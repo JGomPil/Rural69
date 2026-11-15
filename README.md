@@ -185,13 +185,6 @@ solo. En local el valor por defecto es `/Rural69/`, definido en `vite.config.ts`
   cuando (o justo antes de empezar a organizar la escapada).
 * **Dependencias**: `npm outdated` y `npm update`. El proyecto usa pocas a propósito.
 
-### Mejorar la lista maestra con el tiempo
-
-En *Lista maestra → Mejorar* se compara la lista real de una escapada con la maestra, se
-normalizan las cantidades al grupo de referencia y se proponen cambios (ajustar cantidades,
-añadir productos nuevos). Tú eliges qué se aplica. Así la lista va aprendiendo de cada viaje.
-
----
 
 ## 7. Permisos
 

@@ -83,7 +83,6 @@ Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 - [x] Buscador, filtros (pendientes / comprados / todos) e indicador de progreso
 - [x] Sincronización en tiempo real entre todos los móviles
 - [x] Recalcular cantidades para el número real de asistentes (con revisión previa)
-- [x] «Mejorar la lista maestra» a partir de lo que se cambió en una escapada
 - [x] Exportar a CSV e imprimir
 
 ## Fase 5 · Sobrantes y despensa ✅
