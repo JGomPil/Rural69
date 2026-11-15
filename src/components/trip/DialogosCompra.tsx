@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Archive, Sparkles } from 'lucide-react'
 import { Boton } from '../ui/Boton'
-import { Campo, Casilla, Entrada, Interruptor } from '../ui/Campos'
+import { Campo, Casilla, Entrada, Interruptor, Lista } from '../ui/Campos'
 import { Modal } from '../ui/Modal'
 import { Cargando, Etiqueta } from '../ui/Varios'
 import { useAvisos } from '../../hooks/useAvisos'
@@ -9,7 +9,8 @@ import { mensajeError, supabase } from '../../lib/supabase'
 import { buscaEnDespensa, escalaCantidad, pendienteDeComprar, redondea } from '../../lib/cantidades'
 import { cantidad, numero } from '../../lib/formato'
 import { estiloCategoria } from '../../lib/constantes'
-import type { MasterItem, PantryItem, ShoppingItem } from '../../lib/types'
+import { emojiTiempo } from './Tiempos'
+import type { MasterItem, PantryItem, ShoppingItem, TripMeal } from '../../lib/types'
 
 // =====================================================================
 // 1 · Generar la lista de la escapada a partir de la lista maestra
@@ -20,6 +21,7 @@ export function DialogoGenerarLista({
   tripId,
   personas,
   yaExisten,
+  tiempos = [],
   onHecho,
 }: {
   abierto: boolean
@@ -27,12 +29,14 @@ export function DialogoGenerarLista({
   tripId: string
   personas: number
   yaExisten: ShoppingItem[]
+  tiempos?: TripMeal[]
   onHecho: () => void
 }) {
   const avisos = useAvisos()
   const [maestros, setMaestros] = useState<MasterItem[] | null>(null)
   const [seleccion, setSeleccion] = useState<Set<string>>(new Set())
   const [ajustar, setAjustar] = useState(true)
+  const [tiempo, setTiempo] = useState('')
   const [guardando, setGuardando] = useState(false)
 
   useEffect(() => {
@@ -82,6 +86,7 @@ export function DialogoGenerarLista({
           available_qty: 0,
           buy_qty: necesaria,
           notes: m.notes,
+          meal_id: tiempo || null,
           sort_order: base + i,
         }
       })
@@ -125,6 +130,22 @@ export function DialogoGenerarLista({
         </p>
       ) : (
         <div className="space-y-4">
+          {tiempos.length > 0 && (
+            <Campo
+              etiqueta="¿Para qué tiempo?"
+              ayuda="Todo lo que generes ahora cae en este tiempo. Luego puedes mover productos sueltos."
+            >
+              <Lista value={tiempo} onChange={(e) => setTiempo(e.target.value)}>
+                <option value="">🧺 Compra común</option>
+                {tiempos.map((tm) => (
+                  <option key={tm.id} value={tm.id}>
+                    {emojiTiempo(tm.kind)} {tm.name}
+                  </option>
+                ))}
+              </Lista>
+            </Campo>
+          )}
+
           <div className="rounded-2xl border border-arena bg-white p-4">
             <Interruptor
               checked={ajustar}

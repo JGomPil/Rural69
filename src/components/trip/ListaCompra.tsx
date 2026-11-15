@@ -5,6 +5,8 @@ import {
   ChevronDown,
   Copy,
   Download,
+  FileText,
+  HandHeart,
   Pencil,
   Plus,
   Printer,
@@ -12,33 +14,46 @@ import {
   ShoppingBasket,
   Sparkles,
   Trash2,
+  UtensilsCrossed,
 } from 'lucide-react'
 import { useEscapada } from '../../pages/Escapada'
 import { useConsulta } from '../../hooks/useConsulta'
+import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
 import { nombreMiembro, useGrupo } from '../../hooks/useGrupo'
 import { Persona } from '../ui/Persona'
 import { mensajeError, supabase } from '../../lib/supabase'
-import { cantidad, numero } from '../../lib/formato'
+import { cantidad, fecha, numero } from '../../lib/formato'
 import { estiloCategoria } from '../../lib/constantes'
 import { buscaEnDespensa, clave } from '../../lib/cantidades'
 import { descarga, generaCSV, nombreArchivo } from '../../lib/exportar'
+import { listaDeCompraEnPDF } from '../../lib/pdf'
 import { Boton, BotonIcono } from '../ui/Boton'
 import { Casilla, Contador, Entrada } from '../ui/Campos'
 import { Confirmar } from '../ui/Modal'
 import { AvisoError, Cargando, Etiqueta, Progreso, Tarjeta, Vacio } from '../ui/Varios'
 import { DialogoDespensa, DialogoGenerarLista, DialogoRecalcular } from './DialogosCompra'
 import { DialogoProducto } from './DialogoProducto'
-import type { PantryItem, ShoppingItem } from '../../lib/types'
+import { DialogoTiempos, emojiTiempo } from './Tiempos'
+import type { PantryItem, ShoppingItem, TripMeal } from '../../lib/types'
 
 type Filtro = 'pendientes' | 'comprados' | 'todos'
+/** Cómo se agrupa la lista en pantalla. */
+type Agrupar = 'categoria' | 'tiempo'
+/** `null` en el filtro de tiempo = todos; `'comun'` = los que no son de ningún tiempo. */
+type FiltroTiempo = string | null
 
 export function ListaCompra() {
   const { escapada, participantes, personas } = useEscapada()
   const { miembros } = useGrupo()
+  const { perfil } = useAuth()
   const avisos = useAvisos()
 
   const [filtro, setFiltro] = useState<Filtro>('pendientes')
+  const [agrupar, setAgrupar] = useState<Agrupar>('categoria')
+  const [filtroTiempo, setFiltroTiempo] = useState<FiltroTiempo>(null)
+  const [gestionandoTiempos, setGestionandoTiempos] = useState(false)
+  const [generandoPDF, setGenerandoPDF] = useState(false)
   const [busqueda, setBusqueda] = useState('')
   const [ocultarListas, setOcultarListas] = useState(false)
   const [plegadas, setPlegadas] = useState<Set<string>>(new Set())
@@ -73,6 +88,21 @@ export function ListaCompra() {
     { realtime: ['shopping_items'] },
   )
 
+  const { datos: tiempos, refrescar: refrescarTiempos } = useConsulta<TripMeal[]>(
+    async () => {
+      const { data, error: err } = await supabase
+        .from('trip_meals')
+        .select('*')
+        .eq('trip_id', escapada.id)
+        .order('sort_order')
+        .order('day')
+      if (err) throw err
+      return (data ?? []) as TripMeal[]
+    },
+    [escapada.id],
+    { realtime: ['trip_meals'] },
+  )
+
   const { datos: despensa, refrescar: refrescarDespensa } = useConsulta<PantryItem[]>(
     async () => {
       const { data, error: err } = await supabase.from('pantry_items').select('*').gt('qty', 0)
@@ -84,6 +114,8 @@ export function ListaCompra() {
   )
 
   const lista = useMemo(() => items ?? [], [items])
+  const listaTiempos = useMemo(() => tiempos ?? [], [tiempos])
+  const tiempoPorId = useMemo(() => new Map(listaTiempos.map((t) => [t.id, t])), [listaTiempos])
   const comprados = lista.filter((i) => i.purchased).length
 
   const coincidenciasDespensa = useMemo(() => {
@@ -155,6 +187,7 @@ export function ListaCompra() {
 
   const exportar = () => {
     const filas = lista.map((i) => [
+      tiempoPorId.get(i.meal_id ?? '')?.name ?? 'Compra común',
       i.category,
       i.name,
       numero(i.buy_qty),
@@ -169,6 +202,7 @@ export function ListaCompra() {
       nombreArchivo(`compra-${escapada.title}`, 'csv'),
       generaCSV(
         [
+          'Tiempo',
           'Categoría',
           'Producto',
           'A comprar',
@@ -186,31 +220,139 @@ export function ListaCompra() {
   }
 
   // ---------- Filtrado y agrupación ----------
-  const grupos = useMemo(() => {
+
+  /** Lo que se ve ahora mismo: el filtro de tiempo manda sobre todo lo demás. */
+  const enElTiempo = useMemo(() => {
+    if (filtroTiempo === null) return lista
+    if (filtroTiempo === 'comun') return lista.filter((i) => !i.meal_id)
+    return lista.filter((i) => i.meal_id === filtroTiempo)
+  }, [lista, filtroTiempo])
+
+  const visibles = useMemo(() => {
     const texto = clave(busqueda)
-    const filtrados = lista.filter((i) => {
+    return enElTiempo.filter((i) => {
       if (filtro === 'pendientes' && i.purchased) return false
       if (filtro === 'comprados' && !i.purchased) return false
       if (texto && !clave(i.name).includes(texto) && !clave(i.category).includes(texto)) return false
       return true
     })
-    const mapa = new Map<string, ShoppingItem[]>()
-    for (const i of filtrados) {
-      if (!mapa.has(i.category)) mapa.set(i.category, [])
-      mapa.get(i.category)!.push(i)
+  }, [enElTiempo, filtro, busqueda])
+
+  const grupos = useMemo(() => {
+    const porClave = new Map<string, ShoppingItem[]>()
+    for (const i of visibles) {
+      const k = agrupar === 'categoria' ? i.category : (i.meal_id ?? 'comun')
+      if (!porClave.has(k)) porClave.set(k, [])
+      porClave.get(k)!.push(i)
     }
-    return [...mapa.entries()]
-      .map(([categoria, articulos]) => {
-        const todosDeLaCategoria = lista.filter((i) => i.category === categoria)
+
+    const hechos = (k: string) => {
+      const todos =
+        agrupar === 'categoria'
+          ? lista.filter((i) => i.category === k)
+          : lista.filter((i) => (i.meal_id ?? 'comun') === k)
+      return todos.length > 0 && todos.every((i) => i.purchased)
+    }
+
+    if (agrupar === 'categoria') {
+      return [...porClave.entries()]
+        .map(([k, articulos]) => {
+          const estilo = estiloCategoria(k)
+          return {
+            clave: k,
+            titulo: k,
+            emoji: estilo.emoji,
+            claseEmoji: estilo.clase,
+            tiempo: null as TripMeal | null,
+            articulos,
+            completada: hechos(k),
+          }
+        })
+        .filter((g) => !(ocultarListas && g.completada))
+        .sort((a, b) => a.titulo.localeCompare(b.titulo))
+    }
+
+    // Por tiempos: respetamos el orden de los tiempos y la común va la última.
+    const orden = [...listaTiempos.map((t) => t.id), 'comun']
+    return orden
+      .filter((k) => porClave.has(k))
+      .map((k) => {
+        const tiempo = k === 'comun' ? null : (tiempoPorId.get(k) ?? null)
         return {
-          categoria,
-          articulos,
-          completada: todosDeLaCategoria.length > 0 && todosDeLaCategoria.every((i) => i.purchased),
+          clave: k,
+          titulo: tiempo?.name ?? 'Compra común',
+          emoji: tiempo ? emojiTiempo(tiempo.kind) : '🧺',
+          claseEmoji: 'bg-bosque-50',
+          tiempo,
+          articulos: porClave.get(k)!,
+          completada: hechos(k),
         }
       })
       .filter((g) => !(ocultarListas && g.completada))
-      .sort((a, b) => a.categoria.localeCompare(b.categoria))
-  }, [lista, filtro, busqueda, ocultarListas])
+  }, [visibles, lista, listaTiempos, tiempoPorId, agrupar, ocultarListas])
+
+  // ---------- PDF ----------
+  const tituloDeLoQueSeVe = () => {
+    if (filtroTiempo === 'comun') return 'Compra común'
+    if (filtroTiempo) return tiempoPorId.get(filtroTiempo)?.name ?? 'Compra'
+    return 'Lista de la compra'
+  }
+
+  const exportarPDF = async () => {
+    if (visibles.length === 0) {
+      avisos.error('No hay nada que llevarse al PDF con estos filtros.')
+      return
+    }
+    setGenerandoPDF(true)
+    try {
+      const encargadoDe = (g: (typeof grupos)[number]) => {
+        const id = g.tiempo?.assigned_to
+        const quien = id ? nombreMiembro(miembros, id) : null
+        return quien ? `Compra: ${quien}` : undefined
+      }
+      await listaDeCompraEnPDF({
+        titulo: `${escapada.title} · ${tituloDeLoQueSeVe()}`,
+        subtitulo: [
+          filtro === 'pendientes' ? 'Solo lo pendiente' : filtro === 'comprados' ? 'Solo lo comprado' : null,
+          `${numero(personas)} personas equivalentes`,
+        ]
+          .filter(Boolean)
+          .join(' · '),
+        secciones: grupos.map((g) => ({
+          titulo: g.titulo,
+          subtitulo: agrupar === 'tiempo' ? encargadoDe(g) : undefined,
+          articulos: g.articulos.map((i) => ({
+            name: i.name,
+            buy_qty: Number(i.buy_qty),
+            unit: i.unit,
+            notes: i.notes,
+            purchased: i.purchased,
+          })),
+        })),
+        nombreFichero: nombreArchivo(`compra-${escapada.title}-${tituloDeLoQueSeVe()}`, 'pdf'),
+      })
+      avisos.ok('PDF descargado.')
+    } catch (e) {
+      avisos.error(mensajeError(e))
+    } finally {
+      setGenerandoPDF(false)
+    }
+  }
+
+  /** Apuntarse a hacer la compra de un tiempo entero. */
+  const meEncargo = async (tiempo: TripMeal, miembroId: string | null) => {
+    try {
+      const { error: err } = await supabase
+        .from('trip_meals')
+        .update({ assigned_to: miembroId })
+        .eq('id', tiempo.id)
+      if (err) throw err
+      await refrescarTiempos(true)
+      avisos.ok(miembroId ? `Te encargas de «${tiempo.name}».` : 'Tiempo liberado.')
+    } catch (e) {
+      avisos.error(mensajeError(e))
+    }
+  }
 
   if (cargando) return <Cargando texto="Cargando la compra…" />
   if (error) return <AvisoError texto={error} onReintentar={() => void refrescar()} />
@@ -246,6 +388,7 @@ export function ListaCompra() {
           onCerrar={() => setAnyadiendo(false)}
           tripId={escapada.id}
           participantes={participantes}
+          tiempos={listaTiempos}
           siguienteOrden={0}
           onHecho={() => void refrescar(true)}
         />
@@ -277,6 +420,17 @@ export function ListaCompra() {
             {coincidenciasDespensa > 0 && (
               <span className="rounded-full bg-white/25 px-1.5 text-xs">{coincidenciasDespensa}</span>
             )}
+          </Boton>
+          <Boton tamanyo="sm" variante="secundario" onClick={() => setGestionandoTiempos(true)}>
+            <UtensilsCrossed size={16} /> Tiempos
+            {listaTiempos.length > 0 && (
+              <span className="rounded-full bg-bosque-50 px-1.5 text-xs text-bosque-700">
+                {listaTiempos.length}
+              </span>
+            )}
+          </Boton>
+          <Boton tamanyo="sm" variante="secundario" onClick={() => void exportarPDF()} cargando={generandoPDF}>
+            <FileText size={16} /> PDF
           </Boton>
           <Boton tamanyo="sm" variante="secundario" onClick={exportar}>
             <Download size={16} /> CSV
@@ -326,8 +480,50 @@ export function ListaCompra() {
               ocultarListas ? 'border-bosque-500 bg-bosque-50 text-bosque-700' : 'border-arena bg-white text-carbon/55'
             }`}
           >
-            Ocultar categorías listas
+            Ocultar lo que ya está
           </button>
+        </div>
+
+        {/* Qué parte de la compra se mira */}
+        {listaTiempos.length > 0 && (
+          <div className="scroll-oculto -mx-4 flex gap-1.5 overflow-x-auto px-4 lg:mx-0 lg:px-0">
+            <ChipTiempo activo={filtroTiempo === null} onClick={() => setFiltroTiempo(null)}>
+              Toda la compra ({lista.length})
+            </ChipTiempo>
+            {listaTiempos.map((tm) => {
+              const cuantos = lista.filter((i) => i.meal_id === tm.id).length
+              return (
+                <ChipTiempo key={tm.id} activo={filtroTiempo === tm.id} onClick={() => setFiltroTiempo(tm.id)}>
+                  {emojiTiempo(tm.kind)} {tm.name} ({cuantos})
+                </ChipTiempo>
+              )
+            })}
+            <ChipTiempo activo={filtroTiempo === 'comun'} onClick={() => setFiltroTiempo('comun')}>
+              🧺 Común ({lista.filter((i) => !i.meal_id).length})
+            </ChipTiempo>
+          </div>
+        )}
+
+        {/* Cómo se agrupa */}
+        <div className="flex items-center gap-2 text-xs">
+          <span className="font-semibold text-carbon/45">Agrupar por</span>
+          {(
+            [
+              ['categoria', 'Categorías'],
+              ['tiempo', 'Tiempos'],
+            ] as const
+          ).map(([valor, texto]) => (
+            <button
+              key={valor}
+              type="button"
+              onClick={() => setAgrupar(valor)}
+              className={`rounded-full px-3 py-1 font-bold transition ${
+                agrupar === valor ? 'bg-bosque-600 text-white' : 'bg-white text-carbon/55 hover:bg-beige'
+              }`}
+            >
+              {texto}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -340,38 +536,77 @@ export function ListaCompra() {
         />
       ) : (
         <div className="space-y-3">
-          {grupos.map(({ categoria, articulos, completada }) => {
-            const estilo = estiloCategoria(categoria)
-            const plegada = plegadas.has(categoria)
+          {grupos.map((grupo) => {
+            const { clave: k, titulo, emoji, claseEmoji, tiempo, articulos, completada } = grupo
+            const plegada = plegadas.has(k)
+            const yoMiembro = perfil?.member_id ?? null
+            const seEncargaAlguien = tiempo?.assigned_to ?? null
             return (
-              <Tarjeta key={categoria} className="overflow-hidden">
+              <Tarjeta key={k} className="overflow-hidden">
                 <button
                   type="button"
                   onClick={() =>
                     setPlegadas((prev) => {
                       const copia = new Set(prev)
-                      if (copia.has(categoria)) copia.delete(categoria)
-                      else copia.add(categoria)
+                      if (copia.has(k)) copia.delete(k)
+                      else copia.add(k)
                       return copia
                     })
                   }
                   className="flex w-full items-center gap-2.5 px-4 py-3 text-left transition hover:bg-beige/60"
                 >
-                  <span className={`flex size-8 items-center justify-center rounded-xl text-base ${estilo.clase}`} aria-hidden>
-                    {estilo.emoji}
+                  <span className={`flex size-8 items-center justify-center rounded-xl text-base ${claseEmoji}`} aria-hidden>
+                    {emoji}
                   </span>
-                  <span className="flex-1">
-                    <span className="font-display block text-base text-bosque-800">{categoria}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="font-display block truncate text-base text-bosque-800">{titulo}</span>
                     <span className="block text-xs text-carbon/50">
                       {articulos.filter((i) => i.purchased).length}/{articulos.length} marcados
+                      {tiempo?.day && ` · ${fecha(tiempo.day)}`}
+                      {tiempo?.notes && ` · ${tiempo.notes}`}
                     </span>
                   </span>
+                  {seEncargaAlguien && <Persona miembroId={seEncargaAlguien} />}
                   {completada && <Etiqueta tono="oliva">lista ✔</Etiqueta>}
                   <ChevronDown
                     size={18}
                     className={`no-imprimir shrink-0 text-carbon/35 transition ${plegada ? '-rotate-90' : ''}`}
                   />
                 </button>
+
+                {/* Apuntarse a hacer la compra de este tiempo */}
+                {tiempo && yoMiembro && (
+                  <div className="no-imprimir flex items-center gap-2 border-t border-arena bg-beige/40 px-4 py-2">
+                    {seEncargaAlguien === yoMiembro ? (
+                      <>
+                        <span className="flex-1 text-xs font-semibold text-bosque-700">
+                          Te encargas tú de esta compra.
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => void meEncargo(tiempo, null)}
+                          className="text-xs font-semibold text-carbon/45 hover:text-tierra-600 hover:underline"
+                        >
+                          Ya no
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <span className="flex-1 text-xs text-carbon/55">
+                          {seEncargaAlguien ? 'Lo lleva otra persona.' : 'Nadie se ha apuntado a esta compra.'}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => void meEncargo(tiempo, yoMiembro)}
+                          className="inline-flex items-center gap-1 text-xs font-bold text-bosque-600 hover:underline"
+                        >
+                          <HandHeart size={14} /> Me encargo yo
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+
                 {!plegada && (
                   <ul className="divide-y divide-arena border-t border-arena">
                     {articulos.map((item) => (
@@ -379,6 +614,7 @@ export function ListaCompra() {
                         key={item.id}
                         item={item}
                         encargado={item.assigned_to}
+                        tiempo={agrupar === 'categoria' ? (tiempoPorId.get(item.meal_id ?? '') ?? null) : null}
                         onMarcar={(v) => guarda(item.id, { purchased: v })}
                         onCantidad={(v) => guarda(item.id, { buy_qty: v }, 600)}
                         onEditar={() => setEditando(item)}
@@ -411,7 +647,16 @@ export function ListaCompra() {
         tripId={escapada.id}
         personas={personas || 1}
         yaExisten={lista}
+        tiempos={listaTiempos}
         onHecho={() => void refrescar(true)}
+      />
+      <DialogoTiempos
+        abierto={gestionandoTiempos}
+        onCerrar={() => setGestionandoTiempos(false)}
+        escapada={escapada}
+        tiempos={listaTiempos}
+        participantes={participantes}
+        onHecho={() => void refrescarTiempos(true)}
       />
       <DialogoDespensa
         abierto={revisandoDespensa}
@@ -439,6 +684,8 @@ export function ListaCompra() {
         tripId={escapada.id}
         item={editando}
         participantes={participantes}
+        tiempos={listaTiempos}
+        tiempoPorDefecto={filtroTiempo === 'comun' ? null : filtroTiempo}
         siguienteOrden={lista.length}
         onHecho={() => void refrescar(true)}
       />
@@ -459,9 +706,35 @@ export function ListaCompra() {
   )
 }
 
+/** Píldora del selector de «qué parte de la compra estoy mirando». */
+function ChipTiempo({
+  activo,
+  onClick,
+  children,
+}: {
+  activo: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-bold whitespace-nowrap transition ${
+        activo
+          ? 'border-bosque-600 bg-bosque-600 text-white shadow-sm'
+          : 'border-arena bg-white text-carbon/60 hover:bg-beige'
+      }`}
+    >
+      {children}
+    </button>
+  )
+}
+
 function FilaProducto({
   item,
   encargado,
+  tiempo,
   onMarcar,
   onCantidad,
   onEditar,
@@ -470,6 +743,8 @@ function FilaProducto({
 }: {
   item: ShoppingItem
   encargado: string | null
+  /** Solo se pinta al agrupar por categorías: agrupando por tiempos ya se sabe. */
+  tiempo: TripMeal | null
   onMarcar: (v: boolean) => void
   onCantidad: (v: number) => void
   onEditar: () => void
@@ -495,8 +770,13 @@ function FilaProducto({
             </span>
           }
           descripcion={
-            encargado || item.notes ? (
+            encargado || item.notes || tiempo ? (
               <>
+                {tiempo && (
+                  <span className="font-semibold text-bosque-600">
+                    {emojiTiempo(tiempo.kind)} {tiempo.name}
+                  </span>
+                )}
                 {encargado && <Persona miembroId={encargado} />}
                 {item.notes && <span>{item.notes}</span>}
               </>

@@ -7,7 +7,8 @@ import { mensajeError, supabase } from '../../lib/supabase'
 import { CATEGORIAS, UNIDADES } from '../../lib/constantes'
 import { pendienteDeComprar } from '../../lib/cantidades'
 import { cantidad } from '../../lib/formato'
-import type { Member, ShoppingItem } from '../../lib/types'
+import { emojiTiempo } from './Tiempos'
+import type { Member, ShoppingItem, TripMeal } from '../../lib/types'
 
 interface Props {
   abierto: boolean
@@ -15,6 +16,9 @@ interface Props {
   tripId: string
   item?: ShoppingItem | null
   participantes: Member[]
+  tiempos?: TripMeal[]
+  /** Tiempo que viene marcado en la lista: el producto nuevo cae ahí. */
+  tiempoPorDefecto?: string | null
   siguienteOrden: number
   onHecho: () => void
 }
@@ -25,6 +29,8 @@ export function DialogoProducto({
   tripId,
   item,
   participantes,
+  tiempos = [],
+  tiempoPorDefecto = null,
   siguienteOrden,
   onHecho,
 }: Props) {
@@ -36,6 +42,7 @@ export function DialogoProducto({
   const [disponible, setDisponible] = useState('0')
   const [comprar, setComprar] = useState('1')
   const [asignado, setAsignado] = useState('')
+  const [tiempo, setTiempo] = useState('')
   const [notas, setNotas] = useState('')
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -51,6 +58,7 @@ export function DialogoProducto({
       setDisponible(String(item.available_qty))
       setComprar(String(item.buy_qty))
       setAsignado(item.assigned_to ?? '')
+      setTiempo(item.meal_id ?? '')
       setNotas(item.notes ?? '')
     } else {
       setNombre('')
@@ -60,9 +68,10 @@ export function DialogoProducto({
       setDisponible('0')
       setComprar('1')
       setAsignado('')
+      setTiempo(tiempoPorDefecto ?? '')
       setNotas('')
     }
-  }, [abierto, item])
+  }, [abierto, item, tiempoPorDefecto])
 
   const sugerido = pendienteDeComprar(Number(necesaria) || 0, Number(disponible) || 0, unidad)
 
@@ -82,6 +91,7 @@ export function DialogoProducto({
         available_qty: Number(disponible) || 0,
         buy_qty: Number(comprar) || 0,
         assigned_to: asignado || null,
+        meal_id: tiempo || null,
         notes: notas.trim() || null,
       }
       if (item) {
@@ -194,16 +204,30 @@ export function DialogoProducto({
           )}
         </div>
 
-        <Campo etiqueta="¿Quién lo compra?">
-          <Lista value={asignado} onChange={(e) => setAsignado(e.target.value)}>
-            <option value="">Sin asignar</option>
-            {participantes.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.name}
-              </option>
-            ))}
-          </Lista>
-        </Campo>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {tiempos.length > 0 && (
+            <Campo etiqueta="¿Para cuándo?" ayuda="Sin tiempo = compra común.">
+              <Lista value={tiempo} onChange={(e) => setTiempo(e.target.value)}>
+                <option value="">🧺 Compra común</option>
+                {tiempos.map((tm) => (
+                  <option key={tm.id} value={tm.id}>
+                    {emojiTiempo(tm.kind)} {tm.name}
+                  </option>
+                ))}
+              </Lista>
+            </Campo>
+          )}
+          <Campo etiqueta="¿Quién lo compra?">
+            <Lista value={asignado} onChange={(e) => setAsignado(e.target.value)}>
+              <option value="">Sin asignar</option>
+              {participantes.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.name}
+                </option>
+              ))}
+            </Lista>
+          </Campo>
+        </div>
 
         <Campo etiqueta="Observaciones">
           <AreaTexto value={notas} onChange={(e) => setNotas(e.target.value)} rows={2} />

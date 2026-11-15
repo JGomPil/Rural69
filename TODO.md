@@ -17,6 +17,16 @@ Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 - [x] Instalable en el móvil: manifest, iconos y service worker con modo sin conexión
 - [x] Aviso de instalación (botón en Android, instrucciones en iPhone)
 
+## Fase 8 · Tiempos de la compra ✅
+
+- [x] Comidas y cenas de la escapada, creadas a mano o desde las fechas
+- [x] Cada producto puede pertenecer a un tiempo; sin tiempo = compra común
+- [x] La lista se agrupa por categorías o por tiempos, a elegir
+- [x] Filtro por tiempo: ver solo la cena del viernes, por ejemplo
+- [x] Apuntarse a hacer la compra de un tiempo entero
+- [x] Descargar en PDF lo que se esté viendo, con casillas para el súper
+- [x] El tiempo sale también en el CSV
+
 ---
 
 ## Fase 1 · Infraestructura ✅

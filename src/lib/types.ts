@@ -122,6 +122,8 @@ export interface ShoppingItem {
   buy_qty: number
   purchased: boolean
   assigned_to: string | null
+  /** Tiempo al que pertenece. Vacío = compra común, de nadie en concreto. */
+  meal_id: string | null
   /** Sin uso en la interfaz: las cuentas las lleva el grupo en Settle Up. */
   price: number | null
   notes: string | null
@@ -147,6 +149,22 @@ export interface PantryItem {
 export interface AppSetting {
   key: string
   value: unknown
+}
+
+export type TipoTiempo = 'desayuno' | 'comida' | 'merienda' | 'cena' | 'picoteo' | 'bebida' | 'otro'
+
+/** Un momento de comer de la escapada: «Cena del viernes», «Comida del domingo»… */
+export interface TripMeal {
+  id: string
+  trip_id: string
+  name: string
+  day: string | null
+  kind: TipoTiempo
+  /** Integrante que se encarga de comprar lo de este tiempo. */
+  assigned_to: string | null
+  notes: string | null
+  sort_order: number
+  created_at: string
 }
 
 export interface Message {
