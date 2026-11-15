@@ -1,0 +1,147 @@
+@import 'tailwindcss';
+
+/* =====================================================================
+   Rural69 · Identidad visual
+   Verde bosque, verde oliva, crema, beige y tonos tierra (barbacoa).
+   ===================================================================== */
+@theme {
+  --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-bosque-50: #eef5f0;
+  --color-bosque-100: #d6e7dc;
+  --color-bosque-200: #abcbb8;
+  --color-bosque-300: #78ab8f;
+  --color-bosque-400: #4e8a6b;
+  --color-bosque-500: #3d7555;
+  --color-bosque-600: #2f5d42;
+  --color-bosque-700: #254a35;
+  --color-bosque-800: #1b3727;
+  --color-bosque-900: #12241a;
+
+  --color-oliva-100: #eef1e0;
+  --color-oliva-200: #dbe2bf;
+  --color-oliva-300: #c3cf9f;
+  --color-oliva-400: #a6b577;
+  --color-oliva-500: #8a9a5b;
+  --color-oliva-600: #6b7f3e;
+  --color-oliva-700: #556331;
+
+  --color-tierra-100: #faeade;
+  --color-tierra-200: #f2d2b8;
+  --color-tierra-300: #e9b887;
+  --color-tierra-400: #d89560;
+  --color-tierra-500: #c87941;
+  --color-tierra-600: #a85b32;
+  --color-tierra-700: #85452a;
+
+  --color-crema: #fdfaf3;
+  --color-beige: #f5eedd;
+  --color-arena: #e7dcc4;
+  --color-carbon: #2a2622;
+
+  --radius-card: 1.25rem;
+
+  --animate-aparece: aparece 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-sube: sube 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-pop: pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes aparece {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes sube {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pop {
+  0% { transform: scale(0.88); }
+  100% { transform: scale(1); }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-crema);
+    background-image:
+      radial-gradient(circle at 12% -5%, rgba(138, 154, 91, 0.16), transparent 42%),
+      radial-gradient(circle at 92% 4%, rgba(200, 121, 65, 0.13), transparent 38%);
+    background-attachment: fixed;
+    color: var(--color-carbon);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: none;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  input, select, textarea, button {
+    font: inherit;
+  }
+
+  /* Evita el zoom automático de iOS al enfocar un campo */
+  input, select, textarea {
+    font-size: 16px;
+  }
+}
+
+@layer utilities {
+  .tarjeta {
+    border-radius: var(--radius-card);
+    background-color: #fff;
+    border: 1px solid var(--color-arena);
+    box-shadow: 0 1px 2px rgba(42, 38, 34, 0.04), 0 8px 24px -16px rgba(42, 38, 34, 0.25);
+  }
+
+  .scroll-oculto {
+    scrollbar-width: none;
+  }
+  .scroll-oculto::-webkit-scrollbar {
+    display: none;
+  }
+
+  .safe-bottom {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* =====================================================================
+   Impresión (lista de la compra en papel)
+   ===================================================================== */
+@media print {
+  .no-imprimir,
+  nav,
+  aside,
+  header button {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .tarjeta {
+    border-color: #ccc;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+  main {
+    padding: 0 !important;
+    max-width: none !important;
+  }
+}
