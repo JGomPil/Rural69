@@ -5,10 +5,11 @@ import { useEscapada } from '../../pages/Escapada'
 import { useConsulta } from '../../hooks/useConsulta'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
-import { nombrePerfil, useGrupo } from '../../hooks/useGrupo'
+import { useGrupo } from '../../hooks/useGrupo'
 import { mensajeError, supabase } from '../../lib/supabase'
 import { euros } from '../../lib/formato'
 import { Boton } from '../ui/Boton'
+import { Personas } from '../ui/Persona'
 import { AvisoError, Cargando, Etiqueta, Tarjeta, Vacio } from '../ui/Varios'
 import type { House, Vote } from '../../lib/types'
 
@@ -192,18 +193,20 @@ export function Votacion() {
                     />
                   </div>
                   {votos.length > 0 && (
-                    <p className="mt-1 text-xs text-carbon/45">
-                      {votos.map((v) => nombrePerfil(perfiles, v.voter_id)).join(', ')}
-                    </p>
+                    <Personas
+                      className="mt-1.5 text-xs text-carbon/50"
+                      perfilIds={votos.map((v) => v.voter_id)}
+                    />
                   )}
                 </div>
               )
             })}
           </div>
           {sinVotar.length > 0 && (
-            <p className="mt-3 border-t border-arena pt-3 text-xs text-carbon/50">
-              Faltan por votar: {sinVotar.map((p) => p.display_name || p.email).join(', ')}
-            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-arena pt-3 text-xs text-carbon/50">
+              <span className="font-semibold">Faltan por votar:</span>
+              <Personas perfilIds={sinVotar.map((p) => p.id)} className="opacity-70 grayscale" />
+            </div>
           )}
         </Tarjeta>
       )}

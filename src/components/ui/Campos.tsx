@@ -49,7 +49,7 @@ interface PropsCasilla {
   checked: boolean
   onChange: (valor: boolean) => void
   etiqueta: React.ReactNode
-  descripcion?: string
+  descripcion?: React.ReactNode
   grande?: boolean
   disabled?: boolean
 }
@@ -76,7 +76,11 @@ export function Casilla({ checked, onChange, etiqueta, descripcion, grande = fal
       />
       <span className="min-w-0 flex-1">
         <span className={`block ${grande ? 'text-base' : 'text-sm'} font-medium`}>{etiqueta}</span>
-        {descripcion && <span className="block text-xs text-carbon/55">{descripcion}</span>}
+        {descripcion && (
+          <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-carbon/55">
+            {descripcion}
+          </span>
+        )}
       </span>
     </label>
   )

@@ -15,11 +15,11 @@ import { useEscapada } from '../../pages/Escapada'
 import { useConsulta } from '../../hooks/useConsulta'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
-import { nombrePerfil, useGrupo } from '../../hooks/useGrupo'
 import { mensajeError, supabase } from '../../lib/supabase'
 import { euros, numero } from '../../lib/formato'
 import { Boton, BotonIcono } from '../ui/Boton'
 import { Confirmar } from '../ui/Modal'
+import { Persona } from '../ui/Persona'
 import { AvisoError, Cargando, Etiqueta, Tarjeta, Vacio } from '../ui/Varios'
 import { FormularioCasa } from './FormularioCasa'
 import { GaleriaCasa } from './GaleriaCasa'
@@ -28,7 +28,6 @@ import type { House, HousePhoto } from '../../lib/types'
 export function CasasRurales() {
   const { escapada, participantes, recargar } = useEscapada()
   const { esAdmin, perfil } = useAuth()
-  const { perfiles } = useGrupo()
   const avisos = useAvisos()
   const [vista, setVista] = useState<'tarjetas' | 'comparar'>('tarjetas')
   const [formAbierto, setFormAbierto] = useState(false)
@@ -171,7 +170,7 @@ export function CasasRurales() {
               votos={datos?.votos[casa.id] ?? 0}
               porAdulto={porAdulto(casa)}
               elegida={escapada.chosen_house_id === casa.id}
-              propuestaPor={nombrePerfil(perfiles, casa.proposed_by)}
+              propuestaPor={casa.proposed_by}
               puedeEditar
               puedeBorrar={esAdmin || casa.proposed_by === perfil?.id}
               onEditar={() => {
@@ -224,7 +223,7 @@ interface PropsTarjeta {
   votos: number
   porAdulto: number | null
   elegida: boolean
-  propuestaPor: string
+  propuestaPor: string | null
   puedeEditar: boolean
   puedeBorrar: boolean
   onEditar: () => void
@@ -396,7 +395,11 @@ function TarjetaCasa({
               Marcar reservada
             </button>
           )}
-          <span className="ml-auto text-xs text-carbon/40">Propuesta por {propuestaPor}</span>
+          {propuestaPor && (
+            <span className="ml-auto flex items-center gap-1.5 text-xs text-carbon/40">
+              Propuesta por <Persona perfilId={propuestaPor} />
+            </span>
+          )}
         </div>
       </div>
     </Tarjeta>

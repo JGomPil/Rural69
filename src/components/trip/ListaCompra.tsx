@@ -17,6 +17,7 @@ import { useEscapada } from '../../pages/Escapada'
 import { useConsulta } from '../../hooks/useConsulta'
 import { useAvisos } from '../../hooks/useAvisos'
 import { nombreMiembro, useGrupo } from '../../hooks/useGrupo'
+import { Persona } from '../ui/Persona'
 import { mensajeError, supabase } from '../../lib/supabase'
 import { cantidad, numero } from '../../lib/formato'
 import { estiloCategoria } from '../../lib/constantes'
@@ -377,7 +378,7 @@ export function ListaCompra() {
                       <FilaProducto
                         key={item.id}
                         item={item}
-                        encargado={nombreMiembro(miembros, item.assigned_to)}
+                        encargado={item.assigned_to}
                         onMarcar={(v) => guarda(item.id, { purchased: v })}
                         onCantidad={(v) => guarda(item.id, { buy_qty: v }, 600)}
                         onEditar={() => setEditando(item)}
@@ -494,7 +495,12 @@ function FilaProducto({
             </span>
           }
           descripcion={
-            [encargado ? `🛍️ ${encargado}` : null, item.notes].filter(Boolean).join(' · ') || undefined
+            encargado || item.notes ? (
+              <>
+                {encargado && <Persona miembroId={encargado} />}
+                {item.notes && <span>{item.notes}</span>}
+              </>
+            ) : undefined
           }
         />
         <div className="ml-auto flex shrink-0 items-center gap-1">

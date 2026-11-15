@@ -3,6 +3,7 @@ import { Users } from 'lucide-react'
 import { Boton } from '../ui/Boton'
 import { AreaTexto, Campo, Casilla, Entrada, Lista } from '../ui/Campos'
 import { Modal } from '../ui/Modal'
+import { Persona } from '../ui/Persona'
 import { Etiqueta } from '../ui/Varios'
 import { useAvisos } from '../../hooks/useAvisos'
 import { useGrupo } from '../../hooks/useGrupo'
@@ -234,11 +235,11 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
                         checked={participantes.has(m.id)}
                         onChange={() => alterna(m.id)}
                         etiqueta={
-                          <>
-                            {m.name}
-                            {m.is_child && <span className="ml-1 text-xs text-tierra-600">niñ@</span>}
-                            {!m.active && <span className="ml-1 text-xs text-carbon/40">(inactivo)</span>}
-                          </>
+                          <span className="flex items-center gap-1.5">
+                            <Persona miembroId={m.id} />
+                            {m.is_child && <span className="text-xs text-tierra-600">niñ@</span>}
+                            {!m.active && <span className="text-xs text-carbon/40">(inactivo)</span>}
+                          </span>
                         }
                       />
                     ))}

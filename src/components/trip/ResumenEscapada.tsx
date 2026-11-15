@@ -5,6 +5,7 @@ import { useConsulta } from '../../hooks/useConsulta'
 import { useGrupo } from '../../hooks/useGrupo'
 import { supabase } from '../../lib/supabase'
 import { AvisoError, Cargando, Dato, Etiqueta, Progreso, Tarjeta } from '../ui/Varios'
+import { Persona } from '../ui/Persona'
 import { cuentaAdultosNinos } from '../../lib/cantidades'
 import { euros, numero } from '../../lib/formato'
 import type { House } from '../../lib/types'
@@ -147,12 +148,12 @@ export function ResumenEscapada() {
                 {participantes.map((m) => (
                   <span
                     key={m.id}
-                    className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                    className={`inline-flex items-center gap-1.5 rounded-full py-1 pr-2.5 pl-1 text-xs font-semibold ${
                       m.is_child ? 'bg-tierra-100 text-tierra-700' : 'bg-bosque-50 text-bosque-700'
                     }`}
                   >
-                    {m.name}
-                    {m.is_child && ' 🧒'}
+                    <Persona miembroId={m.id} />
+                    {m.is_child && '🧒'}
                   </span>
                 ))}
               </div>
