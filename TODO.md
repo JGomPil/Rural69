@@ -77,8 +77,6 @@ Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
 - [x] Escapadas realizadas y casas rurales elegidas
 - [x] Precio medio de la casa por persona
-- [x] Gasto total en compras y gasto por escapada (editable por el administrador)
-- [x] Evolución del gasto entre escapadas
 - [x] Productos que suelen sobrar y productos que nunca sobran
 - [x] Tabla completa de escapadas y exportación a CSV
 - [x] Copia de seguridad completa en JSON
@@ -98,7 +96,10 @@ Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 ## Mejoras opcionales para el futuro
 
 - [ ] PWA instalable con caché offline (útil en supermercados con mala cobertura)
-- [ ] Reparto de gastos entre parejas y quién debe a quién
+- [ ] Gastos: total por escapada, evolución y reparto. **Descartado a propósito**:
+      el grupo lleva las cuentas en Settle Up. Se quitó de la interfaz el 15/11/2026,
+      pero las columnas `shopping_items.price` y `trips.shopping_cost` siguen en la
+      base de datos, así que recuperarlo es solo volver a pintar la interfaz.
 - [ ] Menús por días y generación de la compra a partir de recetas
 - [ ] Notificaciones cuando alguien propone casa o abre una votación
 - [ ] Importar la despensa desde un CSV

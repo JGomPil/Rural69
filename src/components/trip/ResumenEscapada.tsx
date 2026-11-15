@@ -18,7 +18,7 @@ export function ResumenEscapada() {
       const [casas, votos, compra] = await Promise.all([
         supabase.from('houses').select('*').eq('trip_id', escapada.id),
         supabase.from('votes').select('house_id').eq('trip_id', escapada.id),
-        supabase.from('shopping_items').select('purchased, buy_qty, price').eq('trip_id', escapada.id),
+        supabase.from('shopping_items').select('purchased').eq('trip_id', escapada.id),
       ])
       if (casas.error) throw casas.error
       if (votos.error) throw votos.error
@@ -29,7 +29,6 @@ export function ResumenEscapada() {
         votos: (votos.data ?? []).length,
         total: items.length,
         comprados: items.filter((i) => i.purchased).length,
-        gasto: items.reduce((s, i) => s + (Number(i.price) || 0), 0),
       }
     },
     [escapada.id],
@@ -122,14 +121,7 @@ export function ResumenEscapada() {
       {datos.total > 0 && (
         <Tarjeta className="p-4">
           <Progreso valor={datos.comprados} total={datos.total} etiqueta="Lista de la compra" />
-          <div className="mt-3 flex items-center justify-between">
-            {datos.gasto > 0 ? (
-              <span className="text-sm text-carbon/60">
-                Gasto anotado: <strong className="text-bosque-700">{euros(datos.gasto, true)}</strong>
-              </span>
-            ) : (
-              <span className="text-sm text-carbon/50">Sin precios anotados</span>
-            )}
+          <div className="mt-3 flex items-center justify-end">
             <Link
               to={`/escapadas/${escapada.id}/compra`}
               className="text-sm font-semibold text-bosque-600 hover:underline"

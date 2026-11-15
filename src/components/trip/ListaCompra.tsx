@@ -162,7 +162,6 @@ export function ListaCompra() {
       numero(i.available_qty),
       i.purchased ? 'Sí' : 'No',
       nombreMiembro(miembros, i.assigned_to) ?? '',
-      i.price != null ? numero(i.price) : '',
       i.notes ?? '',
     ])
     descarga(
@@ -177,7 +176,6 @@ export function ListaCompra() {
           'Ya tenemos',
           'Comprado',
           'Encargado',
-          'Precio',
           'Observaciones',
         ],
         filas,
@@ -526,7 +524,6 @@ function FilaProducto({
           <span className="text-xs text-carbon/50">
             Necesaria {cantidad(item.needed_qty, item.unit)} · ya hay {cantidad(item.available_qty, item.unit)}
           </span>
-          {item.price != null && <Etiqueta>{numero(item.price)} €</Etiqueta>}
           <div className="ml-auto flex items-center gap-1">
             <BotonIcono etiqueta="Editar producto" onClick={onEditar}>
               <Pencil size={15} />

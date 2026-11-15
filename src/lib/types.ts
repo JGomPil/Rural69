@@ -42,6 +42,7 @@ export interface Trip {
   status: EstadoEscapada
   voting_open: boolean
   chosen_house_id: string | null
+  /** Sin uso en la interfaz: las cuentas las lleva el grupo en Settle Up. */
   shopping_cost: number | null
   created_by: string | null
   created_at: string
@@ -117,6 +118,7 @@ export interface ShoppingItem {
   buy_qty: number
   purchased: boolean
   assigned_to: string | null
+  /** Sin uso en la interfaz: las cuentas las lleva el grupo en Settle Up. */
   price: number | null
   notes: string | null
   sort_order: number

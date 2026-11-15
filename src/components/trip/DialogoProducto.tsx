@@ -36,7 +36,6 @@ export function DialogoProducto({
   const [disponible, setDisponible] = useState('0')
   const [comprar, setComprar] = useState('1')
   const [asignado, setAsignado] = useState('')
-  const [precio, setPrecio] = useState('')
   const [notas, setNotas] = useState('')
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -52,7 +51,6 @@ export function DialogoProducto({
       setDisponible(String(item.available_qty))
       setComprar(String(item.buy_qty))
       setAsignado(item.assigned_to ?? '')
-      setPrecio(item.price != null ? String(item.price) : '')
       setNotas(item.notes ?? '')
     } else {
       setNombre('')
@@ -62,7 +60,6 @@ export function DialogoProducto({
       setDisponible('0')
       setComprar('1')
       setAsignado('')
-      setPrecio('')
       setNotas('')
     }
   }, [abierto, item])
@@ -85,7 +82,6 @@ export function DialogoProducto({
         available_qty: Number(disponible) || 0,
         buy_qty: Number(comprar) || 0,
         assigned_to: asignado || null,
-        price: precio.trim() === '' ? null : Number(precio),
         notes: notas.trim() || null,
       }
       if (item) {
@@ -198,28 +194,16 @@ export function DialogoProducto({
           )}
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="¿Quién lo compra?">
-            <Lista value={asignado} onChange={(e) => setAsignado(e.target.value)}>
-              <option value="">Sin asignar</option>
-              {participantes.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.name}
-                </option>
-              ))}
-            </Lista>
-          </Campo>
-          <Campo etiqueta="Precio pagado (€)" ayuda="Opcional, para las estadísticas de gasto.">
-            <Entrada
-              type="number"
-              min="0"
-              step="0.01"
-              inputMode="decimal"
-              value={precio}
-              onChange={(e) => setPrecio(e.target.value)}
-            />
-          </Campo>
-        </div>
+        <Campo etiqueta="¿Quién lo compra?">
+          <Lista value={asignado} onChange={(e) => setAsignado(e.target.value)}>
+            <option value="">Sin asignar</option>
+            {participantes.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.name}
+              </option>
+            ))}
+          </Lista>
+        </Campo>
 
         <Campo etiqueta="Observaciones">
           <AreaTexto value={notas} onChange={(e) => setNotas(e.target.value)} rows={2} />

@@ -1,25 +1,20 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { BarChart3, Download, Home, Receipt, TrendingUp, Users } from 'lucide-react'
-import { useAuth } from '../hooks/useAuth'
+import { BarChart3, Download, Home, Receipt, Users } from 'lucide-react'
 import { useAvisos } from '../hooks/useAvisos'
 import { useConsulta } from '../hooks/useConsulta'
 import { useGrupo } from '../hooks/useGrupo'
-import { mensajeError, supabase } from '../lib/supabase'
+import { supabase } from '../lib/supabase'
 import { euros, numero, rangoFechas } from '../lib/formato'
 import { clave } from '../lib/cantidades'
 import { descarga, generaCSV, nombreArchivo } from '../lib/exportar'
 import { Boton } from '../components/ui/Boton'
-import { Entrada } from '../components/ui/Campos'
 import { AvisoError, Cargando, Dato, Etiqueta, EtiquetaEstado, Seccion, Tarjeta, Vacio } from '../components/ui/Varios'
-import type { House, PantryItem, ShoppingItem, Trip } from '../lib/types'
+import type { House, PantryItem, ShoppingItem } from '../lib/types'
 
 export function Historial() {
   const { escapadas, miembros, cargando: cargandoGrupo } = useGrupo()
-  const { esAdmin } = useAuth()
   const avisos = useAvisos()
-  const [editandoGasto, setEditandoGasto] = useState<string | null>(null)
-  const [valorGasto, setValorGasto] = useState('')
 
   const { datos, cargando, error, refrescar } = useConsulta(
     async () => {
@@ -48,25 +43,20 @@ export function Historial() {
     const porEscapada = escapadas.map((t) => {
       const casa = datos.casas.find((c) => c.id === t.chosen_house_id)
       const items = datos.compra.filter((i) => i.trip_id === t.id)
-      const gastoItems = items.reduce((s, i) => s + (Number(i.price) || 0), 0)
       const idsDelViaje = datos.participantes.filter((p) => p.trip_id === t.id).map((p) => p.member_id)
       const personas = idsDelViaje.length
       const adultos = miembros.filter((m) => idsDelViaje.includes(m.id) && !m.is_child).length
-      const gasto = t.shopping_cost != null ? Number(t.shopping_cost) : gastoItems
       return {
         escapada: t,
         casa,
         personas,
         adultos,
-        gasto,
-        gastoItems,
         productos: items.length,
         porAdultoCasa: casa?.total_price != null && adultos > 0 ? Number(casa.total_price) / adultos : null,
       }
     })
 
     const conPrecio = porEscapada.filter((f) => f.porAdultoCasa != null)
-    const gastoTotal = porEscapada.reduce((s, f) => s + f.gasto, 0)
 
     // Productos que suelen sobrar
     const sobras = new Map<string, { nombre: string; veces: number; total: number; unidad: string }>()
@@ -97,25 +87,11 @@ export function Historial() {
       casasVisitadas: porEscapada.filter((f) => f.casa).map((f) => f.casa!),
       precioMedioPersona:
         conPrecio.length > 0 ? conPrecio.reduce((s, f) => s + (f.porAdultoCasa ?? 0), 0) / conPrecio.length : null,
-      gastoTotal,
       porEscapada,
       sueleSobrar: [...sobras.values()].sort((a, b) => b.veces - a.veces || b.total - a.total),
       seAgotan,
     }
   }, [datos, escapadas, miembros])
-
-  const guardarGasto = async (trip: Trip) => {
-    try {
-      const valor = valorGasto.trim() === '' ? null : Number(valorGasto)
-      const { error: err } = await supabase.from('trips').update({ shopping_cost: valor }).eq('id', trip.id)
-      if (err) throw err
-      avisos.ok('Gasto actualizado.')
-      setEditandoGasto(null)
-      await refrescar(true)
-    } catch (e) {
-      avisos.error(mensajeError(e))
-    }
-  }
 
   const exportar = () => {
     if (!resumen) return
@@ -130,7 +106,6 @@ export function Historial() {
       f.casa?.total_price != null ? numero(f.casa.total_price) : '',
       f.adultos,
       f.porAdultoCasa != null ? numero(f.porAdultoCasa) : '',
-      numero(f.gasto),
       f.productos,
     ])
     descarga(
@@ -147,7 +122,6 @@ export function Historial() {
           'Casa',
           'Precio casa',
           'Casa por adulto',
-          'Gasto compra',
           'Productos',
         ],
         filas,
@@ -159,8 +133,6 @@ export function Historial() {
   if (cargandoGrupo || cargando) return <Cargando texto="Calculando estadísticas…" />
   if (error) return <AvisoError texto={error} onReintentar={() => void refrescar()} />
   if (!resumen) return null
-
-  const maxGasto = Math.max(1, ...resumen.porEscapada.map((f) => f.gasto))
 
   return (
     <div className="space-y-6">
@@ -182,7 +154,7 @@ export function Historial() {
         <Vacio emoji="📊" titulo="Aún no hay datos" texto="Cuando hagáis la primera escapada, aquí aparecerán las estadísticas." />
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
             <Dato icono={<Home size={18} />} valor={resumen.realizadas} etiqueta="Escapadas realizadas" />
             <Dato
               icono={<Users size={18} />}
@@ -196,79 +168,7 @@ export function Historial() {
               etiqueta="Precio medio de casa por adulto"
               tono="tierra"
             />
-            <Dato icono={<TrendingUp size={18} />} valor={euros(resumen.gastoTotal)} etiqueta="Gasto total en compras" />
           </div>
-
-          {/* ---------- Evolución del gasto ---------- */}
-          <Seccion titulo="Gasto por escapada" icono={<TrendingUp size={19} />}>
-            <Tarjeta className="space-y-3 p-4">
-              {resumen.porEscapada.map((f) => (
-                <div key={f.escapada.id}>
-                  <div className="mb-1 flex flex-wrap items-baseline justify-between gap-2 text-sm">
-                    <Link to={`/escapadas/${f.escapada.id}`} className="font-semibold text-bosque-700 hover:underline">
-                      {f.escapada.title}
-                    </Link>
-                    <span className="flex items-center gap-2">
-                      {editandoGasto === f.escapada.id ? (
-                        <>
-                          <Entrada
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            inputMode="decimal"
-                            value={valorGasto}
-                            onChange={(e) => setValorGasto(e.target.value)}
-                            className="w-24 py-1 text-right"
-                            autoFocus
-                          />
-                          <button
-                            type="button"
-                            onClick={() => void guardarGasto(f.escapada)}
-                            className="text-xs font-bold text-bosque-600"
-                          >
-                            Guardar
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setEditandoGasto(null)}
-                            className="text-xs font-semibold text-carbon/45"
-                          >
-                            Cancelar
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <strong className="text-carbon/75">{euros(f.gasto, true)}</strong>
-                          {esAdmin && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setEditandoGasto(f.escapada.id)
-                                setValorGasto(f.escapada.shopping_cost != null ? String(f.escapada.shopping_cost) : '')
-                              }}
-                              className="text-xs font-semibold text-bosque-600 hover:underline"
-                            >
-                              editar
-                            </button>
-                          )}
-                        </>
-                      )}
-                    </span>
-                  </div>
-                  <div className="h-2.5 overflow-hidden rounded-full bg-arena">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-oliva-500 to-bosque-500 transition-all duration-700"
-                      style={{ width: `${Math.round((f.gasto / maxGasto) * 100)}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-              <p className="border-t border-arena pt-2.5 text-xs text-carbon/50">
-                El gasto se calcula con los precios anotados en la lista de la compra. El administrador puede
-                sobrescribirlo con el total real del ticket.
-              </p>
-            </Tarjeta>
-          </Seccion>
 
           {/* ---------- Casas visitadas ---------- */}
           {resumen.casasVisitadas.length > 0 && (
@@ -360,7 +260,6 @@ export function Historial() {
                     <th className="px-4 py-2.5 font-semibold">Personas</th>
                     <th className="px-4 py-2.5 font-semibold">Casa</th>
                     <th className="px-4 py-2.5 font-semibold">Por adulto</th>
-                    <th className="px-4 py-2.5 font-semibold">Compra</th>
                     <th className="px-4 py-2.5 font-semibold">Estado</th>
                   </tr>
                 </thead>
@@ -378,7 +277,6 @@ export function Historial() {
                       <td className="px-4 py-2.5 text-carbon/70">{f.personas || '—'}</td>
                       <td className="px-4 py-2.5 text-carbon/70">{f.casa?.name ?? '—'}</td>
                       <td className="px-4 py-2.5 text-carbon/70">{euros(f.porAdultoCasa)}</td>
-                      <td className="px-4 py-2.5 text-carbon/70">{f.gasto > 0 ? euros(f.gasto) : '—'}</td>
                       <td className="px-4 py-2.5">
                         <EtiquetaEstado estado={f.escapada.status} />
                       </td>
