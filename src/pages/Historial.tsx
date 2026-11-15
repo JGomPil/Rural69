@@ -15,7 +15,7 @@ import { AvisoError, Cargando, Dato, Etiqueta, EtiquetaEstado, Seccion, Tarjeta,
 import type { House, PantryItem, ShoppingItem, Trip } from '../lib/types'
 
 export function Historial() {
-  const { escapadas, cargando: cargandoGrupo } = useGrupo()
+  const { escapadas, miembros, cargando: cargandoGrupo } = useGrupo()
   const { esAdmin } = useAuth()
   const avisos = useAvisos()
   const [editandoGasto, setEditandoGasto] = useState<string | null>(null)
@@ -49,21 +49,24 @@ export function Historial() {
       const casa = datos.casas.find((c) => c.id === t.chosen_house_id)
       const items = datos.compra.filter((i) => i.trip_id === t.id)
       const gastoItems = items.reduce((s, i) => s + (Number(i.price) || 0), 0)
-      const personas = datos.participantes.filter((p) => p.trip_id === t.id).length
+      const idsDelViaje = datos.participantes.filter((p) => p.trip_id === t.id).map((p) => p.member_id)
+      const personas = idsDelViaje.length
+      const adultos = miembros.filter((m) => idsDelViaje.includes(m.id) && !m.is_child).length
       const gasto = t.shopping_cost != null ? Number(t.shopping_cost) : gastoItems
       return {
         escapada: t,
         casa,
         personas,
+        adultos,
         gasto,
         gastoItems,
         productos: items.length,
-        porPersonaCasa: casa?.total_price != null && personas > 0 ? Number(casa.total_price) / personas : null,
-        porPersonaCompra: gasto > 0 && personas > 0 ? gasto / personas : null,
+        porAdultoCasa: casa?.total_price != null && adultos > 0 ? Number(casa.total_price) / adultos : null,
+        porAdultoCompra: gasto > 0 && adultos > 0 ? gasto / adultos : null,
       }
     })
 
-    const conPrecio = porEscapada.filter((f) => f.porPersonaCasa != null)
+    const conPrecio = porEscapada.filter((f) => f.porAdultoCasa != null)
     const gastoTotal = porEscapada.reduce((s, f) => s + f.gasto, 0)
 
     // Productos que suelen sobrar
@@ -94,13 +97,13 @@ export function Historial() {
       realizadas: realizadas.length,
       casasVisitadas: porEscapada.filter((f) => f.casa).map((f) => f.casa!),
       precioMedioPersona:
-        conPrecio.length > 0 ? conPrecio.reduce((s, f) => s + (f.porPersonaCasa ?? 0), 0) / conPrecio.length : null,
+        conPrecio.length > 0 ? conPrecio.reduce((s, f) => s + (f.porAdultoCasa ?? 0), 0) / conPrecio.length : null,
       gastoTotal,
       porEscapada,
       sueleSobrar: [...sobras.values()].sort((a, b) => b.veces - a.veces || b.total - a.total),
       seAgotan,
     }
-  }, [datos, escapadas])
+  }, [datos, escapadas, miembros])
 
   const guardarGasto = async (trip: Trip) => {
     try {
@@ -126,7 +129,8 @@ export function Historial() {
       f.personas,
       f.casa?.name ?? '',
       f.casa?.total_price != null ? numero(f.casa.total_price) : '',
-      f.porPersonaCasa != null ? numero(f.porPersonaCasa) : '',
+      f.adultos,
+      f.porAdultoCasa != null ? numero(f.porAdultoCasa) : '',
       numero(f.gasto),
       f.productos,
     ])
@@ -140,9 +144,10 @@ export function Historial() {
           'Destino',
           'Estado',
           'Participantes',
+          'Adultos',
           'Casa',
           'Precio casa',
-          'Casa por persona',
+          'Casa por adulto',
           'Gasto compra',
           'Productos',
         ],
@@ -189,7 +194,7 @@ export function Historial() {
             <Dato
               icono={<Receipt size={18} />}
               valor={euros(resumen.precioMedioPersona)}
-              etiqueta="Precio medio de casa por persona"
+              etiqueta="Precio medio de casa por adulto"
               tono="tierra"
             />
             <Dato icono={<TrendingUp size={18} />} valor={euros(resumen.gastoTotal)} etiqueta="Gasto total en compras" />
@@ -235,8 +240,8 @@ export function Historial() {
                       ) : (
                         <>
                           <strong className="text-carbon/75">{euros(f.gasto, true)}</strong>
-                          {f.personas > 0 && f.gasto > 0 && (
-                            <span className="text-xs text-carbon/45">{euros(f.gasto / f.personas)}/pers.</span>
+                          {f.adultos > 0 && f.gasto > 0 && (
+                            <span className="text-xs text-carbon/45">{euros(f.gasto / f.adultos)}/adulto</span>
                           )}
                           {esAdmin && (
                             <button
@@ -290,8 +295,8 @@ export function Historial() {
                         </p>
                         <div className="mt-2 flex flex-wrap gap-1.5">
                           {f.casa?.total_price != null && <Etiqueta>{euros(f.casa.total_price)}</Etiqueta>}
-                          {f.porPersonaCasa != null && (
-                            <Etiqueta tono="oliva">{euros(f.porPersonaCasa)}/persona</Etiqueta>
+                          {f.porAdultoCasa != null && (
+                            <Etiqueta tono="oliva">{euros(f.porAdultoCasa)}/adulto</Etiqueta>
                           )}
                         </div>
                       </div>
@@ -358,7 +363,7 @@ export function Historial() {
                     <th className="px-4 py-2.5 font-semibold">Fechas</th>
                     <th className="px-4 py-2.5 font-semibold">Personas</th>
                     <th className="px-4 py-2.5 font-semibold">Casa</th>
-                    <th className="px-4 py-2.5 font-semibold">Por persona</th>
+                    <th className="px-4 py-2.5 font-semibold">Por adulto</th>
                     <th className="px-4 py-2.5 font-semibold">Compra</th>
                     <th className="px-4 py-2.5 font-semibold">Estado</th>
                   </tr>
@@ -376,7 +381,7 @@ export function Historial() {
                       </td>
                       <td className="px-4 py-2.5 text-carbon/70">{f.personas || '—'}</td>
                       <td className="px-4 py-2.5 text-carbon/70">{f.casa?.name ?? '—'}</td>
-                      <td className="px-4 py-2.5 text-carbon/70">{euros(f.porPersonaCasa)}</td>
+                      <td className="px-4 py-2.5 text-carbon/70">{euros(f.porAdultoCasa)}</td>
                       <td className="px-4 py-2.5 text-carbon/70">{f.gasto > 0 ? euros(f.gasto) : '—'}</td>
                       <td className="px-4 py-2.5">
                         <EtiquetaEstado estado={f.escapada.status} />

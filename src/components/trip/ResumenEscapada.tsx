@@ -42,8 +42,9 @@ export function ResumenEscapada() {
 
   const { adultos, ninos } = cuentaAdultosNinos(participantes)
   const elegida = datos.casas.find((c) => c.id === escapada.chosen_house_id)
-  const precioPorPersona =
-    elegida?.total_price && participantes.length > 0 ? elegida.total_price / participantes.length : null
+  const adultosQueVienen = participantes.filter((m) => !m.is_child).length
+  const precioPorAdulto =
+    elegida?.total_price && adultosQueVienen > 0 ? elegida.total_price / adultosQueVienen : null
 
   return (
     <div className="space-y-5">
@@ -83,7 +84,7 @@ export function ResumenEscapada() {
               </p>
               <div className="mt-2 flex flex-wrap gap-2 text-sm">
                 {elegida.total_price != null && <Etiqueta>{euros(elegida.total_price)} en total</Etiqueta>}
-                {precioPorPersona != null && <Etiqueta tono="oliva">{euros(precioPorPersona)} por persona</Etiqueta>}
+                {precioPorAdulto != null && <Etiqueta tono="oliva">{euros(precioPorAdulto)} por adulto</Etiqueta>}
               </div>
               {elegida.url && (
                 <a

@@ -65,6 +65,7 @@ export function Panel() {
   if (cargando) return <Cargando texto="Cargando el panel…" />
 
   const participantes = miembros.filter((m) => datos?.idsParticipantes.includes(m.id))
+  const adultosQueVienen = participantes.filter((m) => !m.is_child).length
   const anteriores = escapadas.filter((t) => t.id !== escapadaActiva?.id).slice(0, 3)
   const elegida = datos?.casas.find((c) => c.id === escapadaActiva?.chosen_house_id)
   const saludo = perfil?.display_name?.split(' ')[0] || 'amig@'
@@ -185,9 +186,9 @@ export function Panel() {
                   <Trophy size={18} className="text-bosque-600" />
                   <span className="font-semibold text-bosque-800">{elegida.name}</span>
                   <Etiqueta tono="exito">{elegida.reserved ? 'Reservada' : 'Elegida'}</Etiqueta>
-                  {elegida.total_price != null && participantes.length > 0 && (
+                  {elegida.total_price != null && adultosQueVienen > 0 && (
                     <span className="text-sm text-carbon/60">
-                      {euros(elegida.total_price / participantes.length)} por persona
+                      {euros(elegida.total_price / adultosQueVienen)} por adulto
                     </span>
                   )}
                 </div>

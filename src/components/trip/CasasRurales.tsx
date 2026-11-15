@@ -59,8 +59,10 @@ export function CasasRurales() {
     { realtime: ['houses', 'house_photos', 'votes'] },
   )
 
-  const porPersona = (casa: House) =>
-    casa.total_price != null && participantes.length > 0 ? casa.total_price / participantes.length : null
+  // En el grupo solo pagan los adultos: los niños no cuentan para repartir el precio.
+  const adultos = participantes.filter((m) => !m.is_child).length
+  const porAdulto = (casa: House) =>
+    casa.total_price != null && adultos > 0 ? casa.total_price / adultos : null
 
   const fotosDe = useMemo(() => {
     const mapa: Record<string, string[]> = {}
@@ -167,7 +169,7 @@ export function CasasRurales() {
               casa={casa}
               fotos={fotosDe[casa.id] ?? []}
               votos={datos?.votos[casa.id] ?? 0}
-              porPersona={porPersona(casa)}
+              porAdulto={porAdulto(casa)}
               elegida={escapada.chosen_house_id === casa.id}
               propuestaPor={nombrePerfil(perfiles, casa.proposed_by)}
               puedeEditar
@@ -187,7 +189,7 @@ export function CasasRurales() {
         <Comparador
           casas={casas}
           votos={datos?.votos ?? {}}
-          participantes={participantes.length}
+          adultos={adultos}
           elegidaId={escapada.chosen_house_id}
         />
       )}
@@ -220,7 +222,7 @@ interface PropsTarjeta {
   casa: House
   fotos: string[]
   votos: number
-  porPersona: number | null
+  porAdulto: number | null
   elegida: boolean
   propuestaPor: string
   puedeEditar: boolean
@@ -236,7 +238,7 @@ function TarjetaCasa({
   casa,
   fotos,
   votos,
-  porPersona,
+  porAdulto,
   elegida,
   propuestaPor,
   puedeEditar,
@@ -318,8 +320,8 @@ function TarjetaCasa({
           {casa.total_price != null ? (
             <>
               <span className="font-display text-xl font-bold text-bosque-700">{euros(casa.total_price)}</span>
-              {porPersona != null && (
-                <span className="text-sm font-semibold text-tierra-600">{euros(porPersona)}/persona</span>
+              {porAdulto != null && (
+                <span className="text-sm font-semibold text-tierra-600">{euros(porAdulto)}/adulto</span>
               )}
             </>
           ) : (
@@ -404,12 +406,12 @@ function TarjetaCasa({
 function Comparador({
   casas,
   votos,
-  participantes,
+  adultos,
   elegidaId,
 }: {
   casas: House[]
   votos: Record<string, number>
-  participantes: number
+  adultos: number
   elegidaId: string | null
 }) {
   const filas: { etiqueta: string; valor: (c: House) => React.ReactNode; destacar?: boolean }[] = [
@@ -419,9 +421,8 @@ function Comparador({
       destacar: true,
     },
     {
-      etiqueta: 'Por persona',
-      valor: (c) =>
-        c.total_price != null && participantes > 0 ? euros(c.total_price / participantes) : '—',
+      etiqueta: 'Por adulto',
+      valor: (c) => (c.total_price != null && adultos > 0 ? euros(c.total_price / adultos) : '—'),
       destacar: true,
     },
     { etiqueta: 'Localidad', valor: (c) => [c.town, c.province].filter(Boolean).join(', ') || '—' },

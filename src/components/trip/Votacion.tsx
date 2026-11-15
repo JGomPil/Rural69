@@ -131,7 +131,7 @@ export function Votacion() {
           </h2>
           <p className="mt-0.5 text-sm text-carbon/60">
             {resultados.total} {resultados.total === 1 ? 'voto emitido' : 'votos emitidos'}
-            {participantes.length > 0 && ` · ${perfiles.length} personas con cuenta`}
+            {participantes.length > 0 && ` · ${perfiles.length} adultos con cuenta`}
           </p>
         </div>
         {esAdmin && (
