@@ -62,7 +62,7 @@ export function Modal({ abierto, onCerrar, titulo, descripcion, children, pie, a
         </header>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4">{children}</div>
         {pie && (
-          <footer className="safe-bottom flex items-center justify-end gap-2 border-t border-arena bg-white/70 px-5 py-3.5">
+          <footer className="safe-bottom flex items-center justify-end gap-2 border-t border-arena bg-white/70 px-5 pt-3.5 [--relleno-inferior:0.875rem]">
             {pie}
           </footer>
         )}

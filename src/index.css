@@ -117,8 +117,11 @@
     display: none;
   }
 
+  /* Deja hueco para la franja inferior del móvil (barra de inicio del iPhone).
+     Pisa cualquier `pb-*`, así que si el elemento ya tiene relleno propio hay que
+     declararlo en --relleno-inferior para que se sumen en vez de perderse. */
   .safe-bottom {
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(var(--relleno-inferior, 0px) + env(safe-area-inset-bottom, 0px));
   }
 }
 
