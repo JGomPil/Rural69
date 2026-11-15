@@ -15,6 +15,7 @@ import {
   UserRound,
 } from 'lucide-react'
 import { Marca } from './Logo'
+import { InstalarApp } from './InstalarApp'
 import { Avatar } from '../ui/Avatar'
 import { useAuth } from '../../hooks/useAuth'
 import { useGrupo } from '../../hooks/useGrupo'
@@ -193,6 +194,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Boton variante="peligro" className="mt-3" ancho onClick={() => void salir()}>
             <LogOut size={16} /> Cerrar sesión
           </Boton>
+        </div>
+
+        {/* Aquí sale siempre, aunque se haya cerrado el aviso del panel. */}
+        <div className="mt-3">
+          <InstalarApp siempre />
         </div>
       </Modal>
     </div>
