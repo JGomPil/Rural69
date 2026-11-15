@@ -32,6 +32,8 @@ supabase/
   01_schema.sql                Tablas, índices y triggers
   02_rls.sql                   Seguridad (RLS), tiempo real y Storage
   03_seed.sql                  Lista maestra de la compra inicial (opcional)
+  04_fotos.sql                 Fotos de perfil y de integrante
+  05_chat.sql                  Chat de la escapada y marcas de lectura
 src/
   lib/            supabase.ts, tipos, formato, cálculo de cantidades, export, subidas
   hooks/          useAuth, useGrupo, useConsulta (datos + tiempo real), useAvisos
@@ -96,6 +98,10 @@ Scripts disponibles:
    1. `supabase/01_schema.sql`
    2. `supabase/02_rls.sql`
    3. `supabase/03_seed.sql` *(opcional: carga una lista maestra de ~75 productos)*
+   4. `supabase/04_fotos.sql`
+   5. `supabase/05_chat.sql`
+
+   Los cinco se pueden volver a ejecutar sin miedo: no borran ni duplican nada.
 3. **Authentication → Providers → Email**: deja activado *Email*. Si quieres entrar con
    enlace mágico, activa también *Magic Link*. Para que nadie se registre por su cuenta,
    desactiva **Allow new users to sign up** *después* de crear las cuentas del grupo.

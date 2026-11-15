@@ -3,6 +3,20 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 7 · Perfiles, chat e instalación ✅
+
+- [x] Página de perfil: foto, nombre, cambio de correo y de contraseña
+- [x] La contraseña nueva exige la actual (Supabase no la pide por su cuenta)
+- [x] Foto de integrante, también para los niños, que no tienen cuenta
+- [x] El administrador puede editar el nombre y la foto de cualquiera
+- [x] Avatares en la barra lateral, la cabecera del móvil y la lista de usuarios
+- [x] Las cuentas las crea el administrador: sin registro abierto ni enlace mágico
+- [x] Chat por escapada, en tiempo real, con fotos, edición y borrado
+- [x] Contador de mensajes sin leer en la pestaña del chat
+- [x] Logo nuevo: casa rural cuyas ventanas son un 6 y un 9
+- [x] Instalable en el móvil: manifest, iconos y service worker con modo sin conexión
+- [x] Aviso de instalación (botón en Android, instrucciones en iPhone)
+
 ---
 
 ## Fase 1 · Infraestructura ✅
