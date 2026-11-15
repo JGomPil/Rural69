@@ -11,6 +11,8 @@ export interface Profile {
   display_name: string
   role: Rol
   member_id: string | null
+  /** Foto que cada cual se pone desde su perfil. */
+  avatar_url: string | null
   created_at: string
 }
 
@@ -28,6 +30,8 @@ export interface Member {
   is_child: boolean
   consumption_factor: number
   active: boolean
+  /** Foto del integrante. Los niños no tienen cuenta: la pone un administrador. */
+  avatar_url: string | null
   created_at: string
 }
 

@@ -19,6 +19,7 @@ import { mensajeError, supabase } from '../lib/supabase'
 import { descarga, nombreArchivo } from '../lib/exportar'
 import { numero } from '../lib/formato'
 import { personasEquivalentes } from '../lib/cantidades'
+import { Avatar, AvatarEditable } from '../components/ui/Avatar'
 import { Boton, BotonIcono } from '../components/ui/Boton'
 import { Campo, Entrada, Interruptor, Lista } from '../components/ui/Campos'
 import { Confirmar, Modal } from '../components/ui/Modal'
@@ -314,9 +315,7 @@ function Integrantes() {
               <ul className="divide-y divide-arena">
                 {gente.map((m) => (
                   <li key={m.id} className={`flex items-center gap-3 px-4 py-2.5 ${m.active ? '' : 'opacity-50'}`}>
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-bosque-50 text-sm font-bold text-bosque-700">
-                      {m.name.slice(0, 1).toUpperCase()}
-                    </span>
+                    <Avatar src={m.avatar_url} nombre={m.name} tamanyo="sm" />
                     <span className="min-w-0 flex-1">
                       <span className="block font-medium">{m.name}</span>
                       <span className="block text-xs text-carbon/50">
@@ -415,6 +414,7 @@ function FormularioMiembro({
   const [esNino, setEsNino] = useState(false)
   const [factor, setFactor] = useState('1')
   const [activo, setActivo] = useState(true)
+  const [foto, setFoto] = useState<string | null>(null)
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -426,6 +426,7 @@ function FormularioMiembro({
     setEsNino(item?.is_child ?? false)
     setFactor(String(item?.consumption_factor ?? 1))
     setActivo(item?.active ?? true)
+    setFoto(item?.avatar_url ?? null)
   }, [abierto, item])
 
   const cambiaNino = (valor: boolean) => {
@@ -447,6 +448,7 @@ function FormularioMiembro({
         is_child: esNino,
         consumption_factor: Number(factor) || (esNino ? factorNinos : 1),
         active: activo,
+        avatar_url: foto,
       }
       if (item) {
         const { error: err } = await supabase.from('members').update(datos).eq('id', item.id)
@@ -483,6 +485,9 @@ function FormularioMiembro({
       }
     >
       <form id="form-miembro" onSubmit={guardar} className="space-y-4">
+        <Campo etiqueta="Foto" ayuda="Opcional. Los niños no tienen cuenta, así que su foto se pone desde aquí.">
+          <AvatarEditable src={foto} nombre={nombre} onCambiar={setFoto} tamanyo="lg" />
+        </Campo>
         <Campo etiqueta="Nombre" requerido>
           <Entrada value={nombre} onChange={(e) => setNombre(e.target.value)} required placeholder="Ej.: Marta" />
         </Campo>
@@ -532,7 +537,11 @@ function Usuarios() {
   const { perfil } = useAuth()
   const avisos = useAvisos()
   const [borrando, setBorrando] = useState<Profile | null>(null)
+  const [editando, setEditando] = useState<Profile | null>(null)
   const [enCurso, setEnCurso] = useState(false)
+
+  // Los niños no tienen cuenta, así que no hay a quién vincularlos.
+  const adultos = miembros.filter((m) => !m.is_child)
 
   const actualiza = async (p: Profile, campos: Partial<Profile>) => {
     try {
@@ -566,6 +575,11 @@ function Usuarios() {
       <Tarjeta className="divide-y divide-arena overflow-hidden">
         {perfiles.map((p) => (
           <div key={p.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
+            <Avatar
+              src={p.avatar_url ?? miembros.find((m) => m.id === p.member_id)?.avatar_url}
+              nombre={p.display_name || p.email}
+              tamanyo="sm"
+            />
             <span className="min-w-0 flex-1">
               <span className="block truncate font-semibold text-bosque-800">
                 {p.display_name || p.email}
@@ -580,7 +594,7 @@ function Usuarios() {
               className="w-auto py-1.5 text-sm"
             >
               <option value="">Sin vincular</option>
-              {miembros.map((m) => (
+              {adultos.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name}
                 </option>
@@ -596,11 +610,16 @@ function Usuarios() {
               <option value="user">Integrante</option>
               <option value="admin">Administrador</option>
             </Lista>
-            {p.id !== perfil?.id && (
-              <BotonIcono etiqueta="Quitar acceso" tono="peligro" onClick={() => setBorrando(p)}>
-                <Trash2 size={15} />
+            <div className="-mr-1 flex shrink-0">
+              <BotonIcono etiqueta={`Editar ${p.display_name || p.email}`} onClick={() => setEditando(p)}>
+                <Pencil size={15} />
               </BotonIcono>
-            )}
+              {p.id !== perfil?.id && (
+                <BotonIcono etiqueta="Quitar acceso" tono="peligro" onClick={() => setBorrando(p)}>
+                  <Trash2 size={15} />
+                </BotonIcono>
+              )}
+            </div>
           </div>
         ))}
       </Tarjeta>
@@ -609,12 +628,26 @@ function Usuarios() {
         <p className="font-semibold text-bosque-800">¿Cómo doy acceso a alguien nuevo?</p>
         <ol className="mt-1 list-decimal space-y-0.5 pl-5">
           <li>
-            En Supabase: <em>Authentication → Users → Add user → Send invitation</em> con su email.
+            En Supabase: <em>Authentication → Users → Add user → Create new user</em>, con su email y una
+            contraseña provisional. Marca <em>Auto Confirm User</em> para que pueda entrar sin confirmar nada.
           </li>
-          <li>La persona abre el email, pone su contraseña y entra: aparecerá aquí automáticamente.</li>
-          <li>Vincúlala con su integrante del grupo y, si hace falta, dale rol de administrador.</li>
+          <li>Pásale el enlace de Rural69, su email y esa contraseña: aparecerá aquí en cuanto entre.</li>
+          <li>Vincúlalo con su integrante del grupo y, si hace falta, dale rol de administrador.</li>
+          <li>Que se cambie la contraseña y se ponga foto desde su perfil. Tú también puedes hacerlo por él.</li>
         </ol>
+        <p className="mt-2 text-xs text-carbon/50">
+          Los niños no llevan cuenta: ni votan ni pagan. Van como integrantes del grupo y los gestionan sus
+          padres o un administrador.
+        </p>
       </div>
+
+      <FormularioUsuario
+        abierto={Boolean(editando)}
+        perfil={editando}
+        miembros={miembros}
+        onCerrar={() => setEditando(null)}
+        onHecho={() => void refrescar()}
+      />
 
       <Confirmar
         abierto={Boolean(borrando)}
@@ -626,6 +659,94 @@ function Usuarios() {
         onCancelar={() => setBorrando(null)}
       />
     </Seccion>
+  )
+}
+
+// ---------------------------------------------------------------------
+// Editar una cuenta (solo administradores)
+// ---------------------------------------------------------------------
+function FormularioUsuario({
+  abierto,
+  perfil,
+  miembros,
+  onCerrar,
+  onHecho,
+}: {
+  abierto: boolean
+  perfil: Profile | null
+  miembros: Member[]
+  onCerrar: () => void
+  onHecho: () => void
+}) {
+  const avisos = useAvisos()
+  const [nombre, setNombre] = useState('')
+  const [foto, setFoto] = useState<string | null>(null)
+  const [guardando, setGuardando] = useState(false)
+
+  useEffect(() => {
+    if (!abierto) return
+    setNombre(perfil?.display_name ?? '')
+    setFoto(perfil?.avatar_url ?? null)
+  }, [abierto, perfil])
+
+  const miembro = miembros.find((m) => m.id === perfil?.member_id) ?? null
+
+  const guardar = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!perfil) return
+    setGuardando(true)
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ display_name: nombre.trim(), avatar_url: foto })
+        .eq('id', perfil.id)
+      if (error) throw error
+      avisos.ok('Cuenta actualizada.')
+      onHecho()
+      onCerrar()
+    } catch (err) {
+      avisos.error(mensajeError(err))
+    } finally {
+      setGuardando(false)
+    }
+  }
+
+  return (
+    <Modal
+      abierto={abierto}
+      onCerrar={onCerrar}
+      titulo={`Editar a ${perfil?.display_name || perfil?.email || ''}`}
+      descripcion="Como administrador puedes cambiarle el nombre y la foto."
+      ancho="sm"
+      pie={
+        <>
+          <Boton variante="secundario" onClick={onCerrar}>
+            Cancelar
+          </Boton>
+          <Boton type="submit" form="form-usuario" cargando={guardando}>
+            Guardar
+          </Boton>
+        </>
+      }
+    >
+      <form id="form-usuario" onSubmit={guardar} className="space-y-4">
+        <Campo etiqueta="Foto">
+          <AvatarEditable src={foto ?? miembro?.avatar_url} nombre={nombre} onCambiar={setFoto} tamanyo="lg" />
+        </Campo>
+        <Campo etiqueta="Nombre" requerido>
+          <Entrada value={nombre} onChange={(e) => setNombre(e.target.value)} required placeholder="Ej.: Javi" />
+        </Campo>
+        <div className="rounded-2xl border border-arena bg-beige px-4 py-3 text-sm text-carbon/65">
+          <p>
+            <strong className="text-bosque-800">Email:</strong> {perfil?.email}
+          </p>
+          <p className="mt-1 text-xs">
+            El correo y la contraseña los cambia cada cual desde su perfil. Si alguien pierde el acceso,
+            cámbiale la contraseña en Supabase (<em>Authentication → Users</em>).
+          </p>
+        </div>
+      </form>
+    </Modal>
   )
 }
 

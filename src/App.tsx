@@ -15,6 +15,7 @@ import { ListaMaestra } from './pages/ListaMaestra'
 import { Despensa } from './pages/Despensa'
 import { Historial } from './pages/Historial'
 import { Ajustes } from './pages/Ajustes'
+import { Perfil } from './pages/Perfil'
 import { ResumenEscapada } from './components/trip/ResumenEscapada'
 import { CasasRurales } from './components/trip/CasasRurales'
 import { Votacion } from './components/trip/Votacion'
@@ -99,6 +100,7 @@ export function App() {
               <Route path="/despensa" element={<Despensa />} />
               <Route path="/historial" element={<Historial />} />
               <Route path="/ajustes" element={<Ajustes />} />
+              <Route path="/perfil" element={<Perfil />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -14,6 +14,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { Marca } from './Logo'
+import { Avatar } from '../ui/Avatar'
 import { useAuth } from '../../hooks/useAuth'
 import { useGrupo } from '../../hooks/useGrupo'
 import { Modal } from '../ui/Modal'
@@ -28,7 +29,7 @@ interface Enlace {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { perfil, salir, esAdmin } = useAuth()
-  const { escapadaActiva } = useGrupo()
+  const { escapadaActiva, miembros } = useGrupo()
   const [menuAbierto, setMenuAbierto] = useState(false)
   const location = useLocation()
 
@@ -49,6 +50,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const compraActiva = location.pathname.includes('/compra')
 
+  // La foto del perfil manda; si no se ha puesto ninguna, vale la del integrante
+  // con el que esté vinculada la cuenta.
+  const miFoto = perfil?.avatar_url ?? miembros.find((m) => m.id === perfil?.member_id)?.avatar_url ?? null
+  const miNombre = perfil?.display_name || perfil?.email || ''
+
   return (
     <div className="min-h-dvh lg:flex">
       {/* ---------- Barra lateral (escritorio) ---------- */}
@@ -60,12 +66,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <EnlaceLateral key={e.a + e.texto} enlace={e} />
         ))}
         <div className="mt-auto rounded-2xl bg-beige p-3">
-          <p className="truncate text-sm font-semibold text-bosque-800">{perfil?.display_name}</p>
-          <p className="truncate text-xs text-carbon/55">{esAdmin ? 'Administrador' : 'Integrante'}</p>
+          <Link to="/perfil" className="flex items-center gap-2.5" title="Mi perfil">
+            <Avatar src={miFoto} nombre={miNombre} tamanyo="sm" />
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-semibold text-bosque-800">{miNombre}</span>
+              <span className="block truncate text-xs text-carbon/55">
+                {esAdmin ? 'Administrador' : 'Integrante'}
+              </span>
+            </span>
+          </Link>
           <button
             type="button"
             onClick={() => void salir()}
-            className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-tierra-600 hover:underline"
+            className="mt-2.5 flex items-center gap-1.5 text-xs font-semibold text-tierra-600 hover:underline"
           >
             <LogOut size={14} /> Cerrar sesión
           </button>
@@ -78,14 +91,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Link to="/">
             <Marca />
           </Link>
-          <button
-            type="button"
-            onClick={() => setMenuAbierto(true)}
-            aria-label="Abrir menú"
-            className="inline-flex size-10 items-center justify-center rounded-2xl border border-arena bg-white text-bosque-700 active:scale-95"
-          >
-            <Menu size={20} />
-          </button>
+          <div className="flex items-center gap-2">
+            <Link to="/perfil" aria-label="Mi perfil" className="active:scale-95">
+              <Avatar src={miFoto} nombre={miNombre} tamanyo="sm" />
+            </Link>
+            <button
+              type="button"
+              onClick={() => setMenuAbierto(true)}
+              aria-label="Abrir menú"
+              className="inline-flex size-10 items-center justify-center rounded-2xl border border-arena bg-white text-bosque-700 active:scale-95"
+            >
+              <Menu size={20} />
+            </button>
+          </div>
         </header>
 
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-5 pb-28 lg:px-8 lg:pt-8 lg:pb-12">{children}</main>
@@ -154,9 +172,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           ))}
         </div>
         <div className="mt-5 rounded-2xl bg-beige p-4">
-          <p className="truncate font-semibold text-bosque-800">{perfil?.display_name}</p>
-          <p className="truncate text-sm text-carbon/55">{perfil?.email}</p>
-          <p className="mt-0.5 text-xs font-semibold text-oliva-700">{esAdmin ? 'Administrador' : 'Integrante'}</p>
+          <Link to="/perfil" onClick={() => setMenuAbierto(false)} className="flex items-center gap-3">
+            <Avatar src={miFoto} nombre={miNombre} tamanyo="md" />
+            <span className="min-w-0 flex-1">
+              <span className="block truncate font-semibold text-bosque-800">{miNombre}</span>
+              <span className="block truncate text-sm text-carbon/55">{perfil?.email}</span>
+              <span className="mt-0.5 block text-xs font-semibold text-oliva-700">
+                {esAdmin ? 'Administrador' : 'Integrante'}
+              </span>
+            </span>
+            <ChevronRight size={18} className="text-carbon/30" />
+          </Link>
           <Boton variante="peligro" className="mt-3" ancho onClick={() => void salir()}>
             <LogOut size={16} /> Cerrar sesión
           </Boton>

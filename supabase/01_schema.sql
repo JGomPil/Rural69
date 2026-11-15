@@ -13,6 +13,7 @@ create table if not exists public.profiles (
   email        text not null,
   display_name text not null default '',
   role         text not null default 'user' check (role in ('admin', 'user')),
+  avatar_url   text,
   member_id    uuid,
   created_at   timestamptz not null default now()
 );
@@ -37,6 +38,7 @@ create table if not exists public.members (
   is_child           boolean not null default false,
   consumption_factor numeric(4,2) not null default 1 check (consumption_factor >= 0 and consumption_factor <= 3),
   active             boolean not null default true,
+  avatar_url         text,
   created_at         timestamptz not null default now()
 );
 

@@ -6,14 +6,15 @@ import { Campo, Entrada } from '../components/ui/Campos'
 import { useAuth } from '../hooks/useAuth'
 import { mensajeError, supabaseConfigurado } from '../lib/supabase'
 
-type Modo = 'password' | 'enlace' | 'registro'
+// No hay registro abierto: las cuentas las crea un administrador en Supabase
+// y reparte la contraseña inicial, que luego cada cual cambia en su perfil.
+type Modo = 'password' | 'enlace'
 
 export function Acceso() {
-  const { entrarConPassword, entrarConEnlace, registrarse, recuperarPassword } = useAuth()
+  const { entrarConPassword, entrarConEnlace, recuperarPassword } = useAuth()
   const [modo, setModo] = useState<Modo>('password')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [nombre, setNombre] = useState('')
   const [cargando, setCargando] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [aviso, setAviso] = useState<string | null>(null)
@@ -28,16 +29,9 @@ export function Acceso() {
     try {
       if (modo === 'password') {
         await entrarConPassword(email, password)
-      } else if (modo === 'enlace') {
+      } else {
         await entrarConEnlace(email)
         setAviso('Te hemos enviado un enlace de acceso. Ábrelo desde este mismo móvil u ordenador.')
-      } else {
-        const { necesitaConfirmar } = await registrarse(email, password, nombre)
-        setAviso(
-          necesitaConfirmar
-            ? 'Cuenta creada. Confirma tu email con el mensaje que acabas de recibir y vuelve a entrar.'
-            : '¡Cuenta creada! Entrando…',
-        )
       }
     } catch (e) {
       setError(mensajeError(e))
@@ -82,7 +76,6 @@ export function Acceso() {
               [
                 ['password', 'Contraseña'],
                 ['enlace', 'Enlace mágico'],
-                ['registro', 'Crear cuenta'],
               ] as const
             ).map(([valor, texto]) => (
               <button
@@ -103,18 +96,6 @@ export function Acceso() {
           </div>
 
           <form onSubmit={enviar} className="space-y-4">
-            {modo === 'registro' && (
-              <Campo etiqueta="Tu nombre" requerido>
-                <Entrada
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
-                  placeholder="Javi"
-                  required
-                  autoComplete="name"
-                />
-              </Campo>
-            )}
-
             <Campo etiqueta="Email" requerido>
               <Entrada
                 type="email"
@@ -127,12 +108,8 @@ export function Acceso() {
               />
             </Campo>
 
-            {modo !== 'enlace' && (
-              <Campo
-                etiqueta="Contraseña"
-                requerido
-                ayuda={modo === 'registro' ? 'Mínimo 6 caracteres.' : undefined}
-              >
+            {modo === 'password' && (
+              <Campo etiqueta="Contraseña" requerido>
                 <Entrada
                   type="password"
                   value={password}
@@ -140,7 +117,7 @@ export function Acceso() {
                   placeholder="••••••••"
                   required
                   minLength={6}
-                  autoComplete={modo === 'registro' ? 'new-password' : 'current-password'}
+                  autoComplete="current-password"
                 />
               </Campo>
             )}
@@ -167,7 +144,6 @@ export function Acceso() {
                   <Mail size={18} /> Enviarme el enlace
                 </>
               )}
-              {modo === 'registro' && 'Crear mi cuenta'}
             </Boton>
 
             {modo === 'password' && (
@@ -183,7 +159,7 @@ export function Acceso() {
         </div>
 
         <p className="mt-5 text-center text-xs text-carbon/45">
-          Rural69 es privada: solo entran los integrantes del grupo autorizados por el administrador.
+          Rural69 es privada: las cuentas las crea el administrador. Si no tienes la tuya, pídesela.
         </p>
       </div>
     </div>
