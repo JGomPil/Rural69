@@ -12,6 +12,7 @@ import {
   Settings,
   ShoppingCart,
   Sparkles,
+  UserRound,
 } from 'lucide-react'
 import { Marca } from './Logo'
 import { Avatar } from '../ui/Avatar'
@@ -45,6 +46,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const secundarios: Enlace[] = [
     { a: '/lista-maestra', texto: 'Lista maestra', icono: ListChecks },
     { a: '/historial', texto: 'Historial', icono: BarChart3 },
+    { a: '/perfil', texto: 'Mi perfil', icono: UserRound },
     { a: '/ajustes', texto: 'Ajustes', icono: Settings },
   ]
 
@@ -66,7 +68,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <EnlaceLateral key={e.a + e.texto} enlace={e} />
         ))}
         <div className="mt-auto rounded-2xl bg-beige p-3">
-          <Link to="/perfil" className="flex items-center gap-2.5" title="Mi perfil">
+          <Link
+            to="/perfil"
+            title="Mi perfil"
+            className="-m-1.5 flex items-center gap-2.5 rounded-xl p-1.5 transition hover:bg-white/70"
+          >
             <Avatar src={miFoto} nombre={miNombre} tamanyo="sm" />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-semibold text-bosque-800">{miNombre}</span>
@@ -74,6 +80,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 {esAdmin ? 'Administrador' : 'Integrante'}
               </span>
             </span>
+            <ChevronRight size={16} className="shrink-0 text-carbon/30" />
           </Link>
           <button
             type="button"
