@@ -348,7 +348,7 @@ function Integrantes() {
               <Entrada
                 value={nuevoHogar}
                 onChange={(e) => setNuevoHogar(e.target.value)}
-                placeholder="Javi y Marta"
+                placeholder="Ej.: Javi y Marta"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault()
@@ -357,7 +357,7 @@ function Integrantes() {
                 }}
               />
             </Campo>
-            <Boton variante="secundario" onClick={() => void crearHogar()}>
+            <Boton variante="secundario" onClick={() => void crearHogar()} disabled={!nuevoHogar.trim()}>
               <HousePlus size={17} /> Crear
             </Boton>
           </Tarjeta>
@@ -484,7 +484,7 @@ function FormularioMiembro({
     >
       <form id="form-miembro" onSubmit={guardar} className="space-y-4">
         <Campo etiqueta="Nombre" requerido>
-          <Entrada value={nombre} onChange={(e) => setNombre(e.target.value)} required placeholder="Marta" />
+          <Entrada value={nombre} onChange={(e) => setNombre(e.target.value)} required placeholder="Ej.: Marta" />
         </Campo>
         <Campo etiqueta="Unidad familiar">
           <Lista value={hogar} onChange={(e) => setHogar(e.target.value)}>
