@@ -11,8 +11,6 @@ interface ContextoAuth {
   sinAutorizar: boolean
   esAdmin: boolean
   entrarConPassword: (email: string, password: string) => Promise<void>
-  registrarse: (email: string, password: string, nombre: string) => Promise<{ necesitaConfirmar: boolean }>
-  entrarConEnlace: (email: string) => Promise<void>
   recuperarPassword: (email: string) => Promise<void>
   cambiarPassword: (password: string) => Promise<void>
   cambiarEmail: (email: string) => Promise<void>
@@ -104,24 +102,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       entrarConPassword: async (email, password) => {
         const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
-        if (error) throw error
-      },
-
-      registrarse: async (email, password, nombre) => {
-        const { data, error } = await supabase.auth.signUp({
-          email: email.trim(),
-          password,
-          options: { data: { display_name: nombre.trim() } },
-        })
-        if (error) throw error
-        return { necesitaConfirmar: !data.session }
-      },
-
-      entrarConEnlace: async (email) => {
-        const { error } = await supabase.auth.signInWithOtp({
-          email: email.trim(),
-          options: { emailRedirectTo: window.location.href.split('#')[0], shouldCreateUser: false },
-        })
         if (error) throw error
       },
 

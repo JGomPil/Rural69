@@ -1,18 +1,16 @@
 import { useState } from 'react'
-import { KeyRound, Mail, ShieldAlert } from 'lucide-react'
+import { KeyRound, ShieldAlert } from 'lucide-react'
 import { Marca } from '../components/layout/Logo'
 import { Boton } from '../components/ui/Boton'
 import { Campo, Entrada } from '../components/ui/Campos'
 import { useAuth } from '../hooks/useAuth'
 import { mensajeError, supabaseConfigurado } from '../lib/supabase'
 
-// No hay registro abierto: las cuentas las crea un administrador en Supabase
-// y reparte la contraseña inicial, que luego cada cual cambia en su perfil.
-type Modo = 'password' | 'enlace'
-
+// Solo se entra con email y contraseña: las cuentas las crea un administrador
+// en Supabase y reparte la contraseña inicial, que luego cada cual cambia en su
+// perfil. Ni registro abierto ni enlaces mágicos.
 export function Acceso() {
-  const { entrarConPassword, entrarConEnlace, recuperarPassword } = useAuth()
-  const [modo, setModo] = useState<Modo>('password')
+  const { entrarConPassword, recuperarPassword } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [cargando, setCargando] = useState(false)
@@ -27,12 +25,7 @@ export function Acceso() {
     setAviso(null)
     setCargando(true)
     try {
-      if (modo === 'password') {
-        await entrarConPassword(email, password)
-      } else {
-        await entrarConEnlace(email)
-        setAviso('Te hemos enviado un enlace de acceso. Ábrelo desde este mismo móvil u ordenador.')
-      }
+      await entrarConPassword(email, password)
     } catch (e) {
       setError(mensajeError(e))
     } finally {
@@ -65,36 +58,10 @@ export function Acceso() {
             <Marca className="scale-125" />
           </div>
           <h1 className="font-display text-3xl text-bosque-800">Nuestras escapadas, en orden</h1>
-          <p className="mx-auto mt-2 max-w-xs text-sm text-carbon/60">
-            Casas rurales, votaciones, lista de la compra y lo que sobró de la última vez. Todo en un sitio.
-          </p>
+          <p className="mt-2 text-sm text-carbon/60">Casas, votaciones y lista de la compra.</p>
         </div>
 
         <div className="tarjeta p-5 sm:p-6">
-          <div className="mb-5 flex rounded-2xl bg-beige p-1">
-            {(
-              [
-                ['password', 'Contraseña'],
-                ['enlace', 'Enlace mágico'],
-              ] as const
-            ).map(([valor, texto]) => (
-              <button
-                key={valor}
-                type="button"
-                onClick={() => {
-                  setModo(valor)
-                  setError(null)
-                  setAviso(null)
-                }}
-                className={`flex-1 rounded-xl py-2 text-xs font-bold transition sm:text-sm ${
-                  modo === valor ? 'bg-white text-bosque-700 shadow-sm' : 'text-carbon/55'
-                }`}
-              >
-                {texto}
-              </button>
-            ))}
-          </div>
-
           <form onSubmit={enviar} className="space-y-4">
             <Campo etiqueta="Email" requerido>
               <Entrada
@@ -108,19 +75,17 @@ export function Acceso() {
               />
             </Campo>
 
-            {modo === 'password' && (
-              <Campo etiqueta="Contraseña" requerido>
-                <Entrada
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  minLength={6}
-                  autoComplete="current-password"
-                />
-              </Campo>
-            )}
+            <Campo etiqueta="Contraseña" requerido>
+              <Entrada
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                minLength={6}
+                autoComplete="current-password"
+              />
+            </Campo>
 
             {error && (
               <p className="rounded-2xl border border-tierra-200 bg-tierra-100 px-3.5 py-2.5 text-sm font-medium text-tierra-700">
@@ -134,32 +99,21 @@ export function Acceso() {
             )}
 
             <Boton type="submit" tamanyo="lg" ancho cargando={cargando}>
-              {modo === 'password' && (
-                <>
-                  <KeyRound size={18} /> Entrar
-                </>
-              )}
-              {modo === 'enlace' && (
-                <>
-                  <Mail size={18} /> Enviarme el enlace
-                </>
-              )}
+              <KeyRound size={18} /> Entrar
             </Boton>
 
-            {modo === 'password' && (
-              <button
-                type="button"
-                onClick={() => void recuperar()}
-                className="w-full text-center text-xs font-semibold text-carbon/50 hover:text-bosque-600"
-              >
-                He olvidado la contraseña
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => void recuperar()}
+              className="w-full text-center text-xs font-semibold text-carbon/50 hover:text-bosque-600"
+            >
+              He olvidado la contraseña
+            </button>
           </form>
         </div>
 
         <p className="mt-5 text-center text-xs text-carbon/45">
-          Rural69 es privada: las cuentas las crea el administrador. Si no tienes la tuya, pídesela.
+          Privada. Las cuentas las crea el administrador.
         </p>
       </div>
     </div>
