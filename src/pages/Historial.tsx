@@ -62,7 +62,6 @@ export function Historial() {
         gastoItems,
         productos: items.length,
         porAdultoCasa: casa?.total_price != null && adultos > 0 ? Number(casa.total_price) / adultos : null,
-        porAdultoCompra: gasto > 0 && adultos > 0 ? gasto / adultos : null,
       }
     })
 
@@ -240,9 +239,6 @@ export function Historial() {
                       ) : (
                         <>
                           <strong className="text-carbon/75">{euros(f.gasto, true)}</strong>
-                          {f.adultos > 0 && f.gasto > 0 && (
-                            <span className="text-xs text-carbon/45">{euros(f.gasto / f.adultos)}/adulto</span>
-                          )}
                           {esAdmin && (
                             <button
                               type="button"
