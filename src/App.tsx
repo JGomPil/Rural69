@@ -21,6 +21,7 @@ import { CasasRurales } from './components/trip/CasasRurales'
 import { Votacion } from './components/trip/Votacion'
 import { ListaCompra } from './components/trip/ListaCompra'
 import { Sobrantes } from './components/trip/Sobrantes'
+import { Chat } from './components/trip/Chat'
 
 function PantallaCarga() {
   return (
@@ -95,6 +96,7 @@ export function App() {
                 <Route path="votacion" element={<Votacion />} />
                 <Route path="compra" element={<ListaCompra />} />
                 <Route path="sobrantes" element={<Sobrantes />} />
+                <Route path="chat" element={<Chat />} />
               </Route>
               <Route path="/lista-maestra" element={<ListaMaestra />} />
               <Route path="/despensa" element={<Despensa />} />

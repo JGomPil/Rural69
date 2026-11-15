@@ -9,6 +9,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useAvisos } from '../hooks/useAvisos'
 import { useConsulta } from '../hooks/useConsulta'
 import { useGrupo } from '../hooks/useGrupo'
+import { useSinLeer } from '../hooks/useSinLeer'
 import { mensajeError, supabase } from '../lib/supabase'
 import { personasEquivalentes } from '../lib/cantidades'
 import { cuentaAtras, numero, rangoFechas } from '../lib/formato'
@@ -32,6 +33,7 @@ const PESTANYAS = [
   { a: 'votacion', texto: 'Votación' },
   { a: 'compra', texto: 'Compra' },
   { a: 'sobrantes', texto: 'Sobrantes' },
+  { a: 'chat', texto: 'Chat' },
 ]
 
 export function Escapada() {
@@ -43,6 +45,7 @@ export function Escapada() {
   const [editando, setEditando] = useState(false)
   const [borrando, setBorrando] = useState(false)
   const [enCurso, setEnCurso] = useState(false)
+  const sinLeer = useSinLeer(id)
 
   const {
     datos,
@@ -187,6 +190,11 @@ export function Escapada() {
             }
           >
             {p.texto}
+            {p.a === 'chat' && sinLeer > 0 && (
+              <span className="ml-1.5 inline-flex min-w-5 justify-center rounded-full bg-tierra-500 px-1.5 text-[11px] leading-5 font-bold text-white">
+                {sinLeer > 99 ? '99+' : sinLeer}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>

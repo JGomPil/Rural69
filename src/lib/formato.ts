@@ -98,3 +98,23 @@ export function hoyISO(): string {
   const dia = String(d.getDate()).padStart(2, '0')
   return `${d.getFullYear()}-${mes}-${dia}`
 }
+
+/** Hora de un mensaje: `18:42`. */
+export function hora(iso: string): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  return d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+}
+
+/** Separador de día del chat: «Hoy», «Ayer» o `martes, 14 de marzo`. */
+export function diaDeChat(iso: string): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  const soloDia = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime()
+  const dias = Math.round((soloDia(new Date()) - soloDia(d)) / 86_400_000)
+  if (dias === 0) return 'Hoy'
+  if (dias === 1) return 'Ayer'
+  const opciones: Intl.DateTimeFormatOptions =
+    dias < 365 ? { weekday: 'long', day: 'numeric', month: 'long' } : { day: 'numeric', month: 'long', year: 'numeric' }
+  return d.toLocaleDateString('es-ES', opciones)
+}

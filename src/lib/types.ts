@@ -148,3 +148,19 @@ export interface AppSetting {
   key: string
   value: unknown
 }
+
+export interface Message {
+  id: string
+  trip_id: string
+  author_id: string
+  body: string
+  image_url: string | null
+  edited_at: string | null
+  created_at: string
+}
+
+export interface MessageRead {
+  trip_id: string
+  profile_id: string
+  last_read_at: string
+}
