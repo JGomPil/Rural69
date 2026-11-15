@@ -22,6 +22,7 @@ import { personasEquivalentes } from '../lib/cantidades'
 import { estiloCategoria } from '../lib/constantes'
 import { Boton } from '../components/ui/Boton'
 import { AvisoError, Cargando, Etiqueta, EtiquetaEstado, Progreso, Seccion, Tarjeta, Vacio } from '../components/ui/Varios'
+import { InstalarApp } from '../components/layout/InstalarApp'
 import { FormularioEscapada } from '../components/trip/FormularioEscapada'
 import type { House, PantryItem, Trip } from '../lib/types'
 
@@ -73,6 +74,8 @@ export function Panel() {
   return (
     <div className="space-y-7">
       {error && <AvisoError texto={error} onReintentar={() => void refrescar()} />}
+
+      <InstalarApp />
 
       <header className="animate-sube">
         <p className="text-sm font-semibold text-oliva-700">¡Hola, {saludo}!</p>

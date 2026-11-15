@@ -4,11 +4,13 @@ type Variante = 'primario' | 'secundario' | 'suave' | 'peligro' | 'fantasma' | '
 type Tamanyo = 'sm' | 'md' | 'lg'
 
 const VARIANTES: Record<Variante, string> = {
-  primario: 'bg-bosque-600 text-white hover:bg-bosque-700 active:bg-bosque-800 shadow-sm',
-  acento: 'bg-tierra-500 text-white hover:bg-tierra-600 active:bg-tierra-700 shadow-sm',
-  secundario: 'bg-white text-bosque-700 border border-arena hover:bg-beige active:bg-arena',
+  primario:
+    'bg-bosque-600 text-white shadow-[0_1px_2px_rgba(27,55,39,0.3),0_6px_16px_-10px_rgba(27,55,39,0.8)] hover:bg-bosque-700 active:bg-bosque-800 active:shadow-[0_1px_2px_rgba(27,55,39,0.3)]',
+  acento:
+    'bg-tierra-500 text-white shadow-[0_1px_2px_rgba(133,69,42,0.3),0_6px_16px_-10px_rgba(133,69,42,0.8)] hover:bg-tierra-600 active:bg-tierra-700 active:shadow-[0_1px_2px_rgba(133,69,42,0.3)]',
+  secundario: 'bg-white text-bosque-700 border border-arena shadow-[0_1px_2px_rgba(74,59,42,0.05)] hover:bg-beige hover:border-arena active:bg-arena active:shadow-none',
   suave: 'bg-bosque-50 text-bosque-700 hover:bg-bosque-100 active:bg-bosque-200',
-  peligro: 'bg-white text-tierra-700 border border-tierra-200 hover:bg-tierra-100',
+  peligro: 'bg-white text-tierra-700 border border-tierra-200 shadow-[0_1px_2px_rgba(74,59,42,0.05)] hover:bg-tierra-100 active:shadow-none',
   fantasma: 'text-carbon/70 hover:bg-black/5 active:bg-black/10',
 }
 
@@ -39,7 +41,7 @@ export function Boton({
     <button
       {...resto}
       disabled={disabled || cargando}
-      className={`inline-flex shrink-0 items-center justify-center font-semibold transition-all duration-150 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 ${VARIANTES[variante]} ${TAMANYOS[tamanyo]} ${ancho ? 'w-full' : ''} ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center font-semibold tracking-tight transition-all duration-150 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none ${VARIANTES[variante]} ${TAMANYOS[tamanyo]} ${ancho ? 'w-full' : ''} ${className}`}
     >
       {cargando && <Loader2 size={16} className="animate-spin" />}
       {children}

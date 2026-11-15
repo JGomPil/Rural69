@@ -16,7 +16,7 @@ export function Tarjeta({
       <button
         type="button"
         onClick={onClick}
-        className={`tarjeta w-full text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 ${className}`}
+        className={`tarjeta sombra-flotante-hover w-full text-left transition duration-200 hover:-translate-y-0.5 active:translate-y-0 ${className}`}
       >
         {children}
       </button>
@@ -41,8 +41,8 @@ export function Seccion({
   return (
     <section className={`animate-sube ${className}`}>
       <header className="mb-3 flex items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-lg text-bosque-800">
-          {icono}
+        <h2 className="flex items-center gap-2.5 text-lg text-bosque-800">
+          {icono && <span className="text-bosque-500">{icono}</span>}
           {titulo}
         </h2>
         {accion}
@@ -70,7 +70,7 @@ export function Etiqueta({
   }
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${tonos[tono]} ${className}`}
+      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold tracking-tight whitespace-nowrap ${tonos[tono]} ${className}`}
     >
       {children}
     </span>
@@ -186,8 +186,10 @@ export function Dato({
   }
   return (
     <div className="tarjeta flex flex-col gap-1 p-4">
-      {icono && <span className={tonos[tono]}>{icono}</span>}
-      <span className={`font-display text-2xl leading-tight font-bold ${tonos[tono]}`}>{valor}</span>
+      {icono && <span className={`${tonos[tono]} opacity-80`}>{icono}</span>}
+      <span className={`font-display text-2xl leading-tight font-bold tracking-tight tabular-nums ${tonos[tono]}`}>
+        {valor}
+      </span>
       <span className="text-xs leading-snug font-medium text-carbon/55">{etiqueta}</span>
     </div>
   )

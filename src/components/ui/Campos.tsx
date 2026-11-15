@@ -1,6 +1,8 @@
 const BASE_CAMPO =
-  'w-full rounded-2xl border border-arena bg-white px-3.5 py-2.5 text-carbon placeholder:text-carbon/35 ' +
-  'transition outline-none focus:border-bosque-500 focus:ring-3 focus:ring-bosque-500/15 disabled:bg-beige disabled:opacity-70'
+  'w-full rounded-2xl border border-arena bg-white px-3.5 py-2.5 text-carbon shadow-[inset_0_1px_2px_rgba(74,59,42,0.04)] ' +
+  'placeholder:text-carbon/35 transition duration-150 outline-none ' +
+  'hover:border-arena/90 focus:border-bosque-500 focus:ring-3 focus:ring-bosque-500/15 focus:shadow-none ' +
+  'disabled:bg-beige disabled:opacity-70'
 
 interface PropsCampo {
   etiqueta?: string
@@ -15,7 +17,7 @@ export function Campo({ etiqueta, ayuda, error, requerido, className = '', child
   return (
     <label className={`block ${className}`}>
       {etiqueta && (
-        <span className="mb-1.5 flex items-center gap-1 text-sm font-semibold text-carbon/75">
+        <span className="mb-1.5 flex items-center gap-0.5 text-[13px] font-semibold text-carbon/70">
           {etiqueta}
           {requerido && <span className="text-tierra-600">*</span>}
         </span>

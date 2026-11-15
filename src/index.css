@@ -42,6 +42,12 @@
 
   --radius-card: 1.25rem;
 
+  /* Una sola escala de sombras, tintada de marrón en vez de negra: sobre
+     fondo crema una sombra gris se ve sucia, y una cálida se ve impresa. */
+  --shadow-suave: 0 1px 2px rgba(74, 59, 42, 0.05);
+  --shadow-tarjeta: 0 1px 2px rgba(74, 59, 42, 0.05), 0 10px 30px -22px rgba(74, 59, 42, 0.45);
+  --shadow-flotante: 0 2px 6px rgba(74, 59, 42, 0.07), 0 18px 40px -24px rgba(74, 59, 42, 0.5);
+
   --animate-aparece: aparece 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-sube: sube 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-pop: pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
@@ -82,15 +88,43 @@
     background-attachment: fixed;
     color: var(--color-carbon);
     font-family: var(--font-sans);
+    font-feature-settings: 'cv05', 'ss01';
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overscroll-behavior-y: none;
+  }
+
+  /* Grano de papel, finísimo. No se ve, pero se nota: el fondo deja de ser
+     una mancha plana de color y parece impreso. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
   }
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
     font-weight: 700;
+    text-wrap: balance;
   }
+
+  /* El interletrado se aprieta cuanto más grande es el texto: si no, los
+     titulares se ven desparramados y los rótulos pequeños, apelmazados. */
+  h1 { letter-spacing: -0.03em; }
+  h2 { letter-spacing: -0.025em; }
+  h3, h4 { letter-spacing: -0.015em; }
+
+  p { text-wrap: pretty; }
 
   input, select, textarea, button {
     font: inherit;
@@ -100,6 +134,26 @@
   input, select, textarea {
     font-size: 16px;
   }
+
+  /* Un único anillo de foco para todo, y solo con el teclado. */
+  :focus-visible {
+    outline: 2px solid var(--color-bosque-500);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+
+  ::selection {
+    background-color: var(--color-oliva-200);
+    color: var(--color-bosque-900);
+  }
+
+  /* Barras de desplazamiento discretas y del color de la casa. */
+  @supports (scrollbar-width: thin) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-arena) transparent;
+    }
+  }
 }
 
 @layer utilities {
@@ -107,7 +161,20 @@
     border-radius: var(--radius-card);
     background-color: #fff;
     border: 1px solid var(--color-arena);
-    box-shadow: 0 1px 2px rgba(42, 38, 34, 0.04), 0 8px 24px -16px rgba(42, 38, 34, 0.25);
+    box-shadow: var(--shadow-tarjeta);
+  }
+
+  .sombra-flotante {
+    box-shadow: var(--shadow-flotante);
+  }
+
+  .sombra-flotante-hover:hover {
+    box-shadow: var(--shadow-flotante);
+  }
+
+  /* Línea fina de separación, del mismo tono que la arena pero más suave. */
+  .raya {
+    border-color: rgba(231, 220, 196, 0.8);
   }
 
   .scroll-oculto {
@@ -137,6 +204,9 @@
   }
   body {
     background: #fff;
+  }
+  body::before {
+    display: none;
   }
   .tarjeta {
     border-color: #ccc;
