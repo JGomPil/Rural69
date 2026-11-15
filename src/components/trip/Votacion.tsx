@@ -45,6 +45,9 @@ export function Votacion() {
     return { filas, maximo, total: votos.length }
   }, [datos])
 
+  // En el grupo solo pagan los adultos: los niños no cuentan para repartir el precio.
+  const adultos = participantes.filter((m) => !m.is_child).length
+
   const miVoto = datos?.votos.find((v) => v.voter_id === perfil?.id)
   const sinVotar = perfiles.filter((p) => !datos?.votos.some((v) => v.voter_id === p.id))
 
@@ -131,7 +134,8 @@ export function Votacion() {
           </h2>
           <p className="mt-0.5 text-sm text-carbon/60">
             {resultados.total} {resultados.total === 1 ? 'voto emitido' : 'votos emitidos'}
-            {participantes.length > 0 && ` · ${perfiles.length} adultos con cuenta`}
+            {participantes.length > 0 &&
+              ` · ${perfiles.length} ${perfiles.length === 1 ? 'adulto' : 'adultos'} con cuenta`}
           </p>
         </div>
         {esAdmin && (
@@ -213,17 +217,30 @@ export function Votacion() {
               key={casa.id}
               className={`flex gap-3 overflow-hidden p-0 ${esMiVoto ? 'ring-2 ring-bosque-500' : ''}`}
             >
-              {(casa.cover_image_url || null) && (
-                <img src={casa.cover_image_url!} alt="" className="w-24 shrink-0 object-cover" loading="lazy" />
+              {casa.cover_image_url && (
+                <img src={casa.cover_image_url} alt="" className="w-24 shrink-0 object-cover" loading="lazy" />
               )}
-              <div className="flex min-w-0 flex-1 flex-col gap-1.5 py-3 pr-3">
+              {/* Sin foto no hay nada que separe el texto del borde, así que el
+                  relleno izquierdo lo pone esta columna. */}
+              <div
+                className={`flex min-w-0 flex-1 flex-col gap-1.5 py-3 pr-3 ${
+                  casa.cover_image_url ? '' : 'pl-4'
+                }`}
+              >
                 <div className="flex items-start justify-between gap-2">
                   <h3 className="font-display truncate text-base text-bosque-800">{casa.name}</h3>
-                  {esGanadora && <Etiqueta tono="oliva">{votos.length} votos</Etiqueta>}
+                  {esGanadora && (
+                    <Etiqueta tono="oliva">
+                      {votos.length} {votos.length === 1 ? 'voto' : 'votos'}
+                    </Etiqueta>
+                  )}
                 </div>
                 <p className="truncate text-sm text-carbon/60">
                   {[casa.town, casa.province].filter(Boolean).join(', ') || '—'}
-                  {casa.total_price != null && ` · ${euros(casa.total_price)}`}
+                  {casa.total_price != null &&
+                    (adultos > 0
+                      ? ` · ${euros(casa.total_price / adultos)}/adulto`
+                      : ` · ${euros(casa.total_price)}`)}
                 </p>
                 <div className="mt-auto flex flex-wrap items-center gap-2 pt-1">
                   <Boton
