@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { Boton } from './Boton'
 
@@ -33,7 +34,10 @@ export function Modal({ abierto, onCerrar, titulo, descripcion, children, pie, a
 
   const anchos = { sm: 'sm:max-w-md', md: 'sm:max-w-xl', lg: 'sm:max-w-3xl' }
 
-  return (
+  // Se monta en <body> con un portal. Si se quedara dentro de la página, cualquier
+  // ancestro con `transform` (por ejemplo una sección animada) pasaría a ser el
+  // marco de referencia de `position: fixed` y el diálogo aparecería descolocado.
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4">
       <div className="animate-aparece absolute inset-0 bg-carbon/45 backdrop-blur-sm" onClick={onCerrar} />
       <div
@@ -56,14 +60,15 @@ export function Modal({ abierto, onCerrar, titulo, descripcion, children, pie, a
             <X size={20} />
           </button>
         </header>
-        <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4">{children}</div>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4">{children}</div>
         {pie && (
           <footer className="safe-bottom flex items-center justify-end gap-2 border-t border-arena bg-white/70 px-5 py-3.5">
             {pie}
           </footer>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

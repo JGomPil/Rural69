@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, ExternalLink, X } from 'lucide-react'
 import type { House } from '../../lib/types'
 
@@ -36,7 +37,7 @@ export function GaleriaCasa({
 
   if (!casa) return null
 
-  return (
+  return createPortal(
     <div className="animate-aparece fixed inset-0 z-[60] flex flex-col bg-carbon/95">
       <header className="flex items-start gap-3 px-4 py-3 text-white">
         <div className="min-w-0 flex-1">
@@ -116,6 +117,7 @@ export function GaleriaCasa({
           ))}
         </div>
       )}
-    </div>
+    </div>,
+    document.body,
   )
 }
