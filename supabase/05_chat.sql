@@ -92,3 +92,7 @@ begin
     end;
   end loop;
 end $$;
+
+-- PostgREST se guarda en memoria cómo es la base de datos. Al añadir tablas o
+-- columnas hay que avisarle, o seguirá diciendo que no existen.
+notify pgrst, 'reload schema';
