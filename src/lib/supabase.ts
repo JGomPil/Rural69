@@ -17,6 +17,7 @@ export const supabase = createClient(url ?? 'http://localhost', anonKey ?? 'sin-
   auth: {
     // PKCE: el enlace mágico vuelve como ?code=... y no choca con el router de hash.
     flowType: 'pkce',
+    storageKey: 'rural69-auth',
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,

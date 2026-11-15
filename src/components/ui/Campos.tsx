@@ -147,9 +147,9 @@ export function Contador({
         value={Number.isFinite(valor) ? valor : 0}
         disabled={disabled}
         onChange={(e) => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
-        className="w-14 border-0 bg-transparent text-center font-semibold outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
+        className="w-11 border-0 bg-transparent px-0 text-center font-semibold outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
       />
-      {sufijo && <span className="pr-1 text-xs text-carbon/55">{sufijo}</span>}
+      {sufijo && <span className="max-w-14 truncate pr-0.5 text-xs text-carbon/55">{sufijo}</span>}
       <button
         type="button"
         onClick={() => ajusta(paso)}

@@ -100,12 +100,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 end={e.exacto}
                 className={({ isActive }) =>
                   `flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold transition ${
-                    (e.texto === 'Compra' ? compraActiva : isActive) ? 'text-bosque-600' : 'text-carbon/45'
+                    (e.texto === 'Compra' ? compraActiva : isActive && !compraActiva)
+                    ? 'text-bosque-600'
+                    : 'text-carbon/45'
                   }`
                 }
               >
                 {({ isActive }) => {
-                  const activo = e.texto === 'Compra' ? compraActiva : isActive
+                  const activo = e.texto === 'Compra' ? compraActiva : isActive && !compraActiva
                   return (
                     <>
                       <span
