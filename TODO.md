@@ -3,6 +3,18 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 14 · El aviso de instalar, solo cuando toca ✅
+
+- [x] En Chrome y Edge, si ya está instalada el evento de instalación no se dispara, y
+      el aviso lo tomaba por «explícaselo a mano»: de ahí que saliera siempre
+- [x] Ahora, en los navegadores que avisan solos, no avisar significa que no hay nada
+      que ofrecer, y el aviso no sale
+- [x] Al abrir la app instalada queda anotado en el aparato, así que la siguiente vez
+      que se abra en una pestaña normal tampoco sale
+- [x] El evento se atrapa en `index.html`, antes de que React exista, que si no se
+      pierde y la aplicación cree que no se puede instalar
+- [x] En iPhone, donde no hay forma de saberlo, un «Ya la tengo instalada» para decirlo
+
 ## Fase 13 · Menús por días ✅
 
 - [x] Recetario del grupo en `/recetario`: platos con ingredientes y para cuánta gente

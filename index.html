@@ -27,6 +27,16 @@
         }
       })()
     </script>
+    <script>
+      // Chrome dispara «beforeinstallprompt» en cuanto carga la página, que
+      // puede ser antes de que React monte nada. Si nadie lo escucha, se
+      // pierde, y entonces la aplicación cree que no se puede instalar.
+      window.__rural69Instalable = null
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault()
+        window.__rural69Instalable = e
+      })
+    </script>
     <meta name="description" content="Rural69 · La central de mando de nuestras escapadas a casas rurales." />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
