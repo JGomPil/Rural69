@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react'
-import { NavLink, Outlet, useNavigate, useOutletContext, useParams } from 'react-router-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { NavLink, Outlet, useLocation, useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import { ArrowLeft, CalendarDays, MapPin, Pencil, Trash2, Users } from 'lucide-react'
 import { BotonIcono } from '../components/ui/Boton'
 import { AvisoError, Cargando, EtiquetaEstado, Vacio } from '../components/ui/Varios'
@@ -39,8 +39,19 @@ const PESTANYAS = [
   { a: 'chat', texto: 'Chat' },
 ]
 
+/** Degradado en los bordes por los que la barra todavía tiene recorrido. */
+function mascara({ izquierda, derecha }: { izquierda: boolean; derecha: boolean }): string | undefined {
+  if (!izquierda && !derecha) return undefined
+  const tramos = [
+    izquierda ? 'transparent 0, #000 2rem' : '#000 0',
+    derecha ? '#000 calc(100% - 2rem), transparent 100%' : '#000 100%',
+  ]
+  return `linear-gradient(to right, ${tramos.join(', ')})`
+}
+
 export function Escapada() {
   const { id } = useParams<{ id: string }>()
+  const { pathname } = useLocation()
   const { miembros, escapadas, refrescar: refrescarGrupo } = useGrupo()
   const { esAdmin } = useAuth()
   const avisos = useAvisos()
@@ -49,6 +60,38 @@ export function Escapada() {
   const [borrando, setBorrando] = useState(false)
   const [enCurso, setEnCurso] = useState(false)
   const sinLeer = useSinLeer(id)
+  const barra = useRef<HTMLElement>(null)
+  const [bordes, setBordes] = useState({ izquierda: false, derecha: false })
+
+  /**
+   * Las siete pestañas no caben en un móvil: a 390 px entran cuatro. Eso deja
+   * dos problemas, y los dos se notan solo en un teléfono de verdad.
+   *
+   * El primero es que si estabas en Compra, Sobrantes o Chat, la pestaña
+   * resaltada quedaba fuera de la pantalla y no había forma de saber dónde
+   * estabas. Por eso se arrastra la activa al centro al cambiar de ruta.
+   *
+   * El segundo es que, con la barra de desplazamiento oculta, nada decía que
+   * hubiera más pestañas a la derecha. De ahí el degradado en el borde por el
+   * que todavía queda algo por ver.
+   */
+  const revisarBordes = useCallback(() => {
+    const el = barra.current
+    if (!el) return
+    setBordes({
+      izquierda: el.scrollLeft > 4,
+      derecha: el.scrollLeft + el.clientWidth < el.scrollWidth - 4,
+    })
+  }, [])
+
+  useEffect(() => {
+    const el = barra.current
+    if (!el) return
+    el.querySelector('[aria-current="page"]')?.scrollIntoView({ inline: 'center', block: 'nearest' })
+    revisarBordes()
+    window.addEventListener('resize', revisarBordes)
+    return () => window.removeEventListener('resize', revisarBordes)
+  }, [pathname, revisarBordes])
 
   const {
     datos,
@@ -180,7 +223,15 @@ export function Escapada() {
         </div>
       </header>
 
-      <nav className="scroll-oculto -mx-4 flex gap-1.5 overflow-x-auto px-4 lg:mx-0 lg:px-0">
+      <nav
+        ref={barra}
+        onScroll={revisarBordes}
+        style={{
+          maskImage: mascara(bordes),
+          WebkitMaskImage: mascara(bordes),
+        }}
+        className="scroll-oculto -mx-4 flex gap-1.5 overflow-x-auto px-4 lg:mx-0 lg:px-0"
+      >
         {PESTANYAS.map((p) => (
           <NavLink
             key={p.texto}
