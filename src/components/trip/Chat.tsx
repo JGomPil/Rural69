@@ -276,6 +276,7 @@ export function Chat() {
             onKeyDown={teclado}
             rows={1}
             placeholder="Escribe un mensaje…"
+            aria-label="Escribe un mensaje"
             className="max-h-32 min-h-10 flex-1 resize-none rounded-2xl border border-arena bg-superficie px-3.5 py-2.5 text-sm outline-none transition focus:border-bosque-400 focus:ring-2 focus:ring-bosque-200"
           />
           <button

@@ -40,6 +40,9 @@ import type { PantryItem, ShoppingItem, TripMeal } from '../../lib/types'
 type Filtro = 'pendientes' | 'comprados' | 'todos'
 /** Cómo se agrupa la lista en pantalla. */
 type Agrupar = 'categoria' | 'tiempo'
+
+/** Cómo prefiere ver la lista quien usa este aparato. */
+const CLAVE_AGRUPAR = 'rural69-agrupar-compra'
 /** `null` en el filtro de tiempo = todos; `'comun'` = los que no son de ningún tiempo. */
 type FiltroTiempo = string | null
 
@@ -50,7 +53,27 @@ export function ListaCompra() {
   const avisos = useAvisos()
 
   const [filtro, setFiltro] = useState<Filtro>('pendientes')
-  const [agrupar, setAgrupar] = useState<Agrupar>('categoria')
+  // Por tiempos de serie: la compra de una escapada se hace pensando en «la
+  // cena del viernes», no en «los lácteos». Por categorías es útil dentro del
+  // supermercado, así que se puede cambiar y se recuerda en este aparato.
+  const [preferencia, setPreferencia] = useState<Agrupar>(() => {
+    try {
+      const guardada = localStorage.getItem(CLAVE_AGRUPAR)
+      if (guardada === 'categoria' || guardada === 'tiempo') return guardada
+    } catch {
+      // Navegación privada: sin memoria. Se queda con lo de serie.
+    }
+    return 'tiempo'
+  })
+
+  const elegirAgrupacion = (valor: Agrupar) => {
+    setPreferencia(valor)
+    try {
+      localStorage.setItem(CLAVE_AGRUPAR, valor)
+    } catch {
+      // Da igual: como mucho no se recuerda la próxima vez.
+    }
+  }
   const [filtroTiempo, setFiltroTiempo] = useState<FiltroTiempo>(null)
   const [gestionandoTiempos, setGestionandoTiempos] = useState(false)
   const [generandoPDF, setGenerandoPDF] = useState(false)
@@ -116,6 +139,9 @@ export function ListaCompra() {
   const lista = useMemo(() => items ?? [], [items])
   const listaTiempos = useMemo(() => tiempos ?? [], [tiempos])
   const tiempoPorId = useMemo(() => new Map(listaTiempos.map((t) => [t.id, t])), [listaTiempos])
+  // Sin comidas creadas, agrupar por tiempos deja todo en un montón llamado
+  // «Común», que no ayuda a nadie. En ese caso manda la categoría.
+  const agrupar: Agrupar = listaTiempos.length === 0 ? 'categoria' : preferencia
   const comprados = lista.filter((i) => i.purchased).length
 
   const coincidenciasDespensa = useMemo(() => {
@@ -517,7 +543,7 @@ export function ListaCompra() {
             <button
               key={valor}
               type="button"
-              onClick={() => setAgrupar(valor)}
+              onClick={() => elegirAgrupacion(valor)}
               className={`rounded-full px-3 py-1 font-bold transition ${
                 agrupar === valor ? 'bg-bosque-600 text-tinta-fuerte' : 'bg-superficie text-suave hover:bg-beige'
               }`}
