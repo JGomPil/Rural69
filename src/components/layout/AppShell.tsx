@@ -30,6 +30,27 @@ interface Enlace {
   exacto?: boolean
 }
 
+/**
+ * Qué enlace se enciende. No vale el `isActive` de NavLink porque «Compra» no
+ * es una sección propia: apunta a una pestaña de dentro de la escapada. Sin
+ * este matiz se encienden dos a la vez, y pasaba en la barra lateral:
+ *
+ *   · en la compra de una escapada, `/escapadas/<id>/compra` empieza por
+ *     `/escapadas`, así que se encendían «Escapadas» y «Compra»;
+ *   · y mientras no hay ninguna escapada creada, «Compra» apunta también a la
+ *     lista, así que las dos se encendían siempre.
+ *
+ * Vive aquí, fuera de las dos barras, para que no vuelvan a desincronizarse.
+ */
+function estaActivo(enlace: Enlace, ruta: string, compraActiva: boolean): boolean {
+  if (enlace.texto === 'Compra') return compraActiva
+  if (enlace.exacto) return ruta === enlace.a
+  // Por tramos: `/escapadas` no debe encenderse con una hipotética
+  // `/escapadas-archivadas`.
+  const dentro = ruta === enlace.a || ruta.startsWith(`${enlace.a}/`)
+  return dentro && !compraActiva
+}
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { perfil, salir, esAdmin } = useAuth()
   const { escapadaActiva, miembros } = useGrupo()
@@ -70,7 +91,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <BotonAvisos />
         </div>
         {[...principales, ...secundarios].map((e) => (
-          <EnlaceLateral key={e.a + e.texto} enlace={e} />
+          <EnlaceLateral
+            key={e.a + e.texto}
+            enlace={e}
+            activo={estaActivo(e, location.pathname, compraActiva)}
+          />
         ))}
         <div className="mt-auto rounded-2xl bg-beige p-3">
           <Link
@@ -129,16 +154,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 key={e.texto}
                 to={e.a}
                 end={e.exacto}
-                className={({ isActive }) =>
-                  `flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold transition ${
-                    (e.texto === 'Compra' ? compraActiva : isActive && !compraActiva)
-                    ? 'text-bosque-600'
-                    : 'text-carbon/45'
-                  }`
-                }
+                className={`flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold transition ${
+                  estaActivo(e, location.pathname, compraActiva) ? 'text-bosque-600' : 'text-carbon/45'
+                }`}
               >
-                {({ isActive }) => {
-                  const activo = e.texto === 'Compra' ? compraActiva : isActive && !compraActiva
+                {() => {
+                  const activo = estaActivo(e, location.pathname, compraActiva)
                   return (
                     <>
                       <span
@@ -210,16 +231,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   )
 }
 
-function EnlaceLateral({ enlace }: { enlace: Enlace }) {
+function EnlaceLateral({ enlace, activo }: { enlace: Enlace; activo: boolean }) {
   return (
     <NavLink
       to={enlace.a}
       end={enlace.exacto}
-      className={({ isActive }) =>
-        `flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold transition ${
-          isActive ? 'bg-bosque-600 text-tinta-fuerte shadow-sm' : 'text-carbon/70 hover:bg-beige'
-        }`
-      }
+      className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold transition ${
+        activo ? 'bg-bosque-600 text-tinta-fuerte shadow-sm' : 'text-carbon/70 hover:bg-beige'
+      }`}
     >
       <enlace.icono size={19} />
       {enlace.texto}
