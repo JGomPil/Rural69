@@ -372,8 +372,9 @@ function AvisosDelGrupo() {
     <Seccion titulo="Avisos" icono={activados ? <Bell size={19} /> : <BellOff size={19} />}>
       <Tarjeta className="space-y-4 p-5">
         <p className="text-sm text-tenue">
-          Cuando alguien propone una casa, se abre una votación o ya hay casa elegida, te sale en la campana
-          de arriba. Eso funciona siempre. Aparte, este aparato puede avisarte con un toque del sistema.
+          Cuando alguien propone fechas o una casa, se abre una votación o ya hay fechas y casa elegidas, te
+          sale en la campana de arriba. Eso funciona siempre, y tus propias acciones no te avisan a ti.
+          Aparte, este aparato puede avisarte con un toque del sistema.
         </p>
 
         {permiso === 'no-soportado' ? (

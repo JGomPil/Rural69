@@ -95,7 +95,8 @@ function PanelAvisos({ abierto, onCerrar }: { abierto: boolean; onCerrar: () => 
         <div className="flex flex-col items-center gap-2.5 py-8 text-center">
           <Inbox size={30} className="text-carbon/30" />
           <p className="text-sm text-suave">
-            Aquí saldrá cuando alguien proponga una casa o se abra una votación.
+            Aquí saldrá cuando alguien proponga fechas o una casa, se abra una votación o ya haya algo
+            decidido. Tus propias acciones no te avisan a ti.
           </p>
         </div>
       ) : (

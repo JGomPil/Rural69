@@ -164,12 +164,17 @@ export function Fechas() {
             {escapada.dates_voting_open ? 'Fechas a votación' : 'Votación de fechas cerrada'}
           </h2>
           <p className="mt-0.5 text-sm text-suave">
+            {/* Tres estados distintos, y decirlos mal despista: «todavía sin
+                fechas» con cinco findes ya propuestos y la gente votando no
+                es verdad. */}
             {yaHayFechas ? (
               <>
                 Fechas de la escapada: <strong>{rangoFechas(escapada.start_date, escapada.end_date)}</strong>
               </>
-            ) : (
+            ) : resultados.filas.length === 0 ? (
               'Todavía sin fechas. Proponed fines de semana y votad.'
+            ) : (
+              `${resultados.filas.length} ${resultados.filas.length === 1 ? 'finde propuesto' : 'findes propuestos'} y ${resultados.total} ${resultados.total === 1 ? 'voto' : 'votos'}. Sin decidir todavía.`
             )}
           </p>
         </div>
