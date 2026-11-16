@@ -3,6 +3,19 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 10 · Votación de fechas ✅
+
+- [x] Pestaña «Fechas» en la escapada, **antes** que «Casas»: es el orden real del grupo
+- [x] Cualquiera propone fines de semana candidatos, con nombre y observaciones
+- [x] Un voto por persona, cambiable mientras la votación esté abierta
+- [x] Resultados con barras, quién ha votado qué y quién falta
+- [x] Un administrador abre y cierra la votación de fechas, aparte de la de casas
+- [x] Al fijar las ganadoras se copian en la escapada: de ahí salen la cuenta atrás,
+      los tiempos de la compra y el historial
+- [x] La pestaña «Casas» recuerda votar las fechas primero si aún no hay
+- [x] Avisos nuevos: fechas propuestas, votación de fechas abierta y fechas elegidas
+- [x] El formulario de la escapada dice que solo el nombre es obligatorio
+
 ## Fase 9 · Modo oscuro y avisos ✅
 
 - [x] Claro, oscuro o automático, desde «Mi perfil → Aspecto»
@@ -147,9 +160,9 @@ Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
 ## Tareas manuales (solo tú puedes hacerlas)
 
-- [ ] Crear el proyecto en Supabase y ejecutar los **siete** scripts SQL por orden
-      (el último, `07_notificaciones.sql`, es el de los avisos: hasta que no se pase,
-      la campana saldrá siempre vacía)
+- [ ] Crear el proyecto en Supabase y ejecutar los **ocho** scripts SQL por orden
+      (`07_notificaciones.sql` son los avisos y `08_fechas.sql` la votación de fechas:
+      hasta que no se pasen, la campana sale vacía y la pestaña «Fechas» da error)
 - [ ] Configurar *Site URL* y *Redirect URLs* en Supabase
 - [ ] Crear tu cuenta (serás administrador) e invitar al resto del grupo
 - [ ] Crear el repositorio en GitHub, añadir los dos secretos y activar Pages

@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Bath,
   BedDouble,
+  CalendarDays,
   Columns3,
   ExternalLink,
   LayoutGrid,
@@ -119,6 +121,21 @@ export function CasasRurales() {
 
   return (
     <div className="space-y-4">
+      {!escapada.start_date && (
+        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-2xl border border-oliva-300 bg-oliva-100 px-4 py-3 text-sm text-oliva-700">
+          <CalendarDays size={16} className="shrink-0" />
+          <span className="flex-1">
+            Todavía no hay fechas. Buscar casa antes de saber el finde suele ser trabajo doble: la mitad
+            estarán ocupadas.
+          </span>
+          <Link
+            to={`/escapadas/${escapada.id}/fechas`}
+            className="font-semibold underline underline-offset-2"
+          >
+            Votar las fechas
+          </Link>
+        </p>
+      )}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex rounded-2xl bg-beige p-1">
           {(

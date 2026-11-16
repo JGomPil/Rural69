@@ -29,6 +29,9 @@ export function useEscapada() {
 
 const PESTANYAS = [
   { a: '', texto: 'Resumen' },
+  // El orden es el del grupo: primero se vota el finde y, con la fecha ya
+  // puesta, se buscan casas libres.
+  { a: 'fechas', texto: 'Fechas' },
   { a: 'casas', texto: 'Casas' },
   { a: 'votacion', texto: 'Votación' },
   { a: 'compra', texto: 'Compra' },

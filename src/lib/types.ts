@@ -46,6 +46,9 @@ export interface Trip {
   status: EstadoEscapada
   voting_open: boolean
   chosen_house_id: string | null
+  /** Votación de fechas. Va antes que la de casas: primero el finde, luego la casa. */
+  dates_voting_open: boolean
+  chosen_date_option_id: string | null
   /** Sin uso en la interfaz: las cuentas las lleva el grupo en Settle Up. */
   shopping_cost: number | null
   created_by: string | null
@@ -183,7 +186,35 @@ export interface MessageRead {
   last_read_at: string
 }
 
-export type TipoAviso = 'casa_propuesta' | 'votacion_abierta' | 'votacion_cerrada' | 'casa_elegida'
+/** Un fin de semana candidato, a votación. */
+export interface TripDateOption {
+  id: string
+  trip_id: string
+  start_date: string
+  end_date: string
+  /** Nombre opcional: «puente de mayo», «finde de la feria»… */
+  label: string | null
+  notes: string | null
+  proposed_by: string | null
+  created_at: string
+}
+
+export interface DateVote {
+  id: string
+  trip_id: string
+  option_id: string
+  voter_id: string
+  created_at: string
+}
+
+export type TipoAviso =
+  | 'casa_propuesta'
+  | 'votacion_abierta'
+  | 'votacion_cerrada'
+  | 'casa_elegida'
+  | 'fechas_propuestas'
+  | 'votacion_fechas_abierta'
+  | 'fechas_elegidas'
 
 /**
  * Un aviso para una persona. Los crean los disparadores de la base de datos

@@ -19,6 +19,7 @@ import { Historial } from './pages/Historial'
 import { Ajustes } from './pages/Ajustes'
 import { Perfil } from './pages/Perfil'
 import { ResumenEscapada } from './components/trip/ResumenEscapada'
+import { Fechas } from './components/trip/Fechas'
 import { CasasRurales } from './components/trip/CasasRurales'
 import { Votacion } from './components/trip/Votacion'
 import { ListaCompra } from './components/trip/ListaCompra'
@@ -97,6 +98,7 @@ export function App() {
                 <Route path="/escapadas" element={<Escapadas />} />
                 <Route path="/escapadas/:id" element={<Escapada />}>
                   <Route index element={<ResumenEscapada />} />
+                  <Route path="fechas" element={<Fechas />} />
                   <Route path="casas" element={<CasasRurales />} />
                   <Route path="votacion" element={<Votacion />} />
                   <Route path="compra" element={<ListaCompra />} />

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, BellRing, CheckCheck, House, Inbox, Trash2, Trophy, Vote } from 'lucide-react'
+import { Bell, BellRing, CalendarDays, CheckCheck, House, Inbox, Trash2, Trophy, Vote } from 'lucide-react'
 import { Avatar } from '../ui/Avatar'
 import { Boton } from '../ui/Boton'
 import { Modal } from '../ui/Modal'
@@ -14,6 +14,9 @@ const ICONOS: Record<TipoAviso, typeof House> = {
   votacion_abierta: Vote,
   votacion_cerrada: CheckCheck,
   casa_elegida: Trophy,
+  fechas_propuestas: CalendarDays,
+  votacion_fechas_abierta: Vote,
+  fechas_elegidas: CalendarDays,
 }
 
 const TONOS: Record<TipoAviso, string> = {
@@ -21,6 +24,9 @@ const TONOS: Record<TipoAviso, string> = {
   votacion_abierta: 'bg-oliva-100 text-oliva-700',
   votacion_cerrada: 'bg-beige text-tenue',
   casa_elegida: 'bg-tierra-100 text-tierra-700',
+  fechas_propuestas: 'bg-oliva-100 text-oliva-700',
+  votacion_fechas_abierta: 'bg-oliva-100 text-oliva-700',
+  fechas_elegidas: 'bg-tierra-100 text-tierra-700',
 }
 
 /** La campana de la cabecera, con el número de avisos sin leer. */

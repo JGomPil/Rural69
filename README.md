@@ -36,6 +36,7 @@ supabase/
   05_chat.sql                  Chat de la escapada y marcas de lectura
   06_tiempos.sql               Comidas y cenas de la escapada
   07_notificaciones.sql        Avisos del grupo (disparadores que los crean)
+  08_fechas.sql                Votación de fechas (va antes que la de casas)
 src/
   lib/            supabase.ts, tipos, formato, cálculo de cantidades, export, subidas
   hooks/          useAuth, useGrupo, useConsulta (datos + tiempo real), useAvisos,
@@ -57,6 +58,8 @@ trip_participants Quién viene a cada escapada
 houses            Casas rurales candidatas de una escapada
 house_photos      Fotos adicionales de cada casa
 votes             Un voto por persona y escapada (restricción única)
+trip_date_options Fines de semana candidatos de una escapada
+date_votes        Un voto de fechas por persona y escapada
 master_items      Lista maestra reutilizable (cantidad + grupo de referencia)
 shopping_items    Lista de cada escapada: necesaria / disponible / a comprar, comprado, encargado
 pantry_items      Despensa compartida: sobrantes que pasan de una escapada a la siguiente
@@ -107,8 +110,9 @@ Scripts disponibles:
    5. `supabase/05_chat.sql`
    6. `supabase/06_tiempos.sql`
    7. `supabase/07_notificaciones.sql`
+   8. `supabase/08_fechas.sql`
 
-   Los siete se pueden volver a ejecutar sin miedo: no borran ni duplican nada.
+   Los ocho se pueden volver a ejecutar sin miedo: no borran ni duplican nada.
 3. **Authentication → Providers → Email**: deja activado *Email*. Si quieres entrar con
    enlace mágico, activa también *Magic Link*. Para que nadie se registre por su cuenta,
    desactiva **Allow new users to sign up** *después* de crear las cuentas del grupo.
@@ -199,7 +203,9 @@ solo. En local el valor por defecto es `/Rural69/`, definido en `vite.config.ts`
 | Gestionar integrantes y unidades familiares | ✅ | ver |
 | Gestionar usuarios y roles | ✅ | — |
 | Editar la lista maestra | ✅ | ver |
-| Abrir y cerrar votaciones | ✅ | — |
+| Abrir y cerrar votaciones (fechas y casas) | ✅ | — |
+| Proponer fechas candidatas y votarlas | ✅ | ✅ |
+| Fijar las fechas elegidas | ✅ | — |
 | Marcar la casa elegida / reservada | ✅ | — |
 | Apuntar quién viene a una escapada | ✅ | ✅ |
 | Añadir y editar casas rurales | ✅ | ✅ |
@@ -294,3 +300,25 @@ empuje los mensajes (Web Push con claves VAPID), y Rural69 no tiene servidor pro
 propósito, que es lo que la hace gratis de mantener. Si algún día se quiere, el camino es una
 *Edge Function* de Supabase y una tabla de suscripciones; en iPhone, además, solo funciona con
 la aplicación instalada en la pantalla de inicio.
+
+---
+
+## 9. Primero las fechas, después la casa
+
+El orden no es un detalle: el grupo **vota primero el fin de semana** y solo entonces busca
+casas, porque la disponibilidad de una casa rural depende de la fecha. La aplicación sigue ese
+orden, y de ahí que la pestaña **Fechas** vaya antes que **Casas**.
+
+Es a propósito un calco de la votación de casas: cualquiera propone fines de semana, cada
+persona tiene un voto y lo puede cambiar, un administrador abre y cierra la votación y marca
+las ganadoras. Lo único distinto es el final: **al fijar unas fechas se copian en la escapada**
+(`trips.start_date` y `trips.end_date`), que es de donde las lee todo lo demás —la cuenta
+atrás, los tiempos de la compra, el historial—, así que no hay dos verdades sobre cuándo es la
+escapada. En `trips.chosen_date_option_id` queda cuál de las candidatas ganó.
+
+Mientras no haya fechas, la pestaña *Casas* lo recuerda con un enlace para ir a votarlas:
+buscar casa sin saber el finde suele ser trabajo doble.
+
+Crear la escapada no obliga a nada de esto: **solo el nombre es obligatorio**. Sin fechas, la
+aplicación muestra «Fechas por decidir» y los tiempos de la compra avisan de que todavía no se
+pueden generar a partir de los días.
