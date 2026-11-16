@@ -168,10 +168,15 @@ Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
 ## Tareas manuales (solo tú puedes hacerlas)
 
-- [ ] Crear el proyecto en Supabase y ejecutar los **ocho** scripts SQL por orden
-      (`07_notificaciones.sql` son los avisos y `08_fechas.sql` la votación de fechas:
-      hasta que no se pasen, la campana sale vacía y la pestaña «Fechas» da error)
-- [ ] Configurar *Site URL* y *Redirect URLs* en Supabase
-- [ ] Crear tu cuenta (serás administrador) e invitar al resto del grupo
-- [ ] Crear el repositorio en GitHub, añadir los dos secretos y activar Pages
-- [ ] Dar de alta en *Ajustes* las 5 parejas, la persona sin pareja y los 4 niños
+- [x] Crear el proyecto en Supabase y ejecutar los **ocho** scripts SQL por orden
+      (comprobado el 16/11/2026: existen las tablas, columnas y funciones de los ocho)
+- [x] Crear el repositorio en GitHub, añadir los dos secretos y activar Pages
+      (cada push despliega y termina en verde)
+- [x] Crear tu cuenta de administrador
+- [ ] Invitar al resto del grupo y darles de alta en *Ajustes*: las 5 parejas, la persona
+      sin pareja y los 4 niños
+- [ ] Comprobar *Site URL* y *Redirect URLs* en Supabase (no se puede ver desde fuera)
+- [ ] **Probar los avisos con dos cuentas**: que otra persona proponga unas fechas y que
+      te suene la campana. Es lo único que no se puede verificar en solitario, porque tus
+      propias acciones nunca te avisan a ti. Ejercita de golpe el disparador, la
+      restricción de tipos del 08 y el tiempo real.
