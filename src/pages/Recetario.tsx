@@ -223,6 +223,66 @@ interface Fila {
   unit: string
 }
 
+/**
+ * El nombre como se compara: sin espacios de más, sin mayúsculas y sin
+ * tildes. Lo de las tildes es a propósito: quien escribe «platano» con prisa
+ * se refiere al «Plátano» que ya está en la lista, y crear los dos es
+ * exactamente lo que queremos evitar.
+ */
+function clave(nombre: string): string {
+  return nombre
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+}
+
+/**
+ * Apunta en la lista maestra los ingredientes que no vengan de ella y
+ * devuelve el id de cada producto por su nombre comparable.
+ *
+ * Busca antes de dar de alta: si «Garrofón» ya estaba y alguien lo escribió a
+ * mano en vez de elegirlo del desplegable, se enlaza con el que hay. Solo se
+ * da de alta lo que de verdad no existe, y con las personas de referencia del
+ * plato, que es para cuántos son esas cantidades.
+ *
+ * Mira también los que están dados de baja (`active = false`): resucitar el
+ * enlace a uno viejo es mejor que tener el mismo producto dos veces.
+ */
+async function apuntaEnMaestra(filas: Fila[], personas: number): Promise<Map<string, string>> {
+  const { data, error } = await supabase.from('master_items').select('id, name')
+  if (error) throw error
+
+  const porNombre = new Map<string, string>()
+  for (const m of (data ?? []) as { id: string; name: string }[]) porNombre.set(clave(m.name), m.id)
+
+  // Dos filas con el mismo nombre nuevo se dan de alta una sola vez.
+  const porCrear = new Map<string, Fila>()
+  for (const fila of filas) {
+    const k = clave(fila.name)
+    if (k && !porNombre.has(k) && !porCrear.has(k)) porCrear.set(k, fila)
+  }
+
+  if (porCrear.size > 0) {
+    const { data: creados, error: err } = await supabase
+      .from('master_items')
+      .insert(
+        [...porCrear.values()].map((fila) => ({
+          name: fila.name.trim(),
+          category: fila.category,
+          unit: fila.unit,
+          qty: fila.qty === '' ? null : Number(fila.qty),
+          base_people: personas,
+        })),
+      )
+      .select('id, name')
+    if (err) throw err
+    for (const m of (creados ?? []) as { id: string; name: string }[]) porNombre.set(clave(m.name), m.id)
+  }
+
+  return porNombre
+}
+
 function FormularioPlato({
   plato,
   ingredientes,
@@ -313,6 +373,26 @@ function FormularioPlato({
         dishId = (data as { id: string }).id
       }
 
+      // Lo que no venga de la lista maestra se apunta en ella y queda
+      // enlazado. Un ingrediente suelto llega bien a la compra, pero la
+      // despensa no lo sabe emparejar con los sobrantes y no se le ofrece a
+      // nadie la próxima vez que apunte una receta.
+      let enlaces = new Map<string, string>()
+      let falloMaestra: string | null = null
+      if (limpias.some((fila) => !fila.master_item_id)) {
+        try {
+          enlaces = await apuntaEnMaestra(
+            limpias.filter((fila) => !fila.master_item_id),
+            Number(personas) || 15,
+          )
+        } catch (err) {
+          // El plato se guarda igual. Perder una receta porque no se ha podido
+          // tocar la lista maestra sería absurdo: el enlace se puede poner
+          // después eligiendo el ingrediente del desplegable.
+          falloMaestra = mensajeError(err)
+        }
+      }
+
       // Los ingredientes se rehacen enteros: son pocos y así no hay que
       // llevar la cuenta de cuáles se han tocado.
       const { error: errBorrar } = await supabase.from('dish_items').delete().eq('dish_id', dishId)
@@ -321,7 +401,7 @@ function FormularioPlato({
         const { error: errMeter } = await supabase.from('dish_items').insert(
           limpias.map((f, i) => ({
             dish_id: dishId,
-            master_item_id: f.master_item_id,
+            master_item_id: f.master_item_id ?? enlaces.get(clave(f.name)) ?? null,
             name: f.name.trim(),
             category: f.category,
             qty: f.qty === '' ? null : Number(f.qty),
@@ -333,6 +413,11 @@ function FormularioPlato({
       }
       await onGuardado()
       avisos.ok(plato ? 'Plato guardado.' : '¡Plato apuntado!')
+      if (falloMaestra) {
+        avisos.error(
+          `El plato está guardado, pero no he podido apuntar los ingredientes nuevos en la lista maestra: ${falloMaestra}`,
+        )
+      }
     } catch (err) {
       setError(mensajeError(err))
     } finally {
@@ -408,6 +493,12 @@ function FormularioPlato({
               <Plus size={15} /> Añadir
             </Boton>
           </div>
+
+          {/* Que no sea magia silenciosa: la lista maestra va a crecer. */}
+          <p className="mb-2 text-xs text-suave">
+            Elígelos de la lista maestra con el desplegable de cada fila. Lo que escribas y no esté en ella{' '}
+            <strong>se apunta solo</strong>, para que la despensa lo reconozca y salga ya hecho la próxima vez.
+          </p>
 
           {filas.length === 0 ? (
             <p className="rounded-2xl border border-dashed border-arena px-4 py-5 text-center text-sm text-suave">

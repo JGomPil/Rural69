@@ -156,14 +156,29 @@ create policy votes_delete_own on public.votes
   using (is_admin() or (voter_id = auth.uid() and voting_is_open(trip_id)));
 
 -- ---------------------------------------------------------------------
--- master_items → lectura: todos · escritura: admin
+-- master_items → lectura y alta: todos · cambiar y borrar: admin
 -- ---------------------------------------------------------------------
+-- El alta es del grupo porque la lista crece sola con el recetario: al
+-- guardar un plato, los ingredientes que no estaban se apuntan aquí y
+-- quedan enlazados, y el recetario lo escribe cualquiera. Podarla, en
+-- cambio, es cosa de uno.
 drop policy if exists master_items_select on public.master_items;
 create policy master_items_select on public.master_items
   for select to authenticated using (is_member());
+
 drop policy if exists master_items_write on public.master_items;
-create policy master_items_write on public.master_items
-  for all to authenticated using (is_admin()) with check (is_admin());
+
+drop policy if exists master_items_insert on public.master_items;
+create policy master_items_insert on public.master_items
+  for insert to authenticated with check (is_member());
+
+drop policy if exists master_items_update on public.master_items;
+create policy master_items_update on public.master_items
+  for update to authenticated using (is_admin()) with check (is_admin());
+
+drop policy if exists master_items_delete on public.master_items;
+create policy master_items_delete on public.master_items
+  for delete to authenticated using (is_admin());
 
 -- ---------------------------------------------------------------------
 -- shopping_items / pantry_items → colaborativo: cualquier integrante

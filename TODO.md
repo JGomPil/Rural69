@@ -3,6 +3,20 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 15 · La lista maestra crece con el recetario ✅
+
+- [x] El camino iba en un solo sentido: el recetario leía la maestra, pero lo escrito
+      a mano se quedaba suelto dentro del plato, con el enlace a nulo
+- [x] Al guardar un plato, lo que no venga de la maestra se apunta en ella y queda
+      enlazado; así la despensa lo empareja con los sobrantes y se ofrece la próxima vez
+- [x] Busca antes de crear, y sin tildes ni mayúsculas: «platano» enlaza con el
+      «Plátano» que ya estaba en vez de crear un segundo
+- [x] Los dados de baja también cuentan: mejor resucitar un enlace viejo que duplicar
+- [x] Índice único por nombre, que dos personas guardando a la vez pueden colarse
+- [x] Añadir a la maestra pasa a ser del grupo; cambiar y borrar siguen siendo del
+      administrador (`12_maestra_crece.sql`)
+- [x] Si el alta falla, el plato se guarda igual y se dice
+
 ## Fase 14 · El aviso de instalar, solo cuando toca ✅
 
 - [x] En Chrome y Edge, si ya está instalada el evento de instalación no se dispara, y

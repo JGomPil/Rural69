@@ -145,6 +145,11 @@ create table if not exists public.master_items (
   created_at  timestamptz not null default now()
 );
 
+-- Dos productos con el mismo nombre no significan nada, y la lista crece
+-- sola con el recetario: sin esto se llena de «Cebolla» y «cebolla ».
+create unique index if not exists master_items_nombre_unico
+  on public.master_items (lower(btrim(name)));
+
 -- ---------------------------------------------------------------------
 -- Lista de la compra de cada escapada
 --   needed_qty    = cantidad necesaria
