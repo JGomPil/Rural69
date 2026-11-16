@@ -41,7 +41,7 @@ function NoAutorizado() {
       <div className="tarjeta max-w-md space-y-4 p-6 text-center">
         <UserX className="mx-auto text-tierra-500" size={36} />
         <h1 className="font-display text-xl text-bosque-800">Tu cuenta aún no está autorizada</h1>
-        <p className="text-sm text-carbon/70">
+        <p className="text-sm text-tenue">
           Has entrado con <strong>{session?.user.email}</strong>, pero esa cuenta todavía no forma parte del grupo.
           Pídele al administrador de Rural69 que te dé acceso.
         </p>

@@ -239,7 +239,7 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
         </div>
 
         <div className="rounded-2xl border border-arena bg-superficie p-4">
-          <p className="mb-3 text-sm font-semibold text-carbon/75">¿Qué tiene?</p>
+          <p className="mb-3 text-sm font-semibold text-tenue">¿Qué tiene?</p>
           <div className="grid gap-3 sm:grid-cols-2">
             <Interruptor
               checked={extras.has_pool}
@@ -274,8 +274,8 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
 
         {/* -------- Fotografías -------- */}
         <div className="rounded-2xl border border-arena bg-superficie p-4">
-          <p className="mb-1 text-sm font-semibold text-carbon/75">Fotografías</p>
-          <p className="mb-3 text-xs text-carbon/50">
+          <p className="mb-1 text-sm font-semibold text-tenue">Fotografías</p>
+          <p className="mb-3 text-xs text-suave">
             Pega la URL de una foto de la web de la casa o sube imágenes desde el móvil. La primera se usa como portada.
           </p>
 

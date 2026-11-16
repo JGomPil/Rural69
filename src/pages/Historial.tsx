@@ -141,7 +141,7 @@ export function Historial() {
           <h1 className="font-display flex items-center gap-2 text-2xl text-bosque-800 sm:text-3xl">
             <BarChart3 size={26} /> Historial
           </h1>
-          <p className="mt-0.5 max-w-xl text-sm text-carbon/60">
+          <p className="mt-0.5 max-w-xl text-sm text-suave">
             Lo que hemos aprendido de las escapadas anteriores para organizar mejor las siguientes.
           </p>
         </div>
@@ -183,10 +183,10 @@ export function Historial() {
                       )}
                       <div className="p-3.5">
                         <p className="font-semibold text-bosque-800">{f.casa?.name}</p>
-                        <p className="text-xs text-carbon/55">
+                        <p className="text-xs text-suave">
                           {[f.casa?.town, f.casa?.province].filter(Boolean).join(', ')}
                         </p>
-                        <p className="mt-1 text-xs text-carbon/50">
+                        <p className="mt-1 text-xs text-suave">
                           {f.escapada.title} · {rangoFechas(f.escapada.start_date, f.escapada.end_date)}
                         </p>
                         <div className="mt-2 flex flex-wrap gap-1.5">
@@ -207,20 +207,20 @@ export function Historial() {
             <Seccion titulo="Lo que siempre sobra" icono={<span aria-hidden>🫙</span>}>
               <Tarjeta className="p-4">
                 {resumen.sueleSobrar.length === 0 ? (
-                  <p className="text-sm text-carbon/55">Todavía no habéis registrado sobrantes.</p>
+                  <p className="text-sm text-suave">Todavía no habéis registrado sobrantes.</p>
                 ) : (
                   <ul className="space-y-1.5">
                     {resumen.sueleSobrar.slice(0, 12).map((s) => (
                       <li key={s.nombre} className="flex items-baseline justify-between gap-3 text-sm">
-                        <span className="truncate text-carbon/75">{s.nombre}</span>
-                        <span className="shrink-0 text-xs font-semibold text-carbon/50">
+                        <span className="truncate text-tenue">{s.nombre}</span>
+                        <span className="shrink-0 text-xs font-semibold text-suave">
                           {s.veces} {s.veces === 1 ? 'vez' : 'veces'} · {numero(s.total)} {s.unidad}
                         </span>
                       </li>
                     ))}
                   </ul>
                 )}
-                <p className="mt-3 border-t border-arena pt-2.5 text-xs text-carbon/50">
+                <p className="mt-3 border-t border-arena pt-2.5 text-xs text-suave">
                   Candidatos a comprar menos la próxima vez.
                 </p>
               </Tarjeta>
@@ -229,20 +229,20 @@ export function Historial() {
             <Seccion titulo="Lo que nunca sobra" icono={<span aria-hidden>🔥</span>}>
               <Tarjeta className="p-4">
                 {resumen.seAgotan.length === 0 ? (
-                  <p className="text-sm text-carbon/55">Sin datos todavía.</p>
+                  <p className="text-sm text-suave">Sin datos todavía.</p>
                 ) : (
                   <ul className="space-y-1.5">
                     {resumen.seAgotan.slice(0, 12).map((s) => (
                       <li key={s.nombre} className="flex items-baseline justify-between gap-3 text-sm">
-                        <span className="truncate text-carbon/75">{s.nombre}</span>
-                        <span className="shrink-0 text-xs font-semibold text-carbon/50">
+                        <span className="truncate text-tenue">{s.nombre}</span>
+                        <span className="shrink-0 text-xs font-semibold text-suave">
                           comprado {s.veces} {s.veces === 1 ? 'vez' : 'veces'}
                         </span>
                       </li>
                     ))}
                   </ul>
                 )}
-                <p className="mt-3 border-t border-arena pt-2.5 text-xs text-carbon/50">
+                <p className="mt-3 border-t border-arena pt-2.5 text-xs text-suave">
                   Se compran y nunca vuelven a casa: quizá haya que subir la cantidad.
                 </p>
               </Tarjeta>
@@ -254,7 +254,7 @@ export function Historial() {
             <Tarjeta className="overflow-x-auto">
               <table className="w-full min-w-max text-sm">
                 <thead>
-                  <tr className="border-b border-arena text-left text-carbon/55">
+                  <tr className="border-b border-arena text-left text-suave">
                     <th className="px-4 py-2.5 font-semibold">Escapada</th>
                     <th className="px-4 py-2.5 font-semibold">Fechas</th>
                     <th className="px-4 py-2.5 font-semibold">Personas</th>
@@ -271,12 +271,12 @@ export function Historial() {
                           {f.escapada.title}
                         </Link>
                       </td>
-                      <td className="px-4 py-2.5 text-carbon/70">
+                      <td className="px-4 py-2.5 text-tenue">
                         {rangoFechas(f.escapada.start_date, f.escapada.end_date)}
                       </td>
-                      <td className="px-4 py-2.5 text-carbon/70">{f.personas || '—'}</td>
-                      <td className="px-4 py-2.5 text-carbon/70">{f.casa?.name ?? '—'}</td>
-                      <td className="px-4 py-2.5 text-carbon/70">{euros(f.porAdultoCasa)}</td>
+                      <td className="px-4 py-2.5 text-tenue">{f.personas || '—'}</td>
+                      <td className="px-4 py-2.5 text-tenue">{f.casa?.name ?? '—'}</td>
+                      <td className="px-4 py-2.5 text-tenue">{euros(f.porAdultoCasa)}</td>
                       <td className="px-4 py-2.5">
                         <EtiquetaEstado estado={f.escapada.status} />
                       </td>

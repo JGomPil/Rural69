@@ -58,7 +58,7 @@ export function Acceso() {
             <Marca className="scale-125" />
           </div>
           <h1 className="font-display text-3xl text-bosque-800">Nuestras escapadas, en orden</h1>
-          <p className="mt-2 text-sm text-carbon/60">Casas, votaciones y lista de la compra.</p>
+          <p className="mt-2 text-sm text-suave">Casas, votaciones y lista de la compra.</p>
         </div>
 
         <div className="tarjeta p-5 sm:p-6">
@@ -105,14 +105,14 @@ export function Acceso() {
             <button
               type="button"
               onClick={() => void recuperar()}
-              className="w-full text-center text-xs font-semibold text-carbon/50 hover:text-bosque-600"
+              className="w-full text-center text-xs font-semibold text-suave hover:text-bosque-600"
             >
               He olvidado la contraseña
             </button>
           </form>
         </div>
 
-        <p className="mt-5 text-center text-xs text-carbon/45">
+        <p className="mt-5 text-center text-xs text-suave">
           Privada. Las cuentas las crea el administrador.
         </p>
       </div>
@@ -126,12 +126,12 @@ function SinConfigurar() {
       <div className="tarjeta max-w-lg space-y-3 p-6">
         <ShieldAlert className="text-tierra-500" size={32} />
         <h1 className="font-display text-xl text-bosque-800">Falta conectar Supabase</h1>
-        <p className="text-sm text-carbon/70">
+        <p className="text-sm text-tenue">
           La aplicación necesita dos variables de entorno para funcionar:{' '}
           <code className="rounded bg-beige px-1.5 py-0.5 text-xs">VITE_SUPABASE_URL</code> y{' '}
           <code className="rounded bg-beige px-1.5 py-0.5 text-xs">VITE_SUPABASE_ANON_KEY</code>.
         </p>
-        <ul className="list-disc space-y-1 pl-5 text-sm text-carbon/70">
+        <ul className="list-disc space-y-1 pl-5 text-sm text-tenue">
           <li>
             En local: crea el archivo <code className="rounded bg-beige px-1.5 py-0.5 text-xs">.env.local</code>{' '}
             copiando <code className="rounded bg-beige px-1.5 py-0.5 text-xs">.env.example</code>.
@@ -141,7 +141,7 @@ function SinConfigurar() {
             desplegar.
           </li>
         </ul>
-        <p className="text-xs text-carbon/50">Tienes el paso a paso completo en el README del repositorio.</p>
+        <p className="text-xs text-suave">Tienes el paso a paso completo en el README del repositorio.</p>
       </div>
     </div>
   )

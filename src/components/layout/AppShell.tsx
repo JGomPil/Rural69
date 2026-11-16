@@ -20,6 +20,7 @@ import { BotonAvisos } from './Avisos'
 import { Avatar } from '../ui/Avatar'
 import { useAuth } from '../../hooks/useAuth'
 import { useGrupo } from '../../hooks/useGrupo'
+import { useAvisos } from '../../hooks/useAvisos'
 import { Modal } from '../ui/Modal'
 import { Boton } from '../ui/Boton'
 
@@ -28,6 +29,8 @@ interface Enlace {
   texto: string
   icono: typeof House
   exacto?: boolean
+  /** Se ejecuta además de navegar. Lo usa «Compra» cuando no hay escapada. */
+  alPulsar?: () => void
 }
 
 /**
@@ -54,15 +57,28 @@ function estaActivo(enlace: Enlace, ruta: string, compraActiva: boolean): boolea
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { perfil, salir, esAdmin } = useAuth()
   const { escapadaActiva, miembros } = useGrupo()
+  const avisos = useAvisos()
   const [menuAbierto, setMenuAbierto] = useState(false)
   const location = useLocation()
 
   const rutaCompra = escapadaActiva ? `/escapadas/${escapadaActiva.id}/compra` : '/escapadas'
 
+  // Sin escapada no hay lista de la compra que enseñar, así que «Compra»
+  // lleva a la lista de escapadas. Dicho así parece que el botón no hace
+  // nada, de modo que lo explicamos al pulsarlo.
+  const avisaSinEscapada = escapadaActiva
+    ? undefined
+    : () =>
+        avisos.info(
+          esAdmin
+            ? 'Todavía no hay ninguna escapada. Crea la primera y aquí saldrá su lista de la compra.'
+            : 'Todavía no hay ninguna escapada. Cuando el administrador cree la próxima, aquí saldrá su lista de la compra.',
+        )
+
   const principales: Enlace[] = [
     { a: '/', texto: 'Inicio', icono: House, exacto: true },
     { a: '/escapadas', texto: 'Escapadas', icono: MapPinned },
-    { a: rutaCompra, texto: 'Compra', icono: ShoppingCart },
+    { a: rutaCompra, texto: 'Compra', icono: ShoppingCart, alPulsar: avisaSinEscapada },
     { a: '/despensa', texto: 'Despensa', icono: Archive },
   ]
 
@@ -106,7 +122,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Avatar src={miFoto} nombre={miNombre} tamanyo="sm" />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-semibold text-bosque-800">{miNombre}</span>
-              <span className="block truncate text-xs text-carbon/55">
+              <span className="block truncate text-xs text-suave">
                 {esAdmin ? 'Administrador' : 'Integrante'}
               </span>
             </span>
@@ -154,8 +170,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 key={e.texto}
                 to={e.a}
                 end={e.exacto}
+                onClick={e.alPulsar}
                 className={`flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold transition ${
-                  estaActivo(e, location.pathname, compraActiva) ? 'text-bosque-600' : 'text-carbon/45'
+                  estaActivo(e, location.pathname, compraActiva) ? 'text-bosque-600' : 'text-suave'
                 }`}
               >
                 {() => {
@@ -178,7 +195,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               onClick={() => setMenuAbierto(true)}
-              className="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold text-carbon/45"
+              className="flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold text-suave"
             >
               <span className="flex size-9 items-center justify-center rounded-2xl">
                 <Sparkles size={20} />
@@ -196,7 +213,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Link
               key={e.texto}
               to={e.a}
-              onClick={() => setMenuAbierto(false)}
+              onClick={() => {
+                setMenuAbierto(false)
+                e.alPulsar?.()
+              }}
               className="flex items-center gap-3 rounded-2xl bg-superficie px-4 py-3 font-semibold text-bosque-800 transition active:scale-[0.98]"
             >
               <e.icono size={20} className="text-bosque-500" />
@@ -210,7 +230,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Avatar src={miFoto} nombre={miNombre} tamanyo="md" />
             <span className="min-w-0 flex-1">
               <span className="block truncate font-semibold text-bosque-800">{miNombre}</span>
-              <span className="block truncate text-sm text-carbon/55">{perfil?.email}</span>
+              <span className="block truncate text-sm text-suave">{perfil?.email}</span>
               <span className="mt-0.5 block text-xs font-semibold text-oliva-700">
                 {esAdmin ? 'Administrador' : 'Integrante'}
               </span>
@@ -236,8 +256,9 @@ function EnlaceLateral({ enlace, activo }: { enlace: Enlace; activo: boolean }) 
     <NavLink
       to={enlace.a}
       end={enlace.exacto}
+      onClick={enlace.alPulsar}
       className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold transition ${
-        activo ? 'bg-bosque-600 text-tinta-fuerte shadow-sm' : 'text-carbon/70 hover:bg-beige'
+        activo ? 'bg-bosque-600 text-tinta-fuerte shadow-sm' : 'text-tenue hover:bg-beige'
       }`}
     >
       <enlace.icono size={19} />

@@ -125,7 +125,7 @@ export function DialogoGenerarLista({
       {!maestros ? (
         <Cargando texto="Cargando lista maestra…" alto="py-10" />
       ) : maestros.length === 0 ? (
-        <p className="rounded-2xl bg-beige px-4 py-3 text-sm text-carbon/70">
+        <p className="rounded-2xl bg-beige px-4 py-3 text-sm text-tenue">
           La lista maestra está vacía. Añade productos en <strong>Lista maestra</strong> y vuelve aquí.
         </p>
       ) : (
@@ -152,7 +152,7 @@ export function DialogoGenerarLista({
               onChange={setAjustar}
               etiqueta={`Ajustar las cantidades a ${numero(personas)} personas equivalentes`}
             />
-            <p className="mt-1.5 text-xs text-carbon/50">
+            <p className="mt-1.5 text-xs text-suave">
               La lista maestra guarda cantidades pensadas para un grupo de referencia. Si lo activas, se recalculan
               proporcionalmente. Son solo propuestas: podrás editarlas una a una.
             </p>
@@ -167,7 +167,7 @@ export function DialogoGenerarLista({
               Seleccionar todo
             </button>
             <span className="text-carbon/25">·</span>
-            <button type="button" onClick={() => setSeleccion(new Set())} className="text-carbon/50 hover:underline">
+            <button type="button" onClick={() => setSeleccion(new Set())} className="text-suave hover:underline">
               Quitar todo
             </button>
           </div>
@@ -298,7 +298,7 @@ export function DialogoDespensa({
       }
     >
       {filas.length === 0 ? (
-        <p className="rounded-2xl bg-beige px-4 py-3 text-sm text-carbon/70">
+        <p className="rounded-2xl bg-beige px-4 py-3 text-sm text-tenue">
           No hay coincidencias entre la lista de esta escapada y los sobrantes guardados en la despensa.
         </p>
       ) : (
@@ -319,11 +319,11 @@ export function DialogoDespensa({
               </div>
               <div className="mt-3 grid grid-cols-3 gap-2 text-center">
                 <div className="rounded-xl bg-beige px-2 py-2">
-                  <p className="text-[11px] font-semibold text-carbon/50">Necesitamos</p>
-                  <p className="font-bold text-carbon/80">{cantidad(f.item.needed_qty, f.item.unit)}</p>
+                  <p className="text-[11px] font-semibold text-suave">Necesitamos</p>
+                  <p className="font-bold text-tenue">{cantidad(f.item.needed_qty, f.item.unit)}</p>
                 </div>
                 <Campo className="text-left">
-                  <span className="mb-1 block text-[11px] font-semibold text-carbon/50">Ya tenemos</span>
+                  <span className="mb-1 block text-[11px] font-semibold text-suave">Ya tenemos</span>
                   <Entrada
                     type="number"
                     min="0"
@@ -347,7 +347,7 @@ export function DialogoDespensa({
               </div>
             </div>
           ))}
-          <p className="text-xs text-carbon/50">
+          <p className="text-xs text-suave">
             Al aplicarlo se guarda la cantidad disponible y se recalcula lo que hay que comprar. La despensa no se
             modifica hasta que registréis lo consumido al volver.
           </p>
@@ -447,7 +447,7 @@ export function DialogoRecalcular({
       {!maestros ? (
         <Cargando alto="py-10" />
       ) : propuestas.length === 0 ? (
-        <p className="rounded-2xl bg-beige px-4 py-3 text-sm text-carbon/70">
+        <p className="rounded-2xl bg-beige px-4 py-3 text-sm text-tenue">
           Las cantidades ya encajan con el número de asistentes. No hay nada que cambiar.
         </p>
       ) : (
@@ -467,7 +467,7 @@ export function DialogoRecalcular({
                 etiqueta={item.name}
               />
               <span className="ml-auto flex shrink-0 items-center gap-1.5 text-sm">
-                <span className="text-carbon/45 line-through">{cantidad(item.needed_qty, item.unit)}</span>
+                <span className="text-suave line-through">{cantidad(item.needed_qty, item.unit)}</span>
                 <span aria-hidden>→</span>
                 <Etiqueta tono="bosque">{cantidad(nueva, item.unit)}</Etiqueta>
               </span>

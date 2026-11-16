@@ -122,7 +122,7 @@ export function Panel() {
                 <div className="flex flex-wrap items-center gap-2">
                   <EtiquetaEstado estado={escapadaActiva.status} />
                   {cuentaAtras(escapadaActiva.start_date) && (
-                    <span className="rounded-full bg-tierra-500 px-2.5 py-0.5 text-xs font-bold text-tinta-fuerte">
+                    <span className="rounded-full bg-tierra-600 px-2.5 py-0.5 text-xs font-bold text-tinta-fuerte">
                       {cuentaAtras(escapadaActiva.start_date)}
                     </span>
                   )}
@@ -134,7 +134,7 @@ export function Panel() {
             </div>
 
             <div className="space-y-4 p-4 sm:p-5">
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-carbon/70">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-tenue">
                 <span className="flex items-center gap-1.5">
                   <CalendarDays size={16} className="text-bosque-500" />
                   {rangoFechas(escapadaActiva.start_date, escapadaActiva.end_date)}
@@ -147,7 +147,7 @@ export function Panel() {
                   <Users size={16} className="text-bosque-500" />
                   {participantes.length} personas
                   {participantes.length > 0 && (
-                    <span className="text-carbon/40">({numero(personasEquivalentes(participantes))} equiv.)</span>
+                    <span className="text-suave">({numero(personasEquivalentes(participantes))} equiv.)</span>
                   )}
                 </span>
               </div>
@@ -194,7 +194,7 @@ export function Panel() {
                   <span className="font-semibold text-bosque-800">{elegida.name}</span>
                   <Etiqueta tono="exito">{elegida.reserved ? 'Reservada' : 'Elegida'}</Etiqueta>
                   {elegida.total_price != null && adultosQueVienen > 0 && (
-                    <span className="text-sm text-carbon/60">
+                    <span className="text-sm text-suave">
                       {euros(elegida.total_price / adultosQueVienen)} por adulto
                     </span>
                   )}
@@ -262,7 +262,7 @@ export function Panel() {
               )
             })}
             {(datos?.despensa.length ?? 0) > 14 && (
-              <span className="self-center text-sm text-carbon/50">y {(datos?.despensa.length ?? 0) - 14} más…</span>
+              <span className="self-center text-sm text-suave">y {(datos?.despensa.length ?? 0) - 14} más…</span>
             )}
           </div>
         </Seccion>
@@ -310,7 +310,7 @@ function AtajoEstado({
     >
       <span className="flex items-center gap-1.5 text-bosque-600">{icono}</span>
       <span className="font-display mt-1 block text-xl leading-none font-bold text-bosque-800">{valor}</span>
-      <span className="mt-0.5 block text-xs leading-snug text-carbon/55">{etiqueta}</span>
+      <span className="mt-0.5 block text-xs leading-snug text-suave">{etiqueta}</span>
     </Link>
   )
 }
@@ -323,7 +323,7 @@ function TarjetaMini({ escapada }: { escapada: Trip }) {
     >
       <div className="min-w-0 flex-1">
         <p className="truncate font-semibold text-bosque-800">{escapada.title}</p>
-        <p className="truncate text-xs text-carbon/55">
+        <p className="truncate text-xs text-suave">
           {rangoFechas(escapada.start_date, escapada.end_date)}
           {escapada.town && ` · ${escapada.town}`}
         </p>

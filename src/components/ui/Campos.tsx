@@ -1,7 +1,7 @@
 const BASE_CAMPO =
-  'w-full rounded-2xl border border-arena bg-superficie px-3.5 py-2.5 text-carbon shadow-[inset_0_1px_2px_rgba(74,59,42,0.04)] ' +
-  'placeholder:text-carbon/35 transition duration-150 outline-none ' +
-  'hover:border-arena/90 focus:border-bosque-500 focus:ring-3 focus:ring-bosque-500/15 focus:shadow-none ' +
+  'w-full rounded-2xl border border-borde-campo bg-superficie px-3.5 py-2.5 text-carbon shadow-[inset_0_1px_2px_rgba(74,59,42,0.04)] ' +
+  'placeholder:text-suave transition duration-150 outline-none ' +
+  'hover:border-carbon/45 focus:border-bosque-500 focus:ring-3 focus:ring-bosque-500/15 focus:shadow-none ' +
   'disabled:bg-beige disabled:opacity-70'
 
 interface PropsCampo {
@@ -17,13 +17,13 @@ export function Campo({ etiqueta, ayuda, error, requerido, className = '', child
   return (
     <label className={`block ${className}`}>
       {etiqueta && (
-        <span className="mb-1.5 flex items-center gap-0.5 text-[13px] font-semibold text-carbon/70">
+        <span className="mb-1.5 flex items-center gap-0.5 text-[13px] font-semibold text-tenue">
           {etiqueta}
           {requerido && <span className="text-tierra-600">*</span>}
         </span>
       )}
       {children}
-      {ayuda && !error && <span className="mt-1 block text-xs text-carbon/50">{ayuda}</span>}
+      {ayuda && !error && <span className="medida mt-1 block text-xs text-suave">{ayuda}</span>}
       {error && <span className="mt-1 block text-xs font-medium text-tierra-600">{error}</span>}
     </label>
   )
@@ -67,7 +67,7 @@ export function Casilla({ checked, onChange, etiqueta, descripcion, grande = fal
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
-        className={`shrink-0 cursor-pointer appearance-none rounded-lg border-2 border-arena bg-superficie transition
+        className={`shrink-0 cursor-pointer appearance-none rounded-lg border-2 border-borde-campo bg-superficie transition
           checked:border-bosque-600 checked:bg-bosque-600
           checked:after:flex checked:after:h-full checked:after:items-center checked:after:justify-center
           checked:after:text-tinta-fuerte checked:after:content-['✓']
@@ -77,7 +77,7 @@ export function Casilla({ checked, onChange, etiqueta, descripcion, grande = fal
       <span className="min-w-0 flex-1">
         <span className={`block break-words ${grande ? 'text-base' : 'text-sm'} font-medium`}>{etiqueta}</span>
         {descripcion && (
-          <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-carbon/55">
+          <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-suave">
             {descripcion}
           </span>
         )}
@@ -102,7 +102,7 @@ export function Interruptor({ checked, onChange, etiqueta, disabled }: PropsInte
         aria-checked={checked}
         disabled={disabled}
         onClick={() => onChange(!checked)}
-        className={`relative h-[26px] w-[44px] shrink-0 rounded-full transition-colors ${checked ? 'bg-bosque-600' : 'bg-arena'}`}
+        className={`relative h-[26px] w-[44px] shrink-0 rounded-full transition-colors ${checked ? 'bg-bosque-600' : 'bg-borde-campo'}`}
       >
         <span
           className={`absolute top-[3px] size-5 rounded-full bg-white shadow transition-all ${checked ? 'left-[21px]' : 'left-[3px]'}`}
@@ -140,7 +140,7 @@ export function Contador({
         type="button"
         onClick={() => ajusta(-paso)}
         disabled={disabled}
-        className="size-8 shrink-0 rounded-xl text-lg font-bold text-carbon/60 transition hover:bg-beige active:scale-95 disabled:opacity-40"
+        className="size-8 shrink-0 rounded-xl text-lg font-bold text-suave transition hover:bg-beige active:scale-95 disabled:opacity-40"
         aria-label="Quitar"
       >
         −
@@ -155,12 +155,12 @@ export function Contador({
         onChange={(e) => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
         className="w-11 border-0 bg-transparent px-0 text-center font-semibold outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
       />
-      {sufijo && <span className="max-w-14 truncate pr-0.5 text-xs text-carbon/55">{sufijo}</span>}
+      {sufijo && <span className="max-w-14 truncate pr-0.5 text-xs text-suave">{sufijo}</span>}
       <button
         type="button"
         onClick={() => ajusta(paso)}
         disabled={disabled}
-        className="size-8 shrink-0 rounded-xl text-lg font-bold text-carbon/60 transition hover:bg-beige active:scale-95 disabled:opacity-40"
+        className="size-8 shrink-0 rounded-xl text-lg font-bold text-suave transition hover:bg-beige active:scale-95 disabled:opacity-40"
         aria-label="Añadir"
       >
         +

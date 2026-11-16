@@ -211,7 +211,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
 
         <div>
           <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-            <span className="flex items-center gap-1.5 text-sm font-semibold text-carbon/75">
+            <span className="flex items-center gap-1.5 text-sm font-semibold text-tenue">
               <Users size={16} /> ¿Quién viene?
             </span>
             <Etiqueta tono="oliva">
@@ -220,14 +220,14 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
           </div>
 
           {miembros.length === 0 ? (
-            <p className="rounded-2xl bg-beige px-4 py-3 text-sm text-carbon/60">
+            <p className="rounded-2xl bg-beige px-4 py-3 text-sm text-suave">
               Todavía no hay integrantes. Añádelos en <strong>Ajustes → Integrantes del grupo</strong>.
             </p>
           ) : (
             <div className="space-y-3 rounded-2xl border border-arena bg-superficie p-3.5">
               {porHogar.map((grupo) => (
                 <div key={grupo.nombre}>
-                  <p className="mb-1 text-xs font-bold tracking-wide text-carbon/40 uppercase">{grupo.nombre}</p>
+                  <p className="mb-1 text-xs font-bold tracking-wide text-suave uppercase">{grupo.nombre}</p>
                   <div className="grid gap-1.5 sm:grid-cols-2">
                     {grupo.miembros.map((m) => (
                       <Casilla
@@ -238,7 +238,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
                           <span className="flex items-center gap-1.5">
                             <Persona miembroId={m.id} />
                             {m.is_child && <span className="text-xs text-tierra-600">niñ@</span>}
-                            {!m.active && <span className="text-xs text-carbon/40">(inactivo)</span>}
+                            {!m.active && <span className="text-xs text-suave">(inactivo)</span>}
                           </span>
                         }
                       />
@@ -258,7 +258,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
                 <button
                   type="button"
                   onClick={() => setParticipantes(new Set())}
-                  className="text-xs font-semibold text-carbon/50 hover:underline"
+                  className="text-xs font-semibold text-suave hover:underline"
                 >
                   Quitar a todos
                 </button>

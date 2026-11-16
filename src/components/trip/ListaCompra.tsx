@@ -466,7 +466,7 @@ export function ListaCompra() {
                 type="button"
                 onClick={() => setFiltro(valor)}
                 className={`flex-1 rounded-xl px-2 py-2 text-xs font-bold whitespace-nowrap transition sm:text-sm ${
-                  filtro === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-carbon/55'
+                  filtro === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-suave'
                 }`}
               >
                 {texto}
@@ -477,7 +477,7 @@ export function ListaCompra() {
             type="button"
             onClick={() => setOcultarListas((v) => !v)}
             className={`rounded-2xl border px-3 py-2 text-xs font-bold transition ${
-              ocultarListas ? 'border-bosque-500 bg-bosque-50 text-bosque-700' : 'border-arena bg-superficie text-carbon/55'
+              ocultarListas ? 'border-bosque-500 bg-bosque-50 text-bosque-700' : 'border-arena bg-superficie text-suave'
             }`}
           >
             Ocultar lo que ya está
@@ -506,7 +506,7 @@ export function ListaCompra() {
 
         {/* Cómo se agrupa */}
         <div className="flex items-center gap-2 text-xs">
-          <span className="font-semibold text-carbon/45">Agrupar por</span>
+          <span className="font-semibold text-suave">Agrupar por</span>
           {(
             [
               ['categoria', 'Categorías'],
@@ -518,7 +518,7 @@ export function ListaCompra() {
               type="button"
               onClick={() => setAgrupar(valor)}
               className={`rounded-full px-3 py-1 font-bold transition ${
-                agrupar === valor ? 'bg-bosque-600 text-tinta-fuerte' : 'bg-superficie text-carbon/55 hover:bg-beige'
+                agrupar === valor ? 'bg-bosque-600 text-tinta-fuerte' : 'bg-superficie text-suave hover:bg-beige'
               }`}
             >
               {texto}
@@ -560,7 +560,7 @@ export function ListaCompra() {
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="font-display block truncate text-base text-bosque-800">{titulo}</span>
-                    <span className="block text-xs text-carbon/50">
+                    <span className="block text-xs text-suave">
                       {articulos.filter((i) => i.purchased).length}/{articulos.length} marcados
                       {tiempo?.day && ` · ${fecha(tiempo.day)}`}
                       {tiempo?.notes && ` · ${tiempo.notes}`}
@@ -585,14 +585,14 @@ export function ListaCompra() {
                         <button
                           type="button"
                           onClick={() => void meEncargo(tiempo, null)}
-                          className="text-xs font-semibold text-carbon/45 hover:text-tierra-600 hover:underline"
+                          className="text-xs font-semibold text-suave hover:text-tierra-600 hover:underline"
                         >
                           Ya no
                         </button>
                       </>
                     ) : (
                       <>
-                        <span className="flex-1 text-xs text-carbon/55">
+                        <span className="flex-1 text-xs text-suave">
                           {seEncargaAlguien ? 'Lo lleva otra persona.' : 'Nadie se ha apuntado a esta compra.'}
                         </span>
                         <button
@@ -634,7 +634,7 @@ export function ListaCompra() {
         <button
           type="button"
           onClick={() => setBorrando({ ...lista[0], id: '__todos__', name: 'toda la lista' })}
-          className="text-xs font-semibold text-carbon/40 hover:text-tierra-600 hover:underline"
+          className="text-xs font-semibold text-suave hover:text-tierra-600 hover:underline"
         >
           Vaciar la lista de esta escapada
         </button>
@@ -723,7 +723,7 @@ function ChipTiempo({
       className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-bold whitespace-nowrap transition ${
         activo
           ? 'border-bosque-600 bg-bosque-600 text-tinta-fuerte shadow-sm'
-          : 'border-arena bg-superficie text-carbon/60 hover:bg-beige'
+          : 'border-arena bg-superficie text-suave hover:bg-beige'
       }`}
     >
       {children}
@@ -760,7 +760,7 @@ function FilaProducto({
           checked={item.purchased}
           onChange={onMarcar}
           etiqueta={
-            <span className={item.purchased ? 'text-carbon/45 line-through' : ''}>
+            <span className={item.purchased ? 'text-suave line-through' : ''}>
               {item.name}
               {item.available_qty > 0 && (
                 <span className="ml-1.5 text-xs font-semibold text-oliva-700">
@@ -807,7 +807,7 @@ function FilaProducto({
 
       {abierto && (
         <div className="no-imprimir mt-2 flex flex-wrap items-center gap-2 border-t border-arena pt-2 pl-10">
-          <span className="text-xs text-carbon/50">
+          <span className="text-xs text-suave">
             Necesaria {cantidad(item.needed_qty, item.unit)} · ya hay {cantidad(item.available_qty, item.unit)}
           </span>
           <div className="ml-auto flex items-center gap-1">

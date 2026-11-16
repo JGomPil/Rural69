@@ -49,13 +49,13 @@ export function Modal({ abierto, onCerrar, titulo, descripcion, children, pie, a
         <header className="flex items-start gap-3 border-b border-arena bg-superficie/70 px-5 py-4">
           <div className="min-w-0 flex-1">
             <h2 className="text-lg text-bosque-800">{titulo}</h2>
-            {descripcion && <p className="mt-0.5 text-sm text-carbon/60">{descripcion}</p>}
+            {descripcion && <p className="mt-0.5 text-sm text-suave">{descripcion}</p>}
           </div>
           <button
             type="button"
             onClick={onCerrar}
             aria-label="Cerrar"
-            className="-mt-1 -mr-1 inline-flex size-9 shrink-0 items-center justify-center rounded-xl text-carbon/50 transition hover:bg-black/5"
+            className="-mt-1 -mr-1 inline-flex size-9 shrink-0 items-center justify-center rounded-xl text-suave transition hover:bg-black/5"
           >
             <X size={20} />
           </button>
@@ -108,7 +108,7 @@ export function Confirmar({
         </>
       }
     >
-      <p className="text-sm text-carbon/70">{texto ?? 'Esta acción no se puede deshacer.'}</p>
+      <p className="text-sm text-tenue">{texto ?? 'Esta acción no se puede deshacer.'}</p>
     </Modal>
   )
 }

@@ -79,7 +79,7 @@ export function ResumenEscapada() {
                 <Trophy size={12} /> {elegida.reserved ? 'Reservada' : 'Casa elegida'}
               </Etiqueta>
               <h3 className="font-display mt-2 text-lg text-bosque-800">{elegida.name}</h3>
-              <p className="text-sm text-carbon/60">
+              <p className="text-sm text-suave">
                 {[elegida.town, elegida.province].filter(Boolean).join(', ') || 'Sin localidad'}
               </p>
               <div className="mt-2 flex flex-wrap gap-2 text-sm">
@@ -109,7 +109,7 @@ export function ResumenEscapada() {
           </span>
           <span className="flex-1">
             <span className="block font-semibold text-bosque-800">Todavía no hay casa elegida</span>
-            <span className="block text-sm text-carbon/60">
+            <span className="block text-sm text-suave">
               {datos.casas.length === 0
                 ? 'Añadid las casas rurales candidatas.'
                 : `${datos.casas.length} candidatas esperando votos.`}
@@ -139,7 +139,7 @@ export function ResumenEscapada() {
             <Users size={17} /> Quién viene
           </h3>
           {participantes.length === 0 ? (
-            <p className="text-sm text-carbon/55">
+            <p className="text-sm text-suave">
               Nadie apuntado todavía. Edita la escapada para marcar quién viene.
             </p>
           ) : (
@@ -157,7 +157,7 @@ export function ResumenEscapada() {
                   </span>
                 ))}
               </div>
-              <p className="mt-3 text-xs text-carbon/50">
+              <p className="mt-3 text-xs text-suave">
                 {numero(personas)} personas equivalentes para calcular la compra
                 {hogares.length > 0 && ` · ${new Set(participantes.map((m) => m.household_id)).size} unidades familiares`}
               </p>
@@ -170,9 +170,9 @@ export function ResumenEscapada() {
             <NotebookPen size={17} /> Observaciones
           </h3>
           {escapada.notes ? (
-            <p className="text-sm whitespace-pre-wrap text-carbon/70">{escapada.notes}</p>
+            <p className="text-sm whitespace-pre-wrap text-tenue">{escapada.notes}</p>
           ) : (
-            <p className="text-sm text-carbon/50">Sin notas. Podéis apuntar aquí la hora de llegada, quién lleva el coche…</p>
+            <p className="text-sm text-suave">Sin notas. Podéis apuntar aquí la hora de llegada, quién lleva el coche…</p>
           )}
         </Tarjeta>
       </div>

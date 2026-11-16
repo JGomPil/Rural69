@@ -37,7 +37,7 @@ export function Ajustes() {
         <h1 className="font-display flex items-center gap-2 text-2xl text-bosque-800 sm:text-3xl">
           <Settings size={26} /> Ajustes
         </h1>
-        <p className="mt-0.5 text-sm text-carbon/60">
+        <p className="mt-0.5 text-sm text-suave">
           {esAdmin ? 'Eres administrador del grupo.' : 'Tu cuenta es de integrante.'} ·{' '}
           {perfil?.email}
         </p>
@@ -282,16 +282,16 @@ function Integrantes() {
     >
       <div className="space-y-3">
         <Tarjeta className="flex flex-wrap items-center gap-x-5 gap-y-1 px-4 py-3 text-sm">
-          <span className="text-carbon/70">
+          <span className="text-tenue">
             <strong>{activos.length}</strong> activos
           </span>
-          <span className="text-carbon/70">
+          <span className="text-tenue">
             <strong>{activos.filter((m) => !m.is_child).length}</strong> adultos
           </span>
-          <span className="text-carbon/70">
+          <span className="text-tenue">
             <strong>{activos.filter((m) => m.is_child).length}</strong> niños
           </span>
-          <span className="text-carbon/70">
+          <span className="text-tenue">
             <strong>{numero(personasEquivalentes(activos))}</strong> personas equivalentes
           </span>
         </Tarjeta>
@@ -302,7 +302,7 @@ function Integrantes() {
               <span className="font-display flex-1 text-sm font-bold text-bosque-800">
                 {hogar?.name ?? 'Sin unidad familiar'}
               </span>
-              <span className="text-xs text-carbon/50">{gente.length}</span>
+              <span className="text-xs text-suave">{gente.length}</span>
               {esAdmin && hogar && (
                 <BotonIcono etiqueta="Eliminar unidad familiar" tono="peligro" onClick={() => setHogarBorrando(hogar)}>
                   <Trash2 size={14} />
@@ -310,7 +310,7 @@ function Integrantes() {
               )}
             </div>
             {gente.length === 0 ? (
-              <p className="px-4 py-3 text-sm text-carbon/50">Nadie asignado todavía.</p>
+              <p className="px-4 py-3 text-sm text-suave">Nadie asignado todavía.</p>
             ) : (
               <ul className="divide-y divide-arena">
                 {gente.map((m) => (
@@ -318,7 +318,7 @@ function Integrantes() {
                     <Avatar src={m.avatar_url} nombre={m.name} tamanyo="sm" />
                     <span className="min-w-0 flex-1">
                       <span className="block font-medium">{m.name}</span>
-                      <span className="block text-xs text-carbon/50">
+                      <span className="block text-xs text-suave">
                         {m.is_child ? 'Niñ@' : 'Adulto'} · factor {numero(m.consumption_factor)}
                         {!m.active && ' · inactivo'}
                       </span>
@@ -583,9 +583,9 @@ function Usuarios() {
             <span className="min-w-0 flex-1">
               <span className="block truncate font-semibold text-bosque-800">
                 {p.display_name || p.email}
-                {p.id === perfil?.id && <span className="ml-1.5 text-xs text-carbon/45">(tú)</span>}
+                {p.id === perfil?.id && <span className="ml-1.5 text-xs text-suave">(tú)</span>}
               </span>
-              <span className="block truncate text-xs text-carbon/50">{p.email}</span>
+              <span className="block truncate text-xs text-suave">{p.email}</span>
             </span>
             <Lista
               aria-label={`Integrante vinculado a ${p.display_name}`}
@@ -624,7 +624,7 @@ function Usuarios() {
         ))}
       </Tarjeta>
 
-      <div className="mt-3 rounded-2xl border border-arena bg-beige px-4 py-3 text-sm text-carbon/70">
+      <div className="mt-3 rounded-2xl border border-arena bg-beige px-4 py-3 text-sm text-tenue">
         <p className="font-semibold text-bosque-800">¿Cómo doy acceso a alguien nuevo?</p>
         <ol className="mt-1 list-decimal space-y-0.5 pl-5">
           <li>
@@ -635,7 +635,7 @@ function Usuarios() {
           <li>Vincúlalo con su integrante del grupo y, si hace falta, dale rol de administrador.</li>
           <li>Que se cambie la contraseña y se ponga foto desde su perfil. Tú también puedes hacerlo por él.</li>
         </ol>
-        <p className="mt-2 text-xs text-carbon/50">
+        <p className="mt-2 text-xs text-suave">
           Los niños no llevan cuenta: ni votan ni pagan. Van como integrantes del grupo y los gestionan sus
           padres o un administrador.
         </p>
@@ -736,7 +736,7 @@ function FormularioUsuario({
         <Campo etiqueta="Nombre" requerido>
           <Entrada value={nombre} onChange={(e) => setNombre(e.target.value)} required placeholder="Ej.: Javi" />
         </Campo>
-        <div className="rounded-2xl border border-arena bg-beige px-4 py-3 text-sm text-carbon/65">
+        <div className="rounded-2xl border border-arena bg-beige px-4 py-3 text-sm text-tenue">
           <p>
             <strong className="text-bosque-800">Email:</strong> {perfil?.email}
           </p>
@@ -796,7 +796,7 @@ function CopiaSeguridad() {
   return (
     <Seccion titulo="Copia de seguridad" icono={<DatabaseBackup size={19} />}>
       <Tarjeta className="flex flex-wrap items-center justify-between gap-3 p-4">
-        <p className="max-w-lg text-sm text-carbon/65">
+        <p className="max-w-lg text-sm text-tenue">
           Descarga un archivo JSON con todo: escapadas, casas, votos, listas, despensa e integrantes. Guárdalo de vez
           en cuando por si acaso.
         </p>

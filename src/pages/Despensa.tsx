@@ -101,7 +101,7 @@ export function Despensa() {
           <h1 className="font-display flex items-center gap-2 text-2xl text-bosque-800 sm:text-3xl">
             <Archive size={26} /> Despensa
           </h1>
-          <p className="mt-0.5 max-w-xl text-sm text-carbon/60">
+          <p className="mt-0.5 max-w-xl text-sm text-suave">
             Todo lo que sobró de escapadas anteriores y se conserva para la siguiente.
           </p>
         </div>
@@ -147,7 +147,7 @@ export function Despensa() {
                 etiqueta="Solo lo que se conserva"
               />
               <Interruptor checked={verAgotados} onChange={setVerAgotados} etiqueta="Ver agotados" />
-              <span className="text-sm text-carbon/55">
+              <span className="text-sm text-suave">
                 {lista.filter((p) => p.qty > 0).length} disponibles · {lista.length} registrados
               </span>
             </Tarjeta>

@@ -7,11 +7,11 @@ const VARIANTES: Record<Variante, string> = {
   primario:
     'bg-bosque-600 text-tinta-fuerte shadow-[0_1px_2px_rgba(27,55,39,0.3),0_6px_16px_-10px_rgba(27,55,39,0.8)] hover:bg-bosque-700 active:bg-bosque-800 active:shadow-[0_1px_2px_rgba(27,55,39,0.3)]',
   acento:
-    'bg-tierra-500 text-tinta-fuerte shadow-[0_1px_2px_rgba(133,69,42,0.3),0_6px_16px_-10px_rgba(133,69,42,0.8)] hover:bg-tierra-600 active:bg-tierra-700 active:shadow-[0_1px_2px_rgba(133,69,42,0.3)]',
+    'bg-tierra-600 text-tinta-fuerte shadow-[0_1px_2px_rgba(133,69,42,0.3),0_6px_16px_-10px_rgba(133,69,42,0.8)] hover:bg-tierra-700 active:bg-tierra-700 active:shadow-[0_1px_2px_rgba(133,69,42,0.3)]',
   secundario: 'bg-superficie text-bosque-700 border border-arena shadow-[0_1px_2px_rgba(74,59,42,0.05)] hover:bg-beige hover:border-arena active:bg-arena active:shadow-none',
   suave: 'bg-bosque-50 text-bosque-700 hover:bg-bosque-100 active:bg-bosque-200',
   peligro: 'bg-superficie text-tierra-700 border border-tierra-200 shadow-[0_1px_2px_rgba(74,59,42,0.05)] hover:bg-tierra-100 active:shadow-none',
-  fantasma: 'text-carbon/70 hover:bg-black/5 active:bg-black/10',
+  fantasma: 'text-tenue hover:bg-black/5 active:bg-black/10',
 }
 
 const TAMANYOS: Record<Tamanyo, string> = {
@@ -61,7 +61,7 @@ export function BotonIcono({ etiqueta, tono = 'normal', className = '', children
       aria-label={etiqueta}
       title={etiqueta}
       className={`inline-flex size-9 shrink-0 items-center justify-center rounded-xl transition active:scale-95 ${
-        tono === 'peligro' ? 'text-tierra-600 hover:bg-tierra-100' : 'text-carbon/55 hover:bg-black/5 hover:text-carbon'
+        tono === 'peligro' ? 'text-tierra-600 hover:bg-tierra-100' : 'text-suave hover:bg-black/5 hover:text-carbon'
       } ${className}`}
     >
       {children}

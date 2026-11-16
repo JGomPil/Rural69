@@ -132,7 +132,7 @@ export function CasasRurales() {
               type="button"
               onClick={() => setVista(valor)}
               className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-bold transition ${
-                vista === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-carbon/55'
+                vista === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-suave'
               }`}
             >
               <Icono size={16} /> {texto}
@@ -297,7 +297,7 @@ function TarjetaCasa({
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <h3 className="font-display text-lg leading-tight text-bosque-800">{casa.name}</h3>
-            <p className="truncate text-sm text-carbon/60">
+            <p className="truncate text-sm text-suave">
               {[casa.town, casa.province].filter(Boolean).join(', ') || 'Sin localidad'}
             </p>
           </div>
@@ -324,11 +324,11 @@ function TarjetaCasa({
               )}
             </>
           ) : (
-            <span className="text-sm text-carbon/45">Precio por confirmar</span>
+            <span className="text-sm text-suave">Precio por confirmar</span>
           )}
         </div>
 
-        <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-carbon/65">
+        <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-tenue">
           {casa.max_guests != null && (
             <span className="flex items-center gap-1">
               <Users size={14} /> {casa.max_guests} plazas
@@ -356,14 +356,14 @@ function TarjetaCasa({
           </div>
         )}
 
-        {casa.features && <p className="text-sm text-carbon/65">{casa.features}</p>}
+        {casa.features && <p className="text-sm text-tenue">{casa.features}</p>}
         {casa.common_spaces && (
-          <p className="text-sm text-carbon/60">
+          <p className="text-sm text-suave">
             <span className="font-semibold">Espacios comunes:</span> {casa.common_spaces}
           </p>
         )}
         {casa.notes && (
-          <p className="rounded-xl bg-beige px-3 py-2 text-sm whitespace-pre-wrap text-carbon/70">{casa.notes}</p>
+          <p className="rounded-xl bg-beige px-3 py-2 text-sm whitespace-pre-wrap text-tenue">{casa.notes}</p>
         )}
 
         <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-arena pt-3">
@@ -381,7 +381,7 @@ function TarjetaCasa({
             <button
               type="button"
               onClick={onElegir}
-              className="rounded-xl px-2.5 py-1.5 text-sm font-semibold text-carbon/60 transition hover:bg-black/5"
+              className="rounded-xl px-2.5 py-1.5 text-sm font-semibold text-suave transition hover:bg-black/5"
             >
               {elegida ? 'Quitar elección' : 'Marcar elegida'}
             </button>
@@ -396,7 +396,7 @@ function TarjetaCasa({
             </button>
           )}
           {propuestaPor && (
-            <span className="ml-auto flex items-center gap-1.5 text-xs text-carbon/40">
+            <span className="ml-auto flex items-center gap-1.5 text-xs text-suave">
               Propuesta por <Persona perfilId={propuestaPor} />
             </span>
           )}
@@ -483,7 +483,7 @@ function Comparador({
             {filas.map((fila, i) => (
               <tr key={fila.etiqueta} className={i % 2 ? 'bg-beige/50' : 'bg-superficie'}>
                 <th
-                  className={`sticky left-0 z-10 px-4 py-2.5 text-left font-semibold whitespace-nowrap text-carbon/70 ${
+                  className={`sticky left-0 z-10 px-4 py-2.5 text-left font-semibold whitespace-nowrap text-tenue ${
                     i % 2 ? 'bg-beige' : 'bg-superficie'
                   }`}
                 >
@@ -492,7 +492,7 @@ function Comparador({
                 {casas.map((c) => (
                   <td
                     key={c.id}
-                    className={`px-4 py-2.5 align-top ${fila.destacar ? 'font-bold text-bosque-700' : 'text-carbon/75'}`}
+                    className={`px-4 py-2.5 align-top ${fila.destacar ? 'font-bold text-bosque-700' : 'text-tenue'}`}
                   >
                     {fila.valor(c)}
                   </td>

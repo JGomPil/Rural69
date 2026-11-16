@@ -134,7 +134,7 @@ export function ListaMaestra() {
           <h1 className="font-display flex items-center gap-2 text-2xl text-bosque-800 sm:text-3xl">
             <ListChecks size={26} /> Lista maestra
           </h1>
-          <p className="mt-0.5 max-w-xl text-sm text-carbon/60">
+          <p className="mt-0.5 max-w-xl text-sm text-suave">
             La lista de siempre, que vamos mejorando escapada tras escapada. De aquí nace la compra de cada viaje.
           </p>
         </div>
@@ -161,7 +161,7 @@ export function ListaMaestra() {
       {error && <AvisoError texto={error} onReintentar={() => void refrescar()} />}
 
       {!esAdmin && (
-        <p className="rounded-2xl border border-arena bg-beige px-4 py-3 text-sm text-carbon/65">
+        <p className="rounded-2xl border border-arena bg-beige px-4 py-3 text-sm text-tenue">
           Solo el administrador puede cambiar la lista maestra. Tú sí puedes modificar la lista de cada escapada.
         </p>
       )}
@@ -191,7 +191,7 @@ export function ListaMaestra() {
             />
           </div>
 
-          <p className="text-sm text-carbon/55">
+          <p className="text-sm text-suave">
             {lista.length} productos · cantidades de referencia para{' '}
             <strong>{numero(ajustes.grupoHabitual)} personas</strong>
           </p>
@@ -216,10 +216,10 @@ export function ListaMaestra() {
                               la cantidad, porque nada le da dónde partirlo. */}
                           <p className="font-medium break-words text-carbon">
                             {m.name}
-                            {!m.active && <span className="ml-1.5 text-xs text-carbon/50">(desactivado)</span>}
+                            {!m.active && <span className="ml-1.5 text-xs text-suave">(desactivado)</span>}
                           </p>
                           {(m.notes || m.base_people !== ajustes.grupoHabitual) && (
-                            <p className="text-xs text-carbon/50">
+                            <p className="text-xs text-suave">
                               {m.notes}
                               {/* En el móvil no cabe la pastilla, así que va aquí. */}
                               {m.base_people !== ajustes.grupoHabitual && (

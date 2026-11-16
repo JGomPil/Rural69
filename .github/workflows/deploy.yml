@@ -37,6 +37,9 @@ jobs:
       - name: Comprobar tipos
         run: npx tsc -b
 
+      - name: Comprobar contraste
+        run: node scripts/contraste.mjs
+
       - name: Construir
         run: npx vite build
         env:

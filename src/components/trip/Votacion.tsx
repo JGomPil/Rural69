@@ -133,7 +133,7 @@ export function Votacion() {
             <VotoIcono size={19} />
             {escapada.voting_open ? 'Votación abierta' : 'Votación cerrada'}
           </h2>
-          <p className="mt-0.5 text-sm text-carbon/60">
+          <p className="mt-0.5 text-sm text-suave">
             {resultados.total} {resultados.total === 1 ? 'voto emitido' : 'votos emitidos'}
             {participantes.length > 0 &&
               ` · ${perfiles.length} ${perfiles.length === 1 ? 'adulto' : 'adultos'} con cuenta`}
@@ -158,7 +158,7 @@ export function Votacion() {
       </Tarjeta>
 
       {!escapada.voting_open && (
-        <p className="rounded-2xl border border-arena bg-beige px-4 py-3 text-sm text-carbon/70">
+        <p className="rounded-2xl border border-arena bg-beige px-4 py-3 text-sm text-tenue">
           La votación está cerrada: ya no se pueden cambiar los votos.
         </p>
       )}
@@ -176,11 +176,11 @@ export function Votacion() {
               return (
                 <div key={casa.id}>
                   <div className="mb-1 flex items-baseline justify-between gap-2 text-sm">
-                    <span className={`truncate font-semibold ${esGanadora ? 'text-bosque-700' : 'text-carbon/70'}`}>
+                    <span className={`truncate font-semibold ${esGanadora ? 'text-bosque-700' : 'text-tenue'}`}>
                       {casa.name}
                       {escapada.chosen_house_id === casa.id && ' 🏆'}
                     </span>
-                    <span className="shrink-0 font-bold text-carbon/60">
+                    <span className="shrink-0 font-bold text-suave">
                       {votos.length} ({pct}%)
                     </span>
                   </div>
@@ -194,7 +194,7 @@ export function Votacion() {
                   </div>
                   {votos.length > 0 && (
                     <Personas
-                      className="mt-1.5 text-xs text-carbon/50"
+                      className="mt-1.5 text-xs text-suave"
                       perfilIds={votos.map((v) => v.voter_id)}
                     />
                   )}
@@ -203,7 +203,7 @@ export function Votacion() {
             })}
           </div>
           {sinVotar.length > 0 && (
-            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-arena pt-3 text-xs text-carbon/50">
+            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-arena pt-3 text-xs text-suave">
               <span className="font-semibold">Faltan por votar:</span>
               <Personas perfilIds={sinVotar.map((p) => p.id)} className="opacity-70 grayscale" />
             </div>
@@ -238,7 +238,7 @@ export function Votacion() {
                     </Etiqueta>
                   )}
                 </div>
-                <p className="truncate text-sm text-carbon/60">
+                <p className="truncate text-sm text-suave">
                   {[casa.town, casa.province].filter(Boolean).join(', ') || '—'}
                   {casa.total_price != null &&
                     (adultos > 0
@@ -265,7 +265,7 @@ export function Votacion() {
                     <button
                       type="button"
                       onClick={() => void proclamar(casa.id)}
-                      className="text-xs font-semibold text-carbon/50 hover:text-bosque-600 hover:underline"
+                      className="text-xs font-semibold text-suave hover:text-bosque-600 hover:underline"
                     >
                       Marcar como elegida
                     </button>
@@ -277,7 +277,7 @@ export function Votacion() {
         })}
       </div>
 
-      <p className="text-center text-xs text-carbon/45">
+      <p className="text-center text-xs text-suave">
         Cada persona tiene un voto por escapada y puede cambiarlo mientras la votación esté abierta.
       </p>
     </div>

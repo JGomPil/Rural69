@@ -164,7 +164,7 @@ export function DialogoTiempos({
         <div className="space-y-4">
           {tiempos.length === 0 ? (
             <div className="rounded-2xl border border-arena bg-beige px-4 py-5 text-center">
-              <p className="text-sm text-carbon/70">
+              <p className="text-sm text-tenue">
                 Todavía no hay tiempos. Puedo crearlos a partir de las fechas de la escapada y luego los
                 retocas.
               </p>
@@ -185,7 +185,7 @@ export function DialogoTiempos({
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-semibold text-bosque-800">{t.name}</span>
-                      <span className="block truncate text-xs text-carbon/50">
+                      <span className="block truncate text-xs text-suave">
                         {t.day ? fecha(t.day) : 'Sin día'}
                         {t.notes && ` · ${t.notes}`}
                       </span>
@@ -214,7 +214,7 @@ export function DialogoTiempos({
             </>
           )}
 
-          <p className="text-xs text-carbon/50">
+          <p className="text-xs text-suave">
             Los productos que no pertenezcan a ningún tiempo se quedan en la <strong>compra común</strong>:
             bebida, desayunos, lo que no es de una comida concreta.
           </p>

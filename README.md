@@ -91,6 +91,7 @@ Scripts disponibles:
 | `npm run build` | Comprobación de tipos + construcción en `dist/` |
 | `npm run preview` | Sirve `dist/` para probarlo |
 | `npm run lint` | Linter (oxlint) |
+| `npm run contraste` | Repasa el contraste de los dos temas (falla si alguno baja del mínimo) |
 
 ---
 
@@ -236,6 +237,38 @@ Tres detalles que conviene no romper al tocar estilos:
   para que el súper no se lleve una hoja negra.
 * El tema se escribe en `<html data-tema>` desde un script de `index.html`, antes del primer
   pintado. Si eso se quitara, al abrir la app en oscuro se vería un fogonazo blanco.
+
+### Reglas de presentación
+
+El color y la tipografía siguen reglas comprobables, no gusto. Si tocas estilos, respétalas:
+
+* **Texto apagado con colores, no con opacidad.** Había doce niveles de `text-carbon/NN`
+  y con opacidad era imposible llegar al 4,5:1 que pide [WCAG 1.4.3][wcag143]: para que el
+  55 % cumpliera, `carbon` tendría que ser casi negro. Ahora hay dos tokens, `--color-tenue`
+  (secundario) y `--color-suave` (rótulos y metadatos), calculados contra el más desfavorable
+  de los fondos de cada tema, así que cumplen sobre los tres. La jerarquía se hace con tamaño
+  y grosor, no bajando el contraste.
+* **El borde de los campos no es adorno.** En una tarjeta blanca es lo único que dice dónde
+  empieza el campo, y [WCAG 1.4.11][wcag1411] le pide 3:1: de ahí `--color-borde-campo`, que
+  usan los campos, las casillas y el carril del interruptor. `arena` se queda para separadores
+  y bordes de tarjeta, que sí son decorativos.
+* **Lo que lleva texto encima tiene que poder leerse.** El acento pasó de `tierra-500` a
+  `tierra-600` porque el blanco sobre el 500 se quedaba en 3,35:1.
+* **Interlineado al revés que el interletrado:** cuanto más grande el texto, más junto
+  (1,15 en `h1`, 1,5 en el cuerpo), para que un titular de dos líneas se lea como un bloque.
+* **Medida de lectura:** la utilidad `.medida` (65ch) en los textos corridos. Pasados unos
+  75 caracteres por línea, el ojo pierde el renglón al volver.
+* **Cifras de ancho fijo** (`.cifras`, y por defecto en las tablas): en una columna de
+  cantidades las cifras proporcionales bailan de una fila a otra.
+* **Los objetivos táctiles** están en 36 px, por encima de los 24 px de
+  [WCAG 2.5.8][wcag258].
+
+Hay un medidor de contraste en `scripts/contraste.mjs`: `node scripts/contraste.mjs` repasa
+los 26 pares de color de los dos temas y falla si alguno baja del mínimo.
+
+[wcag143]: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
+[wcag1411]: https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast
+[wcag258]: https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html
 
 ### Avisos
 

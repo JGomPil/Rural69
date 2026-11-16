@@ -153,7 +153,7 @@ export function FormularioSobrante({ abierto, onCerrar, tripId, item, inicial, o
             onChange={setConservable}
             etiqueta="Se puede guardar para la próxima escapada"
           />
-          <p className="mt-1.5 text-xs text-carbon/50">
+          <p className="mt-1.5 text-xs text-suave">
             Si lo desactivas seguirá apuntado, pero no se propondrá para descontar de la próxima compra.
           </p>
         </div>

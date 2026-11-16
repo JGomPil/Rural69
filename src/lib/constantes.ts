@@ -26,7 +26,7 @@ export const ESTILO_CATEGORIA: Record<string, { emoji: string; clase: string }> 
   Verduras: { emoji: '🥬', clase: 'bg-oliva-100 text-oliva-700' },
   'Carne y pescado': { emoji: '🍖', clase: 'bg-tierra-200 text-tierra-700' },
   Limpieza: { emoji: '🧼', clase: 'bg-bosque-50 text-bosque-600' },
-  Otros: { emoji: '🧺', clase: 'bg-arena text-carbon/70' },
+  Otros: { emoji: '🧺', clase: 'bg-arena text-tenue' },
 }
 
 export function estiloCategoria(categoria: string) {
@@ -55,7 +55,7 @@ export const ESTADOS: Record<EstadoEscapada, { etiqueta: string; clase: string; 
   planificacion: { etiqueta: 'En planificación', clase: 'bg-tierra-100 text-tierra-700 border-tierra-200', emoji: '✏️' },
   confirmada: { etiqueta: 'Confirmada', clase: 'bg-oliva-100 text-oliva-700 border-oliva-300', emoji: '✅' },
   realizada: { etiqueta: 'Realizada', clase: 'bg-bosque-100 text-bosque-700 border-bosque-200', emoji: '🏡' },
-  archivada: { etiqueta: 'Archivada', clase: 'bg-arena text-carbon/60 border-arena', emoji: '📦' },
+  archivada: { etiqueta: 'Archivada', clase: 'bg-arena text-suave border-arena', emoji: '📦' },
 }
 
 export const ESTADOS_SOBRANTE = ['Perfecto', 'Abierto', 'Casi acabado', 'Caduca pronto'] as const

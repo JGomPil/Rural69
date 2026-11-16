@@ -158,7 +158,7 @@ export function Chat() {
     <div className="flex h-[calc(100dvh-20rem)] min-h-96 flex-col overflow-hidden rounded-3xl border border-arena bg-beige/50">
       <div ref={hilo} className="flex-1 space-y-1 overflow-y-auto overscroll-contain px-3 py-4 sm:px-4">
         {mensajes.length === 0 && (
-          <p className="mx-auto mt-10 max-w-xs text-center text-sm text-carbon/50">
+          <p className="mx-auto mt-10 max-w-xs text-center text-sm text-suave">
             Aquí no hay nada todavía. Escribid lo que haga falta para esta escapada: quién lleva el coche, a
             qué hora quedáis, qué casa os gusta más…
           </p>
@@ -177,7 +177,7 @@ export function Chat() {
             <div key={m.id}>
               {nuevoDia && (
                 <div className="my-4 flex justify-center">
-                  <span className="rounded-full bg-superficie px-3 py-1 text-xs font-semibold text-carbon/50 shadow-sm">
+                  <span className="rounded-full bg-superficie px-3 py-1 text-xs font-semibold text-suave shadow-sm">
                     {diaDeChat(m.created_at)}
                   </span>
                 </div>
@@ -210,7 +210,7 @@ export function Chat() {
                     </button>
                   )}
                   {m.body && <p className="text-sm whitespace-pre-wrap break-words">{m.body}</p>}
-                  <p className={`mt-0.5 text-right text-[11px] ${mio ? 'text-tinta-fuerte/60' : 'text-carbon/40'}`}>
+                  <p className={`mt-0.5 text-right text-[11px] ${mio ? 'text-tinta-fuerte/60' : 'text-suave'}`}>
                     {m.edited_at && 'editado · '}
                     {hora(m.created_at)}
                   </p>
@@ -265,7 +265,7 @@ export function Chat() {
             onClick={() => archivo.current?.click()}
             disabled={subiendo || Boolean(editando)}
             aria-label="Enviar una foto"
-            className="inline-flex size-10 shrink-0 items-center justify-center rounded-2xl text-carbon/50 transition hover:bg-black/5 disabled:opacity-40"
+            className="inline-flex size-10 shrink-0 items-center justify-center rounded-2xl text-suave transition hover:bg-black/5 disabled:opacity-40"
           >
             {subiendo ? <Loader2 size={20} className="animate-spin" /> : <ImagePlus size={20} />}
           </button>

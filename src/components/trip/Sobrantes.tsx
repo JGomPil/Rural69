@@ -105,7 +105,7 @@ export function Sobrantes() {
           <h2 className="flex items-center gap-2 text-lg text-bosque-800">
             <Archive size={19} /> ¿Qué ha sobrado?
           </h2>
-          <p className="mt-0.5 max-w-xl text-sm text-carbon/65">
+          <p className="mt-0.5 max-w-xl text-sm text-tenue">
             Apuntad lo que vuelve a casa: la próxima vez el sistema lo tendrá en cuenta para no comprar de más.
           </p>
         </div>
@@ -143,7 +143,7 @@ export function Sobrantes() {
           icono={<span aria-hidden>⚡</span>}
           className="rounded-card bg-superficie/60 p-4"
         >
-          <p className="mb-3 text-sm text-carbon/60">
+          <p className="mb-3 text-sm text-suave">
             Pulsa un producto que hayáis comprado para apuntar cuánto ha sobrado.
           </p>
           <div className="flex flex-wrap gap-2">
@@ -174,7 +174,7 @@ export function Sobrantes() {
       {/* -------- Despensa de escapadas anteriores -------- */}
       {deOtras.length > 0 && (
         <Seccion titulo="Lo que ya había en la despensa" icono={<span aria-hidden>📦</span>}>
-          <p className="mb-3 text-sm text-carbon/60">
+          <p className="mb-3 text-sm text-suave">
             Si algo se ha consumido en esta escapada, quítalo aquí para que la despensa quede al día.
           </p>
           <div className="grid gap-2.5 sm:grid-cols-2">
@@ -250,9 +250,9 @@ export function TarjetaSobrante({
         <div className="mt-1 flex flex-wrap items-center gap-1.5">
           {item.condition && <Etiqueta>{item.condition}</Etiqueta>}
           {!item.keepable && <Etiqueta tono="tierra">no se guarda</Etiqueta>}
-          {origen && <span className="text-xs text-carbon/45">de {origen}</span>}
+          {origen && <span className="text-xs text-suave">de {origen}</span>}
         </div>
-        {item.notes && <p className="mt-1 text-sm text-carbon/60">{item.notes}</p>}
+        {item.notes && <p className="mt-1 text-sm text-suave">{item.notes}</p>}
         {onConsumido && (
           <button
             type="button"

@@ -47,7 +47,7 @@ export function Escapadas() {
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl text-bosque-800 sm:text-3xl">Escapadas</h1>
-          <p className="mt-0.5 text-sm text-carbon/60">
+          <p className="mt-0.5 text-sm text-suave">
             {escapadas.length === 1 ? '1 escapada guardada' : `${escapadas.length} escapadas guardadas`}
           </p>
         </div>
@@ -73,7 +73,7 @@ export function Escapadas() {
             type="button"
             onClick={() => setFiltro(valor)}
             className={`flex-1 rounded-xl px-4 py-2 text-sm font-bold whitespace-nowrap transition ${
-              filtro === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-carbon/55'
+              filtro === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-suave'
             }`}
           >
             {texto}
@@ -136,7 +136,7 @@ function TarjetaEscapada({
         <h3 className="font-display text-lg leading-tight text-bosque-800">{escapada.title}</h3>
         <ChevronRight size={18} className="mt-1 shrink-0 text-carbon/25" />
       </div>
-      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-carbon/65">
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-tenue">
         <span className="flex items-center gap-1">
           <CalendarDays size={14} /> {rangoFechas(escapada.start_date, escapada.end_date)}
         </span>
@@ -152,7 +152,7 @@ function TarjetaEscapada({
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <EtiquetaEstado estado={escapada.status} />
         {cuenta && (
-          <span className="rounded-full bg-tierra-500 px-2.5 py-0.5 text-xs font-bold text-tinta-fuerte">{cuenta}</span>
+          <span className="rounded-full bg-tierra-600 px-2.5 py-0.5 text-xs font-bold text-tinta-fuerte">{cuenta}</span>
         )}
       </div>
     </Tarjeta>

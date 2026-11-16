@@ -62,7 +62,7 @@ export function Etiqueta({
   className?: string
 }) {
   const tonos = {
-    neutro: 'bg-beige text-carbon/70 border-arena',
+    neutro: 'bg-beige text-tenue border-arena',
     bosque: 'bg-bosque-50 text-bosque-700 border-bosque-100',
     oliva: 'bg-oliva-100 text-oliva-700 border-oliva-200',
     tierra: 'bg-tierra-100 text-tierra-700 border-tierra-200',
@@ -103,7 +103,7 @@ export function Progreso({
   const pct = total > 0 ? Math.round((valor / total) * 100) : 0
   return (
     <div>
-      <div className="mb-1.5 flex items-baseline justify-between text-xs font-semibold text-carbon/60">
+      <div className="cifras mb-1.5 flex items-baseline justify-between text-xs font-semibold text-suave">
         <span>{etiqueta}</span>
         <span>
           {valor}/{total} · {pct}%
@@ -121,7 +121,7 @@ export function Progreso({
 
 export function Cargando({ texto = 'Cargando…', alto = 'py-16' }: { texto?: string; alto?: string }) {
   return (
-    <div className={`flex flex-col items-center justify-center gap-3 text-carbon/50 ${alto}`}>
+    <div className={`flex flex-col items-center justify-center gap-3 text-suave ${alto}`}>
       <Loader2 size={28} className="animate-spin text-bosque-500" />
       <p className="text-sm font-medium">{texto}</p>
     </div>
@@ -146,7 +146,7 @@ export function Vacio({
       </span>
       <div>
         <h3 className="text-base text-bosque-800">{titulo}</h3>
-        {texto && <p className="mx-auto mt-1 max-w-sm text-sm text-carbon/60">{texto}</p>}
+        {texto && <p className="mx-auto mt-1 max-w-sm text-sm text-suave">{texto}</p>}
       </div>
       {accion}
     </div>
@@ -190,7 +190,7 @@ export function Dato({
       <span className={`font-display text-2xl leading-tight font-bold tracking-tight tabular-nums ${tonos[tono]}`}>
         {valor}
       </span>
-      <span className="text-xs leading-snug font-medium text-carbon/55">{etiqueta}</span>
+      <span className="text-xs leading-snug font-medium text-suave">{etiqueta}</span>
     </div>
   )
 }

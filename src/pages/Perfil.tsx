@@ -41,7 +41,7 @@ export function Perfil() {
           <h1 className="font-display truncate text-2xl text-bosque-800">
             {perfil.display_name || 'Sin nombre'}
           </h1>
-          <p className="truncate text-sm text-carbon/60">{perfil.email}</p>
+          <p className="truncate text-sm text-suave">{perfil.email}</p>
           <div className="mt-1.5 flex flex-wrap gap-1.5">
             <Etiqueta tono={esAdmin ? 'oliva' : 'neutro'}>{esAdmin ? 'Administrador' : 'Integrante'}</Etiqueta>
             {miembro && <Etiqueta>{miembro.name}</Etiqueta>}
@@ -76,7 +76,7 @@ export function Perfil() {
 
       <Seccion titulo="Sesión" icono={<LogOut size={19} />}>
         <Tarjeta className="flex flex-wrap items-center justify-between gap-3 p-4">
-          <p className="text-sm text-carbon/60">
+          <p className="text-sm text-suave">
             Cierra la sesión si estás en un móvil u ordenador que no es tuyo.
           </p>
           <Boton variante="peligro" onClick={() => void salir()}>
@@ -85,7 +85,7 @@ export function Perfil() {
         </Tarjeta>
       </Seccion>
 
-      <p className="text-center text-xs text-carbon/45">
+      <p className="text-center text-xs text-suave">
         Los niños no tienen cuenta: sus datos y su foto los gestionan sus padres o un administrador desde
         Ajustes.
       </p>
@@ -273,7 +273,7 @@ function CambioPassword({
     <Seccion titulo="Contraseña" icono={<KeyRound size={19} />}>
       <Tarjeta className="p-5">
         <form onSubmit={enviar} className="space-y-4">
-          <p className="flex items-start gap-2 rounded-2xl bg-beige px-3.5 py-2.5 text-sm text-carbon/70">
+          <p className="flex items-start gap-2 rounded-2xl bg-beige px-3.5 py-2.5 text-sm text-tenue">
             <ShieldCheck size={17} className="mt-0.5 shrink-0 text-oliva-600" />
             Si entraste con una contraseña que te dio el administrador, cámbiala por una tuya.
           </p>
@@ -339,14 +339,14 @@ function Aspecto() {
               onClick={() => cambiar(valor)}
               aria-pressed={preferencia === valor}
               className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-bold transition ${
-                preferencia === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-carbon/55'
+                preferencia === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-suave'
               }`}
             >
               <Icono size={16} /> {texto}
             </button>
           ))}
         </div>
-        <p className="text-sm text-carbon/60">
+        <p className="text-sm text-suave">
           {preferencia === 'sistema'
             ? `Sigue a tu móvil u ordenador, que ahora mismo está en ${resuelto}.`
             : 'Fijo, sin hacer caso a lo que diga el sistema.'}{' '}
@@ -371,7 +371,7 @@ function AvisosDelGrupo() {
   return (
     <Seccion titulo="Avisos" icono={activados ? <Bell size={19} /> : <BellOff size={19} />}>
       <Tarjeta className="space-y-4 p-5">
-        <p className="text-sm text-carbon/70">
+        <p className="text-sm text-tenue">
           Cuando alguien propone una casa, se abre una votación o ya hay casa elegida, te sale en la campana
           de arriba. Eso funciona siempre. Aparte, este aparato puede avisarte con un toque del sistema.
         </p>
@@ -393,7 +393,7 @@ function AvisosDelGrupo() {
               onChange={() => desactivar()}
               etiqueta="Avisarme en este aparato"
             />
-            <p className="text-sm text-carbon/60">
+            <p className="text-sm text-suave">
               Suena mientras Rural69 esté abierta, aunque sea de fondo o con la pantalla apagada. Con la
               aplicación cerrada del todo no puede sonar: para eso haría falta un servidor propio, y Rural69
               no tiene ninguno a propósito (es lo que la hace gratis de mantener).
@@ -404,7 +404,7 @@ function AvisosDelGrupo() {
             <Boton variante="secundario" onClick={() => void pedir()}>
               <Bell size={16} /> Activar avisos en este aparato
             </Boton>
-            <p className="text-sm text-carbon/60">
+            <p className="text-sm text-suave">
               El navegador te preguntará si los permites. Se elige aparato por aparato.
             </p>
           </>

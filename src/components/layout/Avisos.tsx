@@ -19,7 +19,7 @@ const ICONOS: Record<TipoAviso, typeof House> = {
 const TONOS: Record<TipoAviso, string> = {
   casa_propuesta: 'bg-bosque-50 text-bosque-700',
   votacion_abierta: 'bg-oliva-100 text-oliva-700',
-  votacion_cerrada: 'bg-beige text-carbon/70',
+  votacion_cerrada: 'bg-beige text-tenue',
   casa_elegida: 'bg-tierra-100 text-tierra-700',
 }
 
@@ -38,7 +38,7 @@ export function BotonAvisos({ className = '' }: { className?: string }) {
       >
         {sinLeer > 0 ? <BellRing size={19} /> : <Bell size={19} />}
         {sinLeer > 0 && (
-          <span className="animate-pop absolute -top-1 -right-1 inline-flex min-w-5 justify-center rounded-full bg-tierra-500 px-1 text-[11px] leading-5 font-bold text-tinta-fuerte">
+          <span className="animate-pop absolute -top-1 -right-1 inline-flex min-w-5 justify-center rounded-full bg-tierra-600 px-1 text-[11px] leading-5 font-bold text-tinta-fuerte">
             {sinLeer > 9 ? '9+' : sinLeer}
           </span>
         )}
@@ -88,7 +88,7 @@ function PanelAvisos({ abierto, onCerrar }: { abierto: boolean; onCerrar: () => 
       {lista.length === 0 ? (
         <div className="flex flex-col items-center gap-2.5 py-8 text-center">
           <Inbox size={30} className="text-carbon/30" />
-          <p className="text-sm text-carbon/60">
+          <p className="text-sm text-suave">
             Aquí saldrá cuando alguien proponga una casa o se abra una votación.
           </p>
         </div>
@@ -109,7 +109,7 @@ function PanelAvisos({ abierto, onCerrar }: { abierto: boolean; onCerrar: () => 
                   }`}
                 >
                   <span
-                    className={`mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-xl ${TONOS[aviso.kind] ?? 'bg-beige text-carbon/70'}`}
+                    className={`mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-xl ${TONOS[aviso.kind] ?? 'bg-beige text-tenue'}`}
                   >
                     <Icono size={17} />
                   </span>
@@ -118,11 +118,11 @@ function PanelAvisos({ abierto, onCerrar }: { abierto: boolean; onCerrar: () => 
                       <span className="min-w-0 flex-1 text-sm font-semibold text-bosque-800">
                         {aviso.title}
                       </span>
-                      <span className="shrink-0 text-[11px] font-medium text-carbon/45">
+                      <span className="shrink-0 text-[11px] font-medium text-suave">
                         {hace(aviso.created_at)}
                       </span>
                     </span>
-                    {aviso.body && <span className="mt-0.5 block text-xs text-carbon/65">{aviso.body}</span>}
+                    {aviso.body && <span className="mt-0.5 block text-xs text-tenue">{aviso.body}</span>}
                   </span>
                   {autor && (
                     <span className="mt-0.5 shrink-0">
