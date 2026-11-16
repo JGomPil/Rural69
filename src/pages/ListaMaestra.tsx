@@ -427,7 +427,7 @@ function FormularioMaestro({
           <AreaTexto value={notas} onChange={(e) => setNotas(e.target.value)} rows={2} />
         </Campo>
 
-        <div className="rounded-2xl border border-arena bg-white p-4">
+        <div className="rounded-2xl border border-arena bg-superficie p-4">
           <Interruptor checked={activo} onChange={setActivo} etiqueta="Incluir al generar listas nuevas" />
         </div>
 

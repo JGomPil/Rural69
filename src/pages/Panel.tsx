@@ -106,19 +106,23 @@ export function Panel() {
           {/* ---------- Tarjeta principal ---------- */}
           <Tarjeta className="animate-sube overflow-hidden">
             <div className="relative">
+              {/* Encima de esta cabecera va el título en blanco de verdad, así que
+                  tanto el velo de la foto como el degradado de respaldo tienen que
+                  seguir siendo oscuros en modo oscuro: de ahí el velo y los verdes
+                  fijos en lugar de los del tema. */}
               {elegida?.cover_image_url ? (
                 <div className="relative h-40 sm:h-52">
                   <img src={elegida.cover_image_url} alt="" className="size-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-bosque-900/85 via-bosque-900/35 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-velo/85 via-velo/35 to-transparent" />
                 </div>
               ) : (
-                <div className="h-28 bg-gradient-to-br from-bosque-600 via-bosque-500 to-oliva-500 sm:h-32" />
+                <div className="h-28 bg-gradient-to-br from-[#2f5d42] via-[#3d7555] to-[#8a9a5b] sm:h-32" />
               )}
               <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
                 <div className="flex flex-wrap items-center gap-2">
                   <EtiquetaEstado estado={escapadaActiva.status} />
                   {cuentaAtras(escapadaActiva.start_date) && (
-                    <span className="rounded-full bg-tierra-500 px-2.5 py-0.5 text-xs font-bold text-white">
+                    <span className="rounded-full bg-tierra-500 px-2.5 py-0.5 text-xs font-bold text-tinta-fuerte">
                       {cuentaAtras(escapadaActiva.start_date)}
                     </span>
                   )}
@@ -207,7 +211,7 @@ export function Panel() {
 
               <Link
                 to={`/escapadas/${escapadaActiva.id}`}
-                className="flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-bosque-600 text-base font-semibold text-white transition active:scale-[0.98] sm:hidden"
+                className="flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-bosque-600 text-base font-semibold text-tinta-fuerte transition active:scale-[0.98] sm:hidden"
               >
                 Abrir la escapada <ArrowRight size={18} />
               </Link>

@@ -129,7 +129,7 @@ export function Escapada() {
               aria-label="Cambiar de escapada"
               value={escapada.id}
               onChange={(e) => navegar(`/escapadas/${e.target.value}`)}
-              className="min-w-0 flex-1 truncate rounded-xl border border-arena bg-white px-2.5 py-1.5 text-xs font-semibold text-carbon/70 sm:max-w-xs"
+              className="min-w-0 flex-1 truncate rounded-xl border border-arena bg-superficie px-2.5 py-1.5 text-xs font-semibold text-carbon/70 sm:max-w-xs"
             >
               <option value={escapada.id}>Cambiar de escapada…</option>
               {otras.map((t) => (
@@ -157,7 +157,7 @@ export function Escapada() {
           <h1 className="font-display text-2xl text-bosque-800 sm:text-3xl">{escapada.title}</h1>
           <EtiquetaEstado estado={escapada.status} />
           {cuenta && (
-            <span className="rounded-full bg-tierra-500 px-2.5 py-0.5 text-xs font-bold text-white">{cuenta}</span>
+            <span className="rounded-full bg-tierra-500 px-2.5 py-0.5 text-xs font-bold text-tinta-fuerte">{cuenta}</span>
           )}
         </div>
 
@@ -185,13 +185,13 @@ export function Escapada() {
             end={!p.a}
             className={({ isActive }) =>
               `rounded-2xl px-4 py-2 text-sm font-bold whitespace-nowrap transition ${
-                isActive ? 'bg-bosque-600 text-white shadow-sm' : 'bg-white text-carbon/60 hover:bg-beige'
+                isActive ? 'bg-bosque-600 text-tinta-fuerte shadow-sm' : 'bg-superficie text-carbon/60 hover:bg-beige'
               }`
             }
           >
             {p.texto}
             {p.a === 'chat' && sinLeer > 0 && (
-              <span className="ml-1.5 inline-flex min-w-5 justify-center rounded-full bg-tierra-500 px-1.5 text-[11px] leading-5 font-bold text-white">
+              <span className="ml-1.5 inline-flex min-w-5 justify-center rounded-full bg-tierra-500 px-1.5 text-[11px] leading-5 font-bold text-tinta-fuerte">
                 {sinLeer > 99 ? '99+' : sinLeer}
               </span>
             )}

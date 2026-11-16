@@ -3,6 +3,22 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 9 · Modo oscuro y avisos ✅
+
+- [x] Claro, oscuro o automático, desde «Mi perfil → Aspecto»
+- [x] Se guarda por aparato y se aplica antes del primer pintado (sin fogonazo blanco)
+- [x] Sin un segundo juego de estilos: se vuelven a declarar los tokens de color
+- [x] Los velos de las fotos y los diálogos siguen siendo oscuros en los dos modos
+- [x] Al imprimir, papel blanco aunque la aplicación esté en oscuro
+- [x] La barra del navegador y la del móvil cambian de color con el tema
+- [x] Buzón de avisos con campana y contador, en tiempo real
+- [x] Avisa cuando alguien propone casa, se abre o se cierra una votación y hay casa elegida
+- [x] Los avisos los crean disparadores de la base de datos, no el navegador
+- [x] Una fila por persona: cada cual marca como leído lo suyo
+- [x] Los avisos de más de 90 días se borran solos
+- [x] Aviso del sistema operativo, autorizado aparato por aparato
+- [x] Al pulsar el aviso, lleva a la pantalla que toca y reutiliza la pestaña abierta
+
 ## Fase 7 · Perfiles, chat e instalación ✅
 
 - [x] Página de perfil: foto, nombre, cambio de correo y de contraseña
@@ -118,19 +134,22 @@ Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
 ## Mejoras opcionales para el futuro
 
-- [ ] PWA instalable con caché offline (útil en supermercados con mala cobertura)
 - [ ] Gastos: total por escapada, evolución y reparto. **Descartado a propósito**:
       el grupo lleva las cuentas en Settle Up. Se quitó de la interfaz el 15/11/2026,
       pero las columnas `shopping_items.price` y `trips.shopping_cost` siguen en la
       base de datos, así que recuperarlo es solo volver a pintar la interfaz.
 - [ ] Menús por días y generación de la compra a partir de recetas
-- [ ] Notificaciones cuando alguien propone casa o abre una votación
 - [ ] Importar la despensa desde un CSV
-- [ ] Modo oscuro
+- [ ] Que los avisos suenen con la aplicación **cerrada del todo**. Hoy suenan mientras está
+      abierta, aunque sea de fondo. Para lo otro hace falta Web Push: una *Edge Function* de
+      Supabase, claves VAPID y una tabla de suscripciones. Deja de ser «sin servidor propio»,
+      que es lo que hace la aplicación gratis de mantener; de ahí que se haya quedado fuera.
 
 ## Tareas manuales (solo tú puedes hacerlas)
 
-- [ ] Crear el proyecto en Supabase y ejecutar los tres scripts SQL
+- [ ] Crear el proyecto en Supabase y ejecutar los **siete** scripts SQL por orden
+      (el último, `07_notificaciones.sql`, es el de los avisos: hasta que no se pase,
+      la campana saldrá siempre vacía)
 - [ ] Configurar *Site URL* y *Redirect URLs* en Supabase
 - [ ] Crear tu cuenta (serás administrador) e invitar al resto del grupo
 - [ ] Crear el repositorio en GitHub, añadir los dos secretos y activar Pages

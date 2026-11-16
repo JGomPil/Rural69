@@ -466,7 +466,7 @@ export function ListaCompra() {
                 type="button"
                 onClick={() => setFiltro(valor)}
                 className={`flex-1 rounded-xl px-2 py-2 text-xs font-bold whitespace-nowrap transition sm:text-sm ${
-                  filtro === valor ? 'bg-white text-bosque-700 shadow-sm' : 'text-carbon/55'
+                  filtro === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-carbon/55'
                 }`}
               >
                 {texto}
@@ -477,7 +477,7 @@ export function ListaCompra() {
             type="button"
             onClick={() => setOcultarListas((v) => !v)}
             className={`rounded-2xl border px-3 py-2 text-xs font-bold transition ${
-              ocultarListas ? 'border-bosque-500 bg-bosque-50 text-bosque-700' : 'border-arena bg-white text-carbon/55'
+              ocultarListas ? 'border-bosque-500 bg-bosque-50 text-bosque-700' : 'border-arena bg-superficie text-carbon/55'
             }`}
           >
             Ocultar lo que ya está
@@ -518,7 +518,7 @@ export function ListaCompra() {
               type="button"
               onClick={() => setAgrupar(valor)}
               className={`rounded-full px-3 py-1 font-bold transition ${
-                agrupar === valor ? 'bg-bosque-600 text-white' : 'bg-white text-carbon/55 hover:bg-beige'
+                agrupar === valor ? 'bg-bosque-600 text-tinta-fuerte' : 'bg-superficie text-carbon/55 hover:bg-beige'
               }`}
             >
               {texto}
@@ -722,8 +722,8 @@ function ChipTiempo({
       onClick={onClick}
       className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-bold whitespace-nowrap transition ${
         activo
-          ? 'border-bosque-600 bg-bosque-600 text-white shadow-sm'
-          : 'border-arena bg-white text-carbon/60 hover:bg-beige'
+          ? 'border-bosque-600 bg-bosque-600 text-tinta-fuerte shadow-sm'
+          : 'border-arena bg-superficie text-carbon/60 hover:bg-beige'
       }`}
     >
       {children}

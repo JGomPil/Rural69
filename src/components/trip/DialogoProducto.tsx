@@ -156,7 +156,7 @@ export function DialogoProducto({
           </Campo>
         </div>
 
-        <div className="rounded-2xl border border-arena bg-white p-4">
+        <div className="rounded-2xl border border-arena bg-superficie p-4">
           <p className="mb-3 text-sm font-semibold text-carbon/75">Cantidades</p>
           <div className="grid grid-cols-3 gap-2.5">
             <Campo etiqueta="Necesaria">

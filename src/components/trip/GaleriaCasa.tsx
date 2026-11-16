@@ -38,7 +38,7 @@ export function GaleriaCasa({
   if (!casa) return null
 
   return createPortal(
-    <div className="animate-aparece fixed inset-0 z-[60] flex flex-col bg-carbon/95">
+    <div className="animate-aparece fixed inset-0 z-[60] flex flex-col bg-velo/95">
       <header className="flex items-start gap-3 px-4 py-3 text-white">
         <div className="min-w-0 flex-1">
           <h2 className="font-display truncate text-lg">{casa.name}</h2>

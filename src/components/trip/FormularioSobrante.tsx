@@ -147,7 +147,7 @@ export function FormularioSobrante({ abierto, onCerrar, tripId, item, inicial, o
           </Campo>
         </div>
 
-        <div className="rounded-2xl border border-arena bg-white p-4">
+        <div className="rounded-2xl border border-arena bg-superficie p-4">
           <Interruptor
             checked={conservable}
             onChange={setConservable}

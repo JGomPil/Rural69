@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { Marca } from './Logo'
 import { InstalarApp } from './InstalarApp'
+import { BotonAvisos } from './Avisos'
 import { Avatar } from '../ui/Avatar'
 import { useAuth } from '../../hooks/useAuth'
 import { useGrupo } from '../../hooks/useGrupo'
@@ -61,10 +62,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-dvh lg:flex">
       {/* ---------- Barra lateral (escritorio) ---------- */}
-      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-1 border-r border-arena bg-white/70 px-4 py-6 backdrop-blur lg:flex">
-        <Link to="/" className="mb-6 px-2">
-          <Marca />
-        </Link>
+      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-1 border-r border-arena bg-superficie/70 px-4 py-6 backdrop-blur lg:flex">
+        <div className="mb-6 flex items-center justify-between gap-2 px-2">
+          <Link to="/">
+            <Marca />
+          </Link>
+          <BotonAvisos />
+        </div>
         {[...principales, ...secundarios].map((e) => (
           <EnlaceLateral key={e.a + e.texto} enlace={e} />
         ))}
@@ -72,7 +76,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Link
             to="/perfil"
             title="Mi perfil"
-            className="-m-1.5 flex items-center gap-2.5 rounded-xl p-1.5 transition hover:bg-white/70"
+            className="-m-1.5 flex items-center gap-2.5 rounded-xl p-1.5 transition hover:bg-superficie/70"
           >
             <Avatar src={miFoto} nombre={miNombre} tamanyo="sm" />
             <span className="min-w-0 flex-1">
@@ -100,6 +104,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Marca />
           </Link>
           <div className="flex items-center gap-2">
+            <BotonAvisos />
             <Link to="/perfil" aria-label="Mi perfil" className="active:scale-95">
               <Avatar src={miFoto} nombre={miNombre} tamanyo="sm" />
             </Link>
@@ -107,7 +112,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               type="button"
               onClick={() => setMenuAbierto(true)}
               aria-label="Abrir menú"
-              className="inline-flex size-10 items-center justify-center rounded-2xl border border-arena bg-white text-bosque-700 active:scale-95"
+              className="inline-flex size-10 items-center justify-center rounded-2xl border border-arena bg-superficie text-bosque-700 active:scale-95"
             >
               <Menu size={20} />
             </button>
@@ -171,7 +176,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               key={e.texto}
               to={e.a}
               onClick={() => setMenuAbierto(false)}
-              className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 font-semibold text-bosque-800 transition active:scale-[0.98]"
+              className="flex items-center gap-3 rounded-2xl bg-superficie px-4 py-3 font-semibold text-bosque-800 transition active:scale-[0.98]"
             >
               <e.icono size={20} className="text-bosque-500" />
               <span className="flex-1">{e.texto}</span>
@@ -212,7 +217,7 @@ function EnlaceLateral({ enlace }: { enlace: Enlace }) {
       end={enlace.exacto}
       className={({ isActive }) =>
         `flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold transition ${
-          isActive ? 'bg-bosque-600 text-white shadow-sm' : 'text-carbon/70 hover:bg-beige'
+          isActive ? 'bg-bosque-600 text-tinta-fuerte shadow-sm' : 'text-carbon/70 hover:bg-beige'
         }`
       }
     >

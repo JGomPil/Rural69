@@ -15,9 +15,14 @@
 //
 // Lo que nunca se cachea: las llamadas a Supabase. Los datos del grupo
 // tienen que venir siempre frescos.
+//
+// Y una tercera cosa: es quien muestra los avisos del sistema (los que
+// suenan) y quien sabe a dónde llevar cuando se pulsa uno. Los avisos los
+// lanza la propia aplicación mientras está abierta, no un servidor: aquí no
+// hay suscripción push.
 // =====================================================================
 
-const VERSION = 'rural69-v1'
+const VERSION = 'rural69-v2'
 const CACHE = `${VERSION}-estatico`
 
 self.addEventListener('install', (e) => {
@@ -70,6 +75,40 @@ self.addEventListener('fetch', (e) => {
         }
         return respuesta
       })
+    }),
+  )
+})
+
+// =====================================================================
+// Avisos del sistema
+// ---------------------------------------------------------------------
+// Al pulsar el aviso, mejor reutilizar la pestaña que ya está abierta que
+// abrir otra. La ruta viaja en `data.url` (p. ej. `/escapadas/<id>/casas`) y
+// se monta como hash, que es lo que entiende el router.
+// =====================================================================
+
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close()
+
+  const ruta = e.notification.data && e.notification.data.url
+  const destino = new URL(self.registration.scope)
+  if (ruta) destino.hash = '#' + ruta
+
+  e.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((ventanas) => {
+      const abierta = ventanas.find((v) => v.url.startsWith(self.registration.scope))
+      if (abierta) {
+        // `navigate` no está en todos los navegadores; si falla, al menos la
+        // aplicación pasa al frente.
+        if (ruta && typeof abierta.navigate === 'function') {
+          return abierta
+            .navigate(destino.href)
+            .then((v) => (v || abierta).focus())
+            .catch(() => abierta.focus())
+        }
+        return abierta.focus()
+      }
+      return self.clients.openWindow(destino.href)
     }),
   )
 })

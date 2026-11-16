@@ -88,7 +88,7 @@ export function AvatarEditable({
       <div className="relative">
         <Avatar src={src} nombre={nombre} tamanyo={tamanyo} />
         {subiendo && (
-          <span className="absolute inset-0 flex items-center justify-center rounded-full bg-carbon/45 text-white">
+          <span className="absolute inset-0 flex items-center justify-center rounded-full bg-velo/45 text-white">
             <Loader2 size={22} className="animate-spin" />
           </span>
         )}
@@ -99,7 +99,7 @@ export function AvatarEditable({
           type="button"
           onClick={() => entrada.current?.click()}
           disabled={subiendo}
-          className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-arena bg-white px-3 text-sm font-semibold text-bosque-700 transition hover:bg-beige active:scale-[0.97] disabled:opacity-50"
+          className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-arena bg-superficie px-3 text-sm font-semibold text-bosque-700 transition hover:bg-beige active:scale-[0.97] disabled:opacity-50"
         >
           <Camera size={15} /> {src ? 'Cambiar foto' : 'Subir foto'}
         </button>

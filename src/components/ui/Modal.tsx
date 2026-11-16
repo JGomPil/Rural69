@@ -39,14 +39,14 @@ export function Modal({ abierto, onCerrar, titulo, descripcion, children, pie, a
   // marco de referencia de `position: fixed` y el diálogo aparecería descolocado.
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4">
-      <div className="animate-aparece absolute inset-0 bg-carbon/45 backdrop-blur-sm" onClick={onCerrar} />
+      <div className="animate-aparece absolute inset-0 bg-velo/45 backdrop-blur-sm" onClick={onCerrar} />
       <div
         role="dialog"
         aria-modal="true"
         aria-label={titulo}
         className={`animate-sube relative flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl bg-crema shadow-2xl sm:rounded-3xl ${anchos[ancho]}`}
       >
-        <header className="flex items-start gap-3 border-b border-arena bg-white/70 px-5 py-4">
+        <header className="flex items-start gap-3 border-b border-arena bg-superficie/70 px-5 py-4">
           <div className="min-w-0 flex-1">
             <h2 className="text-lg text-bosque-800">{titulo}</h2>
             {descripcion && <p className="mt-0.5 text-sm text-carbon/60">{descripcion}</p>}
@@ -62,7 +62,7 @@ export function Modal({ abierto, onCerrar, titulo, descripcion, children, pie, a
         </header>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4">{children}</div>
         {pie && (
-          <footer className="safe-bottom flex items-center justify-end gap-2 border-t border-arena bg-white/70 px-5 pt-3.5 [--relleno-inferior:0.875rem]">
+          <footer className="safe-bottom flex items-center justify-end gap-2 border-t border-arena bg-superficie/70 px-5 pt-3.5 [--relleno-inferior:0.875rem]">
             {pie}
           </footer>
         )}

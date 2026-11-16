@@ -1,5 +1,5 @@
 const BASE_CAMPO =
-  'w-full rounded-2xl border border-arena bg-white px-3.5 py-2.5 text-carbon shadow-[inset_0_1px_2px_rgba(74,59,42,0.04)] ' +
+  'w-full rounded-2xl border border-arena bg-superficie px-3.5 py-2.5 text-carbon shadow-[inset_0_1px_2px_rgba(74,59,42,0.04)] ' +
   'placeholder:text-carbon/35 transition duration-150 outline-none ' +
   'hover:border-arena/90 focus:border-bosque-500 focus:ring-3 focus:ring-bosque-500/15 focus:shadow-none ' +
   'disabled:bg-beige disabled:opacity-70'
@@ -67,10 +67,10 @@ export function Casilla({ checked, onChange, etiqueta, descripcion, grande = fal
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange(e.target.checked)}
-        className={`shrink-0 cursor-pointer appearance-none rounded-lg border-2 border-arena bg-white transition
+        className={`shrink-0 cursor-pointer appearance-none rounded-lg border-2 border-arena bg-superficie transition
           checked:border-bosque-600 checked:bg-bosque-600
           checked:after:flex checked:after:h-full checked:after:items-center checked:after:justify-center
-          checked:after:text-white checked:after:content-['✓']
+          checked:after:text-tinta-fuerte checked:after:content-['✓']
           focus-visible:ring-3 focus-visible:ring-bosque-500/25
           ${grande ? "size-7 checked:after:text-lg" : "size-5 checked:after:text-xs"}`}
       />
@@ -135,7 +135,7 @@ export function Contador({
     onChange(Math.max(min, redondeado))
   }
   return (
-    <div className="inline-flex items-center gap-1 rounded-2xl border border-arena bg-white p-1">
+    <div className="inline-flex items-center gap-1 rounded-2xl border border-arena bg-superficie p-1">
       <button
         type="button"
         onClick={() => ajusta(-paso)}

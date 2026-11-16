@@ -132,7 +132,7 @@ export function CasasRurales() {
               type="button"
               onClick={() => setVista(valor)}
               className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-bold transition ${
-                vista === valor ? 'bg-white text-bosque-700 shadow-sm' : 'text-carbon/55'
+                vista === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-carbon/55'
               }`}
             >
               <Icono size={16} /> {texto}
@@ -275,7 +275,7 @@ function TarjetaCasa({
           <span className="flex size-full items-center justify-center text-4xl opacity-40">🏡</span>
         )}
         {fotos.length > 1 && (
-          <span className="absolute right-2 bottom-2 rounded-full bg-carbon/65 px-2 py-0.5 text-xs font-semibold text-white">
+          <span className="absolute right-2 bottom-2 rounded-full bg-velo/65 px-2 py-0.5 text-xs font-semibold text-white">
             {fotos.length} fotos
           </span>
         )}
@@ -464,7 +464,7 @@ function Comparador({
       <div className="overflow-x-auto">
         <table className="w-full min-w-max border-collapse text-sm">
           <thead>
-            <tr className="bg-bosque-600 text-left text-white">
+            <tr className="bg-bosque-600 text-left text-tinta-fuerte">
               <th className="sticky left-0 z-10 bg-bosque-600 px-4 py-3 font-semibold">Casa</th>
               {casas.map((c) => (
                 <th key={c.id} className="min-w-40 px-4 py-3 font-semibold">
@@ -481,10 +481,10 @@ function Comparador({
           </thead>
           <tbody>
             {filas.map((fila, i) => (
-              <tr key={fila.etiqueta} className={i % 2 ? 'bg-beige/50' : 'bg-white'}>
+              <tr key={fila.etiqueta} className={i % 2 ? 'bg-beige/50' : 'bg-superficie'}>
                 <th
                   className={`sticky left-0 z-10 px-4 py-2.5 text-left font-semibold whitespace-nowrap text-carbon/70 ${
-                    i % 2 ? 'bg-beige' : 'bg-white'
+                    i % 2 ? 'bg-beige' : 'bg-superficie'
                   }`}
                 >
                   {fila.etiqueta}

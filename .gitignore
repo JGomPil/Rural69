@@ -27,3 +27,8 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Capturas de pantalla y notas sueltas en la raíz
+/*.png
+/*.jpg
+/*.jpeg

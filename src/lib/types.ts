@@ -182,3 +182,23 @@ export interface MessageRead {
   profile_id: string
   last_read_at: string
 }
+
+export type TipoAviso = 'casa_propuesta' | 'votacion_abierta' | 'votacion_cerrada' | 'casa_elegida'
+
+/**
+ * Un aviso para una persona. Los crean los disparadores de la base de datos
+ * (ver `supabase/07_notificaciones.sql`), nunca la aplicación.
+ */
+export interface Notification {
+  id: string
+  profile_id: string
+  kind: TipoAviso
+  trip_id: string | null
+  title: string
+  body: string | null
+  /** Ruta de la aplicación a la que lleva, p. ej. `/escapadas/<id>/casas`. */
+  url: string | null
+  actor_id: string | null
+  read_at: string | null
+  created_at: string
+}

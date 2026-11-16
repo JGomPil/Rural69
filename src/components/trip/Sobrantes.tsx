@@ -141,7 +141,7 @@ export function Sobrantes() {
         <Seccion
           titulo="Apuntar rápido desde la compra"
           icono={<span aria-hidden>⚡</span>}
-          className="rounded-card bg-white/60 p-4"
+          className="rounded-card bg-superficie/60 p-4"
         >
           <p className="mb-3 text-sm text-carbon/60">
             Pulsa un producto que hayáis comprado para apuntar cuánto ha sobrado.
@@ -162,7 +162,7 @@ export function Sobrantes() {
                     },
                   })
                 }
-                className="rounded-full border border-arena bg-white px-3 py-1.5 text-sm font-medium transition hover:border-bosque-400 hover:bg-bosque-50 active:scale-95"
+                className="rounded-full border border-arena bg-superficie px-3 py-1.5 text-sm font-medium transition hover:border-bosque-400 hover:bg-bosque-50 active:scale-95"
               >
                 {i.name}
               </button>

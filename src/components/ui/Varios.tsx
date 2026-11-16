@@ -66,7 +66,7 @@ export function Etiqueta({
     bosque: 'bg-bosque-50 text-bosque-700 border-bosque-100',
     oliva: 'bg-oliva-100 text-oliva-700 border-oliva-200',
     tierra: 'bg-tierra-100 text-tierra-700 border-tierra-200',
-    exito: 'bg-bosque-600 text-white border-bosque-600',
+    exito: 'bg-bosque-600 text-tinta-fuerte border-bosque-600',
   }
   return (
     <span
@@ -140,7 +140,7 @@ export function Vacio({
   accion?: React.ReactNode
 }) {
   return (
-    <div className="animate-sube flex flex-col items-center gap-3 rounded-card border border-dashed border-arena bg-white/60 px-6 py-12 text-center">
+    <div className="animate-sube flex flex-col items-center gap-3 rounded-card border border-dashed border-arena bg-superficie/60 px-6 py-12 text-center">
       <span className="text-4xl" aria-hidden>
         {emoji}
       </span>

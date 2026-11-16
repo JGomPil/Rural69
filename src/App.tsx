@@ -3,6 +3,8 @@ import { LogOut, UserX } from 'lucide-react'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import { AvisosProvider } from './hooks/useAvisos'
 import { GrupoProvider } from './hooks/useGrupo'
+import { NotificacionesProvider } from './hooks/useNotificaciones'
+import { TemaProvider } from './hooks/useTema'
 import { AppShell } from './components/layout/AppShell'
 import { Marca } from './components/layout/Logo'
 import { Boton } from './components/ui/Boton'
@@ -62,9 +64,11 @@ function Protegido() {
 
   return (
     <GrupoProvider>
-      <AppShell>
-        <Outlet />
-      </AppShell>
+      <NotificacionesProvider>
+        <AppShell>
+          <Outlet />
+        </AppShell>
+      </NotificacionesProvider>
     </GrupoProvider>
   )
 }
@@ -79,36 +83,38 @@ function SoloInvitados() {
 
 export function App() {
   return (
-    <AuthProvider>
-      <AvisosProvider>
-        <HashRouter>
-          <Routes>
-            <Route element={<SoloInvitados />}>
-              <Route path="/acceso" element={<Acceso />} />
-            </Route>
-
-            <Route element={<Protegido />}>
-              <Route path="/" element={<Panel />} />
-              <Route path="/escapadas" element={<Escapadas />} />
-              <Route path="/escapadas/:id" element={<Escapada />}>
-                <Route index element={<ResumenEscapada />} />
-                <Route path="casas" element={<CasasRurales />} />
-                <Route path="votacion" element={<Votacion />} />
-                <Route path="compra" element={<ListaCompra />} />
-                <Route path="sobrantes" element={<Sobrantes />} />
-                <Route path="chat" element={<Chat />} />
+    <TemaProvider>
+      <AuthProvider>
+        <AvisosProvider>
+          <HashRouter>
+            <Routes>
+              <Route element={<SoloInvitados />}>
+                <Route path="/acceso" element={<Acceso />} />
               </Route>
-              <Route path="/lista-maestra" element={<ListaMaestra />} />
-              <Route path="/despensa" element={<Despensa />} />
-              <Route path="/historial" element={<Historial />} />
-              <Route path="/ajustes" element={<Ajustes />} />
-              <Route path="/perfil" element={<Perfil />} />
-            </Route>
 
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </HashRouter>
-      </AvisosProvider>
-    </AuthProvider>
+              <Route element={<Protegido />}>
+                <Route path="/" element={<Panel />} />
+                <Route path="/escapadas" element={<Escapadas />} />
+                <Route path="/escapadas/:id" element={<Escapada />}>
+                  <Route index element={<ResumenEscapada />} />
+                  <Route path="casas" element={<CasasRurales />} />
+                  <Route path="votacion" element={<Votacion />} />
+                  <Route path="compra" element={<ListaCompra />} />
+                  <Route path="sobrantes" element={<Sobrantes />} />
+                  <Route path="chat" element={<Chat />} />
+                </Route>
+                <Route path="/lista-maestra" element={<ListaMaestra />} />
+                <Route path="/despensa" element={<Despensa />} />
+                <Route path="/historial" element={<Historial />} />
+                <Route path="/ajustes" element={<Ajustes />} />
+                <Route path="/perfil" element={<Perfil />} />
+              </Route>
+
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </HashRouter>
+        </AvisosProvider>
+      </AuthProvider>
+    </TemaProvider>
   )
 }

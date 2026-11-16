@@ -73,7 +73,7 @@ export function Escapadas() {
             type="button"
             onClick={() => setFiltro(valor)}
             className={`flex-1 rounded-xl px-4 py-2 text-sm font-bold whitespace-nowrap transition ${
-              filtro === valor ? 'bg-white text-bosque-700 shadow-sm' : 'text-carbon/55'
+              filtro === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-carbon/55'
             }`}
           >
             {texto}
@@ -152,7 +152,7 @@ function TarjetaEscapada({
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <EtiquetaEstado estado={escapada.status} />
         {cuenta && (
-          <span className="rounded-full bg-tierra-500 px-2.5 py-0.5 text-xs font-bold text-white">{cuenta}</span>
+          <span className="rounded-full bg-tierra-500 px-2.5 py-0.5 text-xs font-bold text-tinta-fuerte">{cuenta}</span>
         )}
       </div>
     </Tarjeta>

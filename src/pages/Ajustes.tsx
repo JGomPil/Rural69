@@ -501,7 +501,7 @@ function FormularioMiembro({
             ))}
           </Lista>
         </Campo>
-        <div className="space-y-3 rounded-2xl border border-arena bg-white p-4">
+        <div className="space-y-3 rounded-2xl border border-arena bg-superficie p-4">
           <Interruptor checked={esNino} onChange={cambiaNino} etiqueta="Es niñ@" />
           <Interruptor checked={activo} onChange={setActivo} etiqueta="Participa habitualmente" />
         </div>

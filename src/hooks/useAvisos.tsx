@@ -17,9 +17,9 @@ interface ContextoAvisos {
 const Contexto = createContext<ContextoAvisos | null>(null)
 
 const ESTILOS: Record<Tipo, string> = {
-  ok: 'bg-bosque-600 text-white',
-  error: 'bg-tierra-600 text-white',
-  info: 'bg-carbon text-white',
+  ok: 'bg-bosque-600 text-tinta-fuerte',
+  error: 'bg-tierra-600 text-tinta-fuerte',
+  info: 'bg-velo text-white',
 }
 
 const ICONOS: Record<Tipo, typeof Check> = { ok: Check, error: CircleAlert, info: Info }

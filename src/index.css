@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+/* Permite escribir `dark:` en los componentes. El atributo lo pone useTema
+   en <html>, ya resuelto: nunca vale 'sistema'. */
+@custom-variant dark ([data-tema='oscuro'] &);
+
 /* =====================================================================
    Rural69 · Identidad visual
    Verde bosque, verde oliva, crema, beige y tonos tierra (barbacoa).
@@ -40,6 +44,17 @@
   --color-arena: #e7dcc4;
   --color-carbon: #2a2622;
 
+  /* Tokens que cambian de valor en modo oscuro (ver más abajo). Se usan en
+     lugar de `bg-white` y `text-white` allí donde el blanco era en realidad
+     «el color del papel» o «el color que se lee sobre un relleno fuerte». */
+  --color-superficie: #ffffff;
+  --color-tinta-fuerte: #ffffff;
+
+  /* Y este no cambia nunca: el velo que oscurece fotos y diálogos. Debajo
+     hay una imagen, no el fondo de la página, así que tiene que seguir
+     siendo oscuro también en modo oscuro. */
+  --color-velo: #211f1b;
+
   --radius-card: 1.25rem;
 
   /* Una sola escala de sombras, tintada de marrón en vez de negra: sobre
@@ -64,6 +79,76 @@
 @keyframes pop {
   0% { transform: scale(0.88); }
   100% { transform: scale(1); }
+}
+
+/* =====================================================================
+   Modo oscuro
+   ---------------------------------------------------------------------
+   No hay un segundo juego de clases: se vuelven a declarar los mismos
+   tokens con otros valores, así que los componentes no se tocan.
+
+   La escala de verdes (y la de olivas y tierras) se da la vuelta por los
+   extremos: los tonos bajos eran fondos claros y pasan a ser fondos
+   oscuros; los altos eran texto oscuro y pasan a ser texto claro. El
+   centro (500/600) se queda siendo el verde de los botones, solo más
+   vivo, y lo que se lee encima deja de ser blanco para ser
+   `--color-tinta-fuerte`, que aquí es casi negro: sobre un verde claro
+   el blanco no se lee.
+
+   El atributo lo escribe useTema en <html> y siempre vale 'claro' u
+   'oscuro'; la preferencia «automático» se resuelve antes en JavaScript.
+   ===================================================================== */
+:root[data-tema='oscuro'] {
+  color-scheme: dark;
+
+  /* Papel y tinta */
+  --color-crema: #13160f;      /* fondo de la página */
+  --color-superficie: #1c2118; /* tarjetas, campos, burbujas del chat */
+  --color-beige: #242a1e;      /* paneles de dentro, hover, campos inertes */
+  --color-arena: #343c2c;      /* bordes, separadores, barras de progreso */
+  --color-carbon: #e8ead9;     /* el texto, que ahora es el claro */
+
+  /* El blanco puro solo se mantiene donde hay una foto o un velo debajo.
+     Como texto sobre relleno fuerte pasa a ser casi negro. */
+  --color-tinta-fuerte: #0f1410;
+
+  /* `bg-black/5` y `bg-black/10` son los lavados de hover. Aquí el lavado
+     tiene que aclarar, no oscurecer. */
+  --color-black: #ffffff;
+
+  /* Verdes: del 50 (fondo más oscuro) al 900 (texto más claro) */
+  --color-bosque-50: #16291c;
+  --color-bosque-100: #1c3a26;
+  --color-bosque-200: #24502f;
+  --color-bosque-300: #2f6b47;
+  --color-bosque-400: #3f8a5d;
+  --color-bosque-500: #55a675;
+  --color-bosque-600: #6ebb8c;
+  --color-bosque-700: #93cfa8;
+  --color-bosque-800: #b9e0c6;
+  --color-bosque-900: #dbf0e2;
+
+  --color-oliva-100: #222a16;
+  --color-oliva-200: #303a1e;
+  --color-oliva-300: #44512c;
+  --color-oliva-400: #7b8d4e;
+  --color-oliva-500: #93a661;
+  --color-oliva-600: #aec083;
+  --color-oliva-700: #c7d79b;
+
+  --color-tierra-100: #332015;
+  --color-tierra-200: #4a3020;
+  --color-tierra-300: #6b4426;
+  --color-tierra-400: #b5774a;
+  --color-tierra-500: #cf8f5f;
+  --color-tierra-600: #e3ab7f;
+  --color-tierra-700: #f0c8a4;
+
+  /* Sobre fondo oscuro una sombra marrón no se ve: tiene que ser negra y
+     más profunda, o las tarjetas se quedan pegadas al fondo. */
+  --shadow-suave: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-tarjeta: 0 1px 2px rgba(0, 0, 0, 0.45), 0 10px 30px -22px rgba(0, 0, 0, 0.9);
+  --shadow-flotante: 0 2px 6px rgba(0, 0, 0, 0.5), 0 18px 40px -24px rgba(0, 0, 0, 1);
 }
 
 @layer base {
@@ -110,6 +195,19 @@
   #root {
     position: relative;
     z-index: 1;
+  }
+
+  /* En oscuro el resplandor de las esquinas molesta si mantiene la fuerza
+     del modo claro, y el grano tiene que aclarar en vez de oscurecer. */
+  :root[data-tema='oscuro'] body {
+    background-image:
+      radial-gradient(circle at 12% -5%, rgba(138, 154, 91, 0.1), transparent 45%),
+      radial-gradient(circle at 92% 4%, rgba(200, 121, 65, 0.08), transparent 40%);
+  }
+
+  :root[data-tema='oscuro'] body::before {
+    mix-blend-mode: screen;
+    opacity: 0.3;
   }
 
   h1, h2, h3, h4 {
@@ -159,7 +257,7 @@
 @layer utilities {
   .tarjeta {
     border-radius: var(--radius-card);
-    background-color: #fff;
+    background-color: var(--color-superficie);
     border: 1px solid var(--color-arena);
     box-shadow: var(--shadow-tarjeta);
   }
@@ -174,7 +272,7 @@
 
   /* Línea fina de separación, del mismo tono que la arena pero más suave. */
   .raya {
-    border-color: rgba(231, 220, 196, 0.8);
+    border-color: color-mix(in oklab, var(--color-arena) 80%, transparent);
   }
 
   .scroll-oculto {
@@ -196,6 +294,26 @@
    Impresión (lista de la compra en papel)
    ===================================================================== */
 @media print {
+  /* La lista de la compra se imprime en papel blanco aunque la aplicación
+     esté en modo oscuro: si no, el súper se lleva una hoja negra. */
+  :root[data-tema='oscuro'] {
+    color-scheme: light;
+    --color-crema: #fdfaf3;
+    --color-superficie: #ffffff;
+    --color-beige: #f5eedd;
+    --color-arena: #e7dcc4;
+    --color-carbon: #2a2622;
+    --color-tinta-fuerte: #ffffff;
+    --color-black: #000000;
+    --color-bosque-500: #3d7555;
+    --color-bosque-600: #2f5d42;
+    --color-bosque-700: #254a35;
+    --color-bosque-800: #1b3727;
+    --color-bosque-900: #12241a;
+    --color-oliva-700: #556331;
+    --color-tierra-700: #85452a;
+  }
+
   .no-imprimir,
   nav,
   aside,

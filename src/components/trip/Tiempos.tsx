@@ -177,7 +177,7 @@ export function DialogoTiempos({
             </div>
           ) : (
             <>
-              <ul className="divide-y divide-arena overflow-hidden rounded-2xl border border-arena bg-white">
+              <ul className="divide-y divide-arena overflow-hidden rounded-2xl border border-arena bg-superficie">
                 {tiempos.map((t) => (
                   <li key={t.id} className="flex items-center gap-3 px-3.5 py-2.5">
                     <span className="text-lg" aria-hidden>

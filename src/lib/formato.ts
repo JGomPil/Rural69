@@ -118,3 +118,17 @@ export function diaDeChat(iso: string): string {
     dias < 365 ? { weekday: 'long', day: 'numeric', month: 'long' } : { day: 'numeric', month: 'long', year: 'numeric' }
   return d.toLocaleDateString('es-ES', opciones)
 }
+
+/** Antigüedad de un aviso, corta: «ahora», «hace 5 min», «hace 3 h», «ayer». */
+export function hace(iso: string): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  const seg = Math.round((Date.now() - d.getTime()) / 1000)
+  if (seg < 60) return 'ahora'
+  if (seg < 3600) return `hace ${Math.floor(seg / 60)} min`
+  if (seg < 86_400) return `hace ${Math.floor(seg / 3600)} h`
+  const dias = Math.floor(seg / 86_400)
+  if (dias === 1) return 'ayer'
+  if (dias < 7) return `hace ${dias} días`
+  return fecha(iso)
+}

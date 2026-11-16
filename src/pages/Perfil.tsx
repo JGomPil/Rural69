@@ -1,12 +1,25 @@
 import { useEffect, useState } from 'react'
-import { AtSign, KeyRound, LogOut, ShieldCheck, UserRound } from 'lucide-react'
+import {
+  AtSign,
+  Bell,
+  BellOff,
+  KeyRound,
+  LogOut,
+  Monitor,
+  Moon,
+  ShieldCheck,
+  Sun,
+  UserRound,
+} from 'lucide-react'
 import { Avatar, AvatarEditable } from '../components/ui/Avatar'
 import { Boton } from '../components/ui/Boton'
-import { Campo, Entrada } from '../components/ui/Campos'
+import { Campo, Entrada, Interruptor } from '../components/ui/Campos'
 import { Etiqueta, Seccion, Tarjeta } from '../components/ui/Varios'
 import { useAuth } from '../hooks/useAuth'
 import { useGrupo } from '../hooks/useGrupo'
 import { useAvisos } from '../hooks/useAvisos'
+import { useNotificaciones } from '../hooks/useNotificaciones'
+import { useTema, type Preferencia } from '../hooks/useTema'
 import { mensajeError, supabase } from '../lib/supabase'
 
 export function Perfil() {
@@ -45,6 +58,10 @@ export function Perfil() {
           await refrescar()
         }}
       />
+
+      <Aspecto />
+
+      <AvisosDelGrupo />
 
       <CambioEmail emailActual={session?.user.email ?? perfil.email} cambiarEmail={cambiarEmail} />
 
@@ -295,6 +312,103 @@ function CambioPassword({
             Cambiar contraseña
           </Boton>
         </form>
+      </Tarjeta>
+    </Seccion>
+  )
+}
+
+// ---------------------------------------------------------------------
+
+const ASPECTOS: [Preferencia, string, typeof Sun][] = [
+  ['claro', 'Claro', Sun],
+  ['oscuro', 'Oscuro', Moon],
+  ['sistema', 'Automático', Monitor],
+]
+
+function Aspecto() {
+  const { preferencia, resuelto, cambiar } = useTema()
+
+  return (
+    <Seccion titulo="Aspecto" icono={<Moon size={19} />}>
+      <Tarjeta className="space-y-3 p-5">
+        <div className="flex flex-wrap rounded-2xl bg-beige p-1">
+          {ASPECTOS.map(([valor, texto, Icono]) => (
+            <button
+              key={valor}
+              type="button"
+              onClick={() => cambiar(valor)}
+              aria-pressed={preferencia === valor}
+              className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-bold transition ${
+                preferencia === valor ? 'bg-superficie text-bosque-700 shadow-sm' : 'text-carbon/55'
+              }`}
+            >
+              <Icono size={16} /> {texto}
+            </button>
+          ))}
+        </div>
+        <p className="text-sm text-carbon/60">
+          {preferencia === 'sistema'
+            ? `Sigue a tu móvil u ordenador, que ahora mismo está en ${resuelto}.`
+            : 'Fijo, sin hacer caso a lo que diga el sistema.'}{' '}
+          Es una preferencia de este aparato: si entras desde otro, se elige allí aparte.
+        </p>
+      </Tarjeta>
+    </Seccion>
+  )
+}
+
+function AvisosDelGrupo() {
+  const { permiso, activados, activar, desactivar } = useNotificaciones()
+  const avisos = useAvisos()
+
+  const pedir = async () => {
+    await activar()
+    if (Notification.permission === 'denied') {
+      avisos.error('El navegador ha bloqueado los avisos. Hay que permitirlos en sus ajustes.')
+    }
+  }
+
+  return (
+    <Seccion titulo="Avisos" icono={activados ? <Bell size={19} /> : <BellOff size={19} />}>
+      <Tarjeta className="space-y-4 p-5">
+        <p className="text-sm text-carbon/70">
+          Cuando alguien propone una casa, se abre una votación o ya hay casa elegida, te sale en la campana
+          de arriba. Eso funciona siempre. Aparte, este aparato puede avisarte con un toque del sistema.
+        </p>
+
+        {permiso === 'no-soportado' ? (
+          <p className="rounded-2xl border border-tierra-200 bg-tierra-100 px-3.5 py-2.5 text-sm text-tierra-700">
+            Este navegador no deja mandar avisos del sistema. En el iPhone hay que instalar antes Rural69 en
+            la pantalla de inicio (botón <strong>Compartir → Añadir a inicio</strong>).
+          </p>
+        ) : permiso === 'denegado' ? (
+          <p className="rounded-2xl border border-tierra-200 bg-tierra-100 px-3.5 py-2.5 text-sm text-tierra-700">
+            Los avisos están bloqueados para Rural69. Para volver a activarlos hay que permitirlos en los
+            ajustes del navegador (el candado de la barra de direcciones).
+          </p>
+        ) : activados ? (
+          <>
+            <Interruptor
+              checked
+              onChange={() => desactivar()}
+              etiqueta="Avisarme en este aparato"
+            />
+            <p className="text-sm text-carbon/60">
+              Suena mientras Rural69 esté abierta, aunque sea de fondo o con la pantalla apagada. Con la
+              aplicación cerrada del todo no puede sonar: para eso haría falta un servidor propio, y Rural69
+              no tiene ninguno a propósito (es lo que la hace gratis de mantener).
+            </p>
+          </>
+        ) : (
+          <>
+            <Boton variante="secundario" onClick={() => void pedir()}>
+              <Bell size={16} /> Activar avisos en este aparato
+            </Boton>
+            <p className="text-sm text-carbon/60">
+              El navegador te preguntará si los permites. Se elige aparato por aparato.
+            </p>
+          </>
+        )}
       </Tarjeta>
     </Seccion>
   )

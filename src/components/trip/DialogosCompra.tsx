@@ -146,7 +146,7 @@ export function DialogoGenerarLista({
             </Campo>
           )}
 
-          <div className="rounded-2xl border border-arena bg-white p-4">
+          <div className="rounded-2xl border border-arena bg-superficie p-4">
             <Interruptor
               checked={ajustar}
               onChange={setAjustar}
@@ -180,7 +180,7 @@ export function DialogoGenerarLista({
                   <p className={`mb-1.5 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold ${estilo.clase}`}>
                     <span aria-hidden>{estilo.emoji}</span> {categoria}
                   </p>
-                  <div className="divide-y divide-arena rounded-2xl border border-arena bg-white">
+                  <div className="divide-y divide-arena rounded-2xl border border-arena bg-superficie">
                     {items.map((m) => (
                       <div key={m.id} className="flex items-center gap-3 px-3.5 py-2">
                         <Casilla
@@ -304,7 +304,7 @@ export function DialogoDespensa({
       ) : (
         <div className="space-y-2.5">
           {filas.map((f, i) => (
-            <div key={f.item.id} className="rounded-2xl border border-arena bg-white p-3.5">
+            <div key={f.item.id} className="rounded-2xl border border-arena bg-superficie p-3.5">
               <div className="flex items-start gap-3">
                 <Casilla
                   checked={f.elegido}
@@ -451,7 +451,7 @@ export function DialogoRecalcular({
           Las cantidades ya encajan con el número de asistentes. No hay nada que cambiar.
         </p>
       ) : (
-        <div className="divide-y divide-arena rounded-2xl border border-arena bg-white">
+        <div className="divide-y divide-arena rounded-2xl border border-arena bg-superficie">
           {propuestas.map(({ item, nueva }) => (
             <div key={item.id} className="flex items-center gap-3 px-3.5 py-2.5">
               <Casilla

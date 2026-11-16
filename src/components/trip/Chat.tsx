@@ -177,7 +177,7 @@ export function Chat() {
             <div key={m.id}>
               {nuevoDia && (
                 <div className="my-4 flex justify-center">
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-carbon/50 shadow-sm">
+                  <span className="rounded-full bg-superficie px-3 py-1 text-xs font-semibold text-carbon/50 shadow-sm">
                     {diaDeChat(m.created_at)}
                   </span>
                 </div>
@@ -189,7 +189,7 @@ export function Chat() {
 
                 <div
                   className={`max-w-[min(32rem,78%)] rounded-2xl px-3 py-2 shadow-sm ${
-                    mio ? 'bg-bosque-600 text-white' : 'bg-white text-carbon'
+                    mio ? 'bg-bosque-600 text-tinta-fuerte' : 'bg-superficie text-carbon'
                   } ${seguido ? (mio ? 'rounded-tr-md' : 'rounded-tl-md') : ''}`}
                 >
                   {!seguido && !mio && (
@@ -210,7 +210,7 @@ export function Chat() {
                     </button>
                   )}
                   {m.body && <p className="text-sm whitespace-pre-wrap break-words">{m.body}</p>}
-                  <p className={`mt-0.5 text-right text-[11px] ${mio ? 'text-white/60' : 'text-carbon/40'}`}>
+                  <p className={`mt-0.5 text-right text-[11px] ${mio ? 'text-tinta-fuerte/60' : 'text-carbon/40'}`}>
                     {m.edited_at && 'editado · '}
                     {hora(m.created_at)}
                   </p>
@@ -241,7 +241,7 @@ export function Chat() {
         })}
       </div>
 
-      <form onSubmit={enviar} className="safe-bottom border-t border-arena bg-white/80 p-2.5 [--relleno-inferior:0.625rem]">
+      <form onSubmit={enviar} className="safe-bottom border-t border-arena bg-superficie/80 p-2.5 [--relleno-inferior:0.625rem]">
         {editando && (
           <div className="mb-2 flex items-center gap-2 rounded-xl bg-bosque-50 px-3 py-1.5 text-xs text-bosque-700">
             <Pencil size={13} />
@@ -276,13 +276,13 @@ export function Chat() {
             onKeyDown={teclado}
             rows={1}
             placeholder="Escribe un mensaje…"
-            className="max-h-32 min-h-10 flex-1 resize-none rounded-2xl border border-arena bg-white px-3.5 py-2.5 text-sm outline-none transition focus:border-bosque-400 focus:ring-2 focus:ring-bosque-200"
+            className="max-h-32 min-h-10 flex-1 resize-none rounded-2xl border border-arena bg-superficie px-3.5 py-2.5 text-sm outline-none transition focus:border-bosque-400 focus:ring-2 focus:ring-bosque-200"
           />
           <button
             type="submit"
             disabled={!texto.trim() || enviando}
             aria-label={editando ? 'Guardar el cambio' : 'Enviar'}
-            className="inline-flex size-10 shrink-0 items-center justify-center rounded-2xl bg-bosque-600 text-white shadow-sm transition hover:bg-bosque-700 active:scale-95 disabled:opacity-40"
+            className="inline-flex size-10 shrink-0 items-center justify-center rounded-2xl bg-bosque-600 text-tinta-fuerte shadow-sm transition hover:bg-bosque-700 active:scale-95 disabled:opacity-40"
           >
             {enviando ? (
               <Loader2 size={18} className="animate-spin" />
@@ -325,7 +325,7 @@ function FotoAmpliada({ src, onCerrar }: { src: string; onCerrar: () => void }) 
 
   return createPortal(
     <div
-      className="animate-aparece fixed inset-0 z-50 flex items-center justify-center bg-carbon/90 p-4"
+      className="animate-aparece fixed inset-0 z-50 flex items-center justify-center bg-velo/90 p-4"
       onClick={onCerrar}
       role="dialog"
       aria-modal="true"

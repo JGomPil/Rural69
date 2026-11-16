@@ -224,7 +224,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
               Todavía no hay integrantes. Añádelos en <strong>Ajustes → Integrantes del grupo</strong>.
             </p>
           ) : (
-            <div className="space-y-3 rounded-2xl border border-arena bg-white p-3.5">
+            <div className="space-y-3 rounded-2xl border border-arena bg-superficie p-3.5">
               {porHogar.map((grupo) => (
                 <div key={grupo.nombre}>
                   <p className="mb-1 text-xs font-bold tracking-wide text-carbon/40 uppercase">{grupo.nombre}</p>

@@ -238,7 +238,7 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
           </Campo>
         </div>
 
-        <div className="rounded-2xl border border-arena bg-white p-4">
+        <div className="rounded-2xl border border-arena bg-superficie p-4">
           <p className="mb-3 text-sm font-semibold text-carbon/75">¿Qué tiene?</p>
           <div className="grid gap-3 sm:grid-cols-2">
             <Interruptor
@@ -273,7 +273,7 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
         </Campo>
 
         {/* -------- Fotografías -------- */}
-        <div className="rounded-2xl border border-arena bg-white p-4">
+        <div className="rounded-2xl border border-arena bg-superficie p-4">
           <p className="mb-1 text-sm font-semibold text-carbon/75">Fotografías</p>
           <p className="mb-3 text-xs text-carbon/50">
             Pega la URL de una foto de la web de la casa o sube imágenes desde el móvil. La primera se usa como portada.
@@ -285,7 +285,7 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
                 <div key={`${url}-${i}`} className="group relative aspect-4/3 overflow-hidden rounded-xl bg-beige">
                   <img src={url} alt="" className="size-full object-cover" loading="lazy" />
                   {i === 0 && (
-                    <span className="absolute top-1 left-1 rounded-full bg-bosque-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                    <span className="absolute top-1 left-1 rounded-full bg-bosque-600 px-1.5 py-0.5 text-[10px] font-bold text-tinta-fuerte">
                       Portada
                     </span>
                   )}
@@ -293,7 +293,7 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
                     type="button"
                     onClick={() => setFotos((prev) => prev.filter((_, j) => j !== i))}
                     aria-label="Quitar foto"
-                    className="absolute top-1 right-1 rounded-full bg-carbon/70 p-1 text-white opacity-90"
+                    className="absolute top-1 right-1 rounded-full bg-velo/70 p-1 text-white opacity-90"
                   >
                     <Trash2 size={13} />
                   </button>
@@ -320,7 +320,7 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
                 <Link2 size={16} /> Añadir
               </Boton>
             </div>
-            <label className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-2xl border border-arena bg-white px-4 text-sm font-semibold text-bosque-700 transition hover:bg-beige">
+            <label className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-2xl border border-arena bg-superficie px-4 text-sm font-semibold text-bosque-700 transition hover:bg-beige">
               {subiendo ? <Loader2 size={16} className="animate-spin" /> : <ImagePlus size={16} />}
               Subir fotos
               <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => void sube(e)} />

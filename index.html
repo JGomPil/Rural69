@@ -7,6 +7,26 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#2f5d42" />
+    <script>
+      // Modo oscuro, antes del primer pintado. Si esto esperara a React, al
+      // abrir la app en oscuro se vería un fogonazo blanco. Deja escrito en
+      // <html> el tema ya resuelto; useTema se encarga del resto.
+      (function () {
+        try {
+          var guardada = localStorage.getItem('rural69-tema')
+          var oscuro =
+            guardada === 'oscuro' ||
+            ((guardada === null || guardada === 'sistema') &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          document.documentElement.dataset.tema = oscuro ? 'oscuro' : 'claro'
+          if (oscuro) {
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#13160f')
+          }
+        } catch (e) {
+          document.documentElement.dataset.tema = 'claro'
+        }
+      })()
+    </script>
     <meta name="description" content="Rural69 · La central de mando de nuestras escapadas a casas rurales." />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
