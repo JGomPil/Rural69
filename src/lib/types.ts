@@ -127,6 +127,8 @@ export interface ShoppingItem {
   assigned_to: string | null
   /** Tiempo al que pertenece. Vacío = compra común, de nadie en concreto. */
   meal_id: string | null
+  /** Plato del que salió, si vino de un menú. Vacío = apuntado a mano. */
+  dish_id: string | null
   /** Sin uso en la interfaz: las cuentas las lleva el grupo en Settle Up. */
   price: number | null
   notes: string | null
@@ -167,6 +169,44 @@ export interface TripMeal {
   assigned_to: string | null
   notes: string | null
   sort_order: number
+  created_at: string
+}
+
+/**
+ * El recetario del grupo: se reutiliza entre escapadas, como la lista
+ * maestra. Las cantidades de sus ingredientes son para `base_people` y se
+ * escalan al grupo real al pasarlas a la compra.
+ */
+export interface Dish {
+  id: string
+  name: string
+  kind: TipoTiempo
+  base_people: number
+  notes: string | null
+  active: boolean
+  created_by: string | null
+  sort_order: number
+  created_at: string
+}
+
+export interface DishItem {
+  id: string
+  dish_id: string
+  master_item_id: string | null
+  name: string
+  category: string
+  qty: number | null
+  unit: string
+  notes: string | null
+  sort_order: number
+  created_at: string
+}
+
+/** Qué se cocina en cada tiempo de una escapada. */
+export interface TripMealDish {
+  id: string
+  meal_id: string
+  dish_id: string
   created_at: string
 }
 

@@ -14,12 +14,14 @@ import { Panel } from './pages/Panel'
 import { Escapadas } from './pages/Escapadas'
 import { Escapada } from './pages/Escapada'
 import { ListaMaestra } from './pages/ListaMaestra'
+import { Recetario } from './pages/Recetario'
 import { Despensa } from './pages/Despensa'
 import { Historial } from './pages/Historial'
 import { Ajustes } from './pages/Ajustes'
 import { Perfil } from './pages/Perfil'
 import { ResumenEscapada } from './components/trip/ResumenEscapada'
 import { Fechas } from './components/trip/Fechas'
+import { Menu } from './components/trip/Menu'
 import { CasasRurales } from './components/trip/CasasRurales'
 import { Votacion } from './components/trip/Votacion'
 import { ListaCompra } from './components/trip/ListaCompra'
@@ -101,11 +103,13 @@ export function App() {
                   <Route path="fechas" element={<Fechas />} />
                   <Route path="casas" element={<CasasRurales />} />
                   <Route path="votacion" element={<Votacion />} />
+                  <Route path="menu" element={<Menu />} />
                   <Route path="compra" element={<ListaCompra />} />
                   <Route path="sobrantes" element={<Sobrantes />} />
                   <Route path="chat" element={<Chat />} />
                 </Route>
                 <Route path="/lista-maestra" element={<ListaMaestra />} />
+                <Route path="/recetario" element={<Recetario />} />
                 <Route path="/despensa" element={<Despensa />} />
                 <Route path="/historial" element={<Historial />} />
                 <Route path="/ajustes" element={<Ajustes />} />

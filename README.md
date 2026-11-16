@@ -40,6 +40,7 @@ supabase/
   09_cosas_a_recordar.sql      Suelto y opcional: mete en la compra lo que siempre
                                se olvida (albal, vasos, sal, aceite…)
   10_voto_multiple.sql         Votar varias casas o varios findes, no solo uno
+  11_menus.sql                 Recetario del grupo y menús por días
 src/
   lib/            supabase.ts, tipos, formato, cálculo de cantidades, export, subidas
   hooks/          useAuth, useGrupo, useConsulta (datos + tiempo real), useAvisos,
@@ -61,6 +62,9 @@ trip_participants Quién viene a cada escapada
 houses            Casas rurales candidatas de una escapada
 house_photos      Fotos adicionales de cada casa
 votes             Qué casas le valen a cada cual (voto por aprobación)
+dishes            Recetario del grupo: un plato y para cuánta gente
+dish_items        Los ingredientes de cada plato
+trip_meal_dishes  Qué se cocina en cada comida de una escapada
 trip_date_options Fines de semana candidatos de una escapada
 date_votes        Qué findes le valen a cada cual
 master_items      Lista maestra reutilizable (cantidad + grupo de referencia)
@@ -212,6 +216,7 @@ solo. En local el valor por defecto es `/Rural69/`, definido en `vite.config.ts`
 | Editar la lista maestra | ✅ | ver |
 | Abrir y cerrar votaciones (fechas y casas) | ✅ | — |
 | Proponer fechas candidatas y votarlas | ✅ | ✅ |
+| Apuntar platos en el recetario y poner menús | ✅ | ✅ |
 | Fijar las fechas elegidas | ✅ | — |
 | Marcar la casa elegida / reservada | ✅ | — |
 | Apuntar quién viene a una escapada | ✅ | ✅ |
@@ -350,3 +355,30 @@ nada cuando cada cual emite los que quiere.
 Lo impone la base de datos: `unique (trip_id, voter_id, house_id)` y
 `unique (trip_id, voter_id, option_id)`. Puedes votar cuantas quieras, pero no la misma
 dos veces.
+
+---
+
+## 11. Menús por días
+
+Entre «cena del sábado» y «comprar dos kilos de arroz» faltaba una pieza. Los tiempos de
+la escapada dicen **cuándo** se come y la lista de la compra dice **qué** se compra, pero
+el salto de uno a otro lo hacía alguien de cabeza, cada vez.
+
+El **recetario** (`/recetario`) es un cuaderno de cocina del grupo, aparte de las
+escapadas igual que la lista maestra, porque la paella es la misma todos los años. Cada
+plato lleva sus ingredientes y para cuánta gente son esas cantidades. Lo escribe
+cualquiera del grupo, no solo un administrador: pedir permiso para apuntar una receta no
+tiene sentido. Borrar, en cambio, solo quien la apuntó o un administrador.
+
+La pestaña **Menú** de la escapada muestra los días con sus comidas y cenas, y en cada
+una se eligen platos del recetario —más de uno si hace falta—. Desde ahí, un botón pasa
+los ingredientes a la compra: se escalan al grupo que va con `escalaCantidad`, quedan
+apuntados a su comida y llevan el nombre del plato en las notas, para que se sepa de
+dónde salió cada cosa.
+
+Volver a pasarlo **no pisa lo que ya hayas retocado a mano**: compara por comida y
+nombre, y solo añade lo que falte. Como todo en esta aplicación, las cantidades son una
+propuesta, no una orden.
+
+Si el recetario está vacío, `11_menus.sql` deja cuatro platos para empezar —paella,
+lentejas, barbacoa y tortilla—, y no hace nada si ya has apuntado los tuyos.

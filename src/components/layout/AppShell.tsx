@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import {
   Archive,
   BarChart3,
+  ChefHat,
   ChevronRight,
   House,
   ListChecks,
@@ -84,6 +85,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const secundarios: Enlace[] = [
     { a: '/lista-maestra', texto: 'Lista maestra', icono: ListChecks },
+    { a: '/recetario', texto: 'Recetario', icono: ChefHat },
     { a: '/historial', texto: 'Historial', icono: BarChart3 },
     { a: '/perfil', texto: 'Mi perfil', icono: UserRound },
     { a: '/ajustes', texto: 'Ajustes', icono: Settings },

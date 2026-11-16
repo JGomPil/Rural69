@@ -34,6 +34,7 @@ const PESTANYAS = [
   { a: 'fechas', texto: 'Fechas' },
   { a: 'casas', texto: 'Casas' },
   { a: 'votacion', texto: 'Votación' },
+  { a: 'menu', texto: 'Menú' },
   { a: 'compra', texto: 'Compra' },
   { a: 'sobrantes', texto: 'Sobrantes' },
   { a: 'chat', texto: 'Chat' },

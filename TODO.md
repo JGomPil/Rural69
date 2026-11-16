@@ -3,6 +3,20 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 13 · Menús por días ✅
+
+- [x] Recetario del grupo en `/recetario`: platos con ingredientes y para cuánta gente
+- [x] Lo escribe cualquiera; lo borra quien lo apuntó o un administrador
+- [x] Los ingredientes se pueden enlazar a la lista maestra, y así la despensa sabe
+      emparejarlos sin adivinar por el nombre
+- [x] Pestaña «Menú» en la escapada, antes de «Compra»: los días con sus comidas, y en
+      cada una los platos que se cocinan
+- [x] Las comidas se pueden crear desde el propio Menú, sin ir a otra pestaña
+- [x] Botón para pasar los ingredientes a la compra, escalados al grupo, apuntados a su
+      comida y con el nombre del plato en las notas
+- [x] Volver a generar no pisa lo retocado a mano: solo añade lo que falte
+- [x] Cuatro platos de ejemplo si el recetario está vacío
+
 ## Fase 12 · Votar varias, no solo una ✅
 
 - [x] Las votaciones pasan a ser por aprobación: cada cual vota todas las casas o
@@ -185,7 +199,6 @@ protocolo de DevTools, con emulación de móvil (390 × 844) en los dos temas.
       el grupo lleva las cuentas en Settle Up. Se quitó de la interfaz el 15/11/2026,
       pero las columnas `shopping_items.price` y `trips.shopping_cost` siguen en la
       base de datos, así que recuperarlo es solo volver a pintar la interfaz.
-- [ ] Menús por días y generación de la compra a partir de recetas
 - [ ] Importar la despensa desde un CSV
 - [ ] Que los avisos suenen con la aplicación **cerrada del todo**. Hoy suenan mientras está
       abierta, aunque sea de fondo. Para lo otro hace falta Web Push: una *Edge Function* de
@@ -194,7 +207,7 @@ protocolo de DevTools, con emulación de móvil (390 × 844) en los dos temas.
 
 ## Tareas manuales (solo tú puedes hacerlas)
 
-- [ ] Pasar `supabase/10_voto_multiple.sql`, que es lo que permite votar varias
+- [ ] Pasar `supabase/11_menus.sql`, que es lo que crea el recetario
 - [x] Crear el proyecto en Supabase y ejecutar los scripts SQL por orden
       (comprobado el 16/11/2026: existen las tablas, columnas y funciones de los ocho)
 - [x] Crear el repositorio en GitHub, añadir los dos secretos y activar Pages
