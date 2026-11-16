@@ -27,6 +27,13 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   ancho?: boolean
 }
 
+/**
+ * Un botón sin `type` dentro de un `<form>` vale «submit» para el navegador,
+ * y eso muerde: en el recetario, el «Añadir» de los ingredientes guardaba el
+ * plato a medias y cerraba la ventana. Aquí el valor de serie es «button», y
+ * los que de verdad envían lo dicen —todos lo dicen ya, con `type="submit"` y
+ * `form="…"` desde el pie de su ventana—.
+ */
 export function Boton({
   variante = 'primario',
   tamanyo = 'md',
@@ -35,11 +42,13 @@ export function Boton({
   className = '',
   children,
   disabled,
+  type = 'button',
   ...resto
 }: Props) {
   return (
     <button
       {...resto}
+      type={type}
       disabled={disabled || cargando}
       className={`inline-flex shrink-0 items-center justify-center font-semibold tracking-tight transition-all duration-150 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none ${VARIANTES[variante]} ${TAMANYOS[tamanyo]} ${ancho ? 'w-full' : ''} ${className}`}
     >
@@ -54,10 +63,19 @@ interface PropsIcono extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tono?: 'normal' | 'peligro'
 }
 
-export function BotonIcono({ etiqueta, tono = 'normal', className = '', children, ...resto }: PropsIcono) {
+/** Lo mismo que en `Boton`: de serie no envía el formulario. */
+export function BotonIcono({
+  etiqueta,
+  tono = 'normal',
+  className = '',
+  children,
+  type = 'button',
+  ...resto
+}: PropsIcono) {
   return (
     <button
       {...resto}
+      type={type}
       aria-label={etiqueta}
       title={etiqueta}
       className={`inline-flex size-9 shrink-0 items-center justify-center rounded-xl transition active:scale-95 ${
