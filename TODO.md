@@ -3,7 +3,15 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
-## Fase 10 · Votación de fechas ✅
+## Fase 10 · Votación de fechas, y la compra por comidas ✅
+
+- [x] Los tiempos que se generan desde las fechas son **comida y cena**, sin desayuno:
+      en este grupo cada uno se lleva el suyo. A mano se puede añadir igual.
+- [x] El último día no lleva cena, que se vuelve después de comer
+- [x] `09_cosas_a_recordar.sql`: mete en la compra el albal, los vasos, el papel de
+      cocina, los pinchos de barbacoa, el vinagre, la sal y el aceite, como compra común
+
+### Votación de fechas
 
 - [x] Pestaña «Fechas» en la escapada, **antes** que «Casas»: es el orden real del grupo
 - [x] Cualquiera propone fines de semana candidatos, con nombre y observaciones

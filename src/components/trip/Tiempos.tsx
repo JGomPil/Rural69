@@ -73,7 +73,14 @@ export function DialogoTiempos({
 
   const dias = useMemo(() => diasDe(escapada), [escapada])
 
-  /** Crea desayuno, comida y cena de cada día, saltándose los que ya estén. */
+  /**
+   * Crea la comida y la cena de cada día, saltándose los que ya estén.
+   *
+   * El desayuno no se genera: en este grupo cada uno se lleva el suyo, así
+   * que ponerlo en la lista de la compra común solo estorba. Si alguna vez
+   * hace falta, se añade a mano con el botón de arriba, que sigue teniendo
+   * «Desayuno» entre los tipos.
+   */
   const generar = async () => {
     if (dias.length === 0) {
       avisos.error('La escapada no tiene fechas todavía. Ponlas y vuelve a intentarlo.')
@@ -87,16 +94,9 @@ export function DialogoTiempos({
 
       dias.forEach((dia, i) => {
         const esUltimo = i === dias.length - 1
-        // El primer día se llega para comer o cenar, y el último se va después
-        // de comer: generar los tres tiempos de todos los días sobra siempre.
-        const tipos: TipoTiempo[] =
-          dias.length === 1
-            ? ['comida', 'cena']
-            : i === 0
-              ? ['comida', 'cena']
-              : esUltimo
-                ? ['desayuno', 'comida']
-                : ['desayuno', 'comida', 'cena']
+        // El último día se vuelve después de comer, así que ese día no hay
+        // cena. Los demás, comida y cena.
+        const tipos: TipoTiempo[] = esUltimo && dias.length > 1 ? ['comida'] : ['comida', 'cena']
 
         for (const kind of tipos) {
           if (existentes.has(`${dia}|${kind}`)) continue
@@ -165,8 +165,8 @@ export function DialogoTiempos({
           {tiempos.length === 0 ? (
             <div className="rounded-2xl border border-arena bg-beige px-4 py-5 text-center">
               <p className="text-sm text-tenue">
-                Todavía no hay tiempos. Puedo crearlos a partir de las fechas de la escapada y luego los
-                retocas.
+                Todavía no hay tiempos. Puedo crear la comida y la cena de cada día a partir de las
+                fechas de la escapada, y luego los retocas. El desayuno no, que se lo trae cada uno.
               </p>
               <Boton className="mt-3" onClick={() => void generar()} cargando={enCurso} disabled={dias.length === 0}>
                 <Sparkles size={16} /> Crear desde las fechas

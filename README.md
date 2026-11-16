@@ -37,6 +37,8 @@ supabase/
   06_tiempos.sql               Comidas y cenas de la escapada
   07_notificaciones.sql        Avisos del grupo (disparadores que los crean)
   08_fechas.sql                Votación de fechas (va antes que la de casas)
+  09_cosas_a_recordar.sql      Suelto y opcional: mete en la compra lo que siempre
+                               se olvida (albal, vasos, sal, aceite…)
 src/
   lib/            supabase.ts, tipos, formato, cálculo de cantidades, export, subidas
   hooks/          useAuth, useGrupo, useConsulta (datos + tiempo real), useAvisos,
@@ -113,6 +115,10 @@ Scripts disponibles:
    8. `supabase/08_fechas.sql`
 
    Los ocho se pueden volver a ejecutar sin miedo: no borran ni duplican nada.
+
+   `09_cosas_a_recordar.sql` no es parte de la instalación: es un apaño suelto que mete en
+   la compra de la escapada en marcha lo que siempre se olvida. Pásalo cuando te haga
+   falta, las veces que quieras.
 3. **Authentication → Providers → Email**: deja activado *Email*. Si quieres entrar con
    enlace mágico, activa también *Magic Link*. Para que nadie se registre por su cuenta,
    desactiva **Allow new users to sign up** *después* de crear las cuentas del grupo.
