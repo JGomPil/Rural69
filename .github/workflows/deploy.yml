@@ -9,6 +9,8 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  # `deploy-pages` lo necesita para localizar el artefacto que sube el otro trabajo.
+  actions: read
 
 # Un despliegue a la vez; si llegan varios, se queda el último.
 concurrency:
@@ -21,10 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar el código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Preparar Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -45,12 +47,15 @@ jobs:
           BASE_PATH: /${{ github.event.repository.name }}/
 
       - name: Configurar Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Subir el resultado
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
+          # Desde la v4 los archivos ocultos se quedan fuera, y en dist/ hay un
+          # .nojekyll que viene de public/. Así el artefacto sigue siendo el mismo.
+          include-hidden-files: true
 
   desplegar:
     name: Publicar
@@ -62,4 +67,4 @@ jobs:
     steps:
       - name: Publicar en GitHub Pages
         id: publicar
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
