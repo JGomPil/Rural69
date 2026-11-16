@@ -39,6 +39,7 @@ supabase/
   08_fechas.sql                Votación de fechas (va antes que la de casas)
   09_cosas_a_recordar.sql      Suelto y opcional: mete en la compra lo que siempre
                                se olvida (albal, vasos, sal, aceite…)
+  10_voto_multiple.sql         Votar varias casas o varios findes, no solo uno
 src/
   lib/            supabase.ts, tipos, formato, cálculo de cantidades, export, subidas
   hooks/          useAuth, useGrupo, useConsulta (datos + tiempo real), useAvisos,
@@ -59,9 +60,9 @@ trips             Escapadas (fechas, destino, estado, votación abierta, casa el
 trip_participants Quién viene a cada escapada
 houses            Casas rurales candidatas de una escapada
 house_photos      Fotos adicionales de cada casa
-votes             Un voto por persona y escapada (restricción única)
+votes             Qué casas le valen a cada cual (voto por aprobación)
 trip_date_options Fines de semana candidatos de una escapada
-date_votes        Un voto de fechas por persona y escapada
+date_votes        Qué findes le valen a cada cual
 master_items      Lista maestra reutilizable (cantidad + grupo de referencia)
 shopping_items    Lista de cada escapada: necesaria / disponible / a comprar, comprado, encargado
 pantry_items      Despensa compartida: sobrantes que pasan de una escapada a la siguiente
@@ -215,7 +216,7 @@ solo. En local el valor por defecto es `/Rural69/`, definido en `vite.config.ts`
 | Marcar la casa elegida / reservada | ✅ | — |
 | Apuntar quién viene a una escapada | ✅ | ✅ |
 | Añadir y editar casas rurales | ✅ | ✅ |
-| Votar (un voto, cambiable mientras esté abierta) | ✅ | ✅ |
+| Votar todas las que le valgan, y quitarlas | ✅ | ✅ |
 | Modificar la lista de la compra y marcar comprados | ✅ | ✅ |
 | Registrar sobrantes y gestionar la despensa | ✅ | ✅ |
 | Consultar el historial y exportar datos | ✅ | ✅ |
@@ -316,7 +317,7 @@ casas, porque la disponibilidad de una casa rural depende de la fecha. La aplica
 orden, y de ahí que la pestaña **Fechas** vaya antes que **Casas**.
 
 Es a propósito un calco de la votación de casas: cualquiera propone fines de semana, cada
-persona tiene un voto y lo puede cambiar, un administrador abre y cierra la votación y marca
+persona vota todos los que le valgan, un administrador abre y cierra la votación y marca
 las ganadoras. Lo único distinto es el final: **al fijar unas fechas se copian en la escapada**
 (`trips.start_date` y `trips.end_date`), que es de donde las lee todo lo demás —la cuenta
 atrás, los tiempos de la compra, el historial—, así que no hay dos verdades sobre cuándo es la
@@ -328,3 +329,24 @@ buscar casa sin saber el finde suele ser trabajo doble.
 Crear la escapada no obliga a nada de esto: **solo el nombre es obligatorio**. Sin fechas, la
 aplicación muestra «Fechas por decidir» y los tiempos de la compra avisan de que todavía no se
 pueden generar a partir de los días.
+
+---
+
+## 10. Votar varias, no solo una
+
+Las votaciones son **por aprobación**: cada cual marca *todas* las casas o todos los
+findes que le valen, incluso todos, y gana lo que le vale a más gente. No se elige una y
+ya está.
+
+Es a propósito. Con un solo voto por persona, once personas repartidas entre cuatro
+findes dan un ganador con tres votos que a ocho no les viene bien. Marcando todo lo que
+cuadra sale el que menos gente deja fuera, que es la decisión que de verdad buscáis
+—sobre todo en las fechas, donde lo que importa no es cuál prefieres sino cuáles puedes.
+
+Por eso los porcentajes se miden sobre **la gente que ha votado**, no sobre el número de
+votos: «a 8 de 11 les vale esta» dice algo, «esta se lleva el 22 % de los votos» no dice
+nada cuando cada cual emite los que quiere.
+
+Lo impone la base de datos: `unique (trip_id, voter_id, house_id)` y
+`unique (trip_id, voter_id, option_id)`. Puedes votar cuantas quieras, pero no la misma
+dos veces.

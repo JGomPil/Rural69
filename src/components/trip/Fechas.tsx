@@ -19,8 +19,8 @@ import type { DateVote, TripDateOption } from '../../lib/types'
  * grupo: primero se decide el fin de semana y, con la fecha ya puesta, se
  * buscan casas libres.
  *
- * Es el mismo patrón que la votación de casas (proponer, un voto por
- * persona y cambiable, abrir y cerrar, marcar la ganadora). La diferencia
+ * Es el mismo patrón que la votación de casas (proponer, votar todas las
+ * que valgan, abrir y cerrar, marcar la ganadora). La diferencia
  * es el final: al marcar las fechas elegidas se copian en la escapada, que
  * es de donde las lee todo lo demás —la cuenta atrás, los tiempos de la
  * compra, el historial—, así que no hay dos verdades.
@@ -62,33 +62,37 @@ export function Fechas() {
     // Más votadas primero; a igualdad de votos, por fecha.
     filas.sort((a, b) => b.votos.length - a.votos.length || a.opcion.start_date.localeCompare(b.opcion.start_date))
     const maximo = filas[0]?.votos.length ?? 0
-    return { filas, maximo, total: votos.length }
+    // El porcentaje se mide sobre la gente que ha votado, no sobre el número
+    // de votos: con voto múltiple lo que dice algo es a cuántos les vale.
+    const votantes = new Set(votos.map((v) => v.voter_id)).size
+    return { filas, maximo, votantes, total: votos.length }
   }, [datos])
 
-  const miVoto = datos?.votos.find((v) => v.voter_id === perfil?.id)
+  /** Los findes que he votado yo: de la opción al identificador de mi voto. */
+  const misVotos = useMemo(() => {
+    const mapa = new Map<string, string>()
+    for (const v of datos?.votos ?? []) if (v.voter_id === perfil?.id) mapa.set(v.option_id, v.id)
+    return mapa
+  }, [datos, perfil?.id])
+
   const sinVotar = perfiles.filter((p) => !datos?.votos.some((v) => v.voter_id === p.id))
 
   const votar = async (optionId: string) => {
     if (!perfil) return
     setVotando(optionId)
     try {
-      if (miVoto?.option_id === optionId) {
-        const { error: err } = await supabase.from('date_votes').delete().eq('id', miVoto.id)
+      // Vota todos los findes que te valgan: pulsar uno votado lo quita.
+      const mío = misVotos.get(optionId)
+      if (mío) {
+        const { error: err } = await supabase.from('date_votes').delete().eq('id', mío)
         if (err) throw err
-        avisos.info('Has retirado tu voto.')
-      } else if (miVoto) {
-        const { error: err } = await supabase
-          .from('date_votes')
-          .update({ option_id: optionId })
-          .eq('id', miVoto.id)
-        if (err) throw err
-        avisos.ok('Voto cambiado.')
+        avisos.info('Voto retirado.')
       } else {
         const { error: err } = await supabase
           .from('date_votes')
           .insert({ trip_id: escapada.id, option_id: optionId, voter_id: perfil.id })
         if (err) throw err
-        avisos.ok('¡Voto registrado!')
+        avisos.ok('¡Votadas!')
       }
       await refrescar(true)
     } catch (e) {
@@ -174,7 +178,7 @@ export function Fechas() {
             ) : resultados.filas.length === 0 ? (
               'Todavía sin fechas. Proponed fines de semana y votad.'
             ) : (
-              `${resultados.filas.length} ${resultados.filas.length === 1 ? 'finde propuesto' : 'findes propuestos'} y ${resultados.total} ${resultados.total === 1 ? 'voto' : 'votos'}. Sin decidir todavía.`
+              `${resultados.filas.length} ${resultados.filas.length === 1 ? 'finde propuesto' : 'findes propuestos'}; han votado ${resultados.votantes} de ${perfiles.length}. Sin decidir todavía.`
             )}
           </p>
         </div>
@@ -234,7 +238,7 @@ export function Fechas() {
               </h3>
               <div className="space-y-2.5">
                 {resultados.filas.map(({ opcion, votos }) => {
-                  const pct = resultados.total > 0 ? Math.round((votos.length / resultados.total) * 100) : 0
+                  const pct = resultados.votantes > 0 ? Math.round((votos.length / resultados.votantes) * 100) : 0
                   const esGanadora = votos.length === resultados.maximo && votos.length > 0
                   return (
                     <div key={opcion.id}>
@@ -273,7 +277,7 @@ export function Fechas() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             {resultados.filas.map(({ opcion, votos }) => {
-              const esMiVoto = miVoto?.option_id === opcion.id
+              const esMiVoto = misVotos.has(opcion.id)
               const esGanadora = votos.length === resultados.maximo && votos.length > 0
               const n = noches(opcion.start_date, opcion.end_date)
               const elegidas = escapada.chosen_date_option_id === opcion.id
@@ -318,7 +322,7 @@ export function Fechas() {
                     >
                       {esMiVoto ? (
                         <>
-                          <Check size={15} /> Mi voto
+                          <Check size={15} /> Votadas
                         </>
                       ) : (
                         'Votar estas'
@@ -342,8 +346,9 @@ export function Fechas() {
       )}
 
       <p className="medida mx-auto text-center text-xs text-suave">
-        Cada persona tiene un voto, y puede cambiarlo mientras la votación esté abierta. Al fijar unas fechas se
-        copian en la escapada: de ahí salen la cuenta atrás y los tiempos de la compra.
+        Vota <strong>todos los findes que te valgan</strong>, no solo uno: así sale el que le viene bien a más
+        gente. Puedes quitarlos mientras la votación esté abierta. Al fijar unas fechas se copian en la
+        escapada: de ahí salen la cuenta atrás y los tiempos de la compra.
       </p>
 
       <FormularioFechas

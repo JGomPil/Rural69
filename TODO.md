@@ -3,6 +3,16 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 12 · Votar varias, no solo una ✅
+
+- [x] Las votaciones pasan a ser por aprobación: cada cual vota todas las casas o
+      todos los findes que le valgan, incluso todos
+- [x] La restricción de la base de datos pasa de `(trip_id, voter_id)` a incluir la
+      candidata, así que una persona puede votar varias pero no la misma dos veces
+- [x] Los porcentajes se miden sobre la gente que ha votado, no sobre el número de
+      votos, que con voto múltiple no significa nada
+- [x] Los votos que ya hubiera siguen valiendo: cada persona tenía como mucho uno
+
 ## Fase 11 · Revisión en un navegador de verdad ✅
 
 Hasta aquí todo se había comprobado con el compilador, el linter y las cuentas de
@@ -184,7 +194,8 @@ protocolo de DevTools, con emulación de móvil (390 × 844) en los dos temas.
 
 ## Tareas manuales (solo tú puedes hacerlas)
 
-- [x] Crear el proyecto en Supabase y ejecutar los **ocho** scripts SQL por orden
+- [ ] Pasar `supabase/10_voto_multiple.sql`, que es lo que permite votar varias
+- [x] Crear el proyecto en Supabase y ejecutar los scripts SQL por orden
       (comprobado el 16/11/2026: existen las tablas, columnas y funciones de los ocho)
 - [x] Crear el repositorio en GitHub, añadir los dos secretos y activar Pages
       (cada push despliega y termina en verde)

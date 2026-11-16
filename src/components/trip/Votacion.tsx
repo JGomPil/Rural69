@@ -43,33 +43,42 @@ export function Votacion() {
     }))
     filas.sort((a, b) => b.votos.length - a.votos.length || a.casa.name.localeCompare(b.casa.name))
     const maximo = filas[0]?.votos.length ?? 0
-    return { filas, maximo, total: votos.length }
+    // Con voto múltiple el porcentaje se mide sobre la GENTE que ha votado,
+    // no sobre el número de votos: lo que dice algo es «a 8 de 11 les vale
+    // esta», no «esta se lleva el 22 % de los votos emitidos».
+    const votantes = new Set(votos.map((v) => v.voter_id)).size
+    return { filas, maximo, votantes, total: votos.length }
   }, [datos])
 
   // En el grupo solo pagan los adultos: los niños no cuentan para repartir el precio.
   const adultos = participantes.filter((m) => !m.is_child).length
 
-  const miVoto = datos?.votos.find((v) => v.voter_id === perfil?.id)
+  /** Las que he votado yo: de la casa al identificador de mi voto, para poder quitarlo. */
+  const misVotos = useMemo(() => {
+    const mapa = new Map<string, string>()
+    for (const v of datos?.votos ?? []) if (v.voter_id === perfil?.id) mapa.set(v.house_id, v.id)
+    return mapa
+  }, [datos, perfil?.id])
+
   const sinVotar = perfiles.filter((p) => !datos?.votos.some((v) => v.voter_id === p.id))
 
   const votar = async (houseId: string) => {
     if (!perfil) return
     setVotando(houseId)
     try {
-      if (miVoto?.house_id === houseId) {
-        const { error: err } = await supabase.from('votes').delete().eq('id', miVoto.id)
+      // Se puede votar cuantas valgan: pulsar una que ya tienes votada la
+      // quita, y pulsar otra la añade. Ya no se sustituye nada.
+      const mío = misVotos.get(houseId)
+      if (mío) {
+        const { error: err } = await supabase.from('votes').delete().eq('id', mío)
         if (err) throw err
-        avisos.info('Has retirado tu voto.')
-      } else if (miVoto) {
-        const { error: err } = await supabase.from('votes').update({ house_id: houseId }).eq('id', miVoto.id)
-        if (err) throw err
-        avisos.ok('Voto cambiado.')
+        avisos.info('Voto retirado.')
       } else {
         const { error: err } = await supabase
           .from('votes')
           .insert({ trip_id: escapada.id, house_id: houseId, voter_id: perfil.id })
         if (err) throw err
-        avisos.ok('¡Voto registrado!')
+        avisos.ok('¡Votada!')
       }
       await refrescar(true)
     } catch (e) {
@@ -134,9 +143,11 @@ export function Votacion() {
             {escapada.voting_open ? 'Votación abierta' : 'Votación cerrada'}
           </h2>
           <p className="mt-0.5 text-sm text-suave">
-            {resultados.total} {resultados.total === 1 ? 'voto emitido' : 'votos emitidos'}
-            {participantes.length > 0 &&
-              ` · ${perfiles.length} ${perfiles.length === 1 ? 'adulto' : 'adultos'} con cuenta`}
+            {resultados.votantes === 0
+              ? 'Nadie ha votado todavía'
+              : `Han votado ${resultados.votantes} de ${perfiles.length}, con ${resultados.total} ${
+                  resultados.total === 1 ? 'voto' : 'votos'
+                } en total`}
           </p>
         </div>
         {esAdmin && (
@@ -171,7 +182,7 @@ export function Votacion() {
           </h3>
           <div className="space-y-2.5">
             {resultados.filas.map(({ casa, votos }) => {
-              const pct = resultados.total > 0 ? Math.round((votos.length / resultados.total) * 100) : 0
+              const pct = resultados.votantes > 0 ? Math.round((votos.length / resultados.votantes) * 100) : 0
               const esGanadora = votos.length === resultados.maximo && votos.length > 0
               return (
                 <div key={casa.id}>
@@ -213,7 +224,7 @@ export function Votacion() {
 
       <div className="grid gap-3 sm:grid-cols-2">
         {resultados.filas.map(({ casa, votos }) => {
-          const esMiVoto = miVoto?.house_id === casa.id
+          const esMiVoto = misVotos.has(casa.id)
           const esGanadora = votos.length === resultados.maximo && votos.length > 0
           return (
             <Tarjeta
@@ -255,7 +266,7 @@ export function Votacion() {
                   >
                     {esMiVoto ? (
                       <>
-                        <Check size={15} /> Mi voto
+                        <Check size={15} /> Votada
                       </>
                     ) : (
                       'Votar esta'
@@ -278,7 +289,8 @@ export function Votacion() {
       </div>
 
       <p className="text-center text-xs text-suave">
-        Cada persona tiene un voto por escapada y puede cambiarlo mientras la votación esté abierta.
+        Vota <strong>todas las casas que te valgan</strong>, no solo una: así sale la que le gusta a más gente.
+        Puedes quitarlas mientras la votación esté abierta.
       </p>
     </div>
   )

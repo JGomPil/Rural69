@@ -117,7 +117,7 @@ create table if not exists public.house_photos (
 );
 
 -- ---------------------------------------------------------------------
--- Votaciones (un voto por persona y escapada)
+-- Votaciones (voto por aprobación: cada cual vota las que le valgan)
 -- ---------------------------------------------------------------------
 create table if not exists public.votes (
   id         uuid primary key default gen_random_uuid(),
@@ -125,7 +125,8 @@ create table if not exists public.votes (
   house_id   uuid not null references public.houses (id)   on delete cascade,
   voter_id   uuid not null references public.profiles (id) on delete cascade,
   created_at timestamptz not null default now(),
-  unique (trip_id, voter_id)
+  -- Varias candidatas por persona, pero no la misma dos veces.
+  unique (trip_id, voter_id, house_id)
 );
 
 -- ---------------------------------------------------------------------

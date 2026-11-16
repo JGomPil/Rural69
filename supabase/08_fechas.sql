@@ -11,7 +11,7 @@
 -- aplicación.
 --
 --   · trip_date_options → los fines de semana candidatos.
---   · date_votes        → un voto por persona y escapada, cambiable.
+--   · date_votes        → los findes que le valen a cada cual.
 --
 -- Es a propósito un calco de `houses` + `votes`: mismas políticas, mismo
 -- «abrir y cerrar», mismo «marcar la elegida». Lo único distinto es que
@@ -67,7 +67,8 @@ create table if not exists public.date_votes (
   option_id  uuid not null references public.trip_date_options (id)   on delete cascade,
   voter_id   uuid not null references public.profiles (id)            on delete cascade,
   created_at timestamptz not null default now(),
-  unique (trip_id, voter_id)
+  -- Varios findes por persona, pero no el mismo dos veces.
+  unique (trip_id, voter_id, option_id)
 );
 
 create index if not exists date_votes_trip_idx on public.date_votes (trip_id);
