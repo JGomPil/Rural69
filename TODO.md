@@ -3,6 +3,22 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 11 · Revisión en un navegador de verdad ✅
+
+Hasta aquí todo se había comprobado con el compilador, el linter y las cuentas de
+contraste, pero nadie había mirado una pantalla. Repasado con Chrome conducido por el
+protocolo de DevTools, con emulación de móvil (390 × 844) en los dos temas.
+
+- [x] En el móvil no se veía en qué pestaña estabas: con siete pestañas entran cuatro,
+      y si estabas en Compra, Sobrantes o Chat la activa quedaba fuera de la pantalla.
+      Ahora se arrastra al centro y el borde con recorrido se desvanece
+- [x] El rótulo de «Fechas» decía «todavía sin fechas» con findes ya propuestos
+- [x] La campana vacía y el perfil hablaban solo de casas; faltaban las fechas y lo de
+      que tus propias acciones no te avisan a ti
+- [x] Comprobado que no hay desbordamiento horizontal a 390 px en ninguna pantalla
+- [x] Comprobado que la barra inferior flotante no tapa ningún control al final de
+      ninguna página (96 px de holgura en la más larga, que es el perfil)
+
 ## Fase 10 · Votación de fechas, y la compra por comidas ✅
 
 - [x] Los tiempos que se generan desde las fechas son **comida y cena**, sin desayuno:
