@@ -449,6 +449,7 @@ export function ListaCompra() {
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar producto…"
+            aria-label="Buscar producto en la compra"
             className="pl-10"
           />
         </div>

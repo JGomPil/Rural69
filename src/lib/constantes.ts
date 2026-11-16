@@ -21,7 +21,7 @@ export const ESTILO_CATEGORIA: Record<string, { emoji: string; clase: string }> 
   Comidas: { emoji: '🥘', clase: 'bg-tierra-200 text-tierra-700' },
   Cenas: { emoji: '🌙', clase: 'bg-bosque-100 text-bosque-700' },
   Bebidas: { emoji: '🍻', clase: 'bg-oliva-200 text-oliva-700' },
-  Postres: { emoji: '🍰', clase: 'bg-tierra-100 text-tierra-600' },
+  Postres: { emoji: '🍰', clase: 'bg-tierra-100 text-tierra-700' },
   Fruta: { emoji: '🍎', clase: 'bg-tierra-200 text-tierra-700' },
   Verduras: { emoji: '🥬', clase: 'bg-oliva-100 text-oliva-700' },
   'Carne y pescado': { emoji: '🍖', clase: 'bg-tierra-200 text-tierra-700' },

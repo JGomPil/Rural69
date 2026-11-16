@@ -187,6 +187,7 @@ export function ListaMaestra() {
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               placeholder="Buscar producto…"
+              aria-label="Buscar producto en la lista maestra"
               className="pl-10"
             />
           </div>

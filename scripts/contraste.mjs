@@ -117,6 +117,36 @@ const PARES = [
 ]
 
 // ---------------------------------------------------------------------
+// Las categorías, leídas de `constantes.ts`
+// ---------------------------------------------------------------------
+// Son once pares de color escritos a mano, y uno se había quedado con un
+// tono por debajo del resto sin que nadie lo notara. Aquí no se listan:
+// se leen del archivo, así que añadir una categoría nueva la mete sola en
+// la comprobación.
+const constantes = readFileSync(join(raiz, 'src/lib/constantes.ts'), 'utf8')
+
+// Ojo con `bloque`: la declaración lleva un `Record<string, { … }>` delante,
+// así que hay que arrancar en el `= {` del mapa y no en la primera llave.
+const desde = constantes.indexOf('ESTILO_CATEGORIA')
+if (desde === -1) throw new Error('No encuentro ESTILO_CATEGORIA en constantes.ts')
+const bloqueCategorias = bloque(constantes.slice(constantes.indexOf('= {', desde)), '= {')
+
+let cuantas = 0
+for (const [, nombre, fondo, frente] of bloqueCategorias.matchAll(
+  /^\s*'?([^':{]+)'?:\s*\{[^}]*clase:\s*'bg-([a-z0-9-]+)\s+text-([a-z0-9-]+)'/gm,
+)) {
+  PARES.push([`categoría ${nombre.trim()}`, frente, fondo, TEXTO])
+  cuantas++
+}
+
+// Si un día cambia la forma del archivo, esto tiene que fallar y no pasar de
+// largo: callarse sería peor que no comprobar nada.
+if (cuantas < 5) {
+  console.error(`Solo he sabido leer ${cuantas} categorías de constantes.ts; algo ha cambiado de forma.`)
+  process.exit(1)
+}
+
+// ---------------------------------------------------------------------
 let fallos = 0
 
 for (const [nombre, tema] of [

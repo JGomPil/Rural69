@@ -137,6 +137,7 @@ export function Despensa() {
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
                 placeholder="Buscar en la despensa…"
+                aria-label="Buscar en la despensa"
                 className="pl-10"
               />
             </div>
