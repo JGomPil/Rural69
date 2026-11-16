@@ -52,7 +52,8 @@ export function Panel() {
       const items = (compra.data ?? []) as { purchased: boolean }[]
       return {
         casas: (casas.data ?? []) as House[],
-        votos: (votos.data ?? []).length,
+        // Gente que ha votado, no votos sueltos: se puede votar varias casas.
+        votos: new Set((votos.data ?? []).map((v) => (v as { voter_id: string }).voter_id)).size,
         totalCompra: items.length,
         compradosCompra: items.filter((i) => i.purchased).length,
         idsParticipantes: (participantes.data ?? []).map((r) => (r as { member_id: string }).member_id),
@@ -164,7 +165,7 @@ export function Panel() {
                   a={`/escapadas/${escapadaActiva.id}/votacion`}
                   icono={<Vote size={17} />}
                   valor={datos?.votos ?? 0}
-                  etiqueta={escapadaActiva.voting_open ? 'votos (abierta)' : 'votos (cerrada)'}
+                  etiqueta={escapadaActiva.voting_open ? 'han votado (abierta)' : 'han votado (cerrada)'}
                 />
                 <AtajoEstado
                   a={`/escapadas/${escapadaActiva.id}/compra`}

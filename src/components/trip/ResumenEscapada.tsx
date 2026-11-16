@@ -18,7 +18,7 @@ export function ResumenEscapada() {
     async () => {
       const [casas, votos, compra] = await Promise.all([
         supabase.from('houses').select('*').eq('trip_id', escapada.id),
-        supabase.from('votes').select('house_id').eq('trip_id', escapada.id),
+        supabase.from('votes').select('voter_id').eq('trip_id', escapada.id),
         supabase.from('shopping_items').select('purchased').eq('trip_id', escapada.id),
       ])
       if (casas.error) throw casas.error
@@ -27,7 +27,8 @@ export function ResumenEscapada() {
       const items = compra.data ?? []
       return {
         casas: (casas.data ?? []) as House[],
-        votos: (votos.data ?? []).length,
+        // Gente que ha votado, no votos: cada cual puede votar varias casas.
+        votos: new Set((votos.data ?? []).map((v) => (v as { voter_id: string }).voter_id)).size,
         total: items.length,
         comprados: items.filter((i) => i.purchased).length,
       }
@@ -55,7 +56,7 @@ export function ResumenEscapada() {
           etiqueta={`${adultos} adultos · ${ninos} niños`}
         />
         <Dato icono={<Home size={18} />} valor={datos.casas.length} etiqueta="Casas propuestas" tono="oliva" />
-        <Dato icono={<Vote size={18} />} valor={datos.votos} etiqueta="Votos emitidos" tono="tierra" />
+        <Dato icono={<Vote size={18} />} valor={datos.votos} etiqueta="Han votado" tono="tierra" />
         <Dato
           icono={<ShoppingCart size={18} />}
           valor={datos.total ? `${datos.comprados}/${datos.total}` : '—'}

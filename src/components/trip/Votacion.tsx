@@ -6,7 +6,7 @@ import { useConsulta } from '../../hooks/useConsulta'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
 import { useGrupo } from '../../hooks/useGrupo'
-import { mensajeError, supabase } from '../../lib/supabase'
+import { esVotoDuplicado, mensajeError, supabase } from '../../lib/supabase'
 import { euros } from '../../lib/formato'
 import { Boton } from '../ui/Boton'
 import { Personas } from '../ui/Persona'
@@ -82,7 +82,7 @@ export function Votacion() {
       }
       await refrescar(true)
     } catch (e) {
-      avisos.error(mensajeError(e))
+      avisos.error(esVotoDuplicado(e) ? 'Todavía no se pueden votar varias: falta pasar el último cambio de la base de datos (10_voto_multiple.sql).' : mensajeError(e))
     } finally {
       setVotando(null)
     }

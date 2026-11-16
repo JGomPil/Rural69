@@ -25,6 +25,19 @@ export const supabase = createClient(url ?? 'http://localhost', anonKey ?? 'sin-
 })
 
 /** Convierte un error de Supabase en un mensaje legible en español. */
+/**
+ * Votar una segunda candidata choca con la restricción vieja mientras no se
+ * haya pasado `supabase/10_voto_multiple.sql`. El error que llega es un
+ * `23505` de Postgres, que no le dice nada a nadie.
+ */
+export function esVotoDuplicado(e: unknown): boolean {
+  const t = mensajeError(e).toLowerCase()
+  return (
+    (t.includes('duplicate key') || t.includes('23505') || t.includes('ya existe')) &&
+    (t.includes('voter_id') || t.includes('votes') || t.includes('sin_repetir'))
+  )
+}
+
 export function mensajeError(error: unknown): string {
   if (!error) return 'Ha ocurrido un error inesperado.'
   const msg = typeof error === 'string' ? error : ((error as { message?: string }).message ?? '')

@@ -5,7 +5,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
 import { useConsulta } from '../../hooks/useConsulta'
 import { useGrupo } from '../../hooks/useGrupo'
-import { mensajeError, supabase } from '../../lib/supabase'
+import { esVotoDuplicado, mensajeError, supabase } from '../../lib/supabase'
 import { hoyISO, noches, rangoFechas } from '../../lib/formato'
 import { Boton, BotonIcono } from '../ui/Boton'
 import { Campo, Entrada } from '../ui/Campos'
@@ -96,7 +96,7 @@ export function Fechas() {
       }
       await refrescar(true)
     } catch (e) {
-      avisos.error(mensajeError(e))
+      avisos.error(esVotoDuplicado(e) ? 'Todavía no se pueden votar varias: falta pasar el último cambio de la base de datos (10_voto_multiple.sql).' : mensajeError(e))
     } finally {
       setVotando(null)
     }
