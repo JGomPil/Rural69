@@ -156,7 +156,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
       abierto={abierto}
       onCerrar={onCerrar}
       titulo={editando ? 'Editar escapada' : 'Nueva escapada'}
-      descripcion={editando ? undefined : 'Los datos se pueden completar más tarde.'}
+      descripcion="Solo el nombre es obligatorio: las fechas y el sitio pueden esperar a la votación."
       pie={
         <>
           <Boton variante="secundario" onClick={onCerrar}>
@@ -174,7 +174,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
         </Campo>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="Fecha de ida">
+          <Campo etiqueta="Fecha de ida" ayuda="Si todavía están por decidir, déjalas en blanco: saldrá «Fechas por decidir».">
             <Entrada type="date" value={inicio} onChange={(e) => setInicio(e.target.value)} />
           </Campo>
           <Campo etiqueta="Fecha de vuelta">
@@ -186,7 +186,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
           <Campo etiqueta="Localidad">
             <Entrada value={localidad} onChange={(e) => setLocalidad(e.target.value)} placeholder="Potes" />
           </Campo>
-          <Campo etiqueta="Provincia">
+          <Campo etiqueta="Provincia" ayuda="Si depende de la casa que salga votada, déjalo vacío.">
             <Entrada value={provincia} onChange={(e) => setProvincia(e.target.value)} placeholder="Cantabria" />
           </Campo>
         </div>
