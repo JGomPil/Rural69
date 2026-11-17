@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { desuscribe, suscribe } from '../lib/push'
 import type { Notification as Aviso } from '../lib/types'
 import { useAuth } from './useAuth'
 import { useConsulta } from './useConsulta'
@@ -108,6 +109,17 @@ export function NotificacionesProvider({ children }: { children: React.ReactNode
   const vistos = useRef<Set<string> | null>(null)
   const activados = quiere && permiso === 'concedido'
 
+  // Quien ya tenía los avisos puestos de antes no vuelve a pasar por
+  // `activar()`, así que nunca se apuntaría para los del móvil. Se
+  // comprueba al entrar: si ya está apuntado, el navegador devuelve la
+  // misma suscripción y esto no hace nada.
+  useEffect(() => {
+    if (!activados || !perfil?.id) return
+    void suscribe(perfil.id).catch((e) =>
+      console.error('Rural69: no he podido apuntar este aparato para los avisos', e),
+    )
+  }, [activados, perfil?.id])
+
   useEffect(() => {
     if (!datos) return
 
@@ -210,12 +222,25 @@ export function NotificacionesProvider({ children }: { children: React.ReactNode
     if (nuevo === 'concedido') {
       guardaPreferencia(true)
       setQuiere(true)
+      // Y además, apuntar este aparato para que suene con la aplicación
+      // cerrada. Si falla, el permiso sigue valiendo: se seguirán viendo
+      // los avisos mientras la app esté abierta, que es como era antes.
+      if (perfil?.id) {
+        try {
+          await suscribe(perfil.id)
+        } catch (e) {
+          console.error('Rural69: no he podido apuntar este aparato para los avisos', e)
+        }
+      }
     }
-  }, [])
+  }, [perfil?.id])
 
   const desactivar = useCallback(() => {
     guardaPreferencia(false)
     setQuiere(false)
+    void desuscribe().catch((e) =>
+      console.error('Rural69: no he podido dar de baja este aparato', e),
+    )
   }, [])
 
   const valor = useMemo<ContextoAvisosGrupo>(

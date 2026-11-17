@@ -17,12 +17,13 @@
 // tienen que venir siempre frescos.
 //
 // Y una tercera cosa: es quien muestra los avisos del sistema (los que
-// suenan) y quien sabe a dónde llevar cuando se pulsa uno. Los avisos los
-// lanza la propia aplicación mientras está abierta, no un servidor: aquí no
-// hay suscripción push.
+// suenan) y quien sabe a dónde llevar cuando se pulsa uno. Llegan por dos
+// caminos: la propia aplicación mientras está abierta, y el servidor cuando
+// está cerrada. Los dos acaban aquí y usan la misma etiqueta, así que si
+// llegan los dos, uno sustituye al otro en vez de sonar dos veces.
 // =====================================================================
 
-const VERSION = 'rural69-v2'
+const VERSION = 'rural69-v3'
 const CACHE = `${VERSION}-estatico`
 
 self.addEventListener('install', (e) => {
@@ -86,6 +87,35 @@ self.addEventListener('fetch', (e) => {
 // abrir otra. La ruta viaja en `data.url` (p. ej. `/escapadas/<id>/casas`) y
 // se monta como hash, que es lo que entiende el router.
 // =====================================================================
+
+// =====================================================================
+// El empujón del servidor: lo que hace que suene con la app cerrada.
+// =====================================================================
+
+self.addEventListener('push', (e) => {
+  // Sin datos no se puede decir nada útil, pero callarse del todo tampoco
+  // vale: el navegador obliga a mostrar algo cuando llega un push.
+  let aviso = { title: 'Rural69', body: 'Hay novedades en el grupo.', url: '', kind: 'aviso' }
+  if (e.data) {
+    try {
+      aviso = Object.assign(aviso, e.data.json())
+    } catch (err) {
+      aviso.body = e.data.text() || aviso.body
+    }
+  }
+
+  e.waitUntil(
+    self.registration.showNotification(aviso.title, {
+      body: aviso.body || undefined,
+      icon: './icon-192.png',
+      badge: './icon-192.png',
+      // La misma etiqueta que usa la aplicación cuando está abierta: si una
+      // votación se abre y estás mirando, no suena dos veces.
+      tag: aviso.kind || 'aviso',
+      data: { url: aviso.url || '' },
+    }),
+  )
+})
 
 self.addEventListener('notificationclick', (e) => {
   e.notification.close()

@@ -3,6 +3,20 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 18 · Que suene el móvil con la aplicación cerrada 🚧
+
+- [x] `14_avisos_push.sql`: dónde se guarda a qué aparatos empujar
+- [x] El service worker escucha el empujón y muestra el aviso (misma etiqueta que
+      los de la app abierta, así que no suenan dos veces)
+- [x] La aplicación apunta el aparato al conceder el permiso, y también al entrar
+      si ya lo tenía concedido de antes
+- [x] Función `avisar` para el servidor: firma con VAPID, envía y limpia las
+      suscripciones muertas
+- [x] Solo la clave de servicio puede mandar avisos (si no, cualquiera del grupo
+      podría hacer sonar el móvil de los demás)
+- [ ] **Falta que Javi**: pase el SQL, despliegue la función, ponga los secretos
+      y cree el webhook sobre `notifications`
+
 ## Fase 17 · Al grupo de WhatsApp, y qué lleva cada uno ✅
 
 - [x] Botón de compartir el resumen: en el móvil abre el menú del sistema, en el
