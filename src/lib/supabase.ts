@@ -50,6 +50,14 @@ export function mensajeError(error: unknown): string {
     'Email signups are disabled': 'El registro está cerrado. Pide al administrador que te invite.',
     'For security purposes, you can only request this after 60 seconds':
       'Por seguridad, espera un minuto antes de volver a intentarlo.',
+    // Los que llegan por los enlaces de los emails de invitación y de
+    // recuperar contraseña, que es justo cuando menos ganas hay de leer inglés.
+    'Email link is invalid or has expired': 'el enlace ya se usó o ha caducado',
+    'Token has expired or is invalid': 'el enlace ya se usó o ha caducado',
+    'Invalid Refresh Token: Already Used': 'el enlace ya se usó',
+    'New password should be different from the old password':
+      'La contraseña nueva tiene que ser distinta de la anterior.',
+    'Auth session missing!': 'La sesión ha caducado. Vuelve a entrar.',
   }
   for (const [en, es] of Object.entries(traducciones)) {
     if (msg.includes(en)) return es

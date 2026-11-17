@@ -17,7 +17,7 @@ export function Acceso() {
   // Si se llegó aquí desde un enlace de email que ya no valía, hay que
   // decirlo: si no, uno se queda mirando un formulario sin saber por qué.
   const [error, setError] = useState<string | null>(
-    errorDelEnlace ? `Ese enlace ya no vale: ${errorDelEnlace}. Pide otro aquí abajo.` : null,
+    errorDelEnlace ? `No se ha podido entrar: ${errorDelEnlace}. Pide uno nuevo aquí abajo.` : null,
   )
   const [aviso, setAviso] = useState<string | null>(null)
 
