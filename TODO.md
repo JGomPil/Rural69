@@ -3,6 +3,17 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 17 · Al grupo de WhatsApp, y qué lleva cada uno ✅
+
+- [x] Botón de compartir el resumen: en el móvil abre el menú del sistema, en el
+      ordenador copia al portapapeles
+- [x] El texto se lee solo —fechas, casa, quién viene, qué falta por votar— y acaba
+      con el enlace para quien quiera el detalle
+- [x] Pestaña Equipaje: lo que va de casa y no se compra allí, con quién lo lleva
+- [x] Lo que no lleva nadie sale primero y se avisa: es lo que hay que resolver
+- [x] Sugerencias de un toque para lo de siempre (sacos, toallas, altavoz…)
+- [x] `13_equipaje.sql`, y un mensaje claro si falta por pasar
+
 ## Fase 16 · Que un invitado pueda entrar ✅
 
 - [x] Supabase devuelve la sesión de invitaciones y recuperaciones en el `#`, y ese `#`

@@ -36,6 +36,9 @@ const PESTANYAS = [
   { a: 'votacion', texto: 'Votación' },
   { a: 'menu', texto: 'Menú' },
   { a: 'compra', texto: 'Compra' },
+  // Va después de la compra a propósito: primero lo que se compra allí,
+  // luego lo que se lleva de casa.
+  { a: 'equipaje', texto: 'Equipaje' },
   { a: 'sobrantes', texto: 'Sobrantes' },
   { a: 'chat', texto: 'Chat' },
 ]

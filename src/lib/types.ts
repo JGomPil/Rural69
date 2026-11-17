@@ -227,6 +227,20 @@ export interface MessageRead {
 }
 
 /** Un fin de semana candidato, a votación. */
+/** Algo que alguien lleva de su casa: sacos, toallas, la paellera… */
+export interface TripPacking {
+  id: string
+  trip_id: string
+  name: string
+  notes: string | null
+  /** Integrante que lo lleva. Vacío = nadie se ha ofrecido todavía. */
+  member_id: string | null
+  done: boolean
+  created_by: string | null
+  sort_order: number
+  created_at: string
+}
+
 export interface TripDateOption {
   id: string
   trip_id: string

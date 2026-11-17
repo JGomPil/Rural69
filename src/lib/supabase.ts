@@ -38,6 +38,32 @@ export function esVotoDuplicado(e: unknown): boolean {
   )
 }
 
+/**
+ * Una tabla que no existe todavía porque falta pasar su archivo SQL.
+ *
+ * PostgREST contesta `PGRST205` y el nombre de la tabla, que no le dice nada
+ * a nadie. Mejor decir qué archivo falta por pasar.
+ */
+const ARCHIVOS_SQL: Record<string, string> = {
+  trip_packing: 'supabase/13_equipaje.sql',
+  dishes: 'supabase/11_menus.sql',
+  dish_items: 'supabase/11_menus.sql',
+  trip_meal_dishes: 'supabase/11_menus.sql',
+  trip_date_options: 'supabase/08_fechas.sql',
+  date_votes: 'supabase/08_fechas.sql',
+}
+
+export function faltaPasarSql(e: unknown): string | null {
+  const t = mensajeError(e)
+  if (!t.includes('PGRST205') && !t.toLowerCase().includes('could not find the table')) return null
+  for (const [tabla, archivo] of Object.entries(ARCHIVOS_SQL)) {
+    if (t.includes(tabla)) {
+      return `Esto todavía no está en la base de datos: falta pasar ${archivo} en Supabase.`
+    }
+  }
+  return null
+}
+
 export function mensajeError(error: unknown): string {
   if (!error) return 'Ha ocurrido un error inesperado.'
   const msg = typeof error === 'string' ? error : ((error as { message?: string }).message ?? '')

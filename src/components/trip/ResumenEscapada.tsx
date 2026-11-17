@@ -7,6 +7,8 @@ import { supabase } from '../../lib/supabase'
 import { AvisoError, Cargando, Dato, Etiqueta, Progreso, Tarjeta } from '../ui/Varios'
 import { Persona } from '../ui/Persona'
 import { cuentaAdultosNinos } from '../../lib/cantidades'
+import { resumenParaCompartir } from '../../lib/resumen'
+import { CompartirResumen } from './CompartirResumen'
 import { euros, numero } from '../../lib/formato'
 import type { House } from '../../lib/types'
 
@@ -47,8 +49,23 @@ export function ResumenEscapada() {
   const precioPorAdulto =
     elegida?.total_price && adultosQueVienen > 0 ? elegida.total_price / adultosQueVienen : null
 
+  const texto = resumenParaCompartir({
+    escapada,
+    participantes,
+    casaElegida: elegida ?? null,
+    casasPropuestas: datos.casas.length,
+    hanVotado: datos.votos,
+    compraTotal: datos.total,
+    compraHechos: datos.comprados,
+    enlace: window.location.href,
+  })
+
   return (
     <div className="space-y-5">
+      <div className="no-imprimir flex justify-end">
+        <CompartirResumen texto={texto} />
+      </div>
+
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Dato
           icono={<Users size={18} />}

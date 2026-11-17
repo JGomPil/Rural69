@@ -26,6 +26,7 @@ import { Menu } from './components/trip/Menu'
 import { CasasRurales } from './components/trip/CasasRurales'
 import { Votacion } from './components/trip/Votacion'
 import { ListaCompra } from './components/trip/ListaCompra'
+import { Equipaje } from './components/trip/Equipaje'
 import { Sobrantes } from './components/trip/Sobrantes'
 import { Chat } from './components/trip/Chat'
 
@@ -124,6 +125,7 @@ export function App() {
                   <Route path="votacion" element={<Votacion />} />
                   <Route path="menu" element={<Menu />} />
                   <Route path="compra" element={<ListaCompra />} />
+                  <Route path="equipaje" element={<Equipaje />} />
                   <Route path="sobrantes" element={<Sobrantes />} />
                   <Route path="chat" element={<Chat />} />
                 </Route>
