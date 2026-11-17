@@ -3,6 +3,16 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 16 · Que un invitado pueda entrar ✅
+
+- [x] Supabase devuelve la sesión de invitaciones y recuperaciones en el `#`, y ese `#`
+      es el del router: lo pisaba y la sesión se perdía en silencio
+- [x] `index.html` rescata el `#` antes de que exista React, y limpia la URL
+- [x] Pantalla de bienvenida: el invitado pone su contraseña y entra
+- [x] Vale igual para «he olvidado la contraseña», que estaba roto por lo mismo
+- [x] Sobrevive a una recarga a medio camino (`sessionStorage`)
+- [x] Si el enlace venía caducado o usado, la pantalla de acceso lo dice
+
 ## Fase 15 · La lista maestra crece con el recetario ✅
 
 - [x] El camino iba en un solo sentido: el recetario leía la maestra, pero lo escrito

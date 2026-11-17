@@ -10,6 +10,7 @@ import { Marca } from './components/layout/Logo'
 import { Boton } from './components/ui/Boton'
 import { Cargando } from './components/ui/Varios'
 import { Acceso } from './pages/Acceso'
+import { Bienvenida } from './pages/Bienvenida'
 import { Panel } from './pages/Panel'
 import { Escapadas } from './pages/Escapadas'
 import { Escapada } from './pages/Escapada'
@@ -57,11 +58,14 @@ function NoAutorizado() {
 }
 
 function Protegido() {
-  const { session, perfil, cargando, sinAutorizar } = useAuth()
+  const { session, perfil, cargando, sinAutorizar, pendienteDeContrasenya } = useAuth()
   const location = useLocation()
 
   if (cargando) return <PantallaCarga />
   if (!session) return <Navigate to="/acceso" replace state={{ desde: location.pathname }} />
+  // Llegó por un email y todavía no tiene contraseña: si le dejamos pasar de
+  // largo, la próxima vez no sabrá entrar.
+  if (pendienteDeContrasenya) return <Navigate to="/bienvenida" replace />
   if (sinAutorizar) return <NoAutorizado />
   if (!perfil) return <PantallaCarga />
 
@@ -77,11 +81,24 @@ function Protegido() {
 }
 
 function SoloInvitados() {
-  const { session, cargando, sinAutorizar } = useAuth()
+  const { session, cargando, sinAutorizar, pendienteDeContrasenya } = useAuth()
   if (cargando) return <PantallaCarga />
+  if (session && pendienteDeContrasenya) return <Navigate to="/bienvenida" replace />
   if (session && sinAutorizar) return <NoAutorizado />
   if (session) return <Navigate to="/" replace />
   return <Outlet />
+}
+
+/**
+ * La bienvenida de quien llega por un email. Va por libre: ni es pública —hace
+ * falta la sesión que trajo el enlace— ni puede colgar de `Protegido`, que es
+ * justo quien manda aquí.
+ */
+function Bienvenido() {
+  const { session, cargando } = useAuth()
+  if (cargando) return <PantallaCarga />
+  if (!session) return <Navigate to="/acceso" replace />
+  return <Bienvenida />
 }
 
 export function App() {
@@ -94,6 +111,8 @@ export function App() {
               <Route element={<SoloInvitados />}>
                 <Route path="/acceso" element={<Acceso />} />
               </Route>
+
+              <Route path="/bienvenida" element={<Bienvenido />} />
 
               <Route element={<Protegido />}>
                 <Route path="/" element={<Panel />} />

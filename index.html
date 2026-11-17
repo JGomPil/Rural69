@@ -28,6 +28,36 @@
       })()
     </script>
     <script>
+      // Supabase devuelve la sesión de las invitaciones y de «he olvidado la
+      // contraseña» en el # de la URL. Ese mismo # es el que usa el router
+      // para navegar, así que si no la rescatamos aquí —antes de que exista
+      // React— el router lo pisa con su ruta y la sesión se pierde sin una
+      // sola queja: el invitado acaba en la pantalla de acceso, pidiéndole
+      // una contraseña que nunca ha tenido.
+      ;(function () {
+        var h = window.location.hash || ''
+        if (h.indexOf('access_token=') === -1 && h.indexOf('error') === -1) return
+        var p = new URLSearchParams(h.replace(/^#\/?/, ''))
+        if (!p.get('access_token') && !p.get('error') && !p.get('error_description')) return
+        window.__rural69Entrada = {
+          access_token: p.get('access_token'),
+          refresh_token: p.get('refresh_token'),
+          tipo: p.get('type') || 'invite',
+          error: p.get('error_description') || p.get('error'),
+        }
+        // Que sobreviva a una recarga: si no, quien recargue a medio camino
+        // se queda dentro pero sin contraseña puesta.
+        try {
+          if (!window.__rural69Entrada.error) {
+            sessionStorage.setItem('rural69-entrada', window.__rural69Entrada.tipo)
+          }
+        } catch (e) {
+          /* navegación privada: sin memoria, pero el paso sigue valiendo */
+        }
+        history.replaceState(null, '', window.location.pathname + window.location.search)
+      })()
+    </script>
+    <script>
       // Chrome dispara «beforeinstallprompt» en cuanto carga la página, que
       // puede ser antes de que React monte nada. Si nadie lo escucha, se
       // pierde, y entonces la aplicación cree que no se puede instalar.

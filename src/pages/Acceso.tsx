@@ -10,11 +10,15 @@ import { mensajeError, supabaseConfigurado } from '../lib/supabase'
 // en Supabase y reparte la contraseña inicial, que luego cada cual cambia en su
 // perfil. Ni registro abierto ni enlaces mágicos.
 export function Acceso() {
-  const { entrarConPassword, recuperarPassword } = useAuth()
+  const { entrarConPassword, recuperarPassword, errorDelEnlace } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [cargando, setCargando] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  // Si se llegó aquí desde un enlace de email que ya no valía, hay que
+  // decirlo: si no, uno se queda mirando un formulario sin saber por qué.
+  const [error, setError] = useState<string | null>(
+    errorDelEnlace ? `Ese enlace ya no vale: ${errorDelEnlace}. Pide otro aquí abajo.` : null,
+  )
   const [aviso, setAviso] = useState<string | null>(null)
 
   if (!supabaseConfigurado) return <SinConfigurar />
