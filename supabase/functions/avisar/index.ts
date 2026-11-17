@@ -132,7 +132,7 @@ Deno.serve(async (peticion) => {
   // navegador que se desinstaló dejan una dirección que ya no existe, y
   // guardarla para siempre solo hace más lento cada envío.
   const muertas: string[] = []
-  let enviados = 0
+  const buenas: string[] = []
 
   await Promise.all(
     suscripciones.map(async (s) => {
@@ -142,7 +142,7 @@ Deno.serve(async (peticion) => {
           carga,
           { TTL: 60 * 60 * 12 },
         )
-        enviados++
+        buenas.push(s.id)
       } catch (e) {
         const codigo = (e as { statusCode?: number }).statusCode
         if (codigo === 404 || codigo === 410) muertas.push(s.id)
@@ -154,14 +154,17 @@ Deno.serve(async (peticion) => {
   if (muertas.length > 0) {
     await supabase.from('push_subscriptions').delete().in('id', muertas)
   }
-  if (enviados > 0) {
+  // Solo a las que de verdad salieron. Marcarlas todas porque una funcionó
+  // convierte el recibo en un adorno: deja de poder usarse para averiguar
+  // qué aparato está recibiendo y cuál no.
+  if (buenas.length > 0) {
     await supabase
       .from('push_subscriptions')
       .update({ last_ok_at: new Date().toISOString() })
-      .eq('profile_id', aviso.profile_id)
+      .in('id', buenas)
   }
 
-  return new Response(JSON.stringify({ enviados, borradas: muertas.length }), {
+  return new Response(JSON.stringify({ enviados: buenas.length, borradas: muertas.length }), {
     headers: { 'Content-Type': 'application/json' },
   })
 })

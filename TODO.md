@@ -14,8 +14,14 @@ Lo que queda son mejoras opcionales, no funcionalidades pendientes.
       suscripciones muertas
 - [x] Solo la clave de servicio puede mandar avisos (si no, cualquiera del grupo
       podría hacer sonar el móvil de los demás)
-- [ ] **Falta que Javi**: pase el SQL, despliegue la función, ponga los secretos
-      y cree el webhook sobre `notifications`
+- [x] Pasado el SQL, desplegada la función, puestos los secretos y creado el
+      webhook. Probado de punta a punta: con la aplicación cerrada, la
+      notificación llega al móvil
+- [x] Una suscripción a la vez: al activar se llamaba por dos caminos y se
+      creaban dos apuntes del mismo aparato
+- [x] El recibo (`last_ok_at`) se escribe solo en los aparatos a los que el
+      envío salió bien
+- [ ] Volver a desplegar la función con el recibo por aparato (sin prisa)
 
 ## Fase 17 · Al grupo de WhatsApp, y qué lleva cada uno ✅
 

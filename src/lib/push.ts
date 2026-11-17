@@ -33,14 +33,35 @@ export function soportaPush(): boolean {
 }
 
 /**
+ * Mientras hay una suscripción en marcha, las demás esperan a esa misma.
+ *
+ * Hace falta porque al activar los avisos se llama por dos caminos a la
+ * vez: el botón de «Activar» y la comprobación que corre al entrar. Si los
+ * dos se ponen a ello, ninguno ve llegar al otro, el navegador acaba
+ * creando dos apuntes del mismo aparato y cada aviso se manda dos veces.
+ * Pasó de verdad: dos filas en el mismo segundo, en el móvil y en el
+ * ordenador.
+ */
+let enCurso: Promise<void> | null = null
+
+/**
  * Apunta este aparato para recibir avisos con la aplicación cerrada.
  *
  * Se llama después de conceder el permiso. Si ya estaba suscrito, el
  * navegador devuelve la misma suscripción y la base de datos la actualiza
  * en vez de duplicarla, que para eso el `endpoint` es único.
  */
-export async function suscribe(profileId: string): Promise<void> {
-  if (!soportaPush()) return
+export function suscribe(profileId: string): Promise<void> {
+  if (!soportaPush()) return Promise.resolve()
+  if (!enCurso) {
+    enCurso = apunta(profileId).finally(() => {
+      enCurso = null
+    })
+  }
+  return enCurso
+}
+
+async function apunta(profileId: string): Promise<void> {
   const registro = await navigator.serviceWorker.ready
   const suscripcion =
     (await registro.pushManager.getSubscription()) ??
