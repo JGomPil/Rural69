@@ -68,9 +68,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [cargando, setCargando] = useState(true)
   const [perfilResuelto, setPerfilResuelto] = useState(false)
   const [pendiente, setPendiente] = useState<'invite' | 'recovery' | null>(() => entradaPendiente())
-  const [errorDelEnlace, setErrorDelEnlace] = useState<string | null>(
-    () => window.__rural69Entrada?.error ?? null,
-  )
+  // Lo que viene en el # lo escribe Supabase en inglés, así que pasa por el
+  // traductor como cualquier otro error.
+  const [errorDelEnlace, setErrorDelEnlace] = useState<string | null>(() => {
+    const crudo = window.__rural69Entrada?.error
+    return crudo ? mensajeError(crudo) : null
+  })
 
   const cargaPerfil = useCallback(async (userId: string, emailSesion?: string | null) => {
     const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle()
