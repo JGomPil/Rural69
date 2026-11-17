@@ -42,24 +42,52 @@ interface Aviso {
   url: string | null
 }
 
+const CLAVE_SERVICIO = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+
 /**
- * Solo la clave de servicio puede mandar avisos.
+ * Solo una clave privilegiada puede mandar avisos.
  *
- * La función exige un JWT válido, pero el de cualquier integrante también
- * lo es: sin esta comprobación, cualquiera del grupo podría hacerle sonar
- * el móvil a los demás con el texto que quisiera.
+ * Supabase ya exige que el token sea válido para este proyecto, pero el de
+ * cualquier integrante también lo es: sin esta comprobación, cualquiera del
+ * grupo podría hacerle sonar el móvil a los demás con el texto que quisiera.
+ *
+ * Una clave privilegiada puede venir de tres formas, y las tres valen:
+ *
+ *  - `sb_secret_…`, el formato nuevo. No es un JWT y no se puede abrir, pero
+ *    Supabase ya la ha dado por buena antes de llegar aquí, y solo la tiene
+ *    quien administra el proyecto. Un integrante nunca ve una de estas.
+ *  - El JWT antiguo con `role: service_role`.
+ *  - La misma clave que Supabase le pasa a esta función, sea del formato
+ *    que sea.
+ *
+ * Cuando rechaza, lo dice en el registro: sin esto, un 401 era un misterio
+ * de media tarde.
  */
 function loMandaElServidor(peticion: Request): boolean {
   const cabecera = peticion.headers.get('Authorization') ?? ''
-  const token = cabecera.replace(/^Bearer\s+/i, '')
-  const trozos = token.split('.')
-  if (trozos.length !== 3) return false
-  try {
-    const carga = JSON.parse(atob(trozos[1].replace(/-/g, '+').replace(/_/g, '/')))
-    return carga.role === 'service_role'
-  } catch {
+  const token = cabecera.replace(/^Bearer\s+/i, '').trim()
+  if (!token) {
+    console.error('Rechazado: no viene cabecera Authorization')
     return false
   }
+  if (token.startsWith('sb_secret_')) return true
+  if (CLAVE_SERVICIO && token === CLAVE_SERVICIO) return true
+
+  const trozos = token.split('.')
+  if (trozos.length === 3) {
+    try {
+      const carga = JSON.parse(atob(trozos[1].replace(/-/g, '+').replace(/_/g, '/')))
+      if (carga.role === 'service_role') return true
+      console.error('Rechazado: el token es de papel', carga.role, '— hace falta la clave de servicio')
+      return false
+    } catch {
+      console.error('Rechazado: el token parece un JWT pero no se puede leer')
+      return false
+    }
+  }
+  // Nunca el token entero en el registro: es tan secreto como una contraseña.
+  console.error('Rechazado: token de formato desconocido que empieza por', token.slice(0, 11))
+  return false
 }
 
 Deno.serve(async (peticion) => {
