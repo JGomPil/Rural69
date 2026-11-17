@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Baby,
+  ChevronRight,
   DatabaseBackup,
   HousePlus,
   KeyRound,
@@ -56,10 +58,9 @@ export function Ajustes() {
 // Mi cuenta
 // ---------------------------------------------------------------------
 function MiCuenta() {
-  const { perfil, cambiarPassword, refrescarPerfil } = useAuth()
+  const { perfil, refrescarPerfil } = useAuth()
   const avisos = useAvisos()
   const [nombre, setNombre] = useState(perfil?.display_name ?? '')
-  const [password, setPassword] = useState('')
   const [guardando, setGuardando] = useState(false)
 
   const guardarNombre = async () => {
@@ -70,23 +71,6 @@ function MiCuenta() {
       if (error) throw error
       await refrescarPerfil()
       avisos.ok('Nombre actualizado.')
-    } catch (e) {
-      avisos.error(mensajeError(e))
-    } finally {
-      setGuardando(false)
-    }
-  }
-
-  const guardarPassword = async () => {
-    if (password.length < 6) {
-      avisos.error('La contraseña debe tener al menos 6 caracteres.')
-      return
-    }
-    setGuardando(true)
-    try {
-      await cambiarPassword(password)
-      setPassword('')
-      avisos.ok('Contraseña cambiada.')
     } catch (e) {
       avisos.error(mensajeError(e))
     } finally {
@@ -105,19 +89,19 @@ function MiCuenta() {
             </Boton>
           </div>
         </Campo>
-        <Campo etiqueta="Nueva contraseña" ayuda="Mínimo 6 caracteres.">
-          <div className="flex gap-2">
-            <Entrada
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              autoComplete="new-password"
-            />
-            <Boton variante="secundario" onClick={() => void guardarPassword()} disabled={!password}>
-              <KeyRound size={16} /> Cambiar
-            </Boton>
-          </div>
+        {/* La contraseña se cambia en un solo sitio, y es el que pide la
+            actual. Aquí había un campo que la cambiaba a secas, con lo que
+            la comprobación de Mi perfil no servía de nada: bastaba con
+            venirse dos pantallas más allá. */}
+        <Campo etiqueta="Contraseña">
+          <Link
+            to="/perfil"
+            className="flex items-center gap-2 rounded-2xl border border-arena bg-beige px-3.5 py-2.5 text-sm font-semibold text-bosque-700 transition hover:bg-arena"
+          >
+            <KeyRound size={16} className="shrink-0" />
+            <span className="flex-1">Cambiarla en Mi perfil</span>
+            <ChevronRight size={16} className="shrink-0 text-carbon/30" />
+          </Link>
         </Campo>
       </Tarjeta>
     </Seccion>
