@@ -374,7 +374,7 @@ function AvisosDelGrupo() {
         <p className="text-sm text-tenue">
           Cuando alguien propone fechas o una casa, se abre una votación o ya hay fechas y casa elegidas, te
           sale en la campana de arriba. Eso funciona siempre, y tus propias acciones no te avisan a ti.
-          Aparte, este aparato puede avisarte con un toque del sistema.
+          Aparte, este aparato puede avisarte con un toque del sistema, aunque no tengas Rural69 abierta.
         </p>
 
         {permiso === 'no-soportado' ? (
@@ -395,9 +395,9 @@ function AvisosDelGrupo() {
               etiqueta="Avisarme en este aparato"
             />
             <p className="text-sm text-suave">
-              Suena mientras Rural69 esté abierta, aunque sea de fondo o con la pantalla apagada. Con la
-              aplicación cerrada del todo no puede sonar: para eso haría falta un servidor propio, y Rural69
-              no tiene ninguno a propósito (es lo que la hace gratis de mantener).
+              Suena con la pantalla apagada y también con Rural69 cerrada del todo. Los avisos se quedan
+              apuntados en este aparato: si lo cambias o borras los datos del navegador, hay que volver a
+              activarlos aquí.
             </p>
           </>
         ) : (
@@ -406,7 +406,8 @@ function AvisosDelGrupo() {
               <Bell size={16} /> Activar avisos en este aparato
             </Boton>
             <p className="text-sm text-suave">
-              El navegador te preguntará si los permites. Se elige aparato por aparato.
+              El navegador te preguntará si los permites. Se elige aparato por aparato, y sonarán aunque
+              tengas Rural69 cerrada.
             </p>
           </>
         )}
