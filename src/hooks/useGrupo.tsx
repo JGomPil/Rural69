@@ -1,5 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { mensajeError, supabase } from '../lib/supabase'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { esFalloDeRed, mensajeError, supabase } from '../lib/supabase'
+import { guarda, lee } from '../lib/almacen'
 import type { Household, Member, Profile, Trip } from '../lib/types'
 import { useAuth } from './useAuth'
 
@@ -25,6 +26,24 @@ const Contexto = createContext<ContextoGrupo | null>(null)
 
 const AJUSTES_POR_DEFECTO: Ajustes = { factorNinos: 0.5, grupoHabitual: 15 }
 
+/**
+ * El grupo entero, guardado en el aparato.
+ *
+ * Es la copia más importante de todas: sin integrantes y sin escapadas la
+ * aplicación no tiene de qué hablar, y cada pantalla diría «no encontramos
+ * esta escapada». Son cuatro listas cortas —quince personas, cinco
+ * escapadas—, así que cabe de sobra.
+ */
+const CLAVE_GRUPO = 'grupo'
+
+interface GrupoGuardado {
+  miembros: Member[]
+  hogares: Household[]
+  perfiles: Profile[]
+  escapadas: Trip[]
+  ajustes: Ajustes
+}
+
 /** Ordena: primero las próximas por fecha, luego las sin fecha, luego las pasadas. */
 function ordenaEscapadas(escapadas: Trip[]): Trip[] {
   return [...escapadas].sort((a, b) => {
@@ -49,13 +68,18 @@ function eligeActiva(escapadas: Trip[]): Trip | null {
 
 export function GrupoProvider({ children }: { children: React.ReactNode }) {
   const { perfil } = useAuth()
-  const [miembros, setMiembros] = useState<Member[]>([])
-  const [hogares, setHogares] = useState<Household[]>([])
-  const [perfiles, setPerfiles] = useState<Profile[]>([])
-  const [escapadas, setEscapadas] = useState<Trip[]>([])
-  const [ajustes, setAjustes] = useState<Ajustes>(AJUSTES_POR_DEFECTO)
-  const [cargando, setCargando] = useState(true)
+  // Lo guardado se lee antes del primer pintado: si se leyera en un efecto,
+  // la aplicación enseñaría un momento que no hay escapadas.
+  const copia = useMemo(() => lee<GrupoGuardado>(CLAVE_GRUPO)?.datos ?? null, [])
+  const [miembros, setMiembros] = useState<Member[]>(copia?.miembros ?? [])
+  const [hogares, setHogares] = useState<Household[]>(copia?.hogares ?? [])
+  const [perfiles, setPerfiles] = useState<Profile[]>(copia?.perfiles ?? [])
+  const [escapadas, setEscapadas] = useState<Trip[]>(copia?.escapadas ?? [])
+  const [ajustes, setAjustes] = useState<Ajustes>(copia?.ajustes ?? AJUSTES_POR_DEFECTO)
+  const [cargando, setCargando] = useState(!copia)
   const [error, setError] = useState<string | null>(null)
+  /** Si hay algo que enseñar, un fallo de red no es una pantalla de error. */
+  const hayAlgo = useRef(Boolean(copia))
 
   const refrescar = useCallback(async () => {
     if (!perfil) return
@@ -70,20 +94,30 @@ export function GrupoProvider({ children }: { children: React.ReactNode }) {
       const primerError = [m, h, p, t, a].find((r) => r.error)?.error
       if (primerError) throw primerError
 
-      setMiembros((m.data ?? []) as Member[])
-      setHogares((h.data ?? []) as Household[])
-      setPerfiles((p.data ?? []) as Profile[])
-      setEscapadas(ordenaEscapadas((t.data ?? []) as Trip[]))
-
       const mapa = new Map((a.data ?? []).map((row) => [row.key as string, row.value]))
-      setAjustes({
-        factorNinos: Number(mapa.get('child_factor') ?? AJUSTES_POR_DEFECTO.factorNinos),
-        grupoHabitual: Number(mapa.get('default_group_size') ?? AJUSTES_POR_DEFECTO.grupoHabitual),
-      })
+      const nuevo: GrupoGuardado = {
+        miembros: (m.data ?? []) as Member[],
+        hogares: (h.data ?? []) as Household[],
+        perfiles: (p.data ?? []) as Profile[],
+        escapadas: ordenaEscapadas((t.data ?? []) as Trip[]),
+        ajustes: {
+          factorNinos: Number(mapa.get('child_factor') ?? AJUSTES_POR_DEFECTO.factorNinos),
+          grupoHabitual: Number(mapa.get('default_group_size') ?? AJUSTES_POR_DEFECTO.grupoHabitual),
+        },
+      }
+
+      setMiembros(nuevo.miembros)
+      setHogares(nuevo.hogares)
+      setPerfiles(nuevo.perfiles)
+      setEscapadas(nuevo.escapadas)
+      setAjustes(nuevo.ajustes)
       setError(null)
+      hayAlgo.current = true
+      guarda(CLAVE_GRUPO, nuevo)
     } catch (e) {
       console.error(e)
-      setError(mensajeError(e))
+      // Sin red y con copia, la aplicación sigue funcionando con lo guardado.
+      if (!(esFalloDeRed(e) && hayAlgo.current)) setError(mensajeError(e))
     } finally {
       setCargando(false)
     }
@@ -94,7 +128,7 @@ export function GrupoProvider({ children }: { children: React.ReactNode }) {
       setCargando(false)
       return
     }
-    setCargando(true)
+    if (!hayAlgo.current) setCargando(true)
     void refrescar()
   }, [perfil, refrescar])
 

@@ -119,7 +119,7 @@ export function Escapada() {
       }
     },
     [id],
-    { realtime: ['trips', 'trip_participants'] },
+    { realtime: ['trips', 'trip_participants'], copia: `escapada:${id}` },
   )
 
   const recargar = useCallback(async () => {

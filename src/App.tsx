@@ -2,6 +2,7 @@ import { HashRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-
 import { LogOut, UserX } from 'lucide-react'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import { AvisosProvider } from './hooks/useAvisos'
+import { ConexionProvider } from './hooks/useConexion'
 import { GrupoProvider } from './hooks/useGrupo'
 import { NotificacionesProvider } from './hooks/useNotificaciones'
 import { TemaProvider } from './hooks/useTema'
@@ -60,11 +61,14 @@ function NoAutorizado() {
 }
 
 function Protegido() {
-  const { session, perfil, cargando, sinAutorizar, pendienteDeContrasenya } = useAuth()
+  const { session, perfil, cargando, sinAutorizar, pendienteDeContrasenya, sesionGuardada } = useAuth()
   const location = useLocation()
 
   if (cargando) return <PantallaCarga />
-  if (!session) return <Navigate to="/acceso" replace state={{ desde: location.pathname }} />
+  // `sesionGuardada` = sin red y con el testigo caducado. La aplicación entra
+  // igual y enseña lo que ya tenía guardado el aparato; en cuanto hay línea,
+  // Supabase renueva y esto vuelve a ser `false`.
+  if (!session && !sesionGuardada) return <Navigate to="/acceso" replace state={{ desde: location.pathname }} />
   // Llegó por un email y todavía no tiene contraseña: si le dejamos pasar de
   // largo, la próxima vez no sabrá entrar.
   if (pendienteDeContrasenya) return <Navigate to="/bienvenida" replace />
@@ -72,13 +76,15 @@ function Protegido() {
   if (!perfil) return <PantallaCarga />
 
   return (
-    <GrupoProvider>
-      <NotificacionesProvider>
-        <AppShell>
-          <Outlet />
-        </AppShell>
-      </NotificacionesProvider>
-    </GrupoProvider>
+    <ConexionProvider>
+      <GrupoProvider>
+        <NotificacionesProvider>
+          <AppShell>
+            <Outlet />
+          </AppShell>
+        </NotificacionesProvider>
+      </GrupoProvider>
+    </ConexionProvider>
   )
 }
 

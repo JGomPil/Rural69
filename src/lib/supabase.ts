@@ -65,6 +65,25 @@ export function faltaPasarSql(e: unknown): string | null {
   return null
 }
 
+/**
+ * ¿Es que no hay red, o es que el servidor ha dicho que no?
+ *
+ * La diferencia manda: sin red lo que toca es enseñar la copia guardada y
+ * apuntar el cambio para después; si el servidor ha contestado, hay que
+ * decirlo y no esconderlo detrás de un «sin conexión».
+ */
+export function esFalloDeRed(error: unknown): boolean {
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return true
+  const msg = typeof error === 'string' ? error : ((error as { message?: string })?.message ?? '')
+  return (
+    msg.includes('Failed to fetch') ||
+    msg.includes('NetworkError') ||
+    msg.includes('Load failed') ||
+    msg.includes('network') ||
+    msg.includes('fetch failed')
+  )
+}
+
 export function mensajeError(error: unknown): string {
   if (!error) return 'Ha ocurrido un error inesperado.'
   const msg = typeof error === 'string' ? error : ((error as { message?: string }).message ?? '')

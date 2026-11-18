@@ -4,7 +4,8 @@ import { useEscapada } from '../../pages/Escapada'
 import { useConsulta } from '../../hooks/useConsulta'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
-import { faltaPasarSql, mensajeError, supabase } from '../../lib/supabase'
+import { esFalloDeRed, faltaPasarSql, mensajeError, supabase } from '../../lib/supabase'
+import { encola } from '../../lib/cola'
 import { AvisoError, Cargando, Progreso, Tarjeta, Vacio } from '../ui/Varios'
 import { Boton, BotonIcono } from '../ui/Boton'
 import { Entrada, Lista } from '../ui/Campos'
@@ -39,7 +40,7 @@ export function Equipaje() {
   const [nuevo, setNuevo] = useState('')
   const [guardando, setGuardando] = useState(false)
 
-  const { datos, cargando, error, refrescar } = useConsulta(
+  const { datos, cargando, error, refrescar, setDatos } = useConsulta(
     async () => {
       const { data, error: err } = await supabase
         .from('trip_packing')
@@ -51,7 +52,7 @@ export function Equipaje() {
       return (data ?? []) as TripPacking[]
     },
     [escapada.id],
-    { realtime: ['trip_packing'] },
+    { realtime: ['trip_packing'], copia: `equipaje:${escapada.id}` },
   )
 
   const lista = useMemo(() => datos ?? [], [datos])
@@ -102,9 +103,20 @@ export function Equipaje() {
   }
 
   const cambia = async (cosa: TripPacking, parche: Partial<TripPacking>) => {
+    // Se pinta antes de preguntar: en la casa no hay línea y esperar al
+    // servidor para ver el cambio sería esperar sentado.
+    setDatos((prev) => (prev ?? []).map((c) => (c.id === cosa.id ? { ...c, ...parche } : c)))
     const { error: err } = await supabase.from('trip_packing').update(parche).eq('id', cosa.id)
-    if (err) avisos.error(mensajeError(err))
-    else await refrescar(true)
+    if (!err) {
+      await refrescar(true)
+      return
+    }
+    if (esFalloDeRed(err)) {
+      encola('trip_packing', cosa.id, parche)
+      return
+    }
+    avisos.error(mensajeError(err))
+    await refrescar(true)
   }
 
   const quita = async (cosa: TripPacking) => {

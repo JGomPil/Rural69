@@ -34,7 +34,7 @@ export function ResumenEscapada() {
       }
     },
     [escapada.id],
-    { realtime: ['houses', 'votes', 'shopping_items'] },
+    { realtime: ['houses', 'votes', 'shopping_items'], copia: `resumen:${escapada.id}` },
   )
 
   if (cargando) return <Cargando />

@@ -107,7 +107,7 @@ export function Chat() {
       return (data ?? []) as Message[]
     },
     [escapada.id],
-    { realtime: ['messages'] },
+    { realtime: ['messages'], copia: `chat:${escapada.id}` },
   )
 
   const mensajes = useMemo(() => datos ?? [], [datos])

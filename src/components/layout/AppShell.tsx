@@ -5,11 +5,13 @@ import {
   BarChart3,
   ChefHat,
   ChevronRight,
+  CloudOff,
   House,
   ListChecks,
   LogOut,
   MapPinned,
   Menu,
+  RefreshCw,
   Settings,
   ShoppingCart,
   Sparkles,
@@ -18,6 +20,7 @@ import {
 import { Marca } from './Logo'
 import { InstalarApp } from './InstalarApp'
 import { BotonAvisos } from './Avisos'
+import { useConexion } from '../../hooks/useConexion'
 import { Avatar } from '../ui/Avatar'
 import { useAuth } from '../../hooks/useAuth'
 import { useGrupo } from '../../hooks/useGrupo'
@@ -162,6 +165,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
+        <TiraSinConexion />
+
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-5 pb-28 lg:px-8 lg:pt-8 lg:pb-12">{children}</main>
 
         {/* ---------- Navegación inferior (móvil) ---------- */}
@@ -266,5 +271,40 @@ function EnlaceLateral({ enlace, activo }: { enlace: Enlace; activo: boolean }) 
       <enlace.icono size={19} />
       {enlace.texto}
     </NavLink>
+  )
+}
+
+/**
+ * La tira de arriba cuando no hay red.
+ *
+ * Sin ella, la aplicación sin cobertura parece rota: las listas salen
+ * (están guardadas en el aparato) pero no cambia nada y uno no sabe si es
+ * que no se ha guardado o es que no hay línea. Y si hay retoques esperando,
+ * decirlo es lo que permite guardar el móvil tranquilo.
+ */
+function TiraSinConexion() {
+  const { enLinea, porMandar, mandando, manda } = useConexion()
+  if (enLinea && porMandar === 0) return null
+
+  return (
+    <div
+      className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold ${
+        enLinea ? 'bg-oliva-100 text-oliva-700' : 'bg-tierra-100 text-tierra-700'
+      }`}
+    >
+      {enLinea ? <RefreshCw size={14} className={mandando ? 'animate-spin' : ''} /> : <CloudOff size={14} />}
+      <span className="flex-1">
+        {enLinea
+          ? `${porMandar} ${porMandar === 1 ? 'cambio' : 'cambios'} por mandar`
+          : porMandar > 0
+            ? `Sin conexión · ${porMandar} ${porMandar === 1 ? 'cambio guardado aquí' : 'cambios guardados aquí'}`
+            : 'Sin conexión · estás viendo lo último que se guardó'}
+      </span>
+      {enLinea && !mandando && (
+        <button type="button" onClick={() => void manda()} className="underline underline-offset-2">
+          Mandar ahora
+        </button>
+      )}
+    </div>
   )
 }

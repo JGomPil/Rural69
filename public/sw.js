@@ -23,7 +23,7 @@
 // llegan los dos, uno sustituye al otro en vez de sonar dos veces.
 // =====================================================================
 
-const VERSION = 'rural69-v3'
+const VERSION = 'rural69-v4'
 const CACHE = `${VERSION}-estatico`
 
 self.addEventListener('install', (e) => {

@@ -50,7 +50,8 @@ export function Recetario() {
       }
     },
     [],
-    { realtime: ['dishes', 'dish_items'] },
+    // Las recetas se leen en la cocina de la casa, que es donde no hay línea.
+    { realtime: ['dishes', 'dish_items'], copia: 'recetario' },
   )
 
   const porPlato = useMemo(() => {

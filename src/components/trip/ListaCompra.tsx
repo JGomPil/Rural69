@@ -23,7 +23,8 @@ import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
 import { nombreMiembro, useGrupo } from '../../hooks/useGrupo'
 import { Persona } from '../ui/Persona'
-import { mensajeError, supabase } from '../../lib/supabase'
+import { esFalloDeRed, mensajeError, supabase } from '../../lib/supabase'
+import { encola } from '../../lib/cola'
 import { cantidad, fecha, numero } from '../../lib/formato'
 import { estiloCategoria } from '../../lib/constantes'
 import { buscaEnDespensa, clave } from '../../lib/cantidades'
@@ -113,7 +114,7 @@ export function ListaCompra() {
       return (data ?? []) as ShoppingItem[]
     },
     [escapada.id],
-    { realtime: ['shopping_items'] },
+    { realtime: ['shopping_items'], copia: `compra:${escapada.id}` },
   )
 
   const { datos: tiempos, refrescar: refrescarTiempos } = useConsulta<TripMeal[]>(
@@ -128,7 +129,7 @@ export function ListaCompra() {
       return (data ?? []) as TripMeal[]
     },
     [escapada.id],
-    { realtime: ['trip_meals'] },
+    { realtime: ['trip_meals'], copia: `tiempos:${escapada.id}` },
   )
 
   const { datos: despensa, refrescar: refrescarDespensa } = useConsulta<PantryItem[]>(
@@ -138,7 +139,7 @@ export function ListaCompra() {
       return (data ?? []) as PantryItem[]
     },
     [],
-    { realtime: ['pantry_items'] },
+    { realtime: ['pantry_items'], copia: 'despensa' },
   )
 
   const lista = useMemo(() => items ?? [], [items])
@@ -164,10 +165,16 @@ export function ListaCompra() {
         .update(campos)
         .eq('id', id)
         .then(({ error: err }) => {
-          if (err) {
-            avisos.error(mensajeError(err))
-            void refrescar(true)
+          if (!err) return
+          if (esFalloDeRed(err)) {
+            // En el súper del pueblo no hay cobertura. La pantalla ya está
+            // marcada y la copia guardada también: solo falta mandarlo, y eso
+            // se hace solo al volver la línea.
+            encola('shopping_items', id, campos)
+            return
           }
+          avisos.error(mensajeError(err))
+          void refrescar(true)
         })
     }, retardo)
   }

@@ -55,7 +55,11 @@ export function Menu() {
       }
     },
     [escapada.id],
-    { realtime: ['trip_meals', 'trip_meal_dishes', 'dishes', 'dish_items', 'shopping_items'] },
+    // El menú se consulta en la cocina, donde no hay cobertura.
+    {
+      realtime: ['trip_meals', 'trip_meal_dishes', 'dishes', 'dish_items', 'shopping_items'],
+      copia: `menu:${escapada.id}`,
+    },
   )
 
   const porTiempo = useMemo(() => {

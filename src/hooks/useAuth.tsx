@@ -1,6 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { mensajeError, supabase, supabaseConfigurado } from '../lib/supabase'
+import { guarda, lee, limpia } from '../lib/almacen'
+import { vaciaCola } from '../lib/cola'
 import type { Profile } from '../lib/types'
 
 /** Lo que deja el script de `index.html` al rescatar el # de un email. */
@@ -18,6 +20,18 @@ declare global {
 }
 
 const ENTRADA = 'rural69-entrada'
+
+/**
+ * El perfil, guardado en el aparato.
+ *
+ * Sin esto, abrir la aplicación sin cobertura acaba en una de dos pantallas
+ * absurdas: «tu cuenta aún no está autorizada» —porque la consulta del
+ * perfil falla y parece que no hay fila— o la de entrar, si además el
+ * testigo de sesión ya había caducado y Supabase no ha podido renovarlo.
+ * Ninguna de las dos tiene arreglo en mitad del monte, que es justo donde
+ * pasa.
+ */
+const CLAVE_PERFIL = 'perfil'
 
 function olvidaEntrada() {
   try {
@@ -43,6 +57,8 @@ interface ContextoAuth {
   cargando: boolean
   /** Hay sesión pero la cuenta no tiene perfil en el grupo (no autorizada). */
   sinAutorizar: boolean
+  /** Sin red y con la sesión caducada: se sigue con lo guardado en el aparato. */
+  sesionGuardada: boolean
   esAdmin: boolean
   entrarConPassword: (email: string, password: string) => Promise<void>
   recuperarPassword: (email: string) => Promise<void>
@@ -70,14 +86,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [pendiente, setPendiente] = useState<'invite' | 'recovery' | null>(() => entradaPendiente())
   // Lo que viene en el # lo escribe Supabase en inglés, así que pasa por el
   // traductor como cualquier otro error.
+  // Sesión caducada y sin red para renovarla: se sigue con lo guardado.
+  const [sesionGuardada, setSesionGuardada] = useState(false)
   const [errorDelEnlace, setErrorDelEnlace] = useState<string | null>(() => {
     const crudo = window.__rural69Entrada?.error
     return crudo ? mensajeError(crudo) : null
   })
 
+  const sesionGuardadaRef = useRef(false)
+  sesionGuardadaRef.current = sesionGuardada
+
   const cargaPerfil = useCallback(async (userId: string, emailSesion?: string | null) => {
     const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle()
-    if (error) console.error('Rural69: no se ha podido cargar el perfil', error)
+    if (error) {
+      console.error('Rural69: no se ha podido cargar el perfil', error)
+      // Que no se pueda preguntar no significa que no esté autorizada.
+      const copia = lee<Profile>(CLAVE_PERFIL)
+      if (copia?.datos && copia.datos.id === userId) {
+        setPerfil(copia.datos)
+        setPerfilResuelto(true)
+        return
+      }
+    }
     let fila = (data as Profile | null) ?? null
 
     // Al cambiar el correo desde el perfil, auth lo actualiza cuando la persona
@@ -95,6 +125,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setPerfil(fila)
     setPerfilResuelto(true)
+    if (fila) guarda(CLAVE_PERFIL, fila)
   }, [])
 
   useEffect(() => {
@@ -124,6 +155,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!vivo) return
       setSession(data.session)
       if (!data.session) {
+        // Supabase no guarda la sesión caducada que no ha podido renovar, y
+        // sin red no puede renovarla. Antes que echar a la calle a quien está
+        // en el monte, se entra con lo guardado: lo que haya en el aparato se
+        // ve, y lo que se toque se queda apuntado para cuando vuelva la línea.
+        const copia = lee<Profile>(CLAVE_PERFIL)
+        if (!navigator.onLine && copia?.datos) {
+          setPerfil(copia.datos)
+          setPerfilResuelto(true)
+          setSesionGuardada(true)
+          setCargando(false)
+          return
+        }
         setCargando(false)
         // Sin sesión no hay bienvenida que dar: el enlace no sirvió.
         olvidaEntrada()
@@ -134,7 +177,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const { data: sub } = supabase.auth.onAuthStateChange((_evento, nuevaSesion) => {
       setSession(nuevaSesion)
+      if (nuevaSesion) setSesionGuardada(false)
       if (!nuevaSesion) {
+        // En modo sin red no se borra nada: lo guardado es justo lo que
+        // sostiene la pantalla.
+        if (sesionGuardadaRef.current) return
         setPerfil(null)
         setPerfilResuelto(false)
         setCargando(false)
@@ -165,6 +212,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       perfil,
       cargando,
       sinAutorizar: Boolean(session) && perfilResuelto && !perfil,
+      sesionGuardada,
       esAdmin: perfil?.role === 'admin',
 
       entrarConPassword: async (email, password) => {
@@ -208,13 +256,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await supabase.auth.signOut()
         setPerfil(null)
         setPerfilResuelto(false)
+        setSesionGuardada(false)
+        // Lo guardado en el aparato es del grupo, no del navegador: si alguien
+        // cierra sesión, no se queda ahí para el siguiente.
+        limpia()
+        vaciaCola()
       },
 
       refrescarPerfil: async () => {
         if (session?.user) await cargaPerfil(session.user.id, session.user.email)
       },
     }),
-    [session, perfil, cargando, perfilResuelto, cargaPerfil, pendiente, errorDelEnlace],
+    [session, perfil, cargando, perfilResuelto, cargaPerfil, pendiente, errorDelEnlace, sesionGuardada],
   )
 
   return <Contexto.Provider value={valor}>{children}</Contexto.Provider>
