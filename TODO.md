@@ -308,15 +308,14 @@ protocolo de DevTools, con emulación de móvil (390 × 844) en los dos temas.
       disparador, el tiempo real, el webhook, la firma VAPID y el service worker.
 - [ ] Borrar la cuenta de prueba `jgompil+prueba@gmail.com` en *Authentication → Users*.
       Mientras exista cuenta como una persona más del grupo y recibe todos los avisos.
-- [ ] Pasar `supabase/15_recordatorios.sql` en el SQL Editor. Si al final dice que falta
-      `pg_cron`, actívala en *Database → Extensions* y vuelve a pasarlo: sin eso las dos
-      primeras piezas quedan puestas pero nadie llama a la tarea.
-- [ ] Pasar `supabase/16_avisos_chat.sql`: hasta entonces el chat no avisa a nadie.
-- [ ] Pasar `supabase/17_quien_viene.sql`: hasta entonces, pulsar «Sí» o «No» en
-      *¿Quién viene?* dice que falta pasar ese archivo. El resto de la aplicación
-      aguanta sin él, entendiendo que tener fila significa venir.
-- [ ] Pasar `supabase/18_fotos_escapada.sql`: hasta entonces la pestaña *Fotos* dice
-      que falta pasarlo.
+- [x] Pasar los archivos 15, 16, 17 y 18 en el SQL Editor (18/11/2026). Comprobado uno
+      por uno: la columna `attending`, las tablas `trip_photos` y `trip_reminders`, el
+      disparador `messages_avisa`, el tipo de aviso `mensaje_chat` y la extensión
+      `pg_cron`. La tarea `rural69-recordatorios` está programada y activa a las
+      `0 8 * * *` — que es **UTC**: en invierno suena aquí a las 9:00.
+      Probado además en la aplicación desplegada: contestar «Sí» en *¿Quién viene?* pasa
+      sin queja, la pestaña *Fotos* deja subir, y un mensaje de prueba en el chat entró y
+      se borró sin romper nada.
 
 ---
 
