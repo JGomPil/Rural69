@@ -107,7 +107,7 @@ export function Escapada() {
       if (!id) return null
       const [t, p] = await Promise.all([
         supabase.from('trips').select('*').eq('id', id).maybeSingle(),
-        supabase.from('trip_participants').select('member_id').eq('trip_id', id),
+        supabase.from('trip_participants').select('member_id').eq('trip_id', id).eq('attending', true),
       ])
       if (t.error) throw t.error
       if (p.error) throw p.error

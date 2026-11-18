@@ -2,19 +2,17 @@ import { Link } from 'react-router-dom'
 import { ChevronRight, Home, NotebookPen, ShoppingCart, Trophy, Users, Vote } from 'lucide-react'
 import { useEscapada } from '../../pages/Escapada'
 import { useConsulta } from '../../hooks/useConsulta'
-import { useGrupo } from '../../hooks/useGrupo'
 import { supabase } from '../../lib/supabase'
 import { AvisoError, Cargando, Dato, Etiqueta, Progreso, Tarjeta } from '../ui/Varios'
-import { Persona } from '../ui/Persona'
 import { cuentaAdultosNinos } from '../../lib/cantidades'
 import { resumenParaCompartir } from '../../lib/resumen'
 import { CompartirResumen } from './CompartirResumen'
-import { euros, numero } from '../../lib/formato'
+import { QuienViene } from './QuienViene'
+import { euros } from '../../lib/formato'
 import type { House } from '../../lib/types'
 
 export function ResumenEscapada() {
-  const { escapada, participantes, personas } = useEscapada()
-  const { hogares } = useGrupo()
+  const { escapada, participantes } = useEscapada()
 
   const { datos, cargando, error, refrescar } = useConsulta(
     async () => {
@@ -152,36 +150,7 @@ export function ResumenEscapada() {
       )}
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <Tarjeta className="p-4">
-          <h3 className="mb-2 flex items-center gap-2 text-base text-bosque-800">
-            <Users size={17} /> Quién viene
-          </h3>
-          {participantes.length === 0 ? (
-            <p className="text-sm text-suave">
-              Nadie apuntado todavía. Edita la escapada para marcar quién viene.
-            </p>
-          ) : (
-            <>
-              <div className="flex flex-wrap gap-1.5">
-                {participantes.map((m) => (
-                  <span
-                    key={m.id}
-                    className={`inline-flex items-center gap-1.5 rounded-full py-1 pr-2.5 pl-1 text-xs font-semibold ${
-                      m.is_child ? 'bg-tierra-100 text-tierra-700' : 'bg-bosque-50 text-bosque-700'
-                    }`}
-                  >
-                    <Persona miembroId={m.id} />
-                    {m.is_child && '🧒'}
-                  </span>
-                ))}
-              </div>
-              <p className="mt-3 text-xs text-suave">
-                {numero(personas)} personas equivalentes para calcular la compra
-                {hogares.length > 0 && ` · ${new Set(participantes.map((m) => m.household_id)).size} unidades familiares`}
-              </p>
-            </>
-          )}
-        </Tarjeta>
+        <QuienViene />
 
         <Tarjeta className="p-4">
           <h3 className="mb-2 flex items-center gap-2 text-base text-bosque-800">

@@ -58,6 +58,8 @@ export interface Trip {
 export interface TripParticipant {
   trip_id: string
   member_id: string
+  /** `true` = viene, `false` = no puede. Sin fila = todavía no ha contestado. */
+  attending: boolean
 }
 
 export interface House {
@@ -271,6 +273,8 @@ export type TipoAviso =
   | 'fechas_elegidas'
   /** El que no provoca nadie: «esto es este finde». Lo manda `manda_recordatorios()`. */
   | 'recordatorio'
+  /** Alguien ha escrito en el chat. Una conversación seguida es un solo aviso. */
+  | 'mensaje_chat'
 
 /**
  * Un aviso para una persona. Los crean los disparadores de la base de datos

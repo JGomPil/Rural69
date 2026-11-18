@@ -46,7 +46,10 @@ export interface EstadoOrganizacion {
   casas: number
   hanVotadoCasa: number
   heVotadoCasa: boolean
-  participantes: number
+  /** Alguien de mi casa (yo, mi pareja, mis niños) sin contestar si viene. */
+  meFaltaContestar: boolean
+  /** Gente de fuera de mi casa que todavía no ha dicho si viene. */
+  sinContestarOtros: number
   compraTotal: number
   compraPorComprar: number
   equipajeSinDuenyo: number
@@ -167,14 +170,26 @@ export function queFalta(e: EstadoOrganizacion): Pendiente[] {
   }
 
   // ---------------- Quién viene ----------------
-  if (e.participantes === 0 && e.esAdmin) {
-    grupo.push({
-      id: 'participantes',
-      texto: 'Falta apuntar quién viene',
-      detalle: 'De ahí salen las cantidades de la compra y el precio por adulto.',
-      a: base,
-      dequien: 'admin',
-    })
+  // Solo cuando ya hay fechas: preguntar «¿vienes?» sin saber qué finde es
+  // no tiene respuesta posible.
+  if (hayFechas) {
+    if (e.meFaltaContestar) {
+      mias.push({
+        id: 'contestar',
+        texto: 'No has dicho si vienes',
+        detalle: 'De las respuestas salen las cantidades de la compra y el precio por adulto.',
+        a: base,
+        dequien: 'tuyo',
+      })
+    }
+    if (e.sinContestarOtros > 0) {
+      grupo.push({
+        id: 'sin-contestar',
+        texto: `${plural(e.sinContestarOtros, 'persona', 'personas')} sin decir si vienen`,
+        a: base,
+        dequien: 'grupo',
+      })
+    }
   }
 
   // ---------------- Compra y equipaje ----------------

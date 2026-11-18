@@ -156,6 +156,19 @@ export function Chat() {
       .then(({ error: err }) => {
         if (err) console.error('Rural69: no se ha podido marcar el chat como leído', err)
       })
+
+    // Y los avisos de este chat, que si no la campana se queda encendida
+    // mientras uno lee la conversación que la encendió.
+    void supabase
+      .from('notifications')
+      .update({ read_at: new Date().toISOString() })
+      .eq('profile_id', perfil.id)
+      .eq('trip_id', escapada.id)
+      .eq('kind', 'mensaje_chat')
+      .is('read_at', null)
+      .then(({ error: err }) => {
+        if (err) console.error('Rural69: no se han podido marcar los avisos del chat', err)
+      })
   }, [escapada.id, perfil, mensajes.length])
 
   const autor = (id: string): Profile | undefined => perfiles.find((p) => p.id === id)

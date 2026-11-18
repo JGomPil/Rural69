@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react'
-import { CalendarDays, Check, Lock, LockOpen, Plus, Trash2, Trophy } from 'lucide-react'
+import { CalendarDays, Check, Lock, LockOpen, Plus, Sparkles, Trash2, Trophy } from 'lucide-react'
 import { useEscapada } from '../../pages/Escapada'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
 import { useConsulta } from '../../hooks/useConsulta'
 import { useGrupo } from '../../hooks/useGrupo'
 import { esVotoDuplicado, mensajeError, supabase } from '../../lib/supabase'
-import { hoyISO, noches, rangoFechas } from '../../lib/formato'
+import { findeCorto, hoyISO, noches, proximosFindes, rangoFechas } from '../../lib/formato'
 import { Boton, BotonIcono } from '../ui/Boton'
 import { Campo, Entrada } from '../ui/Campos'
 import { Confirmar, Modal } from '../ui/Modal'
@@ -34,6 +34,7 @@ export function Fechas() {
   const [votando, setVotando] = useState<string | null>(null)
   const [borrando, setBorrando] = useState<TripDateOption | null>(null)
   const [enCurso, setEnCurso] = useState(false)
+  const [proponiendo, setProponiendo] = useState<string | null>(null)
 
   const { datos, cargando, error, refrescar } = useConsulta(
     async () => {
@@ -76,6 +77,40 @@ export function Fechas() {
   }, [datos, perfil?.id])
 
   const sinVotar = perfiles.filter((p) => !datos?.votos.some((v) => v.voter_id === p.id))
+
+  // Los findes que vienen, para proponer de un toque. Se calcula una vez: no
+  // depende de nada que cambie mientras se mira la pantalla.
+  const findes = useMemo(() => proximosFindes(10), [])
+  const yaPropuestos = useMemo(
+    () => new Set((datos?.opciones ?? []).map((o) => `${o.start_date}|${o.end_date}`)),
+    [datos?.opciones],
+  )
+
+  const proponFinde = async (finde: { inicio: string; fin: string }) => {
+    if (!perfil) return
+    const clave = `${finde.inicio}|${finde.fin}`
+    setProponiendo(clave)
+    try {
+      const { error: err } = await supabase.from('trip_date_options').insert({
+        trip_id: escapada.id,
+        start_date: finde.inicio,
+        end_date: finde.fin,
+        proposed_by: perfil.id,
+      })
+      if (err) throw err
+      await refrescar(true)
+      avisos.ok(`Propuesto el ${findeCorto(finde.inicio, finde.fin)}.`)
+    } catch (e) {
+      const texto = mensajeError(e)
+      avisos.error(
+        texto.includes('sin_repetir') || texto.includes('duplicate')
+          ? 'Ese finde ya estaba propuesto.'
+          : texto,
+      )
+    } finally {
+      setProponiendo(null)
+    }
+  }
 
   const votar = async (optionId: string) => {
     if (!perfil) return
@@ -206,6 +241,40 @@ export function Fechas() {
           )}
         </div>
       </Tarjeta>
+
+      {escapada.dates_voting_open && (
+        <Tarjeta className="p-4">
+          <h3 className="flex items-center gap-2 text-base text-bosque-800">
+            <Sparkles size={17} className="text-oliva-600" /> Los findes que vienen
+          </h3>
+          <p className="mt-0.5 text-xs text-suave">
+            Un toque y queda propuesto, para que no haya que escribir dos fechas en el móvil. Para un puente
+            o unas fechas sueltas, «Proponer fechas».
+          </p>
+          <div className="scroll-oculto -mx-4 mt-3 flex gap-1.5 overflow-x-auto px-4">
+            {findes.map((f) => {
+              const clave = `${f.inicio}|${f.fin}`
+              const ya = yaPropuestos.has(clave)
+              return (
+                <button
+                  key={clave}
+                  type="button"
+                  disabled={ya || proponiendo !== null}
+                  onClick={() => void proponFinde(f)}
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-2 text-sm font-bold whitespace-nowrap transition disabled:opacity-100 ${
+                    ya
+                      ? 'cursor-default border-bosque-100 bg-bosque-50 text-bosque-700'
+                      : 'border-arena bg-superficie text-tenue hover:border-bosque-400 hover:bg-beige active:scale-95 disabled:opacity-50'
+                  }`}
+                >
+                  {ya ? <Check size={14} /> : <Plus size={14} />}
+                  {findeCorto(f.inicio, f.fin)}
+                </button>
+              )
+            })}
+          </div>
+        </Tarjeta>
+      )}
 
       {!escapada.dates_voting_open && (
         <p className="rounded-2xl border border-arena bg-beige px-4 py-3 text-sm text-tenue">

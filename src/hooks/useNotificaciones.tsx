@@ -6,20 +6,19 @@ import { useAuth } from './useAuth'
 import { useConsulta } from './useConsulta'
 
 /**
- * Los avisos del grupo: alguien propone una casa, se abre una votación, ya hay
- * casa elegida.
+ * Los avisos del grupo: alguien escribe en el chat, propone una casa, se abre
+ * una votación, ya hay casa elegida.
  *
  * Dos cosas distintas, y conviene no confundirlas:
  *
  *   1. El buzón de dentro de la aplicación (la campana). Funciona siempre, en
  *      cualquier navegador, y es la fuente de la verdad: los avisos están en
  *      Supabase y llegan en tiempo real.
- *   2. El aviso del sistema operativo, el que suena. Es un extra que hay que
- *      autorizar aparato por aparato, y solo se puede lanzar mientras la
- *      aplicación está abierta (aunque esté de fondo o con la pantalla
- *      apagada). Para que avisara con la app cerrada del todo haría falta un
- *      servidor que empujara los mensajes, y Rural69 no tiene servidor
- *      propio a propósito.
+ *   2. El aviso del sistema operativo, el que suena. Hay que autorizarlo
+ *      aparato por aparato. Lo que se lanza desde aquí es solo para cuando la
+ *      aplicación está abierta; con la aplicación cerrada el aviso llega
+ *      empujado desde el servidor (ver `lib/push.ts` y la función `avisar`),
+ *      y entonces lo pinta el service worker, no esto.
  */
 
 const CLAVE_PREFERENCIA = 'rural69-avisos'

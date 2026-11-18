@@ -54,6 +54,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
         .from('trip_participants')
         .select('member_id')
         .eq('trip_id', escapada.id)
+        .eq('attending', true)
         .then(({ data }) => setParticipantes(new Set((data ?? []).map((r) => r.member_id as string))))
     } else {
       const anyo = new Date().getFullYear()
@@ -120,12 +121,19 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
       }
 
       if (id) {
-        const { error: errBorrado } = await supabase.from('trip_participants').delete().eq('trip_id', id)
-        if (errBorrado) throw errBorrado
-        if (participantes.size) {
-          const filas = [...participantes].map((member_id) => ({ trip_id: id, member_id }))
-          const { error: errIns } = await supabase.from('trip_participants').insert(filas)
-          if (errIns) throw errIns
+        // Se contesta por todo el mundo, no solo por quien viene: así no queda
+        // nadie en «todavía no ha dicho nada» después de que un administrador
+        // haya puesto la lista a mano.
+        const filas = miembros.map((m) => ({
+          trip_id: id,
+          member_id: m.id,
+          attending: participantes.has(m.id),
+        }))
+        if (filas.length) {
+          const { error: errPart } = await supabase
+            .from('trip_participants')
+            .upsert(filas, { onConflict: 'trip_id,member_id' })
+          if (errPart) throw errPart
         }
       }
 

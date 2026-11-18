@@ -92,6 +92,58 @@ export function cantidad(valor: number | null | undefined, unidad?: string | nul
   return unidad ? `${n} ${unidad}` : n
 }
 
+/** `2026-03-14` -> `14 mar` (y con el año si no es el que corre). */
+export function fechaCorta(iso: string): string {
+  const d = new Date(`${iso}T12:00:00`)
+  if (Number.isNaN(d.getTime())) return '—'
+  const mismoAnyo = d.getFullYear() === new Date().getFullYear()
+  return d.toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'short',
+    ...(mismoAnyo ? {} : { year: '2-digit' }),
+  })
+}
+
+/** Un fin de semana en corto: `20–22 nov`. */
+export function findeCorto(inicio: string, fin: string): string {
+  const a = new Date(`${inicio}T12:00:00`)
+  const b = new Date(`${fin}T12:00:00`)
+  if (Number.isNaN(a.getTime()) || Number.isNaN(b.getTime())) return '—'
+  const mismoMes = a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth()
+  return mismoMes ? `${a.getDate()}–${fechaCorta(fin)}` : `${fechaCorta(inicio)} – ${fechaCorta(fin)}`
+}
+
+/**
+ * Los fines de semana que vienen, de viernes a domingo.
+ *
+ * Existe porque proponer unas fechas obligaba a escribir dos fechas a mano
+ * en un móvil, y eso lo hace una persona del grupo, no once. Con los findes
+ * ya calculados, proponer es un toque y la votación arranca sola.
+ *
+ * El primero es el próximo viernes; si hoy es viernes, hoy. El fin de semana
+ * que ya ha empezado no se ofrece: nadie organiza una escapada para esta
+ * misma tarde.
+ */
+export function proximosFindes(cuantos = 10, desde: Date = new Date()): { inicio: string; fin: string }[] {
+  const dia = new Date(desde.getFullYear(), desde.getMonth(), desde.getDate())
+  // 5 = viernes. Lo que falta hasta el próximo (0 si hoy ya lo es).
+  const faltan = (5 - dia.getDay() + 7) % 7
+  dia.setDate(dia.getDate() + faltan)
+
+  const iso = (d: Date) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
+  const findes: { inicio: string; fin: string }[] = []
+  for (let i = 0; i < cuantos; i++) {
+    const viernes = new Date(dia)
+    viernes.setDate(dia.getDate() + i * 7)
+    const domingo = new Date(viernes)
+    domingo.setDate(viernes.getDate() + 2)
+    findes.push({ inicio: iso(viernes), fin: iso(domingo) })
+  }
+  return findes
+}
+
 export function hoyISO(): string {
   const d = new Date()
   const mes = String(d.getMonth() + 1).padStart(2, '0')

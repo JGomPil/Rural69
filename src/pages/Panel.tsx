@@ -41,7 +41,7 @@ export function Panel() {
         activa ? supabase.from('houses').select('*').eq('trip_id', activa.id) : vacio,
         activa ? supabase.from('votes').select('voter_id').eq('trip_id', activa.id) : vacio,
         activa ? supabase.from('shopping_items').select('purchased').eq('trip_id', activa.id) : vacio,
-        activa ? supabase.from('trip_participants').select('member_id').eq('trip_id', activa.id) : vacio,
+        activa ? supabase.from('trip_participants').select('member_id, attending').eq('trip_id', activa.id) : vacio,
         supabase.from('pantry_items').select('*').gt('qty', 0).order('category'),
         activa ? supabase.from('trip_date_options').select('id').eq('trip_id', activa.id) : vacio,
         activa ? supabase.from('date_votes').select('voter_id').eq('trip_id', activa.id) : vacio,
@@ -59,7 +59,11 @@ export function Panel() {
         heVotadoCasa: perfil ? quienVotoCasa.has(perfil.id) : false,
         totalCompra: items.length,
         compradosCompra: items.filter((i) => i.purchased).length,
-        idsParticipantes: (participantes.data ?? []).map((r) => (r as { member_id: string }).member_id),
+        idsParticipantes: ((participantes.data ?? []) as { member_id: string; attending: boolean }[])
+          .filter((r) => r.attending)
+          .map((r) => r.member_id),
+        // Quien ya ha contestado, venga o no: lo que falta es la gente sin fila.
+        hanContestado: ((participantes.data ?? []) as { member_id: string }[]).map((r) => r.member_id),
         despensa: (despensa.data ?? []) as PantryItem[],
         opcionesDeFecha: (opciones.data ?? []).length,
         votantesFecha: quienVotoFecha.size,
@@ -90,6 +94,16 @@ export function Panel() {
   const elegida = datos?.casas.find((c) => c.id === escapadaActiva?.chosen_house_id)
   const saludo = perfil?.display_name?.split(' ')[0] || 'amig@'
 
+  // Quién ha contestado ya si viene, y si falto yo o alguien de mi casa.
+  const activos = miembros.filter((m) => m.active)
+  const yo = miembros.find((m) => m.id === perfil?.member_id)
+  const miCasa = yo
+    ? activos.filter((m) => m.id === yo.id || (yo.household_id && m.household_id === yo.household_id))
+    : []
+  const respondidos = new Set(datos?.hanContestado ?? [])
+  const miCasaPendiente = miCasa.filter((m) => !respondidos.has(m.id)).length
+  const sinContestar = activos.filter((m) => !respondidos.has(m.id)).length
+
   // Lo que toca hacer ahora mismo, con lo tuyo primero. Las reglas están en
   // `lib/pendientes.ts`, que son muchos casos y aquí no se leerían.
   const pendientes =
@@ -104,7 +118,8 @@ export function Panel() {
           casas: datos.casas.length,
           hanVotadoCasa: datos.votos,
           heVotadoCasa: datos.heVotadoCasa,
-          participantes: datos.idsParticipantes.length,
+          meFaltaContestar: miCasaPendiente > 0,
+          sinContestarOtros: sinContestar - miCasaPendiente,
           compraTotal: datos.totalCompra,
           compraPorComprar: datos.totalCompra - datos.compradosCompra,
           equipajeSinDuenyo: datos.equipajeSinDuenyo,
