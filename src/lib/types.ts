@@ -212,6 +212,19 @@ export interface TripMealDish {
   created_at: string
 }
 
+/**
+ * Una foto hecha en la escapada. Nada que ver con `HousePhoto`, que son las
+ * de la casa candidata: aquellas sirven para decidir, estas para recordar.
+ */
+export interface TripPhoto {
+  id: string
+  trip_id: string
+  url: string
+  caption: string | null
+  uploaded_by: string | null
+  created_at: string
+}
+
 export interface Message {
   id: string
   trip_id: string

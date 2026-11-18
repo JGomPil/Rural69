@@ -28,6 +28,7 @@ import { Votacion } from './components/trip/Votacion'
 import { ListaCompra } from './components/trip/ListaCompra'
 import { Equipaje } from './components/trip/Equipaje'
 import { Sobrantes } from './components/trip/Sobrantes'
+import { Fotos } from './components/trip/Fotos'
 import { Chat } from './components/trip/Chat'
 
 function PantallaCarga() {
@@ -127,6 +128,7 @@ export function App() {
                   <Route path="compra" element={<ListaCompra />} />
                   <Route path="equipaje" element={<Equipaje />} />
                   <Route path="sobrantes" element={<Sobrantes />} />
+                  <Route path="fotos" element={<Fotos />} />
                   <Route path="chat" element={<Chat />} />
                 </Route>
                 <Route path="/lista-maestra" element={<ListaMaestra />} />

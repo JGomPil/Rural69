@@ -46,6 +46,7 @@ export function esVotoDuplicado(e: unknown): boolean {
  */
 const ARCHIVOS_SQL: Record<string, string> = {
   trip_packing: 'supabase/13_equipaje.sql',
+  trip_photos: 'supabase/18_fotos_escapada.sql',
   dishes: 'supabase/11_menus.sql',
   dish_items: 'supabase/11_menus.sql',
   trip_meal_dishes: 'supabase/11_menus.sql',

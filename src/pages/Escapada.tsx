@@ -40,6 +40,8 @@ const PESTANYAS = [
   // luego lo que se lleva de casa.
   { a: 'equipaje', texto: 'Equipaje' },
   { a: 'sobrantes', texto: 'Sobrantes' },
+  // Las de después, no las de la casa candidata.
+  { a: 'fotos', texto: 'Fotos' },
   { a: 'chat', texto: 'Chat' },
 ]
 
