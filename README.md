@@ -139,7 +139,10 @@ Scripts disponibles:
    16. `supabase/17_quien_viene.sql`
    17. `supabase/18_fotos_escapada.sql`
 
-   Todos se pueden volver a ejecutar sin miedo: no borran ni duplican nada.
+   Todos se pueden volver a ejecutar sin miedo, y en cualquier orden: no borran ni
+   duplican nada. Los que amplían la lista de tipos de aviso (el 15 y el 16) la leen
+   antes y le suman el suyo, en vez de escribirla entera: si la escribieran entera,
+   volver a pasar un archivo viejo borraría de la lista los tipos que añadió uno nuevo.
 
    El 15 programa el recordatorio de antes de la escapada con `pg_cron`. Si la extensión
    no está activada, el archivo se ejecuta igual y avisa al final: actívala en

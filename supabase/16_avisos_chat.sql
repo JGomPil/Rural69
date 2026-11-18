@@ -27,13 +27,44 @@
 -- ---------------------------------------------------------------------
 -- Un tipo de aviso más
 -- ---------------------------------------------------------------------
-do $$ begin
-  alter table public.notifications drop constraint if exists notifications_kind_check;
-  alter table public.notifications add constraint notifications_kind_check check (kind in (
-    'casa_propuesta', 'votacion_abierta', 'votacion_cerrada', 'casa_elegida',
-    'fechas_propuestas', 'votacion_fechas_abierta', 'fechas_elegidas',
-    'recordatorio', 'mensaje_chat'
-  ));
+-- La lista de tipos permitidos no se reescribe a pelo, se AMPLÍA. Escribirla
+-- entera tenía una trampa fina: cada archivo conoce los tipos que existían
+-- cuando se escribió, así que volver a pasar uno viejo borraba de la lista
+-- los que añadió uno más nuevo —y si ya había avisos de ese tipo, ni siquiera
+-- dejaba pasarlo: «check constraint is violated by some row»—.
+--
+-- Así que se parte de lo que la restricción ya permitía, se le suman los
+-- tipos de este archivo y los que haya escritos en la tabla, y se vuelve a
+-- montar con todo. De este modo los archivos se pueden pasar en cualquier
+-- orden y las veces que haga falta.
+do $$
+declare
+  v_def   text;
+  v_tipos text[];
+begin
+  select pg_get_constraintdef(c.oid) into v_def
+    from pg_constraint c
+   where c.conrelid = 'public.notifications'::regclass
+     and c.conname  = 'notifications_kind_check';
+
+  -- Lo que ya estaba permitido, sacado de la propia restricción.
+  v_tipos := coalesce(
+    (select array_agg(distinct m[1]) from regexp_matches(coalesce(v_def, ''), '''([a-z_]+)''', 'g') as m),
+    '{}'::text[]
+  );
+
+  -- Más los de este archivo.
+  v_tipos := v_tipos || array['casa_propuesta', 'votacion_abierta', 'votacion_cerrada', 'casa_elegida',
+    'fechas_propuestas', 'votacion_fechas_abierta', 'fechas_elegidas', 'recordatorio', 'mensaje_chat'];
+
+  -- Más los que ya haya escritos: si alguno se coló, que no bloquee el resto.
+  v_tipos := v_tipos || coalesce((select array_agg(distinct kind) from public.notifications), '{}'::text[]);
+
+  execute format(
+    'alter table public.notifications drop constraint if exists notifications_kind_check,'
+    ' add constraint notifications_kind_check check (kind = any (%L::text[]))',
+    (select array_agg(distinct t order by t) from unnest(v_tipos) as t)
+  );
 end $$;
 
 -- Buscar «mi aviso de chat sin leer de esta escapada» es lo único que hace
