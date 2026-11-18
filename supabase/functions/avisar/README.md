@@ -76,3 +76,12 @@ aviso se pintara en la pantalla.
 
 Las suscripciones muertas (un móvil formateado, un navegador desinstalado) se
 borran solas cuando el servicio contesta 404 o 410.
+
+## Quién más usa este camino
+
+Desde `supabase/15_recordatorios.sql`, también el recordatorio de los días
+antes de la escapada: lo crea una tarea diaria de `pg_cron` llamando a la
+misma función `notificar()`, así que entra por el webhook igual que los
+demás avisos y llega al móvil sin tocar nada de aquí. Si alguna vez dejan de
+llegar los recordatorios pero sí los avisos normales, el problema está en la
+tarea (`select * from cron.job`), no en esta función.
