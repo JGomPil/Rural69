@@ -3,7 +3,7 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
-## Fase 18 · Que suene el móvil con la aplicación cerrada 🚧
+## Fase 18 · Que suene el móvil con la aplicación cerrada ✅
 
 - [x] `14_avisos_push.sql`: dónde se guarda a qué aparatos empujar
 - [x] El service worker escucha el empujón y muestra el aviso (misma etiqueta que
@@ -21,7 +21,8 @@ Lo que queda son mejoras opcionales, no funcionalidades pendientes.
       creaban dos apuntes del mismo aparato
 - [x] El recibo (`last_ok_at`) se escribe solo en los aparatos a los que el
       envío salió bien
-- [ ] Volver a desplegar la función con el recibo por aparato (sin prisa)
+- [x] Redesplegada la función con el recibo por aparato, y comprobada después:
+      las dos suscripciones del móvil se marcaron cada una por su cuenta
 
 ## Fase 17 · Al grupo de WhatsApp, y qué lleva cada uno ✅
 
