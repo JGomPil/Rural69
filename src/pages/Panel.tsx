@@ -143,6 +143,10 @@ export function Panel() {
         />
       ) : (
         <>
+          {/* Lo primero, antes incluso de la tarjeta de la escapada: para eso
+              se abre la aplicación. */}
+          {pendientes && <QueFalta pendientes={pendientes} />}
+
           {/* ---------- Tarjeta principal ---------- */}
           <Tarjeta className="animate-sube overflow-hidden">
             <div className="relative">
@@ -263,8 +267,6 @@ export function Panel() {
               </Link>
             </div>
           </Tarjeta>
-
-          {pendientes && <QueFalta pendientes={pendientes} />}
 
           {esAdmin && (
             <div className="flex justify-center">
