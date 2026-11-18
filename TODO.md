@@ -268,14 +268,10 @@ protocolo de DevTools, con emulación de móvil (390 × 844) en los dos temas.
       pero las columnas `shopping_items.price` y `trips.shopping_cost` siguen en la
       base de datos, así que recuperarlo es solo volver a pintar la interfaz.
 - [ ] Importar la despensa desde un CSV
-- [ ] Que los avisos suenen con la aplicación **cerrada del todo**. Hoy suenan mientras está
-      abierta, aunque sea de fondo. Para lo otro hace falta Web Push: una *Edge Function* de
-      Supabase, claves VAPID y una tabla de suscripciones. Deja de ser «sin servidor propio»,
-      que es lo que hace la aplicación gratis de mantener; de ahí que se haya quedado fuera.
 
 ## Tareas manuales (solo tú puedes hacerlas)
 
-- [ ] Pasar `supabase/11_menus.sql`, que es lo que crea el recetario
+- [x] Pasar `supabase/11_menus.sql`, que es lo que crea el recetario
 - [x] Crear el proyecto en Supabase y ejecutar los scripts SQL por orden
       (comprobado el 16/11/2026: existen las tablas, columnas y funciones de los ocho)
 - [x] Crear el repositorio en GitHub, añadir los dos secretos y activar Pages
@@ -283,8 +279,11 @@ protocolo de DevTools, con emulación de móvil (390 × 844) en los dos temas.
 - [x] Crear tu cuenta de administrador
 - [ ] Invitar al resto del grupo y darles de alta en *Ajustes*: las 5 parejas, la persona
       sin pareja y los 4 niños
-- [ ] Comprobar *Site URL* y *Redirect URLs* en Supabase (no se puede ver desde fuera)
-- [ ] **Probar los avisos con dos cuentas**: que otra persona proponga unas fechas y que
-      te suene la campana. Es lo único que no se puede verificar en solitario, porque tus
-      propias acciones nunca te avisan a ti. Ejercita de golpe el disparador, la
-      restricción de tipos del 08 y el tiempo real.
+- [x] Comprobar *Site URL* y *Redirect URLs* en Supabase. El 17/11/2026 estaba en
+      `http://localhost:3000`: toda invitación habría apuntado a una página inexistente
+      en el ordenador del invitado. Corregido y probado de punta a punta
+- [x] **Probar los avisos con dos cuentas** (17/11/2026). Una cuenta de prueba propuso una
+      casa y el aviso llegó al móvil con Rural69 cerrada del todo. Ejercitó de una vez el
+      disparador, el tiempo real, el webhook, la firma VAPID y el service worker.
+- [ ] Borrar la cuenta de prueba `jgompil+prueba@gmail.com` en *Authentication → Users*.
+      Mientras exista cuenta como una persona más del grupo y recibe todos los avisos.
