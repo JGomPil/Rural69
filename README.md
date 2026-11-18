@@ -41,6 +41,11 @@ supabase/
                                se olvida (albal, vasos, sal, aceite…)
   10_voto_multiple.sql         Votar varias casas o varios findes, no solo uno
   11_menus.sql                 Recetario del grupo y menús por días
+  12_maestra_crece.sql         La lista maestra crece con el recetario
+  13_equipaje.sql              Lo que lleva cada uno de su casa
+  14_avisos_push.sql           A qué aparatos empujar los avisos
+  15_recordatorios.sql         Recordatorio automático antes de la escapada (pg_cron)
+  functions/avisar/            Edge Function que firma y manda el empujón (Web Push)
 src/
   lib/            supabase.ts, tipos, formato, cálculo de cantidades, export, subidas
   hooks/          useAuth, useGrupo, useConsulta (datos + tiempo real), useAvisos,
@@ -67,11 +72,15 @@ dish_items        Los ingredientes de cada plato
 trip_meal_dishes  Qué se cocina en cada comida de una escapada
 trip_date_options Fines de semana candidatos de una escapada
 date_votes        Qué findes le valen a cada cual
+trip_meals        Comidas y cenas de una escapada
+trip_packing      Lo que lleva cada uno de su casa (sacos, toallas, altavoz…)
 master_items      Lista maestra reutilizable (cantidad + grupo de referencia)
 shopping_items    Lista de cada escapada: necesaria / disponible / a comprar, comprado, encargado
 pantry_items      Despensa compartida: sobrantes que pasan de una escapada a la siguiente
 app_settings      Ajustes (factor de los niños, grupo de referencia)
 notifications     Avisos: una fila por persona y aviso, con su marca de leído
+push_subscriptions A qué aparatos empujar los avisos (endpoint + claves del navegador)
+trip_reminders    Qué recordatorio automático se mandó ya, para no repetirlo
 ```
 
 Las tres cantidades de la compra se guardan por separado a propósito:
@@ -119,7 +128,20 @@ Scripts disponibles:
    7. `supabase/07_notificaciones.sql`
    8. `supabase/08_fechas.sql`
 
-   Los ocho se pueden volver a ejecutar sin miedo: no borran ni duplican nada.
+   9. `supabase/10_voto_multiple.sql`
+   10. `supabase/11_menus.sql`
+   11. `supabase/12_maestra_crece.sql`
+   12. `supabase/13_equipaje.sql`
+   13. `supabase/14_avisos_push.sql`
+   14. `supabase/15_recordatorios.sql`
+
+   Todos se pueden volver a ejecutar sin miedo: no borran ni duplican nada.
+
+   El 15 programa el recordatorio de antes de la escapada con `pg_cron`. Si la extensión
+   no está activada, el archivo se ejecuta igual y avisa al final: actívala en
+   **Database → Extensions → pg_cron** y vuelve a pasarlo. Y para que ese aviso llegue
+   al móvil con la aplicación cerrada hace falta además la *Edge Function* `avisar` y su
+   webhook, que están explicados en `supabase/functions/avisar/README.md`.
 
    `09_cosas_a_recordar.sql` no es parte de la instalación: es un apaño suelto que mete en
    la compra de la escapada en marcha lo que siempre se olvida. Pásalo cuando te haga
@@ -296,8 +318,9 @@ Hay dos cosas distintas, y conviene no confundirlas:
    navegador. Los avisos están en Supabase y llegan en tiempo real: alguien propone una casa,
    se abre o se cierra una votación, ya hay casa elegida.
 2. **El aviso del sistema**, el que suena. Se autoriza aparato por aparato desde
-   *Mi perfil → Avisos*, y solo puede sonar **mientras Rural69 está abierta**, aunque sea de
-   fondo o con la pantalla apagada.
+   *Mi perfil → Avisos*, y suena **también con Rural69 cerrada del todo**: el aparato queda
+   apuntado en `push_subscriptions` y el servidor le empuja el aviso (Web Push con claves
+   VAPID). En iPhone, para eso hay que tener la aplicación instalada en la pantalla de inicio.
 
 Los avisos los crean **disparadores de la base de datos**
 (`supabase/07_notificaciones.sql`), no el navegador. Es a propósito: si los creara el móvil de
@@ -307,11 +330,19 @@ tabla `notifications` hay una fila por persona, de modo que cada cual marca como
 sin tocar lo de los demás; nadie puede insertar avisos desde el navegador (no hay política de
 `insert`) y los de más de 90 días se borran solos.
 
-**Con la aplicación cerrada del todo no puede sonar**: para eso hace falta un servidor que
-empuje los mensajes (Web Push con claves VAPID), y Rural69 no tiene servidor propio a
-propósito, que es lo que la hace gratis de mantener. Si algún día se quiere, el camino es una
-*Edge Function* de Supabase y una tabla de suscripciones; en iPhone, además, solo funciona con
-la aplicación instalada en la pantalla de inicio.
+**Con la aplicación cerrada** el camino es más largo, y sigue sin haber servidor propio:
+al insertarse el aviso, un *Database Webhook* llama a la *Edge Function* `avisar`, que firma
+el mensaje con las claves VAPID y lo entrega al servicio de empuje del navegador; el service
+worker lo recibe y lo muestra. La clave privada vive **solo** en los secretos de la función
+—este repositorio es público—, y las suscripciones que el servicio de empuje da por muertas
+(404 o 410) se borran solas. El paso a paso está en `supabase/functions/avisar/README.md`.
+
+Y hay un aviso que **no lo provoca nadie**: el recordatorio de los días antes de la escapada.
+Lo manda una tarea diaria de `pg_cron` (`supabase/15_recordatorios.sql`) a tres días y otra
+vez la víspera, y dice lo que queda por hacer —cuántas cosas del equipaje no lleva nadie,
+cuántos productos faltan por comprar—. Como lo crea con la misma función `notificar()`, viaja
+por el mismo camino que los demás y acaba en el móvil sin nada más que montar. La tabla
+`trip_reminders` es la que impide que se repita cada mañana.
 
 ---
 
@@ -382,3 +413,42 @@ propuesta, no una orden.
 
 Si el recetario está vacío, `11_menus.sql` deja cuatro platos para empezar —paella,
 lentejas, barbacoa y tortilla—, y no hace nada si ya has apuntado los tuyos.
+
+---
+
+## 12. Que se note que hay once personas
+
+Las cinco cosas de esta tanda son todas la misma idea: la aplicación ya guardaba bien los
+datos, pero callaba lo único que de verdad importa al abrirla —**qué toca hacer ahora**— y
+estorbaba justo donde más prisa hay.
+
+**Qué falta por hacer, en el panel.** Antes el panel saludaba y enseñaba cuentas: tres casas
+propuestas, dos personas han votado. Con eso no sabes si te toca algo. Ahora lo primero que se
+lee es la tarea, con su enlace: «te falta votar las fechas», «nadie ha propuesto casa
+todavía», «faltáis 6 por votar». Las reglas están en `src/lib/pendientes.ts`, aparte de la
+pantalla porque son muchos casos. Dos decisiones dentro: **lo tuyo va primero y marcado**,
+que es lo único que puedes resolver sin esperar a nadie, y **no se avisa de lo que todavía no
+toca** —nada de «nadie ha propuesto casa» antes de tener fechas, que buscar casa sin finde es
+trabajo doble—.
+
+**El recordatorio de antes de la escapada** (sección 8). El aviso que más falta hace es
+justamente el que nadie provoca.
+
+**Votar donde se mira.** El aviso de «alguien ha propuesto una casa» te dejaba en la pestaña
+*Casas*, con las fotos y el precio; para decir que te valía había que cambiar a *Votación* y
+buscar la misma casa en otra lista. Ahora cada tarjeta lleva su **«Me vale»**, y *Votación*
+se queda para lo que sirve: ver cómo va la cosa.
+
+**Modo «estoy comprando».** La lista normal está pensada para el sofá —cantidades, tiempos,
+quién se encarga, editar, duplicar— y en el pasillo del súper todo eso estorba. El botón
+*Estoy comprando* abre la misma lista a pantalla completa: por categorías (que es como se
+recorre un supermercado, no por comidas), **toda la fila es el botón** y mide lo que mide un
+dedo, lo marcado desaparece y se va a «ya en el carro», donde se puede devolver —equivocarse
+de toque pasa, y pasa con la mano llena—, y la pantalla no se apaga mientras dure, si el
+navegador deja.
+
+**Buscar en el chat y en el recetario.** Hoy son cuatro mensajes y ocho platos; a la tercera
+escapada, «lo que dijo alguien de la hora de llegada» está enterrado. El chat busca y lleva al
+mensaje, que se queda un momento resaltado para que se sepa cuál era. El recetario busca
+también **por ingrediente** —«¿en qué platos entra el pimentón?» es justo lo que se le
+pregunta a un recetario— y dice por qué sale cada plato, que si no parecería un error.

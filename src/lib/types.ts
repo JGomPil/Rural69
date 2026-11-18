@@ -269,6 +269,8 @@ export type TipoAviso =
   | 'fechas_propuestas'
   | 'votacion_fechas_abierta'
   | 'fechas_elegidas'
+  /** El que no provoca nadie: «esto es este finde». Lo manda `manda_recordatorios()`. */
+  | 'recordatorio'
 
 /**
  * Un aviso para una persona. Los crean los disparadores de la base de datos

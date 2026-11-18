@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bell, BellRing, CalendarDays, CheckCheck, House, Inbox, Trash2, Trophy, Vote } from 'lucide-react'
+import { Backpack, Bell, BellRing, CalendarDays, CheckCheck, House, Inbox, Trash2, Trophy, Vote } from 'lucide-react'
 import { Avatar } from '../ui/Avatar'
 import { Boton } from '../ui/Boton'
 import { Modal } from '../ui/Modal'
@@ -17,6 +17,7 @@ const ICONOS: Record<TipoAviso, typeof House> = {
   fechas_propuestas: CalendarDays,
   votacion_fechas_abierta: Vote,
   fechas_elegidas: CalendarDays,
+  recordatorio: Backpack,
 }
 
 const TONOS: Record<TipoAviso, string> = {
@@ -27,6 +28,7 @@ const TONOS: Record<TipoAviso, string> = {
   fechas_propuestas: 'bg-oliva-100 text-oliva-700',
   votacion_fechas_abierta: 'bg-oliva-100 text-oliva-700',
   fechas_elegidas: 'bg-tierra-100 text-tierra-700',
+  recordatorio: 'bg-tierra-100 text-tierra-700',
 }
 
 /** La campana de la cabecera, con el número de avisos sin leer. */
@@ -96,7 +98,8 @@ function PanelAvisos({ abierto, onCerrar }: { abierto: boolean; onCerrar: () => 
           <Inbox size={30} className="text-carbon/30" />
           <p className="text-sm text-suave">
             Aquí saldrá cuando alguien proponga fechas o una casa, se abra una votación o ya haya algo
-            decidido. Tus propias acciones no te avisan a ti.
+            decidido. También el recordatorio de los días antes de la escapada. Tus propias acciones no te
+            avisan a ti.
           </p>
         </div>
       ) : (

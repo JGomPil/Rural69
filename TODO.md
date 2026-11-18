@@ -3,6 +3,27 @@
 Estado: **todas las fases implementadas y funcionando contra Supabase.**
 Lo que queda son mejoras opcionales, no funcionalidades pendientes.
 
+## Fase 19 · Que se note que hay once personas ✅
+
+- [x] **Qué falta por hacer** en el panel: la tarea con su enlace, en vez de cuentas
+      (`src/lib/pendientes.ts` + `QueFalta.tsx`). Lo tuyo primero y marcado
+- [x] No se avisa de lo que todavía no toca: nada de «nadie ha propuesto casa»
+      sin fechas decididas
+- [x] **Recordatorio automático** a tres días y la víspera (`15_recordatorios.sql`):
+      tarea diaria de `pg_cron` que avisa de lo que queda por hacer. Viaja por el
+      mismo camino que los demás avisos, así que llega al móvil sin montar nada más
+- [x] `trip_reminders` impide que se repita cada mañana
+- [x] **Votar donde se mira**: «Me vale» en cada tarjeta de casa. El aviso te deja
+      en Casas y antes había que cambiar de pestaña y buscarla otra vez
+- [x] **Modo «estoy comprando»**: la lista a pantalla completa, por categorías, toda
+      la fila es el botón, lo marcado se va a «ya en el carro» y se puede devolver.
+      La pantalla no se apaga mientras dure
+- [x] **Buscar en el chat**, con salto al mensaje y un resaltado para saber cuál era
+- [x] **Buscar en el recetario**, también por ingrediente, y diciendo por qué sale
+      cada plato
+- [x] El README decía que con la aplicación cerrada no podía sonar, que dejó de ser
+      verdad en la fase 18
+
 ## Fase 18 · Que suene el móvil con la aplicación cerrada ✅
 
 - [x] `14_avisos_push.sql`: dónde se guarda a qué aparatos empujar
@@ -287,3 +308,6 @@ protocolo de DevTools, con emulación de móvil (390 × 844) en los dos temas.
       disparador, el tiempo real, el webhook, la firma VAPID y el service worker.
 - [ ] Borrar la cuenta de prueba `jgompil+prueba@gmail.com` en *Authentication → Users*.
       Mientras exista cuenta como una persona más del grupo y recibe todos los avisos.
+- [ ] Pasar `supabase/15_recordatorios.sql` en el SQL Editor. Si al final dice que falta
+      `pg_cron`, actívala en *Database → Extensions* y vuelve a pasarlo: sin eso las dos
+      primeras piezas quedan puestas pero nadie llama a la tarea.

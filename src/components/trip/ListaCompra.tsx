@@ -12,6 +12,7 @@ import {
   Printer,
   Search,
   ShoppingBasket,
+  ShoppingCart,
   Sparkles,
   Trash2,
   UtensilsCrossed,
@@ -34,6 +35,7 @@ import { Confirmar } from '../ui/Modal'
 import { AvisoError, Cargando, Etiqueta, Progreso, Tarjeta, Vacio } from '../ui/Varios'
 import { DialogoDespensa, DialogoGenerarLista, DialogoRecalcular } from './DialogosCompra'
 import { DialogoProducto } from './DialogoProducto'
+import { ModoCompra } from './ModoCompra'
 import { DialogoTiempos, emojiTiempo } from './Tiempos'
 import type { PantryItem, ShoppingItem, TripMeal } from '../../lib/types'
 
@@ -76,6 +78,9 @@ export function ListaCompra() {
   }
   const [filtroTiempo, setFiltroTiempo] = useState<FiltroTiempo>(null)
   const [gestionandoTiempos, setGestionandoTiempos] = useState(false)
+  // «Estoy comprando»: la misma lista, a pantalla completa y de un toque
+  // por producto. Ver `ModoCompra`.
+  const [comprando, setComprando] = useState(false)
   const [generandoPDF, setGenerandoPDF] = useState(false)
   const [busqueda, setBusqueda] = useState('')
   const [ocultarListas, setOcultarListas] = useState(false)
@@ -428,6 +433,9 @@ export function ListaCompra() {
       <Tarjeta className="p-4">
         <Progreso valor={comprados} total={lista.length} etiqueta="Productos marcados" />
         <div className="no-imprimir mt-3.5 flex flex-wrap gap-2">
+          <Boton tamanyo="sm" variante="acento" onClick={() => setComprando(true)}>
+            <ShoppingCart size={16} /> Estoy comprando
+          </Boton>
           <Boton tamanyo="sm" onClick={() => setAnyadiendo(true)}>
             <Plus size={16} /> Producto
           </Boton>
@@ -666,6 +674,15 @@ export function ListaCompra() {
           Vaciar la lista de esta escapada
         </button>
       </div>
+
+      {comprando && (
+        <ModoCompra
+          titulo={`${escapada.title} · ${tituloDeLoQueSeVe()}`}
+          items={enElTiempo}
+          onMarcar={(item, comprado) => guarda(item.id, { purchased: comprado })}
+          onCerrar={() => setComprando(false)}
+        />
+      )}
 
       {/* -------- Diálogos -------- */}
       <DialogoGenerarLista

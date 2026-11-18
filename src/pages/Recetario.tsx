@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ChefHat, CookingPot, Pencil, Plus, Trash2, Users } from 'lucide-react'
+import { ChefHat, CookingPot, Pencil, Plus, Search, Trash2, Users, X } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { useAvisos } from '../hooks/useAvisos'
 import { useConsulta } from '../hooks/useConsulta'
@@ -32,6 +32,9 @@ export function Recetario() {
   const [borrando, setBorrando] = useState<Dish | null>(null)
   const [enCurso, setEnCurso] = useState(false)
   const [filtro, setFiltro] = useState<TipoTiempo | 'todos'>('todos')
+  // Buscar también por ingrediente: «¿en qué platos entra el pimentón?» es
+  // justo la pregunta que uno le hace a un recetario.
+  const [busqueda, setBusqueda] = useState('')
 
   const { datos, cargando, error, refrescar } = useConsulta(
     async () => {
@@ -60,7 +63,27 @@ export function Recetario() {
     return mapa
   }, [datos])
 
-  const visibles = (datos?.platos ?? []).filter((p) => filtro === 'todos' || p.kind === filtro)
+  const texto = clave(busqueda)
+
+  const visibles = (datos?.platos ?? []).filter((p) => {
+    if (filtro !== 'todos' && p.kind !== filtro) return false
+    if (!texto) return true
+    if (clave(p.name).includes(texto)) return true
+    if (p.notes && clave(p.notes).includes(texto)) return true
+    return (porPlato.get(p.id) ?? []).some((i) => clave(i.name).includes(texto))
+  })
+
+  /**
+   * Los ingredientes por los que ha salido este plato.
+   *
+   * Hace falta decirlo: la tarjeta solo enseña los seis primeros, así que
+   * buscar «pimentón» y ver aparecer un plato sin ninguna pista de por qué
+   * parecería un error de la aplicación.
+   */
+  const porQueSale = (platoId: string, nombre: string): string[] => {
+    if (!texto || clave(nombre).includes(texto)) return []
+    return (porPlato.get(platoId) ?? []).filter((i) => clave(i.name).includes(texto)).map((i) => i.name)
+  }
 
   const borrar = async () => {
     if (!borrando) return
@@ -98,6 +121,27 @@ export function Recetario() {
         </p>
       </Seccion>
 
+      <div className="relative">
+        <Search size={17} className="absolute top-3.5 left-3.5 text-carbon/35" />
+        <Entrada
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          placeholder="Buscar un plato o un ingrediente…"
+          aria-label="Buscar en el recetario"
+          className="pl-10"
+        />
+        {busqueda && (
+          <button
+            type="button"
+            onClick={() => setBusqueda('')}
+            aria-label="Dejar de buscar"
+            className="absolute top-2.5 right-2.5 inline-flex size-7 items-center justify-center rounded-lg text-suave transition hover:bg-black/5"
+          >
+            <X size={16} />
+          </button>
+        )}
+      </div>
+
       <div className="scroll-oculto -mx-4 flex gap-1.5 overflow-x-auto px-4 lg:mx-0 lg:px-0">
         {([{ valor: 'todos', texto: 'Todos', emoji: '🍽️' }, ...TIPOS] as const).map((t) => (
           <button
@@ -116,12 +160,28 @@ export function Recetario() {
       {visibles.length === 0 ? (
         <Vacio
           emoji="🥘"
-          titulo={filtro === 'todos' ? 'El recetario está vacío' : 'Ningún plato de este tipo'}
-          texto="Apunta un plato con sus ingredientes y podrás ponerlo en la cena de cualquier escapada."
+          titulo={
+            texto
+              ? `Ningún plato con «${busqueda.trim()}»`
+              : filtro === 'todos'
+                ? 'El recetario está vacío'
+                : 'Ningún plato de este tipo'
+          }
+          texto={
+            texto
+              ? 'Se busca en el nombre, en las notas y en los ingredientes.'
+              : 'Apunta un plato con sus ingredientes y podrás ponerlo en la cena de cualquier escapada.'
+          }
           accion={
-            <Boton tamanyo="lg" onClick={() => setEditando('nuevo')}>
-              <Plus size={19} /> Apuntar el primero
-            </Boton>
+            texto ? (
+              <Boton variante="secundario" onClick={() => setBusqueda('')}>
+                Quitar la búsqueda
+              </Boton>
+            ) : (
+              <Boton tamanyo="lg" onClick={() => setEditando('nuevo')}>
+                <Plus size={19} /> Apuntar el primero
+              </Boton>
+            )
           }
         />
       ) : (
@@ -157,6 +217,12 @@ export function Recetario() {
                     · {ingredientes.length} {ingredientes.length === 1 ? 'ingrediente' : 'ingredientes'}
                   </span>
                 </p>
+
+                {porQueSale(plato.id, plato.name).length > 0 && (
+                  <p className="mt-1.5 text-xs font-semibold text-oliva-700">
+                    Lleva {porQueSale(plato.id, plato.name).join(', ')}
+                  </p>
+                )}
 
                 {plato.notes && <p className="mt-1.5 text-sm text-tenue">{plato.notes}</p>}
 

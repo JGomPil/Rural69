@@ -4,6 +4,7 @@ import {
   Bath,
   BedDouble,
   CalendarDays,
+  Check,
   Columns3,
   ExternalLink,
   LayoutGrid,
@@ -17,7 +18,7 @@ import { useEscapada } from '../../pages/Escapada'
 import { useConsulta } from '../../hooks/useConsulta'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
-import { mensajeError, supabase } from '../../lib/supabase'
+import { esVotoDuplicado, mensajeError, supabase } from '../../lib/supabase'
 import { euros, numero } from '../../lib/formato'
 import { Boton, BotonIcono } from '../ui/Boton'
 import { Confirmar } from '../ui/Modal'
@@ -37,13 +38,14 @@ export function CasasRurales() {
   const [borrando, setBorrando] = useState<House | null>(null)
   const [galeria, setGaleria] = useState<House | null>(null)
   const [enCurso, setEnCurso] = useState(false)
+  const [votando, setVotando] = useState<string | null>(null)
 
   const { datos, cargando, error, refrescar } = useConsulta(
     async () => {
       const [casas, fotos, votos] = await Promise.all([
         supabase.from('houses').select('*').eq('trip_id', escapada.id).order('created_at'),
         supabase.from('house_photos').select('*').order('sort_order'),
-        supabase.from('votes').select('house_id').eq('trip_id', escapada.id),
+        supabase.from('votes').select('id, house_id, voter_id').eq('trip_id', escapada.id),
       ])
       if (casas.error) throw casas.error
       if (fotos.error) throw fotos.error
@@ -54,6 +56,7 @@ export function CasasRurales() {
         casas: (casas.data ?? []) as House[],
         fotos: (fotos.data ?? []) as HousePhoto[],
         votos: conteo,
+        emitidos: (votos.data ?? []) as { id: string; house_id: string; voter_id: string }[],
       }
     },
     [escapada.id],
@@ -73,6 +76,50 @@ export function CasasRurales() {
     }
     return mapa
   }, [datos?.fotos])
+
+  /**
+   * Las que he votado yo: de la casa al identificador de mi voto, para poder
+   * quitarlo.
+   *
+   * Votar estaba solo en la pestaña «Votación», y eso dejaba un salto tonto:
+   * el aviso de «alguien ha propuesto una casa» te traía aquí, mirabas las
+   * fotos, y para decir que te valía había que cambiar de pestaña y buscarla
+   * otra vez en una lista distinta. Ahora se vota donde se mira.
+   */
+  const misVotos = useMemo(() => {
+    const mapa = new Map<string, string>()
+    for (const v of datos?.emitidos ?? []) if (v.voter_id === perfil?.id) mapa.set(v.house_id, v.id)
+    return mapa
+  }, [datos?.emitidos, perfil?.id])
+
+  const votar = async (casa: House) => {
+    if (!perfil) return
+    setVotando(casa.id)
+    try {
+      // Voto por aprobación: pulsar una votada la quita, pulsar otra la añade.
+      const mío = misVotos.get(casa.id)
+      if (mío) {
+        const { error: err } = await supabase.from('votes').delete().eq('id', mío)
+        if (err) throw err
+        avisos.info('Voto retirado.')
+      } else {
+        const { error: err } = await supabase
+          .from('votes')
+          .insert({ trip_id: escapada.id, house_id: casa.id, voter_id: perfil.id })
+        if (err) throw err
+        avisos.ok('¡Votada!')
+      }
+      await refrescar(true)
+    } catch (e) {
+      avisos.error(
+        esVotoDuplicado(e)
+          ? 'Todavía no se pueden votar varias: falta pasar el último cambio de la base de datos (10_voto_multiple.sql).'
+          : mensajeError(e),
+      )
+    } finally {
+      setVotando(null)
+    }
+  }
 
   const elegirCasa = async (casa: House, reservar: boolean) => {
     try {
@@ -178,29 +225,47 @@ export function CasasRurales() {
           }
         />
       ) : vista === 'tarjetas' ? (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {casas.map((casa) => (
-            <TarjetaCasa
-              key={casa.id}
-              casa={casa}
-              fotos={fotosDe[casa.id] ?? []}
-              votos={datos?.votos[casa.id] ?? 0}
-              porAdulto={porAdulto(casa)}
-              elegida={escapada.chosen_house_id === casa.id}
-              propuestaPor={casa.proposed_by}
-              puedeEditar
-              puedeBorrar={esAdmin || casa.proposed_by === perfil?.id}
-              onEditar={() => {
-                setEditando(casa)
-                setFormAbierto(true)
-              }}
-              onBorrar={() => setBorrando(casa)}
-              onGaleria={() => setGaleria(casa)}
-              onElegir={esAdmin ? () => void elegirCasa(casa, false) : undefined}
-              onReservar={esAdmin ? () => void elegirCasa(casa, true) : undefined}
-            />
-          ))}
-        </div>
+        <>
+          {escapada.voting_open && (
+            <p className="text-sm text-suave">
+              Marca <strong>«Me vale»</strong> en todas las que te sirvan, aquí mismo. En{' '}
+              <Link
+                to={`/escapadas/${escapada.id}/votacion`}
+                className="font-semibold text-bosque-600 underline underline-offset-2"
+              >
+                Votación
+              </Link>{' '}
+              se ve cómo va.
+            </p>
+          )}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {casas.map((casa) => (
+              <TarjetaCasa
+                key={casa.id}
+                casa={casa}
+                fotos={fotosDe[casa.id] ?? []}
+                votos={datos?.votos[casa.id] ?? 0}
+                porAdulto={porAdulto(casa)}
+                votacionAbierta={escapada.voting_open}
+                esMiVoto={misVotos.has(casa.id)}
+                votando={votando === casa.id}
+                onVotar={() => void votar(casa)}
+                elegida={escapada.chosen_house_id === casa.id}
+                propuestaPor={casa.proposed_by}
+                puedeEditar
+                puedeBorrar={esAdmin || casa.proposed_by === perfil?.id}
+                onEditar={() => {
+                  setEditando(casa)
+                  setFormAbierto(true)
+                }}
+                onBorrar={() => setBorrando(casa)}
+                onGaleria={() => setGaleria(casa)}
+                onElegir={esAdmin ? () => void elegirCasa(casa, false) : undefined}
+                onReservar={esAdmin ? () => void elegirCasa(casa, true) : undefined}
+              />
+            ))}
+          </div>
+        </>
       ) : (
         <Comparador
           casas={casas}
@@ -239,6 +304,10 @@ interface PropsTarjeta {
   fotos: string[]
   votos: number
   porAdulto: number | null
+  votacionAbierta: boolean
+  esMiVoto: boolean
+  votando: boolean
+  onVotar: () => void
   elegida: boolean
   propuestaPor: string | null
   puedeEditar: boolean
@@ -255,6 +324,10 @@ function TarjetaCasa({
   fotos,
   votos,
   porAdulto,
+  votacionAbierta,
+  esMiVoto,
+  votando,
+  onVotar,
   elegida,
   propuestaPor,
   puedeEditar,
@@ -274,7 +347,11 @@ function TarjetaCasa({
   ].filter(Boolean) as string[]
 
   return (
-    <Tarjeta className={`flex flex-col overflow-hidden ${elegida ? 'ring-2 ring-bosque-500' : ''}`}>
+    <Tarjeta
+      className={`flex flex-col overflow-hidden ${
+        elegida ? 'ring-2 ring-bosque-500' : esMiVoto ? 'ring-2 ring-oliva-400' : ''
+      }`}
+    >
       <button
         type="button"
         onClick={onGaleria}
@@ -384,6 +461,22 @@ function TarjetaCasa({
         )}
 
         <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-arena pt-3">
+          <Boton
+            tamanyo="sm"
+            variante={esMiVoto ? 'primario' : 'secundario'}
+            disabled={!votacionAbierta}
+            cargando={votando}
+            onClick={onVotar}
+            title={votacionAbierta ? undefined : 'La votación está cerrada'}
+          >
+            {esMiVoto ? (
+              <>
+                <Check size={15} /> Me vale
+              </>
+            ) : (
+              'Me vale'
+            )}
+          </Boton>
           {casa.url && (
             <a
               href={casa.url}

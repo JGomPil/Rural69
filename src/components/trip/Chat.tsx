@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { RefObject } from 'react'
 import { createPortal } from 'react-dom'
-import { Check, ImagePlus, Loader2, Pencil, Send, Trash2, X } from 'lucide-react'
+import { Check, ImagePlus, Loader2, Pencil, Search, Send, Trash2, X } from 'lucide-react'
 import { useEscapada } from '../../pages/Escapada'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
@@ -9,6 +9,7 @@ import { useConsulta } from '../../hooks/useConsulta'
 import { useGrupo } from '../../hooks/useGrupo'
 import { mensajeError, supabase } from '../../lib/supabase'
 import { subeFoto } from '../../lib/subidas'
+import { clave } from '../../lib/cantidades'
 import { diaDeChat, hora } from '../../lib/formato'
 import { Avatar } from '../ui/Avatar'
 import { BotonIcono } from '../ui/Boton'
@@ -82,8 +83,14 @@ export function Chat() {
   const [editando, setEditando] = useState<Message | null>(null)
   const [borrando, setBorrando] = useState<Message | null>(null)
   const [ampliada, setAmpliada] = useState<string | null>(null)
+  // Buscar en el chat. Hoy son cuatro mensajes; con tres escapadas a la
+  // espalda, «lo que dijo alguien de la hora de llegada» está enterrado.
+  const [busqueda, setBusqueda] = useState('')
+  const [resaltado, setResaltado] = useState<string | null>(null)
 
   const marco = useRef<HTMLDivElement>(null)
+  /** Cada mensaje en pantalla, para poder saltar al que se busca. */
+  const burbujas = useRef(new Map<string, HTMLDivElement>())
   const alto = useEstiraHastaAbajo(marco)
   const hilo = useRef<HTMLDivElement>(null)
   const archivo = useRef<HTMLInputElement>(null)
@@ -105,11 +112,38 @@ export function Chat() {
 
   const mensajes = useMemo(() => datos ?? [], [datos])
 
+  // Los más recientes primero: al buscar algo que se dijo, casi siempre es
+  // lo último que se dijo de eso.
+  const resultados = useMemo(() => {
+    const texto = clave(busqueda)
+    if (!texto) return []
+    return mensajes.filter((m) => m.body && clave(m.body).includes(texto)).reverse()
+  }, [mensajes, busqueda])
+
+  const buscando = busqueda.trim().length > 0
+
+  // Al pulsar un resultado se vuelve al hilo y se salta al mensaje, que se
+  // queda un momento resaltado: si no, uno aterriza en medio de la
+  // conversación sin saber cuál era.
+  const vaAlMensaje = (id: string) => {
+    setBusqueda('')
+    setResaltado(id)
+  }
+
+  useEffect(() => {
+    if (!resaltado) return
+    burbujas.current.get(resaltado)?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    const quita = setTimeout(() => setResaltado(null), 2600)
+    return () => clearTimeout(quita)
+  }, [resaltado])
+
   // Al entrar y cada vez que llega algo nuevo, bajamos del todo y marcamos leído.
   useLayoutEffect(() => {
     const caja = hilo.current
-    if (caja) caja.scrollTop = caja.scrollHeight
-  }, [mensajes.length])
+    if (!caja) return
+    // Buscando, la lista es otra cosa y empieza por arriba.
+    caja.scrollTop = buscando ? 0 : caja.scrollHeight
+  }, [mensajes.length, buscando])
 
   useEffect(() => {
     if (!perfil || mensajes.length === 0) return
@@ -214,89 +248,155 @@ export function Chat() {
       style={alto ? { height: alto } : undefined}
       className="flex h-[calc(100dvh-20rem)] min-h-80 flex-col overflow-hidden rounded-3xl border border-arena bg-beige/50"
     >
+      <label className="flex shrink-0 items-center gap-2 border-b border-arena bg-superficie/60 px-3 py-1.5">
+        <Search size={15} className="shrink-0 text-suave" />
+        <input
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          placeholder="Buscar en el chat…"
+          aria-label="Buscar en el chat"
+          className="min-w-0 flex-1 bg-transparent text-sm text-carbon outline-none placeholder:text-suave"
+        />
+        {buscando && (
+          <>
+            <span className="cifras shrink-0 text-xs font-bold text-suave">
+              {resultados.length} {resultados.length === 1 ? 'resultado' : 'resultados'}
+            </span>
+            <button
+              type="button"
+              onClick={() => setBusqueda('')}
+              aria-label="Dejar de buscar"
+              className="inline-flex size-7 shrink-0 items-center justify-center rounded-lg text-suave transition hover:bg-black/5"
+            >
+              <X size={15} />
+            </button>
+          </>
+        )}
+      </label>
+
       <div ref={hilo} className="flex-1 space-y-1 overflow-y-auto overscroll-contain px-3 py-4 sm:px-4">
-        {mensajes.length === 0 && (
+        {buscando ? (
+          resultados.length === 0 ? (
+            <p className="mx-auto mt-10 max-w-xs text-center text-sm text-suave">
+              Ningún mensaje con «{busqueda.trim()}».
+            </p>
+          ) : (
+            <ul className="space-y-1.5">
+              {resultados.map((m) => (
+                <li key={m.id}>
+                  <button
+                    type="button"
+                    onClick={() => vaAlMensaje(m.id)}
+                    className="flex w-full items-start gap-2.5 rounded-2xl bg-superficie px-3 py-2.5 text-left shadow-sm transition hover:bg-beige active:scale-[0.99]"
+                  >
+                    <Avatar src={fotoDe(m.author_id)} nombre={nombreDe(m.author_id)} tamanyo="sm" />
+                    <span className="min-w-0 flex-1">
+                      <span className="flex flex-wrap items-baseline gap-x-2">
+                        <span className="text-xs font-bold text-bosque-700">{nombreDe(m.author_id)}</span>
+                        <span className="text-[11px] text-suave">
+                          {diaDeChat(m.created_at)} · {hora(m.created_at)}
+                        </span>
+                      </span>
+                      <span className="mt-0.5 line-clamp-2 block text-sm break-words text-tenue">{m.body}</span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )
+        ) : null}
+
+        {!buscando && mensajes.length === 0 && (
           <p className="mx-auto mt-10 max-w-xs text-center text-sm text-suave">
             Aquí no hay nada todavía. Escribid lo que haga falta para esta escapada: quién lleva el coche, a
             qué hora quedáis, qué casa os gusta más…
           </p>
         )}
 
-        {mensajes.map((m, i) => {
-          const anterior = mensajes[i - 1]
-          const nuevoDia = !anterior || diaDeChat(anterior.created_at) !== diaDeChat(m.created_at)
-          const mio = m.author_id === perfil?.id
-          const seguido =
-            !nuevoDia &&
-            anterior?.author_id === m.author_id &&
-            new Date(m.created_at).getTime() - new Date(anterior.created_at).getTime() < AGRUPA_MS
+        {!buscando &&
+          mensajes.map((m, i) => {
+            const anterior = mensajes[i - 1]
+            const nuevoDia = !anterior || diaDeChat(anterior.created_at) !== diaDeChat(m.created_at)
+            const mio = m.author_id === perfil?.id
+            const seguido =
+              !nuevoDia &&
+              anterior?.author_id === m.author_id &&
+              new Date(m.created_at).getTime() - new Date(anterior.created_at).getTime() < AGRUPA_MS
 
-          return (
-            <div key={m.id}>
-              {nuevoDia && (
-                <div className="my-4 flex justify-center">
-                  <span className="rounded-full bg-superficie px-3 py-1 text-xs font-semibold text-suave shadow-sm">
-                    {diaDeChat(m.created_at)}
-                  </span>
-                </div>
-              )}
-              <div className={`group flex items-end gap-2 ${mio ? 'flex-row-reverse' : ''} ${seguido ? 'mt-0.5' : 'mt-2'}`}>
-                <span className={seguido ? 'w-9 shrink-0' : ''}>
-                  {!seguido && <Avatar src={fotoDe(m.author_id)} nombre={nombreDe(m.author_id)} tamanyo="sm" />}
-                </span>
-
-                <div
-                  className={`max-w-[min(32rem,78%)] rounded-2xl px-3 py-2 shadow-sm ${
-                    mio ? 'bg-bosque-600 text-tinta-fuerte' : 'bg-superficie text-carbon'
-                  } ${seguido ? (mio ? 'rounded-tr-md' : 'rounded-tl-md') : ''}`}
-                >
-                  {!seguido && !mio && (
-                    <p className="mb-0.5 text-xs font-bold text-bosque-700">{nombreDe(m.author_id)}</p>
-                  )}
-                  {m.image_url && (
-                    <button
-                      type="button"
-                      onClick={() => setAmpliada(m.image_url)}
-                      className="mb-1 block overflow-hidden rounded-xl"
-                    >
-                      <img
-                        src={m.image_url}
-                        alt="Foto enviada al chat"
-                        className="max-h-72 w-full object-cover"
-                        loading="lazy"
-                      />
-                    </button>
-                  )}
-                  {m.body && <p className="text-sm whitespace-pre-wrap break-words">{m.body}</p>}
-                  <p className={`mt-0.5 text-right text-[11px] ${mio ? 'text-tinta-fuerte/60' : 'text-suave'}`}>
-                    {m.edited_at && 'editado · '}
-                    {hora(m.created_at)}
-                  </p>
-                </div>
-
-                {(mio || esAdmin) && (
-                  <span className="flex shrink-0 opacity-0 transition group-hover:opacity-100 focus-within:opacity-100">
-                    {mio && (
-                      <BotonIcono
-                        etiqueta="Editar mensaje"
-                        onClick={() => {
-                          setEditando(m)
-                          setTexto(m.body)
-                          caja.current?.focus()
-                        }}
-                      >
-                        <Pencil size={14} />
-                      </BotonIcono>
-                    )}
-                    <BotonIcono etiqueta="Borrar mensaje" tono="peligro" onClick={() => setBorrando(m)}>
-                      <Trash2 size={14} />
-                    </BotonIcono>
-                  </span>
+            return (
+              <div
+                key={m.id}
+                ref={(el) => {
+                  if (el) burbujas.current.set(m.id, el)
+                  else burbujas.current.delete(m.id)
+                }}
+              >
+                {nuevoDia && (
+                  <div className="my-4 flex justify-center">
+                    <span className="rounded-full bg-superficie px-3 py-1 text-xs font-semibold text-suave shadow-sm">
+                      {diaDeChat(m.created_at)}
+                    </span>
+                  </div>
                 )}
+                <div className={`group flex items-end gap-2 ${mio ? 'flex-row-reverse' : ''} ${seguido ? 'mt-0.5' : 'mt-2'}`}>
+                  <span className={seguido ? 'w-9 shrink-0' : ''}>
+                    {!seguido && <Avatar src={fotoDe(m.author_id)} nombre={nombreDe(m.author_id)} tamanyo="sm" />}
+                  </span>
+
+                  <div
+                    className={`max-w-[min(32rem,78%)] rounded-2xl px-3 py-2 shadow-sm transition ${
+                      mio ? 'bg-bosque-600 text-tinta-fuerte' : 'bg-superficie text-carbon'
+                    } ${seguido ? (mio ? 'rounded-tr-md' : 'rounded-tl-md') : ''} ${
+                      resaltado === m.id ? 'ring-2 ring-tierra-500' : ''
+                    }`}
+                  >
+                    {!seguido && !mio && (
+                      <p className="mb-0.5 text-xs font-bold text-bosque-700">{nombreDe(m.author_id)}</p>
+                    )}
+                    {m.image_url && (
+                      <button
+                        type="button"
+                        onClick={() => setAmpliada(m.image_url)}
+                        className="mb-1 block overflow-hidden rounded-xl"
+                      >
+                        <img
+                          src={m.image_url}
+                          alt="Foto enviada al chat"
+                          className="max-h-72 w-full object-cover"
+                          loading="lazy"
+                        />
+                      </button>
+                    )}
+                    {m.body && <p className="text-sm whitespace-pre-wrap break-words">{m.body}</p>}
+                    <p className={`mt-0.5 text-right text-[11px] ${mio ? 'text-tinta-fuerte/60' : 'text-suave'}`}>
+                      {m.edited_at && 'editado · '}
+                      {hora(m.created_at)}
+                    </p>
+                  </div>
+
+                  {(mio || esAdmin) && (
+                    <span className="flex shrink-0 opacity-0 transition group-hover:opacity-100 focus-within:opacity-100">
+                      {mio && (
+                        <BotonIcono
+                          etiqueta="Editar mensaje"
+                          onClick={() => {
+                            setEditando(m)
+                            setTexto(m.body)
+                            caja.current?.focus()
+                          }}
+                        >
+                          <Pencil size={14} />
+                        </BotonIcono>
+                      )}
+                      <BotonIcono etiqueta="Borrar mensaje" tono="peligro" onClick={() => setBorrando(m)}>
+                        <Trash2 size={14} />
+                      </BotonIcono>
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
       </div>
 
       <form onSubmit={enviar} className="safe-bottom border-t border-arena bg-superficie/80 p-2.5 [--relleno-inferior:0.625rem]">

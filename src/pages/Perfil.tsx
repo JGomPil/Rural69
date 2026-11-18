@@ -373,7 +373,8 @@ function AvisosDelGrupo() {
       <Tarjeta className="space-y-4 p-5">
         <p className="text-sm text-tenue">
           Cuando alguien propone fechas o una casa, se abre una votación o ya hay fechas y casa elegidas, te
-          sale en la campana de arriba. Eso funciona siempre, y tus propias acciones no te avisan a ti.
+          sale en la campana de arriba. Y tres días antes de la escapada, y la víspera, llega un recordatorio
+          con lo que queda por hacer. Eso funciona siempre, y tus propias acciones no te avisan a ti.
           Aparte, este aparato puede avisarte con un toque del sistema, aunque no tengas Rural69 abierta.
         </p>
 

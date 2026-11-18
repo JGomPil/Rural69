@@ -20,48 +20,66 @@ import { supabase } from '../lib/supabase'
 import { cuentaAtras, euros, numero, rangoFechas } from '../lib/formato'
 import { personasEquivalentes } from '../lib/cantidades'
 import { estiloCategoria } from '../lib/constantes'
+import { queFalta } from '../lib/pendientes'
 import { Boton } from '../components/ui/Boton'
 import { AvisoError, Cargando, Etiqueta, EtiquetaEstado, Progreso, Seccion, Tarjeta, Vacio } from '../components/ui/Varios'
 import { InstalarApp } from '../components/layout/InstalarApp'
 import { FormularioEscapada } from '../components/trip/FormularioEscapada'
+import { QueFalta } from '../components/trip/QueFalta'
 import type { House, PantryItem, Trip } from '../lib/types'
 
 export function Panel() {
   const { perfil, esAdmin } = useAuth()
-  const { escapadas, escapadaActiva, miembros, cargando, error, refrescar } = useGrupo()
+  const { escapadas, escapadaActiva, miembros, perfiles, cargando, error, refrescar } = useGrupo()
   const [formAbierto, setFormAbierto] = useState(false)
 
   const { datos } = useConsulta(
     async () => {
       const activa = escapadaActiva
-      const [casas, votos, compra, participantes, despensa] = await Promise.all([
-        activa
-          ? supabase.from('houses').select('*').eq('trip_id', activa.id)
-          : Promise.resolve({ data: [], error: null }),
-        activa
-          ? supabase.from('votes').select('voter_id').eq('trip_id', activa.id)
-          : Promise.resolve({ data: [], error: null }),
-        activa
-          ? supabase.from('shopping_items').select('purchased').eq('trip_id', activa.id)
-          : Promise.resolve({ data: [], error: null }),
-        activa
-          ? supabase.from('trip_participants').select('member_id').eq('trip_id', activa.id)
-          : Promise.resolve({ data: [], error: null }),
+      const vacio = Promise.resolve({ data: [] as Record<string, never>[], error: null })
+      const [casas, votos, compra, participantes, despensa, opciones, votosFecha, equipaje] = await Promise.all([
+        activa ? supabase.from('houses').select('*').eq('trip_id', activa.id) : vacio,
+        activa ? supabase.from('votes').select('voter_id').eq('trip_id', activa.id) : vacio,
+        activa ? supabase.from('shopping_items').select('purchased').eq('trip_id', activa.id) : vacio,
+        activa ? supabase.from('trip_participants').select('member_id').eq('trip_id', activa.id) : vacio,
         supabase.from('pantry_items').select('*').gt('qty', 0).order('category'),
+        activa ? supabase.from('trip_date_options').select('id').eq('trip_id', activa.id) : vacio,
+        activa ? supabase.from('date_votes').select('voter_id').eq('trip_id', activa.id) : vacio,
+        activa ? supabase.from('trip_packing').select('member_id').eq('trip_id', activa.id) : vacio,
       ])
       const items = (compra.data ?? []) as { purchased: boolean }[]
+      // Quién ha votado, no cuántos votos: con voto por aprobación una
+      // persona vota varias casas y el número de votos no dice nada.
+      const quienVotoCasa = new Set(((votos.data ?? []) as { voter_id: string }[]).map((v) => v.voter_id))
+      const quienVotoFecha = new Set(((votosFecha.data ?? []) as { voter_id: string }[]).map((v) => v.voter_id))
+      const cosas = (equipaje.data ?? []) as { member_id: string | null }[]
       return {
         casas: (casas.data ?? []) as House[],
-        // Gente que ha votado, no votos sueltos: se puede votar varias casas.
-        votos: new Set((votos.data ?? []).map((v) => (v as { voter_id: string }).voter_id)).size,
+        votos: quienVotoCasa.size,
+        heVotadoCasa: perfil ? quienVotoCasa.has(perfil.id) : false,
         totalCompra: items.length,
         compradosCompra: items.filter((i) => i.purchased).length,
         idsParticipantes: (participantes.data ?? []).map((r) => (r as { member_id: string }).member_id),
         despensa: (despensa.data ?? []) as PantryItem[],
+        opcionesDeFecha: (opciones.data ?? []).length,
+        votantesFecha: quienVotoFecha.size,
+        heVotadoFechas: perfil ? quienVotoFecha.has(perfil.id) : false,
+        equipajeSinDuenyo: cosas.filter((c) => !c.member_id).length,
       }
     },
-    [escapadaActiva?.id],
-    { realtime: ['houses', 'votes', 'shopping_items', 'trip_participants', 'pantry_items'] },
+    [escapadaActiva?.id, perfil?.id],
+    {
+      realtime: [
+        'houses',
+        'votes',
+        'shopping_items',
+        'trip_participants',
+        'pantry_items',
+        'trip_date_options',
+        'date_votes',
+        'trip_packing',
+      ],
+    },
   )
 
   if (cargando) return <Cargando texto="Cargando el panel…" />
@@ -71,6 +89,27 @@ export function Panel() {
   const anteriores = escapadas.filter((t) => t.id !== escapadaActiva?.id).slice(0, 3)
   const elegida = datos?.casas.find((c) => c.id === escapadaActiva?.chosen_house_id)
   const saludo = perfil?.display_name?.split(' ')[0] || 'amig@'
+
+  // Lo que toca hacer ahora mismo, con lo tuyo primero. Las reglas están en
+  // `lib/pendientes.ts`, que son muchos casos y aquí no se leerían.
+  const pendientes =
+    escapadaActiva && datos
+      ? queFalta({
+          escapada: escapadaActiva,
+          esAdmin,
+          conCuenta: perfiles.length,
+          opcionesDeFecha: datos.opcionesDeFecha,
+          hanVotadoFechas: datos.votantesFecha,
+          heVotadoFechas: datos.heVotadoFechas,
+          casas: datos.casas.length,
+          hanVotadoCasa: datos.votos,
+          heVotadoCasa: datos.heVotadoCasa,
+          participantes: datos.idsParticipantes.length,
+          compraTotal: datos.totalCompra,
+          compraPorComprar: datos.totalCompra - datos.compradosCompra,
+          equipajeSinDuenyo: datos.equipajeSinDuenyo,
+        })
+      : null
 
   return (
     <div className="space-y-7">
@@ -224,6 +263,8 @@ export function Panel() {
               </Link>
             </div>
           </Tarjeta>
+
+          {pendientes && <QueFalta pendientes={pendientes} />}
 
           {esAdmin && (
             <div className="flex justify-center">
