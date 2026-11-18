@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import type { RefObject } from 'react'
 import { createPortal } from 'react-dom'
 import { Check, ImagePlus, Loader2, Pencil, Send, Trash2, X } from 'lucide-react'
 import { useEscapada } from '../../pages/Escapada'
@@ -18,6 +19,57 @@ import type { Message, Profile } from '../../lib/types'
 /** Dos mensajes seguidos de la misma persona en menos de 5 min van juntos. */
 const AGRUPA_MS = 5 * 60 * 1000
 
+/**
+ * Estira un bloque desde donde empieza hasta el fondo de la pantalla.
+ *
+ * El chat necesita saber cuánto alto le queda, y eso no se puede escribir a
+ * mano: lo que lleva encima —el título de la escapada y la tira de pestañas—
+ * mide una cosa en el ordenador y otra bien distinta en un móvil, donde las
+ * pestañas se parten en dos filas. Con un número fijo, el campo de escribir
+ * acababa por debajo del borde, tapado por la barra de navegación.
+ *
+ * Dos detalles que importan:
+ *
+ *  - Se mide desde el documento (sumando el scroll), no desde la pantalla.
+ *    Si se midiera desde la pantalla, el alto dependería de por dónde va el
+ *    scroll y cambiaría al aplicarlo, persiguiéndose a sí mismo.
+ *  - Se usa `visualViewport` cuando existe, que es el único que encoge al
+ *    abrirse el teclado del móvil. Así el chat se recoge y el campo sigue
+ *    viéndose mientras escribes.
+ */
+function useEstiraHastaAbajo(ref: RefObject<HTMLElement | null>, minimo = 260) {
+  const [alto, setAlto] = useState<number | null>(null)
+
+  useEffect(() => {
+    const medir = () => {
+      const el = ref.current
+      if (!el) return
+      const vista = window.visualViewport?.height ?? window.innerHeight
+      const arriba = el.getBoundingClientRect().top + window.scrollY
+      // La barra de abajo flota por encima del contenido, así que su alto no
+      // cuenta como sitio libre. En el ordenador no existe y no estorba.
+      const barra = document.querySelector('nav.safe-bottom')
+      const estorbo =
+        barra && getComputedStyle(barra).display !== 'none' ? barra.getBoundingClientRect().height : 0
+      setAlto(Math.max(minimo, Math.round(vista - arriba - estorbo - 12)))
+    }
+
+    medir()
+    // Una segunda pasada: al entrar, lo de arriba puede estar aún colocándose
+    // (las fotos de los avatares, una fila de pestañas que se parte).
+    const otra = setTimeout(medir, 350)
+    window.addEventListener('resize', medir)
+    window.visualViewport?.addEventListener('resize', medir)
+    return () => {
+      clearTimeout(otra)
+      window.removeEventListener('resize', medir)
+      window.visualViewport?.removeEventListener('resize', medir)
+    }
+  }, [ref, minimo])
+
+  return alto
+}
+
 export function Chat() {
   const { escapada } = useEscapada()
   const { perfil, esAdmin } = useAuth()
@@ -31,6 +83,8 @@ export function Chat() {
   const [borrando, setBorrando] = useState<Message | null>(null)
   const [ampliada, setAmpliada] = useState<string | null>(null)
 
+  const marco = useRef<HTMLDivElement>(null)
+  const alto = useEstiraHastaAbajo(marco)
   const hilo = useRef<HTMLDivElement>(null)
   const archivo = useRef<HTMLInputElement>(null)
   const caja = useRef<HTMLTextAreaElement>(null)
@@ -155,7 +209,11 @@ export function Chat() {
   if (error) return <AvisoError texto={error} onReintentar={() => void refrescar()} />
 
   return (
-    <div className="flex h-[calc(100dvh-20rem)] min-h-96 flex-col overflow-hidden rounded-3xl border border-arena bg-beige/50">
+    <div
+      ref={marco}
+      style={alto ? { height: alto } : undefined}
+      className="flex h-[calc(100dvh-20rem)] min-h-80 flex-col overflow-hidden rounded-3xl border border-arena bg-beige/50"
+    >
       <div ref={hilo} className="flex-1 space-y-1 overflow-y-auto overscroll-contain px-3 py-4 sm:px-4">
         {mensajes.length === 0 && (
           <p className="mx-auto mt-10 max-w-xs text-center text-sm text-suave">
