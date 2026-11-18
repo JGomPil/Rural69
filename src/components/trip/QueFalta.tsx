@@ -44,12 +44,12 @@ export function QueFalta({ pendientes }: { pendientes: Pendiente[] }) {
           <li key={p.id}>
             <Link
               to={p.a}
-              className={`flex items-center gap-3 px-4 py-3 transition hover:bg-beige/60 ${
+              className={`flex items-start gap-3 px-4 py-3 transition hover:bg-beige/60 ${
                 p.dequien === 'tuyo' ? 'bg-tierra-100/60' : ''
               }`}
             >
               <span
-                className={`mt-0.5 size-2.5 shrink-0 rounded-full ${
+                className={`mt-1.5 size-2.5 shrink-0 rounded-full ${
                   p.dequien === 'tuyo' ? 'bg-tierra-600' : p.dequien === 'admin' ? 'bg-oliva-400' : 'bg-bosque-400'
                 }`}
                 aria-hidden
@@ -64,7 +64,7 @@ export function QueFalta({ pendientes }: { pendientes: Pendiente[] }) {
                 </span>
                 {p.detalle && <span className="mt-0.5 block text-xs leading-snug text-suave">{p.detalle}</span>}
               </span>
-              <ArrowRight size={16} className="shrink-0 text-carbon/30" />
+              <ArrowRight size={16} className="mt-0.5 shrink-0 text-carbon/30" />
             </Link>
           </li>
         ))}
