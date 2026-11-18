@@ -311,3 +311,46 @@ protocolo de DevTools, con emulación de móvil (390 × 844) en los dos temas.
 - [ ] Pasar `supabase/15_recordatorios.sql` en el SQL Editor. Si al final dice que falta
       `pg_cron`, actívala en *Database → Extensions* y vuelve a pasarlo: sin eso las dos
       primeras piezas quedan puestas pero nadie llama a la tarea.
+- [ ] Pasar `supabase/16_avisos_chat.sql`: hasta entonces el chat no avisa a nadie.
+- [ ] Pasar `supabase/17_quien_viene.sql`: hasta entonces, pulsar «Sí» o «No» en
+      *¿Quién viene?* dice que falta pasar ese archivo. El resto de la aplicación
+      aguanta sin él, entendiendo que tener fila significa venir.
+- [ ] Pasar `supabase/18_fotos_escapada.sql`: hasta entonces la pestaña *Fotos* dice
+      que falta pasarlo.
+
+---
+
+## Fase 20 · Que la aplicación se use en el monte, no solo antes de ir
+
+Cinco cosas de las que salieron al revisar la fase 19. La sexta —organizar los
+coches— se dejó fuera a propósito.
+
+- [x] **El chat avisa.** Hasta ahora escribir en el chat no le llegaba a nadie: la
+      insignia solo se veía si ya estabas dentro. Ahora avisa como lo demás, pero
+      con freno: los mensajes seguidos de una misma conversación actualizan el
+      aviso en vez de crear otro, así que una charla de veinte mensajes vibra una
+      vez y luego dice «8 mensajes sin leer». La cuenta es la misma que la de la
+      pestaña, para que no digan cosas distintas. (`supabase/16_avisos_chat.sql`)
+- [x] **Los findes que vienen, de un toque.** Proponer un fin de semana eran dos
+      fechas escritas a mano en el móvil. Los diez siguientes salen ya hechos, y
+      el que ya está propuesto sale marcado en vez de dejar proponerlo dos veces.
+      Para un puente o unas fechas sueltas sigue estando «Proponer fechas».
+- [x] **Que cada uno diga si viene.** La lista de quién va la llevaba el
+      administrador a mano en el formulario de la escapada, y lo que acababa
+      pasando es que las cantidades de la compra salían de una lista que no se
+      correspondía con quién iba de verdad. Ahora cada uno contesta por sí y por
+      los suyos, y hay tres estados de verdad —viene, no puede, no ha
+      contestado—, que es lo que permite al panel decir a quién falta por
+      preguntar. (`supabase/17_quien_viene.sql`)
+- [x] **Las fotos de después.** Las que había eran las de la casa candidata, para
+      decidir; faltaban las del fin de semana. Pestaña propia, varias de golpe,
+      pie de foto y un visor a pantalla completa con flechas. Si una foto falla,
+      las demás siguen subiendo. (`supabase/18_fotos_escapada.sql`)
+- [x] **Que funcione sin cobertura.** Era lo que más se notaba: en una casa rural
+      no hay línea y la compra, el menú, el equipaje y las recetas son justo lo
+      que se mira allí. Ahora la aplicación guarda en el móvil lo último que leyó
+      y lo enseña cuando no hay red, y los retoques que se hacen allí —marcar
+      comprado, quién lleva qué— se apuntan y se mandan solos al volver la señal.
+      Probado de punta a punta: sin red, marcado, y al volver la línea estaba en
+      el servidor.
+- [ ] **Organizar los coches.** Queda fuera por ahora.

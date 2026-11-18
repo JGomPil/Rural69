@@ -79,6 +79,8 @@ export function ResumenEscapada() {
         />
       </div>
 
+      <QuienViene />
+
       {elegida ? (
         <Tarjeta className="overflow-hidden">
           <div className="flex items-stretch gap-0">
@@ -150,8 +152,6 @@ export function ResumenEscapada() {
       )}
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <QuienViene />
-
         <Tarjeta className="p-4">
           <h3 className="mb-2 flex items-center gap-2 text-base text-bosque-800">
             <NotebookPen size={17} /> Observaciones

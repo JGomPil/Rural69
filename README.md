@@ -63,7 +63,7 @@ profiles          Cuentas autorizadas (rol admin | user, vinculadas a un integra
 households        Parejas / unidades familiares
 members           Integrantes del grupo (adulto o niño, con factor de consumo)
 trips             Escapadas (fechas, destino, estado, votación abierta, casa elegida)
-trip_participants Quién viene a cada escapada
+trip_participants Quién viene a cada escapada (sin fila = no ha contestado)
 houses            Casas rurales candidatas de una escapada
 house_photos      Fotos adicionales de cada casa
 votes             Qué casas le valen a cada cual (voto por aprobación)
@@ -81,6 +81,7 @@ app_settings      Ajustes (factor de los niños, grupo de referencia)
 notifications     Avisos: una fila por persona y aviso, con su marca de leído
 push_subscriptions A qué aparatos empujar los avisos (endpoint + claves del navegador)
 trip_reminders    Qué recordatorio automático se mandó ya, para no repetirlo
+trip_photos       Las fotos del fin de semana (las de después, no las de la casa)
 ```
 
 Las tres cantidades de la compra se guardan por separado a propósito:
@@ -134,6 +135,9 @@ Scripts disponibles:
    12. `supabase/13_equipaje.sql`
    13. `supabase/14_avisos_push.sql`
    14. `supabase/15_recordatorios.sql`
+   15. `supabase/16_avisos_chat.sql`
+   16. `supabase/17_quien_viene.sql`
+   17. `supabase/18_fotos_escapada.sql`
 
    Todos se pueden volver a ejecutar sin miedo: no borran ni duplican nada.
 
@@ -452,3 +456,68 @@ escapada, «lo que dijo alguien de la hora de llegada» está enterrado. El chat
 mensaje, que se queda un momento resaltado para que se sepa cuál era. El recetario busca
 también **por ingrediente** —«¿en qué platos entra el pimentón?» es justo lo que se le
 pregunta a un recetario— y dice por qué sale cada plato, que si no parecería un error.
+
+---
+
+## 13. Que la aplicación sirva también estando allí
+
+La tanda anterior arregló lo de antes de ir. Esta va de lo otro: que el fin de semana se
+pueda usar, y que no haga falta que nadie vaya detrás de nadie.
+
+**El chat avisa, pero no machaca.** Escribir en el chat no le llegaba a nadie; la insignia
+solo se veía si ya estabas dentro, que es justo cuando no hace falta. Ahora avisa como lo
+demás, con un freno pensado para una conversación: si ya hay un aviso de chat de esa
+escapada sin leer y es de hace menos de diez minutos, se **actualiza** en vez de crear otro.
+Actualizar no dispara el webhook, así que no vibra: una charla de veinte mensajes vibra una
+vez y el aviso va diciendo «8 mensajes sin leer». La cuenta sale de `message_reads`, la misma
+que la insignia de la pestaña, para que no digan cosas distintas.
+
+**Los findes que vienen.** Proponer un fin de semana eran dos fechas escritas a mano en un
+móvil. Los diez viernes siguientes salen ya calculados: un toque y queda propuesto, y el que
+ya está sale marcado en vez de dejar proponerlo otra vez. Un puente o unas fechas sueltas
+siguen teniendo «Proponer fechas», que para eso está.
+
+**Que cada uno diga si viene.** Esta es de fondo, no de pantalla. La lista de quién va la
+llevaba el administrador a mano, así que las cantidades de la compra salían de una lista que
+no tenía por qué parecerse a quién iba de verdad. Ahora cada uno contesta por sí y por los
+suyos —pareja y niños— desde el resumen, y hay **tres estados**: viene, no puede, y no ha
+contestado. El tercero es el que importa: sin él no se puede decir «faltan 3 por contestar»,
+que es lo que el panel necesita para no tener que preguntarlo por el chat. El administrador
+sigue pudiendo tocar la lista entera en el formulario de la escapada.
+
+**Las fotos del fin de semana.** Las que había eran las de la casa candidata, que sirven para
+decidir y se quedan en *Casas*. Estas son las de después: pestaña propia, varias de golpe,
+pie de foto y un visor a pantalla completa con flechas. Si una se atraganta, las demás
+siguen subiendo y se dice cuál falló.
+
+### Sin cobertura
+
+Lo que más se notaba, y lo más caro de hacer. En una casa rural no hay línea, y la compra, el
+menú, el equipaje y las recetas son justo lo que se mira allí. La aplicación abría —el
+service worker guarda el armazón desde el principio— pero no traía un solo dato: todas las
+pantallas decían «sin conexión con el servidor».
+
+Tres piezas, y la regla que las ordena: **lo guardado es una copia, nunca una verdad**. En
+cuanto hay red se pide lo de verdad y la copia se tira. Nada se decide a partir de ella.
+
+* `src/lib/almacen.ts` guarda en el aparato la respuesta de cada consulta marcada con
+  `copia` —el grupo, la escapada, la compra, el menú, el equipaje, el chat, el recetario—.
+  Se lee antes del primer pintado, así que la pantalla sale llena y sin saltos. Si el
+  navegador no deja guardar, todo sigue funcionando: solo que sin copia.
+* `src/lib/cola.ts` apunta lo que se hace allí y no se puede perder: marcar comprado,
+  cambiar una cantidad, decir quién lleva una cosa. Los encargos se **funden por fila**, así
+  que marcar y desmarcar cinco veces manda una sola cosa. Crear y borrar no se encolan a
+  propósito: obligarían a inventar identificadores y a fingir filas que no existen. Si el
+  servidor rechaza un encargo —una fila que ya no está, un permiso—, se tira: dejarlo
+  atascaría a todos los que vengan detrás.
+* La tira de arriba distingue las dos cosas que importan: si hay red y si queda algo por
+  mandar.
+
+Y dos pantallas absurdas que salían sin cobertura, las dos arregladas con el perfil guardado:
+«tu cuenta aún no está autorizada» —fallaba la consulta del perfil y parecía que no había
+fila— y la de entrar, cuando además el testigo de sesión había caducado y Supabase no podía
+renovarlo. Ninguna de las dos tiene arreglo en mitad del monte, que es justo donde salían.
+
+Probado de punta a punta con el móvil emulado: sin red la aplicación abre entera, se marca un
+producto, la tira dice «1 cambio guardado aquí», y al volver la línea se manda solo y queda
+en el servidor.
