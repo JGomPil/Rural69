@@ -8,7 +8,7 @@ import { Etiqueta } from '../ui/Varios'
 import { useAvisos } from '../../hooks/useAvisos'
 import { useGrupo } from '../../hooks/useGrupo'
 import { useAuth } from '../../hooks/useAuth'
-import { mensajeError, supabase } from '../../lib/supabase'
+import { faltaPasarSql, mensajeError, supabase } from '../../lib/supabase'
 import { ESTADOS } from '../../lib/constantes'
 import { personasEquivalentes } from '../../lib/cantidades'
 import { numero } from '../../lib/formato'
@@ -52,10 +52,17 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
       setEstado(escapada.status)
       void supabase
         .from('trip_participants')
-        .select('member_id')
+        .select('*')
         .eq('trip_id', escapada.id)
-        .eq('attending', true)
-        .then(({ data }) => setParticipantes(new Set((data ?? []).map((r) => r.member_id as string))))
+        .then(({ data }) =>
+          setParticipantes(
+            new Set(
+              ((data ?? []) as { member_id: string; attending?: boolean }[])
+                .filter((r) => (r.attending ?? true) !== false)
+                .map((r) => r.member_id),
+            ),
+          ),
+        )
     } else {
       const anyo = new Date().getFullYear()
       setTitulo(`Escapada ${anyo}`)
@@ -142,7 +149,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
       onCerrar()
       if (id && onGuardada) onGuardada(id)
     } catch (e) {
-      setError(mensajeError(e))
+      setError(faltaPasarSql(e) ?? mensajeError(e))
     } finally {
       setGuardando(false)
     }

@@ -54,14 +54,34 @@ const ARCHIVOS_SQL: Record<string, string> = {
   date_votes: 'supabase/08_fechas.sql',
 }
 
+/** Y lo mismo con las columnas que llegaron después que su tabla. */
+const COLUMNAS_SQL: Record<string, string> = {
+  attending: 'supabase/17_quien_viene.sql',
+}
+
 export function faltaPasarSql(e: unknown): string | null {
   const t = mensajeError(e)
-  if (!t.includes('PGRST205') && !t.toLowerCase().includes('could not find the table')) return null
-  for (const [tabla, archivo] of Object.entries(ARCHIVOS_SQL)) {
-    if (t.includes(tabla)) {
-      return `Esto todavía no está en la base de datos: falta pasar ${archivo} en Supabase.`
+  const minusculas = t.toLowerCase()
+
+  if (t.includes('PGRST205') || minusculas.includes('could not find the table')) {
+    for (const [tabla, archivo] of Object.entries(ARCHIVOS_SQL)) {
+      if (t.includes(tabla)) {
+        return `Esto todavía no está en la base de datos: falta pasar ${archivo} en Supabase.`
+      }
+    }
+    return null
+  }
+
+  // Una columna que no existe: PostgREST contesta PGRST204 al escribir y
+  // 42703 al leer, y en los dos casos nombra la columna.
+  if (t.includes('PGRST204') || t.includes('42703') || minusculas.includes('column')) {
+    for (const [columna, archivo] of Object.entries(COLUMNAS_SQL)) {
+      if (t.includes(columna)) {
+        return `Esto todavía no está en la base de datos: falta pasar ${archivo} en Supabase.`
+      }
     }
   }
+
   return null
 }
 

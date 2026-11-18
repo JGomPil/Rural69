@@ -23,10 +23,15 @@ export function Escapadas() {
   // Número de participantes de cada escapada (una sola consulta).
   const { datos: conteos } = useConsulta<Record<string, number>>(
     async () => {
-      const { data, error: err } = await supabase.from('trip_participants').select('trip_id').eq('attending', true)
+      const { data, error: err } = await supabase.from('trip_participants').select('*')
       if (err) throw err
+      // Solo quien viene. Antes de `17_quien_viene.sql` no había columna y
+      // tener fila ya significaba venir, de ahí el `?? true`.
       const mapa: Record<string, number> = {}
-      for (const fila of data ?? []) mapa[fila.trip_id as string] = (mapa[fila.trip_id as string] ?? 0) + 1
+      for (const fila of (data ?? []) as { trip_id: string; attending?: boolean }[]) {
+        if ((fila.attending ?? true) === false) continue
+        mapa[fila.trip_id] = (mapa[fila.trip_id] ?? 0) + 1
+      }
       return mapa
     },
     [],

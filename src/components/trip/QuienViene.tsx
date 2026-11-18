@@ -5,7 +5,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
 import { useConsulta } from '../../hooks/useConsulta'
 import { useGrupo } from '../../hooks/useGrupo'
-import { mensajeError, supabase } from '../../lib/supabase'
+import { faltaPasarSql, mensajeError, supabase } from '../../lib/supabase'
 import { personasEquivalentes } from '../../lib/cantidades'
 import { numero } from '../../lib/formato'
 import { Persona } from '../ui/Persona'
@@ -39,10 +39,15 @@ export function QuienViene() {
     async () => {
       const { data, error } = await supabase
         .from('trip_participants')
-        .select('member_id, attending')
+        .select('*')
         .eq('trip_id', escapada.id)
       if (error) throw error
-      return (data ?? []) as { member_id: string; attending: boolean }[]
+      // Antes de `17_quien_viene.sql` no había columna, y tener fila
+      // significaba venir.
+      return ((data ?? []) as { member_id: string; attending?: boolean }[]).map((r) => ({
+        member_id: r.member_id,
+        attending: r.attending ?? true,
+      }))
     },
     [escapada.id],
     { realtime: ['trip_participants'] },
@@ -75,7 +80,7 @@ export function QuienViene() {
       if (error) throw error
       await Promise.all([refrescar(true), recargar()])
     } catch (e) {
-      avisos.error(mensajeError(e))
+      avisos.error(faltaPasarSql(e) ?? mensajeError(e))
     } finally {
       setGuardando(null)
     }

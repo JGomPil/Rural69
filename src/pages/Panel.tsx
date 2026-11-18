@@ -41,7 +41,7 @@ export function Panel() {
         activa ? supabase.from('houses').select('*').eq('trip_id', activa.id) : vacio,
         activa ? supabase.from('votes').select('voter_id').eq('trip_id', activa.id) : vacio,
         activa ? supabase.from('shopping_items').select('purchased').eq('trip_id', activa.id) : vacio,
-        activa ? supabase.from('trip_participants').select('member_id, attending').eq('trip_id', activa.id) : vacio,
+        activa ? supabase.from('trip_participants').select('*').eq('trip_id', activa.id) : vacio,
         supabase.from('pantry_items').select('*').gt('qty', 0).order('category'),
         activa ? supabase.from('trip_date_options').select('id').eq('trip_id', activa.id) : vacio,
         activa ? supabase.from('date_votes').select('voter_id').eq('trip_id', activa.id) : vacio,
@@ -59,8 +59,10 @@ export function Panel() {
         heVotadoCasa: perfil ? quienVotoCasa.has(perfil.id) : false,
         totalCompra: items.length,
         compradosCompra: items.filter((i) => i.purchased).length,
-        idsParticipantes: ((participantes.data ?? []) as { member_id: string; attending: boolean }[])
-          .filter((r) => r.attending)
+        // `attending` no existe hasta pasar `17_quien_viene.sql`; sin ella,
+        // tener fila significaba venir, que es lo que dice el `?? true`.
+        idsParticipantes: ((participantes.data ?? []) as { member_id: string; attending?: boolean }[])
+          .filter((r) => (r.attending ?? true) !== false)
           .map((r) => r.member_id),
         // Quien ya ha contestado, venga o no: lo que falta es la gente sin fila.
         hanContestado: ((participantes.data ?? []) as { member_id: string }[]).map((r) => r.member_id),

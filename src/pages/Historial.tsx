@@ -22,7 +22,7 @@ export function Historial() {
         supabase.from('houses').select('*'),
         supabase.from('shopping_items').select('*'),
         supabase.from('pantry_items').select('*'),
-        supabase.from('trip_participants').select('trip_id, member_id').eq('attending', true),
+        supabase.from('trip_participants').select('*'),
       ])
       const primerError = [casas, compra, despensa, participantes].find((r) => r.error)?.error
       if (primerError) throw primerError
@@ -30,7 +30,13 @@ export function Historial() {
         casas: (casas.data ?? []) as House[],
         compra: (compra.data ?? []) as ShoppingItem[],
         despensa: (despensa.data ?? []) as PantryItem[],
-        participantes: (participantes.data ?? []) as { trip_id: string; member_id: string }[],
+        // Solo quien vino: sin la columna `attending` (antes de
+        // `17_quien_viene.sql`) tener fila ya significaba venir.
+        participantes: ((participantes.data ?? []) as {
+          trip_id: string
+          member_id: string
+          attending?: boolean
+        }[]).filter((p) => (p.attending ?? true) !== false),
       }
     },
     [],

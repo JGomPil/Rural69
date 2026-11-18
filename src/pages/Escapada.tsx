@@ -109,13 +109,18 @@ export function Escapada() {
       if (!id) return null
       const [t, p] = await Promise.all([
         supabase.from('trips').select('*').eq('id', id).maybeSingle(),
-        supabase.from('trip_participants').select('member_id').eq('trip_id', id).eq('attending', true),
+        supabase.from('trip_participants').select('*').eq('trip_id', id),
       ])
       if (t.error) throw t.error
       if (p.error) throw p.error
       return {
         escapada: (t.data as Trip | null) ?? null,
-        idsParticipantes: (p.data ?? []).map((r) => r.member_id as string),
+        // Sin fila = todavía no ha contestado; con `attending` a false = no
+        // viene. La columna llegó en `17_quien_viene.sql`, y sin ella tener
+        // fila significaba venir.
+        idsParticipantes: ((p.data ?? []) as { member_id: string; attending?: boolean }[])
+          .filter((r) => (r.attending ?? true) !== false)
+          .map((r) => r.member_id),
       }
     },
     [id],
