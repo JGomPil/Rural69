@@ -308,11 +308,12 @@ protocolo de DevTools, con emulación de móvil (390 × 844) en los dos temas.
       disparador, el tiempo real, el webhook, la firma VAPID y el service worker.
 - [ ] Borrar la cuenta de prueba `jgompil+prueba@gmail.com` en *Authentication → Users*.
       Mientras exista cuenta como una persona más del grupo y recibe todos los avisos.
+- [x] Volver a pasar `supabase/15_recordatorios.sql` (18/11/2026) para que el
+      recordatorio suene a las 8:00 **de España** y no a las 8:00 UTC.
 - [x] Pasar los archivos 15, 16, 17 y 18 en el SQL Editor (18/11/2026). Comprobado uno
       por uno: la columna `attending`, las tablas `trip_photos` y `trip_reminders`, el
       disparador `messages_avisa`, el tipo de aviso `mensaje_chat` y la extensión
-      `pg_cron`. La tarea `rural69-recordatorios` está programada y activa a las
-      `0 8 * * *` — que es **UTC**: en invierno suena aquí a las 9:00.
+      `pg_cron`. La tarea `rural69-recordatorios` está programada y activa.
       Probado además en la aplicación desplegada: contestar «Sí» en *¿Quién viene?* pasa
       sin queja, la pestaña *Fotos* deja subir, y un mensaje de prueba en el chat entró y
       se borró sin romper nada.

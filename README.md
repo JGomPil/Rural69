@@ -143,7 +143,10 @@ Scripts disponibles:
 
    El 15 programa el recordatorio de antes de la escapada con `pg_cron`. Si la extensión
    no está activada, el archivo se ejecuta igual y avisa al final: actívala en
-   **Database → Extensions → pg_cron** y vuelve a pasarlo. Y para que ese aviso llegue
+   **Database → Extensions → pg_cron** y vuelve a pasarlo. La tarea se mira cada hora y
+   solo manda cuando en España son las ocho de la mañana: `pg_cron` solo entiende UTC y
+   aquí la hora cambia dos veces al año, así que la condición va en la tarea y el horario
+   de verano se arregla solo. Y para que ese aviso llegue
    al móvil con la aplicación cerrada hace falta además la *Edge Function* `avisar` y su
    webhook, que están explicados en `supabase/functions/avisar/README.md`.
 

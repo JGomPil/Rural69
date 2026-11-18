@@ -159,11 +159,19 @@ $$;
 revoke all on function public.manda_recordatorios() from public, authenticated;
 
 -- ---------------------------------------------------------------------
--- Una vez al día
+-- Una vez al día, a las ocho de la mañana de España
 -- ---------------------------------------------------------------------
--- `pg_cron` va en hora UTC, así que las 8:00 son las 9 de la mañana en
--- España en invierno y las 10 en verano. Buena hora para un recordatorio:
--- ni de noche ni cuando ya es tarde para comprar.
+-- `pg_cron` solo entiende UTC, y España cambia la hora dos veces al año: un
+-- `0 8 * * *` a secas sonaría a las 9 en invierno y a las 10 en verano, que
+-- ya es tarde para pasar por el supermercado antes de salir.
+--
+-- Así que la tarea se mira cada hora y solo hace algo cuando en Madrid son
+-- las ocho. Pasar 24 veces al día por un `where` que casi siempre es falso no
+-- cuesta nada, y a cambio el horario de verano se arregla solo.
+--
+-- La condición va en la tarea y no dentro de la función a propósito: así
+-- `select public.manda_recordatorios()` se puede llamar a mano a cualquier
+-- hora para probarlo.
 do $$
 begin
   begin
@@ -178,10 +186,13 @@ begin
     end if;
     perform cron.schedule(
       'rural69-recordatorios',
-      '0 8 * * *',
-      $tarea$select public.manda_recordatorios()$tarea$
+      '0 * * * *',
+      $tarea$
+        select public.manda_recordatorios()
+         where extract(hour from (now() at time zone 'Europe/Madrid')) = 8
+      $tarea$
     );
-    raise notice 'Rural69: recordatorios programados todos los días a las 8:00 UTC.';
+    raise notice 'Rural69: recordatorios programados todos los días a las 8:00 de España (con su cambio de hora).';
   else
     raise notice 'Rural69: falta la extensión pg_cron. Actívala en Database → Extensions y vuelve a pasar este archivo; mientras, los recordatorios no se mandarán solos.';
   end if;
