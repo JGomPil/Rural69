@@ -729,7 +729,7 @@ tapada: en su turno hace **una sola pregunta** a la mesa y le contestan sí o no
   sabe si va a querer seguir, así que no tiene sentido preguntarlo entonces.
 - **Las vueltas pueden ir sin límite**, y el reloj es opcional: son segundos para preguntar, no
   para acertar.
-- **586 personajes** en cinco categorías —cine y tele 107, música 101, deportes 93,
+- **585 personajes** en cinco categorías —cine y tele 107, música 101, deportes 93,
   históricos 107 y de ficción 177— que se pueden mezclar. Con diez jugadores y una baraja de
   cien, a la tercera partida se repiten; con esta no. El criterio para entrar es el mismo que el de las palabras
   del Furor: que cualquiera de la mesa sepa quién es sin que se lo expliquen.

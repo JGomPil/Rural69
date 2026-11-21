@@ -417,7 +417,7 @@ rodado, saldrá solo durante la escapada, igual que el panel.
 - [x] **¿Quién soy?** Una carta por cabeza, cada uno con su móvil: ves las de los demás y
       la tuya tapada, una pregunta por turno, y para acertar hay que escribir el nombre.
       Acaba cuando alguien acierta, y ahí se pregunta si se sigue hasta que acierten todos.
-      Vueltas sin límite, reloj opcional, 586 personajes en cinco categorías, 177 de
+      Vueltas sin límite, reloj opcional, 585 personajes en cinco categorías, 177 de
       ellos inventados. Sin cobertura, un solo móvil que va
       pasando. 34 pruebas. (`src/lib/juegos/quiensoy.ts`, `supabase/23_juegos_de_todos.sql`)
 - [x] **Trivial de la casa.** El tablero del `trivialrural` traído entero: 46 casillas,
