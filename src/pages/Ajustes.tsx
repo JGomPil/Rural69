@@ -19,7 +19,8 @@ import { useAvisos } from '../hooks/useAvisos'
 import { useGrupo } from '../hooks/useGrupo'
 import { mensajeError, supabase } from '../lib/supabase'
 import { descarga, nombreArchivo } from '../lib/exportar'
-import { numero } from '../lib/formato'
+import { fecha as formateaFecha, numero } from '../lib/formato'
+import { DIAS_PARA_AVISAR, apuntaCopia, diasDesdeLaCopia, generaCopia, ultimaCopia } from '../lib/copia'
 import { personasEquivalentes } from '../lib/cantidades'
 import { Avatar, AvatarEditable } from '../components/ui/Avatar'
 import { Boton, BotonIcono } from '../components/ui/Boton'
@@ -737,39 +738,23 @@ function FormularioUsuario({
 // ---------------------------------------------------------------------
 // Copia de seguridad
 // ---------------------------------------------------------------------
-const TABLAS = [
-  'profiles',
-  'households',
-  'members',
-  'trips',
-  'trip_participants',
-  'houses',
-  'house_photos',
-  'votes',
-  'master_items',
-  'shopping_items',
-  'pantry_items',
-  'app_settings',
-] as const
-
 function CopiaSeguridad() {
   const avisos = useAvisos()
   const [cargando, setCargando] = useState(false)
+  // Para repintar la fecha en cuanto se baja una copia.
+  const [ultima, setUltima] = useState<Date | null>(() => ultimaCopia())
 
   const exportar = async () => {
     setCargando(true)
     try {
-      const copia: Record<string, unknown> = {
-        aplicacion: 'Rural69',
-        fecha: new Date().toISOString(),
+      const { json, filas, tablasVacias } = await generaCopia()
+      descarga(nombreArchivo('copia-rural69', 'json'), json, 'application/json')
+      apuntaCopia()
+      setUltima(new Date())
+      avisos.ok(`Copia descargada: ${numero(filas)} filas.`)
+      if (tablasVacias.length > 0) {
+        avisos.error(`Estas tablas todavía no están en la base de datos: ${tablasVacias.join(', ')}.`)
       }
-      for (const tabla of TABLAS) {
-        const { data, error } = await supabase.from(tabla).select('*')
-        if (error) throw error
-        copia[tabla] = data ?? []
-      }
-      descarga(nombreArchivo('copia-rural69', 'json'), JSON.stringify(copia, null, 2), 'application/json')
-      avisos.ok('Copia de seguridad descargada.')
     } catch (e) {
       avisos.error(mensajeError(e))
     } finally {
@@ -777,14 +762,24 @@ function CopiaSeguridad() {
     }
   }
 
+  const dias = diasDesdeLaCopia()
+  const toca = dias === null || dias >= DIAS_PARA_AVISAR
+
   return (
     <Seccion titulo="Copia de seguridad" icono={<DatabaseBackup size={19} />}>
       <Tarjeta className="flex flex-wrap items-center justify-between gap-3 p-4">
-        <p className="max-w-lg text-sm text-tenue">
-          Descarga un archivo JSON con todo: escapadas, casas, votos, listas, despensa e integrantes. Guárdalo de vez
-          en cuando por si acaso.
-        </p>
-        <Boton variante="secundario" onClick={() => void exportar()} cargando={cargando}>
+        <div className="max-w-lg">
+          <p className="text-sm text-tenue">
+            Un archivo JSON con todo lo que hay en la base de datos: escapadas, casas, votos, menús, recetario,
+            equipaje, compra, despensa, chat e integrantes. Las fotos no van dentro, van sus direcciones.
+          </p>
+          <p className={`mt-1.5 text-sm font-semibold ${toca ? 'text-tierra-700' : 'text-oliva-700'}`}>
+            {ultima
+              ? `Última copia desde este dispositivo: ${formateaFecha(ultima.toISOString(), true)}`
+              : 'Nunca has bajado una copia desde este dispositivo.'}
+          </p>
+        </div>
+        <Boton variante={toca ? 'primario' : 'secundario'} onClick={() => void exportar()} cargando={cargando}>
           <DatabaseBackup size={17} /> Descargar copia
         </Boton>
       </Tarjeta>

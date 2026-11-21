@@ -5,6 +5,7 @@ import {
   ArrowRight,
   CalendarDays,
   ChevronRight,
+  DatabaseBackup,
   Home,
   MapPin,
   Plus,
@@ -22,6 +23,7 @@ import { personasEquivalentes } from '../lib/cantidades'
 import { estiloCategoria } from '../lib/constantes'
 import { queFalta } from '../lib/pendientes'
 import { momentoDe } from '../lib/estancia'
+import { DIAS_PARA_AVISAR, diasDesdeLaCopia } from '../lib/copia'
 import { Boton } from '../components/ui/Boton'
 import { AvisoError, Cargando, Etiqueta, EtiquetaEstado, Progreso, Seccion, Tarjeta, Vacio } from '../components/ui/Varios'
 import { InstalarApp } from '../components/layout/InstalarApp'
@@ -103,6 +105,10 @@ export function Panel() {
   // lo de «te falta votar las fechas» ya no pinta nada, y lo que hace
   // falta es qué se come hoy, qué falta por comprar y la clave del portón.
   const alli = escapadaActiva ? momentoDe(escapadaActiva) === 'durante' : false
+
+  // Días desde la última copia de seguridad, `null` si nunca.
+  const diasSinCopia = diasDesdeLaCopia()
+  const tocaCopia = esAdmin && (diasSinCopia === null || diasSinCopia >= DIAS_PARA_AVISAR)
 
   // Quién ha contestado ya si viene, y si falto yo o alguien de mi casa.
   const activos = miembros.filter((m) => m.active)
@@ -366,6 +372,25 @@ export function Panel() {
             ))}
           </div>
         </Seccion>
+      )}
+
+      {/* ---------- Copia de seguridad ----------
+          Tres años de recetario y de historial viven en un único proyecto
+          gratuito. Esto es lo único que avisa de que conviene bajárselo, y
+          solo lo ve quien administra, que es quien puede. */}
+      {tocaCopia && (
+        <Link
+          to="/ajustes"
+          className="no-imprimir flex items-center gap-2.5 rounded-2xl border border-arena bg-beige/60 px-4 py-3 text-sm text-tenue transition hover:bg-beige"
+        >
+          <DatabaseBackup size={17} className="shrink-0 text-suave" />
+          <span className="flex-1">
+            {diasSinCopia === null
+              ? 'No has bajado nunca una copia de seguridad desde este dispositivo.'
+              : `La última copia de seguridad es de hace ${diasSinCopia} días.`}
+          </span>
+          <ChevronRight size={16} className="shrink-0 text-carbon/30" />
+        </Link>
       )}
 
       <FormularioEscapada abierto={formAbierto} onCerrar={() => setFormAbierto(false)} />

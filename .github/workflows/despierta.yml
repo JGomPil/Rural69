@@ -1,0 +1,60 @@
+name: Que no se duerma la base de datos
+
+# ---------------------------------------------------------------------
+# Entre escapada y escapada pueden pasar meses sin que nadie abra la
+# aplicación, y Supabase pausa los proyectos del plan gratuito que pasan
+# una semana sin actividad de base de datos. Reactivarlo solo lo puede
+# hacer quien administra el proyecto, entrando en el panel de Supabase:
+# el resto del grupo se encontraría la aplicación muerta sin saber por
+# qué.
+#
+# Esto es un latido semanal: una consulta de verdad, no un «ping» a un
+# endpoint de salud. Supabase mira actividad de la base de datos, y una
+# petición que no llega a Postgres puede no contar.
+#
+# Dos cosas que conviene saber:
+#
+#   · El trabajo horario de pg_cron (el de los recordatorios) ya ejecuta
+#     una consulta cada hora, y eso también cuenta. Esto es el cinturón
+#     además de los tirantes.
+#   · En un repositorio público, GitHub desactiva las tareas programadas
+#     después de 60 días sin actividad en el repositorio, y avisa por
+#     correo. Si eso pasa, se vuelven a activar desde la pestaña Actions
+#     o con `gh workflow enable despierta.yml`.
+# ---------------------------------------------------------------------
+
+on:
+  schedule:
+    # Lunes a las 6:17 UTC. A una hora rara a propósito: en los minutos
+    # en punto GitHub acumula tareas de medio mundo y las retrasa.
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  latido:
+    name: Un latido semanal
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preguntarle algo de verdad a la base de datos
+        env:
+          URL: ${{ secrets.VITE_SUPABASE_URL }}
+          CLAVE: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${URL:-}" ] || [ -z "${CLAVE:-}" ]; then
+            echo "Faltan los secrets VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY." >&2
+            exit 1
+          fi
+          codigo=$(curl -sS -o /dev/null -w '%{http_code}' \
+            -H "apikey: ${CLAVE}" \
+            -H "Authorization: Bearer ${CLAVE}" \
+            "${URL}/rest/v1/trips?select=id&limit=1")
+          echo "PostgREST ha contestado ${codigo}."
+          if [ "${codigo}" != "200" ]; then
+            echo "La base de datos no ha contestado 200: puede que el proyecto esté pausado." >&2
+            exit 1
+          fi
+          echo "Base de datos viva. Hasta el lunes que viene."

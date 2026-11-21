@@ -225,16 +225,27 @@ solo. En local el valor por defecto es `/Rural69/`, definido en `vite.config.ts`
 
 ## 6. Mantenimiento
 
-* **Copias de seguridad**: *Ajustes → Copia de seguridad* descarga un JSON con todo.
-  Conviene hacerlo después de cada escapada. También puedes exportar a CSV la lista de la
-  compra, la lista maestra, la despensa y el historial.
+* **Copias de seguridad**: *Ajustes → Copia de seguridad* descarga un JSON con las 22 tablas
+  de contenido (la lista está en `src/lib/copia.ts`; **si añades una tabla al esquema,
+  añádela ahí**). Quedan fuera a propósito las claves de los navegadores
+  (`push_subscriptions`) y los avisos ya leídos. Las fotos no van dentro: van sus
+  direcciones, los archivos están en Storage. Se baja lo que tus permisos te dejan leer, así
+  que la copia completa la hace quien administra. La fecha de la última se guarda en el
+  propio navegador, y a los 120 días el panel lo recuerda. También puedes exportar a CSV la
+  lista de la compra, la lista maestra, la despensa y el historial.
 * **Imprimir la compra**: botón *Imprimir* en la lista (hay estilos de impresión propios).
 * **Cambios en la base de datos**: añade un archivo nuevo `supabase/04_*.sql` en lugar de
   editar los anteriores, y ejecútalo en el SQL Editor. Los scripts son idempotentes
   (`create table if not exists`, `drop policy if exists`), así que se pueden volver a pasar.
-* **Proyecto Supabase pausado**: el plan gratuito pausa proyectos sin actividad durante una
-  semana. Se reactiva desde el panel en un clic; para evitarlo, entrad en la app de vez en
-  cuando (o justo antes de empezar a organizar la escapada).
+* **Proyecto Supabase pausado**: el plan gratuito pausa los proyectos que pasan una semana
+  sin **actividad de base de datos**, y reactivarlo solo lo puede hacer quien administra el
+  proyecto. Dos cosas lo evitan solas: el trabajo horario de `pg_cron` (el de los
+  recordatorios), que ejecuta una consulta cada hora, y el latido semanal de
+  `.github/workflows/despierta.yml`, que hace una consulta de verdad por PostgREST los lunes
+  —un «ping» a un endpoint de salud no llega a Postgres y puede no contar—. Ojo con una
+  trampa de GitHub: en un repositorio público, las tareas programadas se desactivan tras 60
+  días sin actividad en el repositorio (avisa por correo), y se reactivan desde la pestaña
+  *Actions* o con `gh workflow enable despierta.yml`.
 * **Dependencias**: `npm outdated` y `npm update`. El proyecto usa pocas a propósito.
 
 
