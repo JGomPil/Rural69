@@ -49,6 +49,7 @@ const ARCHIVOS_SQL: Record<string, string> = {
   trip_photos: 'supabase/18_fotos_escapada.sql',
   message_reactions: 'supabase/20_reacciones.sql',
   game_sessions: 'supabase/22_juegos.sql',
+  trivia_questions: 'supabase/25_preguntas_trivial.sql',
   dishes: 'supabase/11_menus.sql',
   dish_items: 'supabase/11_menus.sql',
   trip_meal_dishes: 'supabase/11_menus.sql',

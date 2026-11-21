@@ -47,6 +47,7 @@ export const TABLAS_COPIA = [
   'trip_reminders',
   'messages',
   'message_reactions',
+  'trivia_questions',
 ] as const
 
 /**

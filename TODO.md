@@ -419,6 +419,12 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       Acaba cuando alguien acierta, y ahí se pregunta si se sigue hasta que acierten todos.
       Vueltas sin límite, reloj opcional, 68 famosos. Sin cobertura, un solo móvil que va
       pasando. 34 pruebas. (`src/lib/juegos/quiensoy.ts`, `supabase/23_juegos_de_todos.sql`)
+- [x] **Trivial de la casa.** El tablero del `trivialrural` traído entero: 46 casillas,
+      cinco quesitos, desafío del centro y 1.523 preguntas (199 de «Nosotros»). Cada uno
+      desde su móvil, las casillas se tocan, y se pueden añadir preguntas desde el
+      juego. El movimiento está comprobado contra el `server.py` original en las 276
+      combinaciones posibles. 32 pruebas. (`src/lib/juegos/trivial.ts`, `geometria.ts`,
+      `baraja.ts`, `supabase/25_preguntas_trivial.sql`)
 - [ ] **Más juegos.** El cajón está hecho para eso.
 - [ ] **Pendiente de probar con gente.** Si 30 segundos se hacen largos, si los
       botones se entienden a voces y si la lista de 179 palabras aguanta una
@@ -439,6 +445,8 @@ rodado, saldrá solo durante la escapada, igual que el panel.
 - [ ] Pasar `supabase/24_terminar_entre_todos.sql` en el SQL Editor. Sin él, en el
       «¿Quién soy?» solo el que empezó puede terminar la partida, y a los demás el botón
       les miente: se les vacía la pantalla y la partida sigue viva para el resto.
+- [ ] Pasar `supabase/25_preguntas_trivial.sql` en el SQL Editor. Sin él el Trivial se
+      juega igual con las 1.523 de serie, pero no se pueden añadir preguntas nuevas.
 - [ ] Volver a desplegar la *Edge Function* `avisar` (panel → Edge Functions →
       avisar → Code → pegar `supabase/functions/avisar/index.ts` → Deploy). Sin
       esto, ni el silencio de noche ni el número del icono con la app cerrada.

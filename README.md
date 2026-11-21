@@ -696,9 +696,9 @@ saldrá solo durante la escapada, igual que el panel.
 
 ### ¿Quién soy?
 
-Al empezar, a cada uno le toca un famoso y nadie sabe cuál es el suyo. El móvil va pasando de
-mano en mano: el que lo tiene ve las cartas de todos los demás menos la suya, hace **una sola
-pregunta** a la mesa y le contestan sí o no.
+Al empezar, a cada uno le toca un famoso y nadie sabe cuál es el suyo. Cada cual abre el juego
+en su propio móvil, dice quién es, y desde ahí ve las cartas de todos los demás con la suya
+tapada: en su turno hace **una sola pregunta** a la mesa y le contestan sí o no.
 
 - **La pantalla guarda el secreto, y esa es toda la gracia.** Lo que cada cual no puede saber
   es lo suyo, y de eso se encarga el aparato: nada de papelitos, cintas en la frente ni un
@@ -727,3 +727,46 @@ pregunta** a la mesa y le contestan sí o no.
   cualquiera de la mesa sepa quién es sin que se lo expliquen.
 - **Los nombres se ponen tocando.** Los del grupo salen como botones; escribir ocho nombres
   en un móvil es la forma más rápida de que nadie quiera jugar.
+
+### Trivial de la casa
+
+El tablero del [`trivialrural`](https://github.com/JGomPil/trivialrural) que Javi montó en
+2026, traído aquí entero: anillo de treinta casillas, cinco corredores, el centro, los cinco
+quesitos y 1.523 preguntas, de las que **199 van de nosotros**.
+
+- **Lo que se reaprovechó fue el juego, no el código.** Allí había un servidor en Python con
+  WebSockets que guardaba la partida y se la mandaba a todos; aquí no hay servidor donde
+  ponerlo —esto es un sitio estático—, pero tampoco hace falta: la mesa compartida ya hace ese
+  trabajo. Del `server.py` se trajo lo que valía de verdad, que es el diseño: la geometría del
+  tablero, los caminos del dado y las reglas del desafío del centro.
+- **El movimiento se comprobó contra el original, no «a ojo».** Traducir a mano 150 líneas de
+  aritmética de anillos y corredores es justo donde se cuela un `+1` que no aparece hasta que
+  alguien cae donde no tocaba una noche de agosto. Así que se ejecutó el Python de verdad, se
+  volcaron **las 276 combinaciones posibles** de casilla y dado, y esa tabla es ahora una
+  prueba: si algún día se toca el movimiento, avisa.
+- **El tablero se toca.** En el original había botones de dirección —«izquierda», «derecha»,
+  «adentro»—, que obligan a traducir en la cabeza lo que ya estás viendo. Aquí la casilla a la
+  que puedes llegar late en el tablero y se toca con el dedo; debajo quedan los mismos
+  destinos como botones con el nombre de la categoría, para el que prefiera leer.
+- **Dibujado en SVG, no en un `canvas`.** Se estira hasta el ancho que tenga el móvil sin
+  pixelar, no hay que redibujarlo al girar el teléfono, y cada casilla es un elemento de
+  verdad que puede responder a un toque.
+- **Mientras hay pregunta, el tablero se quita de en medio.** En una pantalla de móvil no
+  caben el tablero, el enunciado y cuatro respuestas; y en ese momento lo que hace falta ver
+  son las respuestas. Queda un botón para abrirlo.
+- **Solo llevan icono las casillas que cambian el turno** —quesitos y dados—. Lo que no se lee
+  en 350 píxeles, no se pinta: las demás se distinguen por el color, que es como se leen de
+  verdad. Y las fichas que comparten casilla se ponen en corrillo, porque con diez personas y
+  46 casillas compartir es lo normal y una ficha tapando a otra es una discusión.
+- **Las preguntas se pueden añadir desde el móvil.** Las 1.523 de serie viven en un `.json`
+  que pesa 184 KB y se carga **solo al entrar al Trivial**: quien abre la lista de la compra no
+  las descarga nunca. Las nuestras van a `trivia_questions` y entran en la baraja en la
+  siguiente partida. El formulario está en la pantalla del juego y no escondido en ajustes,
+  porque la pregunta buena se escribe cuando a alguien se le ocurre, no al día siguiente.
+- **Tres reglas heredadas que merece la pena explicar.** Acertar no da otro turno: en el
+  Trivial de toda la vida sí, y con diez personas eso es una mesa esperando a que uno
+  encadene. Del centro no te puedes quedar a vivir: si el dado te lleva más allá, sales por
+  otro corredor. Y fallar el desafío final cuesta un quesito, que por eso se avisa antes.
+- **La pregunta viaja entera en el estado, con la respuesta buena dentro.** Quien abra las
+  herramientas del navegador puede verla. En una casa con amigos eso no es un agujero de
+  seguridad: es alguien haciendo trampas, y para eso no hay programa que valga.

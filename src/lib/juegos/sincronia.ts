@@ -103,8 +103,16 @@ export function useMesa<T extends Estado>(
    */
   const miHora = useRef(0)
 
+  /**
+   * Guarda lo que llega. `fresco` dice si viene de un aviso de tiempo
+   * real —recién escrito— o de una lectura de la tabla, que puede tener
+   * media hora. Importa para el reloj: la diferencia entre el reloj del
+   * otro y el mío solo se puede medir con algo recién emitido. Midiéndola
+   * contra una partida vieja, la cuenta atrás salía más larga que el
+   * tiempo que se había puesto.
+   */
   const recoge = useCallback(
-    (fila: Fila<T> | null) => {
+    (fila: Fila<T> | null, fresco: boolean) => {
       if (!fila) {
         setPartida(null)
         setModerador(null)
@@ -114,8 +122,9 @@ export function useMesa<T extends Estado>(
       setPartida(fila.state)
       setModerador(fila.moderator_id)
       miHora.current = fila.state?.emitido ?? 0
-      // La hora del otro contra la mía, medida al recibir.
-      setDesfase(typeof fila.state?.emitido === 'number' ? Date.now() - fila.state.emitido : 0)
+      if (fresco && typeof fila.state?.emitido === 'number') {
+        setDesfase(Date.now() - fila.state.emitido)
+      }
     },
     [],
   )
@@ -135,7 +144,7 @@ export function useMesa<T extends Estado>(
       // el que mandan todos eso quería decir «no me entero de nada»: el que
       // abría el juego con la partida ya empezada no la veía.
       const fila = (data as Fila<T> | null) ?? null
-      if (!fila || (fila.state?.emitido ?? 0) >= miHora.current) recoge(fila)
+      if (!fila || (fila.state?.emitido ?? 0) >= miHora.current) recoge(fila, false)
       setASolas(false)
     } catch {
       // Ni tabla ni línea: a solas, con lo último que hubiera aquí.
@@ -189,7 +198,7 @@ export function useMesa<T extends Estado>(
           const fila = aviso.new as unknown as Fila<T>
           // El eco de lo que acabo de escribir yo: ni caso.
           if (fila.state?.emitido === ultimoEnvio.current) return
-          recoge(fila)
+          recoge(fila, true)
           setASolas(false)
         },
       )
@@ -215,6 +224,8 @@ export function useMesa<T extends Estado>(
       const sellada = { ...p, emitido: Date.now() }
       ultimoEnvio.current = sellada.emitido
       miHora.current = sellada.emitido
+      // Lo que escribo yo va con mi reloj: contra mí mismo no hay desfase.
+      setDesfase(0)
 
       // Durante la partida se CAMBIA la fila, no se da de alta otra vez. No
       // es un detalle: un alta exige firmarla como moderador, y en el

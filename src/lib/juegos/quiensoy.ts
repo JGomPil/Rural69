@@ -30,6 +30,7 @@
 // =====================================================================
 
 import { cartasDe, type Carta, type Categoria } from './famosos'
+import { levanta, sienta, sitioDe } from './sillas'
 
 export interface Jugador {
   nombre: string
@@ -129,8 +130,7 @@ export const quedanPorAcertar = (j: Juego): Jugador[] => j.jugadores.filter((p) 
 
 /** En qué silla se ha sentado esta cuenta. `-1` si en ninguna. */
 export function miSitio(j: Juego, perfil: string | null): number {
-  if (!perfil) return -1
-  return j.jugadores.findIndex((p) => p.perfil === perfil)
+  return sitioDe(j.jugadores, perfil)
 }
 
 /**
@@ -141,10 +141,7 @@ export function tomaSitio(j: Juego, indice: number, perfil: string): Juego {
   if (indice < 0 || indice >= j.jugadores.length) return j
   return {
     ...j,
-    jugadores: j.jugadores.map((p, i) => ({
-      ...p,
-      perfil: i === indice ? perfil : p.perfil === perfil ? null : p.perfil,
-    })),
+    jugadores: sienta(j.jugadores, indice, perfil),
     historia: [`${j.jugadores[indice].nombre} ya tiene su móvil.`, ...j.historia],
   }
 }
@@ -152,10 +149,7 @@ export function tomaSitio(j: Juego, indice: number, perfil: string): Juego {
 /** Me he sentado donde no era: suelto la silla y vuelvo a elegir. */
 export function dejaElSitio(j: Juego, perfil: string): Juego {
   if (!j.jugadores.some((p) => p.perfil === perfil)) return j
-  return {
-    ...j,
-    jugadores: j.jugadores.map((p) => (p.perfil === perfil ? { ...p, perfil: null } : p)),
-  }
+  return { ...j, jugadores: levanta(j.jugadores, perfil) }
 }
 
 /** Quita acentos, signos y mayúsculas: se compara lo que suena. */

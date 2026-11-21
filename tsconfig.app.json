@@ -6,6 +6,8 @@
     "module": "esnext",
     "types": ["vite/client"],
     "allowArbitraryExtensions": true,
+    // Las 1.523 preguntas del Trivial viven en un .json que se carga aparte.
+    "resolveJsonModule": true,
     "skipLibCheck": true,
 
     /* Bundler mode */

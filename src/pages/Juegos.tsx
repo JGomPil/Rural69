@@ -31,11 +31,18 @@ export function Juegos() {
             como="Por equipos · manda un moderador · se ve en todos los móviles"
           />
           <Juego
+            a="/juegos/trivial"
+            icono={<Dices size={24} />}
+            titulo="Trivial de la casa"
+            que="El tablero, los quesitos y 1.523 preguntas, con 199 que van de nosotros."
+            como="Cada uno desde su móvil · se tocan las casillas · se pueden añadir preguntas"
+          />
+          <Juego
             a="/juegos/quien-soy"
             icono={<Smile size={24} />}
             titulo="¿Quién soy?"
             que="Cada uno es un famoso y no sabe cuál. Ves las cartas de los demás, la tuya no."
-            como="Una pregunta por turno · un solo móvil que va pasando"
+            como="Una pregunta por turno · cada uno con su móvil"
           />
         </div>
       </Seccion>
