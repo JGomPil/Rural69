@@ -206,8 +206,11 @@ export function useMesa<T extends Estado>(
         game: juego,
         state: sellada,
         updated_at: new Date().toISOString(),
-        anyone_plays: todosJuegan,
       }
+      // La columna llegó en `23_juegos_de_todos.sql` y solo la necesitan los
+      // juegos abiertos. Mandarla siempre haría que, hasta pasar ese SQL, el
+      // Furor —que ya funcionaba— se cayera a jugar a solas.
+      if (todosJuegan) fila.anyone_plays = true
       // El moderador solo se pone al crear o al recogerlo: si se mandara en
       // cada toque, en el ¿Quién soy? el último que pulsa se quedaría con el
       // mando sin pretenderlo.
