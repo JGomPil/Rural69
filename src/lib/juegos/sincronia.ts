@@ -13,7 +13,10 @@
 //     la pantalla de los que miran no tiene botones; no es decoración.
 //   · El eco. Lo que escribe el moderador le vuelve por tiempo real un
 //     instante después; si se lo creyera, su partida daría un saltito
-//     en cada toque. Se ignora lo que viene firmado por uno mismo.
+//     en cada toque. Se reconoce por la hora exacta del envío, no por
+//     quién lo firma: dos aparatos de la misma persona —el móvil y el
+//     portátil— llevan la misma firma, y mirando solo la firma el
+//     segundo se quedaba congelado.
 //   · El desfase de relojes. La cuenta atrás viaja como un instante
 //     («esto se acaba a las 23:04:11»), no como «quedan 30 segundos»,
 //     porque dos móviles no tienen la misma hora. Al recibir se mide la
@@ -51,7 +54,7 @@ export interface Mesa {
   termina: () => Promise<void>
 }
 
-export function usaMesa(juego: string, miPerfil: string | null): Mesa {
+export function useMesa(juego: string, miPerfil: string | null): Mesa {
   const [partida, setPartida] = useState<Partida | null>(null)
   const [moderador, setModerador] = useState<string | null>(null)
   const [cargando, setCargando] = useState(true)
@@ -61,6 +64,8 @@ export function usaMesa(juego: string, miPerfil: string | null): Mesa {
   const soyModerador = aSolas || (miPerfil !== null && moderador === miPerfil)
   const soyModeradorRef = useRef(soyModerador)
   soyModeradorRef.current = soyModerador
+  /** La hora del último envío propio: así se reconoce el eco sin equivocarse. */
+  const ultimoEnvio = useRef(0)
 
   const recoge = useCallback(
     (fila: Fila | null) => {
@@ -123,7 +128,7 @@ export function usaMesa(juego: string, miPerfil: string | null): Mesa {
           }
           const fila = aviso.new as unknown as Fila
           // El eco de lo que acabo de escribir yo: ni caso.
-          if (soyModeradorRef.current && fila.moderator_id === miPerfil) return
+          if (fila.state?.emitido === ultimoEnvio.current) return
           recoge(fila)
           setASolas(false)
         },
@@ -142,9 +147,11 @@ export function usaMesa(juego: string, miPerfil: string | null): Mesa {
   const escribe = useCallback(
     async (p: Partida) => {
       if (!miPerfil) return
+      const sellada = sella(p)
+      ultimoEnvio.current = sellada.emitido
       const { error } = await supabase
         .from('game_sessions')
-        .upsert({ game: juego, state: sella(p), moderator_id: miPerfil, updated_at: new Date().toISOString() })
+        .upsert({ game: juego, state: sellada, moderator_id: miPerfil, updated_at: new Date().toISOString() })
       if (error) throw error
     },
     [juego, miPerfil],

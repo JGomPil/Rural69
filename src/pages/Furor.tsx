@@ -6,12 +6,12 @@ import { FurorEquipos } from '../components/juegos/FurorEquipos'
 import { FurorPartida } from '../components/juegos/FurorPartida'
 import { Cargando } from '../components/ui/Varios'
 import { nuevaPartida } from '../lib/juegos/furor'
-import { usaMesa } from '../lib/juegos/sincronia'
+import { useMesa } from '../lib/juegos/sincronia'
 
 export function Furor() {
   const { perfil, esAdmin } = useAuth()
   const { miembros, perfiles } = useGrupo()
-  const mesa = usaMesa('furor', perfil?.id ?? null)
+  const mesa = useMesa('furor', perfil?.id ?? null)
 
   const gente = miembros.filter((m) => m.active)
 
