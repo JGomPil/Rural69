@@ -517,6 +517,15 @@ contestado. El tercero es el que importa: sin él no se puede decir «faltan 3 p
 que es lo que el panel necesita para no tener que preguntarlo por el chat. El administrador
 sigue pudiendo tocar la lista entera en el formulario de la escapada.
 
+**Tres cosas pequeñas que faltaban.** El chat tiene su cajón de emojis —ochenta elegidos, no
+un buscador: caras, manos, fiesta, comida y campo, que es lo que se usa de verdad—, y el
+emoji entra donde está el cursor, no al final. El resumen tiene un botón que va **derecho a
+WhatsApp** (`wa.me`, que en el móvil abre la aplicación y en el ordenador WhatsApp Web), sin
+tener que buscar el icono en el menú de compartir del sistema, que sigue estando al lado. Y
+en «¿Quién viene?» se puede **contestar por otra casa**: lo suyo es que conteste cada uno
+desde su móvil, pero de quince personas solo tres tienen cuenta, así que alguien tenía que
+poder hacerlo por los demás. Va plegado, para que siga siendo lo segundo.
+
 **Las fotos del fin de semana.** Las que había eran las de la casa candidata, que sirven para
 decidir y se quedan en *Casas*. Estas son las de después: pestaña propia, varias de golpe,
 pie de foto y un visor a pantalla completa con flechas. Si una se atraganta, las demás

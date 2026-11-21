@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Check, Users, X } from 'lucide-react'
+import { Check, ChevronDown, Users, X } from 'lucide-react'
 import { useEscapada } from '../../pages/Escapada'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
@@ -30,10 +30,11 @@ import type { Member } from '../../lib/types'
  */
 export function QuienViene() {
   const { escapada, personas, recargar } = useEscapada()
-  const { miembros } = useGrupo()
+  const { miembros, hogares } = useGrupo()
   const { perfil } = useAuth()
   const avisos = useAvisos()
   const [guardando, setGuardando] = useState<string | null>(null)
+  const [porOtros, setPorOtros] = useState(false)
 
   const { datos, refrescar } = useConsulta(
     async () => {
@@ -63,6 +64,24 @@ export function QuienViene() {
     if (!yo) return [] as Member[]
     return activos.filter((m) => m.id === yo.id || (yo.household_id && m.household_id === yo.household_id))
   }, [activos, miembros, perfil?.member_id])
+
+  // Las demás casas, para poder contestar por quien no tiene cuenta —que
+  // en este grupo son casi todos— o por quien no está mirando el móvil.
+  // Lo normal sigue siendo que conteste cada casa; por eso va plegado.
+  const otrasCasas = useMemo(() => {
+    const mios = new Set(miCasa.map((m) => m.id))
+    const porCasa = new Map<string, Member[]>()
+    for (const m of activos) {
+      if (mios.has(m.id)) continue
+      const casa = m.household_id ?? 'sueltos'
+      porCasa.set(casa, [...(porCasa.get(casa) ?? []), m])
+    }
+    return [...porCasa.entries()].map(([id, gente]) => ({
+      id,
+      nombre: hogares.find((h) => h.id === id)?.name ?? 'Sin casa',
+      gente,
+    }))
+  }, [activos, miCasa, hogares])
 
   const vienen = activos.filter((m) => respuestas.get(m.id) === true)
   const noPueden = activos.filter((m) => respuestas.get(m.id) === false)
@@ -94,41 +113,62 @@ export function QuienViene() {
 
       {miCasa.length > 0 ? (
         <ul className="mt-2.5 space-y-1.5">
-          {miCasa.map((m) => {
-            const respuesta = respuestas.get(m.id)
-            return (
-              <li key={m.id} className="flex items-center gap-2">
-                <span className="min-w-0 flex-1 truncate text-sm font-semibold text-tenue">
-                  <Persona miembroId={m.id} />
-                  {m.is_child && ' 🧒'}
-                </span>
-                <span className="flex shrink-0 rounded-xl bg-beige p-1">
-                  <BotonSiNo
-                    activo={respuesta === true}
-                    cargando={guardando === m.id}
-                    onClick={() => void contesta(m, true)}
-                    tono="si"
-                  >
-                    <Check size={15} /> Sí
-                  </BotonSiNo>
-                  <BotonSiNo
-                    activo={respuesta === false}
-                    cargando={guardando === m.id}
-                    onClick={() => void contesta(m, false)}
-                    tono="no"
-                  >
-                    <X size={15} /> No
-                  </BotonSiNo>
-                </span>
-              </li>
-            )
-          })}
+          {miCasa.map((m) => (
+            <FilaContesta
+              key={m.id}
+              miembro={m}
+              respuesta={respuestas.get(m.id)}
+              cargando={guardando === m.id}
+              onContesta={(viene) => void contesta(m, viene)}
+            />
+          ))}
         </ul>
       ) : (
         <p className="mt-2 text-sm text-suave">
           Tu cuenta no está enlazada con ningún integrante, así que no puedes contestar desde aquí. Un
           administrador lo arregla en <strong>Ajustes → Usuarios</strong>.
         </p>
+      )}
+
+      {otrasCasas.length > 0 && (
+        <div className="mt-3 border-t border-arena pt-2">
+          <button
+            type="button"
+            onClick={() => setPorOtros((v) => !v)}
+            aria-expanded={porOtros}
+            className="flex w-full items-center justify-between gap-2 py-1 text-left text-sm font-semibold text-bosque-700"
+          >
+            Contestar por otra casa
+            <ChevronDown
+              size={16}
+              className={`shrink-0 text-tenue transition-transform ${porOtros ? 'rotate-180' : ''}`}
+            />
+          </button>
+          {porOtros && (
+            <div className="mt-1 space-y-3">
+              <p className="text-xs text-suave">
+                Lo suyo es que conteste cada casa desde su móvil, pero no todo el mundo tiene cuenta.
+                Aquí puedes contestar por ellos; lo verá todo el grupo igual.
+              </p>
+              {otrasCasas.map((casa) => (
+                <div key={casa.id}>
+                  <p className="mb-1 text-xs font-semibold text-tenue">{casa.nombre}</p>
+                  <ul className="space-y-1.5">
+                    {casa.gente.map((m) => (
+                      <FilaContesta
+                        key={m.id}
+                        miembro={m}
+                        respuesta={respuestas.get(m.id)}
+                        cargando={guardando === m.id}
+                        onContesta={(viene) => void contesta(m, viene)}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       <div className="mt-3 space-y-1.5 border-t border-arena pt-3 text-xs">
@@ -143,6 +183,36 @@ export function QuienViene() {
         {numero(personas || personasEquivalentes(vienen))} personas equivalentes para calcular la compra.
       </p>
     </Tarjeta>
+  )
+}
+
+/** Una persona y sus dos botones. El mismo para tu casa y para las demás. */
+function FilaContesta({
+  miembro,
+  respuesta,
+  cargando,
+  onContesta,
+}: {
+  miembro: Member
+  respuesta: boolean | undefined
+  cargando: boolean
+  onContesta: (viene: boolean) => void
+}) {
+  return (
+    <li className="flex items-center gap-2">
+      <span className="min-w-0 flex-1 truncate text-sm font-semibold text-tenue">
+        <Persona miembroId={miembro.id} />
+        {miembro.is_child && ' 🧒'}
+      </span>
+      <span className="flex shrink-0 rounded-xl bg-beige p-1">
+        <BotonSiNo activo={respuesta === true} cargando={cargando} onClick={() => onContesta(true)} tono="si">
+          <Check size={15} /> Sí
+        </BotonSiNo>
+        <BotonSiNo activo={respuesta === false} cargando={cargando} onClick={() => onContesta(false)} tono="no">
+          <X size={15} /> No
+        </BotonSiNo>
+      </span>
+    </li>
   )
 }
 

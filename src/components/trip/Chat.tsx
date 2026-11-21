@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { RefObject } from 'react'
 import { createPortal } from 'react-dom'
-import { Check, ImagePlus, Loader2, Pencil, Search, Send, Trash2, X } from 'lucide-react'
+import { Check, ImagePlus, Loader2, Pencil, Search, Send, Smile, Trash2, X } from 'lucide-react'
 import { useEscapada } from '../../pages/Escapada'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
@@ -13,6 +13,7 @@ import { clave } from '../../lib/cantidades'
 import { diaDeChat, hora } from '../../lib/formato'
 import { Avatar } from '../ui/Avatar'
 import { BotonIcono } from '../ui/Boton'
+import { Emojis } from './Emojis'
 import { Confirmar } from '../ui/Modal'
 import { AvisoError, Cargando } from '../ui/Varios'
 import { Reacciones } from './Reacciones'
@@ -79,6 +80,7 @@ export function Chat() {
   const avisos = useAvisos()
 
   const [texto, setTexto] = useState('')
+  const [emojis, setEmojis] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [subiendo, setSubiendo] = useState(false)
   const [editando, setEditando] = useState<Message | null>(null)
@@ -217,6 +219,7 @@ export function Chat() {
         if (err) throw err
       }
       setTexto('')
+      setEmojis(false)
       await refrescar(true)
     } catch (err) {
       avisos.error(mensajeError(err))
@@ -238,6 +241,7 @@ export function Chat() {
         .insert({ trip_id: escapada.id, author_id: perfil.id, body: texto.trim(), image_url: url })
       if (err) throw err
       setTexto('')
+      setEmojis(false)
       await refrescar(true)
     } catch (err) {
       avisos.error(mensajeError(err))
@@ -478,8 +482,35 @@ export function Chat() {
             </button>
           </div>
         )}
+        {emojis && (
+          <Emojis
+            onElige={(emoji) => {
+              // Donde esté el cursor, no al final: si estás corrigiendo
+              // una frase, el emoji va donde lo estás pensando.
+              const el = caja.current
+              const desde = el?.selectionStart ?? texto.length
+              const hasta = el?.selectionEnd ?? texto.length
+              setTexto(texto.slice(0, desde) + emoji + texto.slice(hasta))
+              requestAnimationFrame(() => {
+                el?.focus()
+                el?.setSelectionRange(desde + emoji.length, desde + emoji.length)
+              })
+            }}
+          />
+        )}
         <div className="flex items-end gap-2">
           <input ref={archivo} type="file" accept="image/*" className="hidden" onChange={(e) => void enviarFoto(e)} />
+          <button
+            type="button"
+            onClick={() => setEmojis((e) => !e)}
+            aria-label={emojis ? 'Cerrar los emojis' : 'Poner un emoji'}
+            aria-expanded={emojis}
+            className={`inline-flex size-10 shrink-0 items-center justify-center rounded-2xl transition hover:bg-black/5 ${
+              emojis ? 'bg-bosque-100 text-bosque-700' : 'text-suave'
+            }`}
+          >
+            <Smile size={20} />
+          </button>
           <button
             type="button"
             onClick={() => archivo.current?.click()}

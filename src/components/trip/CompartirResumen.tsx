@@ -1,14 +1,19 @@
 import { useState } from 'react'
-import { Check, Copy, Share2 } from 'lucide-react'
+import { Check, Copy, MessageCircle, Share2 } from 'lucide-react'
 import { Boton } from '../ui/Boton'
 import { useAvisos } from '../../hooks/useAvisos'
 
 /**
  * Lleva el estado de la escapada al grupo de WhatsApp.
  *
- * En el móvil abre el menú de compartir del sistema, que es donde está
- * WhatsApp. En el ordenador no existe ese menú, así que copia al portapapeles
- * y lo dice. Las dos cosas acaban igual: el texto pegado en el grupo.
+ * Hay un botón que va derecho a WhatsApp y otro que abre el menú de
+ * compartir del sistema. Parece repetido y no lo es: el menú del móvil
+ * enseña diez sitios y hay que buscar el icono, y en el ordenador no
+ * existe siquiera. Como el 99% de las veces esto acaba en el grupo, ese
+ * camino está puesto entero.
+ *
+ * `wa.me` funciona en los dos sitios: en el móvil abre la aplicación y
+ * en el ordenador, WhatsApp Web. Si no hay nada de eso, queda copiar.
  */
 export function CompartirResumen({ texto }: { texto: string }) {
   const avisos = useAvisos()
@@ -37,6 +42,11 @@ export function CompartirResumen({ texto }: { texto: string }) {
     setTimeout(() => setCopiado(false), 2500)
   }
 
+  const porWhatsapp = () => {
+    // `wa.me` sin número abre el «¿a quién se lo mandas?» de WhatsApp.
+    window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank', 'noopener,noreferrer')
+  }
+
   const compartir = async () => {
     if (!puedeCompartir) return void copiar()
     try {
@@ -49,9 +59,14 @@ export function CompartirResumen({ texto }: { texto: string }) {
   }
 
   return (
-    <Boton variante="secundario" onClick={() => void compartir()}>
-      {copiado ? <Check size={17} /> : puedeCompartir ? <Share2 size={17} /> : <Copy size={17} />}
-      {copiado ? 'Copiado' : 'Compartir resumen'}
-    </Boton>
+    <div className="flex flex-wrap justify-end gap-2">
+      <Boton onClick={porWhatsapp}>
+        <MessageCircle size={17} /> Mandar por WhatsApp
+      </Boton>
+      <Boton variante="secundario" onClick={() => void compartir()}>
+        {copiado ? <Check size={17} /> : puedeCompartir ? <Share2 size={17} /> : <Copy size={17} />}
+        {copiado ? 'Copiado' : puedeCompartir ? 'Compartir' : 'Copiar'}
+      </Boton>
+    </div>
   )
 }
