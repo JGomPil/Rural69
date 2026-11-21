@@ -431,7 +431,9 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       de Apple por `scripts/bandas-sonoras.mjs`, que guarda el identificador y la URL del
       trozo de 30 segundos: en la partida no se le pide nada a la tienda, que corta a las
       veinte peticiones por minuto por IP. Suena en un solo móvil, y ese mismo lleva el
-      mando; si se va, cualquiera lo recoge.
+      mando; si se va, cualquiera lo recoge. El reloj no cierra la ronda: al llegar a
+      cero para la música y la ronda sigue abierta, que la gente no deja de decir
+      títulos porque pite un teléfono.
       (`src/lib/juegos/musica.ts`, `bandas.ts`, `bandas.json`)
 - [x] **¿Qué canción suena?** El mismo juego con otro repertorio: 340 canciones de
       pop y rock de 1960 a 2010, un tercio en español, por `scripts/canciones.mjs`. Vale

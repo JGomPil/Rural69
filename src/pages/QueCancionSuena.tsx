@@ -36,6 +36,12 @@ export function QueCancionSuena() {
             haya que decir las dos cosas, o que el que la cante entera se lleve dos puntos.
           </p>
           <p>
+            <strong>El reloj no cierra la ronda.</strong> Cuando se acaba el tiempo la música se
+            para y ya está: si alguien la saca entonces, se le apunta igual. La ronda la cierra el
+            moderador, con el nombre del que acertó o con «no la sacó nadie». Con cinco segundos la
+            música es un fogonazo y la discusión viene después.
+          </p>
+          <p>
             <strong>Suena en un solo móvil</strong>, el que esté más cerca del altavoz. Diez
             teléfonos medio segundo desincronizados no es música, es ruido. Y si el que la lleva se
             va con el móvil en el bolsillo, cualquiera recoge el mando con «que suene aquí».

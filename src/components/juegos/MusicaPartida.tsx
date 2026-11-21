@@ -18,10 +18,9 @@ import {
   acierta,
   arrancaElReloj,
   clasificacion,
+  nadieLaSaco,
   refrescaElSonido,
   restanteDe,
-  rindete,
-  seAcabaElTiempo,
   tomaElMando,
   type Partida,
 } from '../../lib/juegos/musica'
@@ -69,6 +68,8 @@ export function MusicaPartida({
    */
   const puedoMandar = soyModerador || !partida.moderador
   const restante = restanteDe(partida, desfase)
+  /** Se acabó la cuenta atrás, pero la ronda sigue abierta. */
+  const agotado = partida.fase === 'sonando' && partida.fin !== null && restante === 0
   const pista = partida.ronda.pista
   const Cosa = cosa.charAt(0).toUpperCase() + cosa.slice(1)
 
@@ -132,12 +133,13 @@ export function MusicaPartida({
       }
       clearInterval(reloj)
       timbre()
-      // La cierra uno solo, o se escribiría dos veces lo mismo.
-      if (puedoMandar) onCambia(seAcabaElTiempo(partida))
-      else repinta((n) => n + 1)
+      // Se para la música y se queda la ronda abierta: la cierra una
+      // persona, no el reloj. Nada que publicar, solo repintar.
+      audio.current?.pause()
+      repinta((n) => n + 1)
     }, 150)
     return () => clearInterval(reloj)
-  }, [partida, desfase, puedoMandar, soyModerador, onCambia])
+  }, [partida, desfase, soyModerador])
 
   // El veredicto suena en todos los móviles.
   useEffect(() => {
@@ -188,7 +190,7 @@ export function MusicaPartida({
               restante <= 5 ? 'text-tierra-700' : 'text-suave'
             }`}
           >
-            <Hourglass size={15} /> {restante}s
+            <Hourglass size={15} /> {agotado ? '¡Tiempo!' : `${restante}s`}
           </p>
         )}
       </div>
@@ -209,7 +211,9 @@ export function MusicaPartida({
                 <p className="text-sm text-tenue">
                   {sonando
                     ? 'Está sonando en este móvil. Súbele el volumen.'
-                    : 'Dale para que suene. Si es un iPhone, quítale el silencio del lateral.'}
+                    : agotado
+                      ? 'Se acabó el tiempo y la música se ha parado. Puedes volver a ponerla.'
+                      : 'Dale para que suene. Si es un iPhone, quítale el silencio del lateral.'}
                 </p>
                 {roto && (
                   <p className="text-xs text-tierra-700">
@@ -279,22 +283,21 @@ export function MusicaPartida({
                   </Boton>
                 ))}
               </div>
+              <Boton variante="suave" ancho onClick={() => onCambia(nadieLaSaco(partida))}>
+                <Flag size={16} /> No la sacó nadie
+              </Boton>
               <p className="text-xs text-suave">
-                Se dice a voces y tú apuntas. Si no la saca nadie, «nos rendimos» la destapa.
+                {agotado
+                  ? 'Se acabó el tiempo y la música, pero la ronda sigue: si alguien la dice ahora, se le apunta igual.'
+                  : 'Se dice a voces y tú apuntas. La ronda no se cierra hasta que toques algo de aquí.'}
               </p>
             </Tarjeta>
           ) : (
             <p className="text-center text-sm text-suave">
-              Grítalo: lo apunta quien lleva la música.
+              {agotado
+                ? 'Se acabó el tiempo, pero sigue valiendo: grítalo y te lo apuntan.'
+                : 'Grítalo: lo apunta quien lleva la música.'}
             </p>
-          )}
-
-          {puedoMandar && (
-            <div className="flex justify-center">
-              <Boton variante="suave" onClick={() => onCambia(rindete(partida))}>
-                <Flag size={16} /> Nos rendimos
-              </Boton>
-            </div>
           )}
         </>
       ) : (

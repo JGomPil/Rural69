@@ -151,10 +151,11 @@ export function MusicaJugadores({
         <p className="text-sm text-suave">
           {cuantas} {cosas} en el repertorio, y en una partida no se repite ninguna.
           {segundos === 0
-            ? ' Sin reloj: la música da vueltas hasta que alguien la saque o os rindáis.'
+            ? ' Sin reloj: la música da vueltas hasta que alguien la saque.'
             : segundos <= 15
-              ? ` ${segundos} segundos y a la siguiente: no da tiempo a pensarlo.`
+              ? ` A los ${segundos} segundos se para la música, y a correr.`
               : ` La música se repite hasta que se acaben los ${segundos} segundos.`}
+          {segundos > 0 && ' Cuando se acaba, la ronda sigue abierta: la cierra el que lleva el mando.'}
         </p>
       </Tarjeta>
 

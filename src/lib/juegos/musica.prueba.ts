@@ -3,12 +3,11 @@ import {
   acierta,
   arrancaElReloj,
   clasificacion,
+  nadieLaSaco,
   nuevaPartida,
   otraPartida,
   restanteDe,
-  rindete,
   sacaPistaDe,
-  seAcabaElTiempo,
   siguiente,
   tomaElMando,
   trastosDe,
@@ -110,13 +109,28 @@ describe('una partida', () => {
     expect(acierta(p, 9, 2_000_000)).toBe(p)
   })
 
-  it('si se acaba el tiempo no la gana nadie', () => {
-    const p = empieza()
-    const tras = seAcabaElTiempo(p, 2_000_000)
+  it('cuando el moderador dice que no la sacó nadie, se destapa sin puntos', () => {
+    const tras = nadieLaSaco(empieza(), 2_000_000)
     expect(tras.fase).toBe('resuelta')
     expect(tras.ronda.acertante).toBeNull()
     expect(tras.jugadores.every((j) => j.puntos === 0)).toBe(true)
-    expect(rindete(p, 2_000_000).fase).toBe('resuelta')
+    expect(tras.historia[0]).toContain('Nadie')
+  })
+
+  it('pasado el tiempo la ronda sigue abierta, y el punto se puede dar', () => {
+    // El reloj se acabó hace medio minuto y nadie ha cerrado nada.
+    const p = arrancaElReloj(empieza(), 1_500_000)
+    expect(restanteDe(p, 0, 1_600_000)).toBe(0)
+    expect(p.fase).toBe('sonando')
+    const tras = acierta(p, 2, 1_600_000)
+    expect(tras.ronda.acertante).toBe('Leo')
+    expect(tras.jugadores.find((j) => j.nombre === 'Leo')?.puntos).toBe(1)
+  })
+
+  it('y una vez destapada, ya no se admite nada', () => {
+    const cerrada = nadieLaSaco(empieza(), 2_000_000)
+    expect(acierta(cerrada, 0, 2_100_000)).toBe(cerrada)
+    expect(nadieLaSaco(cerrada, 2_200_000)).toBe(cerrada)
   })
 
   it('la siguiente ronda trae otra y deja el reloj parado', () => {

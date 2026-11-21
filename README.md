@@ -821,6 +821,12 @@ _Barbie_.
   dicho tres veces, y la gracia está en el grito. Así que no hay teclado. El móvil que pone la
   música muestra los nombres y toca el del que la ha sacado. Lo que vale y lo que no lo decide
   la mesa, como en el salón de casa: para eso ya hay gente delante.
+- **El reloj no cierra la ronda, la cierra una persona.** Parecía razonable que al llegar a
+  cero se destapara sola, y jugando no lo era: cuando se acaba el tiempo la mesa sigue diciendo
+  títulos, y la ronda se cerraba en medio de la discusión. Ahora el cero solo para la música
+  —el pitido, y a correr—; la ronda se queda abierta y si alguien la saca entonces se le apunta
+  igual. Quien lleva el mando la cierra con el nombre del que acertó o con «no la sacó nadie»,
+  que es el que oye si alguien la ha dicho.
 - **Los jugadores son nombres, no cuentas.** En este no hay sillas que repartir: juega quien
   está en el sofá, con móvil o sin él. Hacen falta dos nombres y un teléfono.
 - **Un punto por acierto, sin premio a la rapidez.** Estuvo puesto el doble para el que

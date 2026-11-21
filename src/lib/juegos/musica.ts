@@ -12,6 +12,10 @@
 //   · Suena en UN móvil, no en diez. Diez teléfonos medio segundo
 //     desincronizados no es música, es ruido. Uno hace de altavoz —el
 //     que esté más cerca del bafle— y ese mismo lleva el mando.
+//   · El reloj no cierra la ronda. Se acaba el tiempo, la música se para
+//     y la ronda sigue abierta: en el salón la gente no deja de decir
+//     títulos porque pite un teléfono. La cierra el que lleva el mando,
+//     apuntando a quien la haya sacado o diciendo que no la sacó nadie.
 //   · No se escribe nada. Lo probé escrito y mata el juego: la gracia
 //     está en el grito, y mientras uno teclea «la guerra de las
 //     galaxias» la mesa ya lo ha dicho tres veces. Quien modera toca el
@@ -160,8 +164,17 @@ export function arrancaElReloj(p: Partida, ahora = Date.now()): Partida {
   return { ...p, emitido: ahora, fin: ahora + p.segundos * 1000 }
 }
 
-/** Se acabó el tiempo sin que nadie la sacara. */
-export function seAcabaElTiempo(p: Partida, ahora = Date.now()): Partida {
+/**
+ * No la ha sacado nadie: se destapa y a otra. Lo dice el que lleva el
+ * mando, y solo él.
+ *
+ * El reloj NO hace esto por su cuenta, que es lo que parecía razonable y
+ * no lo era: cuando se acaba el tiempo la mesa sigue diciendo nombres de
+ * películas, y la ronda se cerraba sola en medio de la discusión. Así que
+ * el reloj para la música y ya está; cerrar la ronda es cosa de una
+ * persona, que es la que oye si alguien la ha dicho.
+ */
+export function nadieLaSaco(p: Partida, ahora = Date.now()): Partida {
   if (p.fase !== 'sonando') return p
   return {
     ...p,
@@ -171,9 +184,6 @@ export function seAcabaElTiempo(p: Partida, ahora = Date.now()): Partida {
     historia: [`Nadie sacó «${p.ronda.pista.titulo}».`, ...p.historia],
   }
 }
-
-/** Nos rendimos: que se vea cuál era. */
-export const rindete = seAcabaElTiempo
 
 /** A la siguiente, o al marcador final si ya no quedan. */
 export function siguiente(p: Partida, saca: SacaPista, azar: () => number = Math.random, ahora = Date.now()): Partida {

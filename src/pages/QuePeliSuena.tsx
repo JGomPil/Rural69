@@ -25,14 +25,19 @@ export function QuePeliSuena() {
           <p>
             Suenan treinta segundos de una banda sonora —el tema de la película, no una versión— y{' '}
             <strong>se grita</strong>. Nadie escribe nada: el que pone la música hace de moderador,
-            toca el nombre del que la ha sacado y a la siguiente. La música da vueltas hasta
-            entonces, o hasta que se acabe el tiempo.
+            toca el nombre del que la ha sacado y a la siguiente.
           </p>
           <p>
             <strong>Suena en un solo móvil</strong>, el que esté más cerca del altavoz. Diez
             teléfonos medio segundo desincronizados no es música, es ruido. Quien modera juega
             igual: no ve nada que no oigan los demás hasta que se destapa. Y si se va con el móvil
             en el bolsillo, cualquiera recoge el mando con «que suene aquí».
+          </p>
+          <p>
+            <strong>El reloj no cierra la ronda.</strong> Cuando se acaba el tiempo la música se
+            para y ya está: la mesa sigue diciendo títulos, y si alguien la saca entonces se le
+            apunta igual. La ronda la cierra el moderador, con el nombre del que acertó o con «no
+            la sacó nadie».
           </p>
           <p>
             Lo que vale y lo que no lo decide la mesa, como en el salón de casa: «la de los piratas»
