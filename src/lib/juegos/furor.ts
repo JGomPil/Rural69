@@ -5,17 +5,20 @@
 // una palabra, los dos equipos cantan por turnos canciones que la
 // contengan, y el que se queda en blanco —o repite una canción ya
 // cantada— le regala un MINIPUNTO al contrario. A los tres minipuntos,
-// punto y prueba ganada. Gana la partida quien llegue antes a los
-// puntos acordados.
+// punto y palabra nueva.
 //
-// Aquí dentro no hay ni pantalla ni reloj: son funciones que reciben una
-// partida y devuelven otra. Así las reglas se pueden probar sin abrir el
-// navegador, que es justo lo que no se puede hacer con un cronómetro de
-// verdad y once personas gritando.
+// No hay meta ni ganador automático: manda el moderador. Puede subir y
+// bajar el marcador cuando le parezca, y la partida se acaba cuando él
+// diga, que es como acaban estas cosas de verdad.
 //
-// El reloj lo lleva la pantalla, y cuando llega a cero llama a `falla`
-// con motivo 'tiempo'. Para las reglas, quedarse callado y que se acabe
-// el tiempo es exactamente lo mismo.
+// Aquí dentro no hay pantalla: son funciones que reciben una partida y
+// devuelven otra, con el azar y la hora inyectados. Así las reglas se
+// prueban sin cronómetro y sin navegador.
+//
+// La hora de fin de la cuenta atrás vive DENTRO de la partida, no en la
+// pantalla. Parece un detalle y es lo que permite que la cuenta atrás
+// sea la misma en todos los móviles: se comparte un instante, no unos
+// segundos que cada aparato contaría a su manera.
 // =====================================================================
 
 import { PALABRAS, eligePalabra } from './palabras'
@@ -34,8 +37,8 @@ export interface Equipo {
 }
 
 export interface Partida {
-  /** Marca del formato: si un día cambia, la partida guardada se tira. */
-  version: 1
+  /** Marca del formato: si cambia, la partida guardada se tira. */
+  version: 2
   equipos: Record<Lado, Equipo>
   /** A quién le toca cantar ahora mismo. */
   turno: Lado
@@ -50,9 +53,13 @@ export interface Partida {
   segundos: number
   /** Minipuntos que valen un punto. En el programa, tres. */
   minipuntosPorPunto: number
-  /** Puntos para llevarse la partida. */
-  meta: number
-  ganador: Lado | null
+  /**
+   * Cuándo se acaba la cuenta atrás, en hora del moderador. `null` es
+   * reloj parado: entre palabra y palabra no corre el tiempo.
+   */
+  fin: number | null
+  /** Hora del moderador al publicar, para corregir el desfase de relojes. */
+  emitido: number
   /** Lo que ha ido pasando, lo último arriba. */
   historia: string[]
 }
@@ -63,16 +70,15 @@ export interface Opciones {
   genteA: string[]
   genteB: string[]
   segundos: number
-  meta: number
   minipuntosPorPunto?: number
 }
 
 /** Quién empieza se echa a suertes, y eso marca toda la partida. */
-export function nuevaPartida(o: Opciones, azar: () => number = Math.random): Partida {
+export function nuevaPartida(o: Opciones, azar: () => number = Math.random, ahora = Date.now()): Partida {
   const abre: Lado = azar() < 0.5 ? 'a' : 'b'
   const palabra = eligePalabra([], azar)
   return {
-    version: 1,
+    version: 2,
     equipos: {
       a: { nombre: o.nombreA, gente: o.genteA, puntos: 0, minipuntos: 0 },
       b: { nombre: o.nombreB, gente: o.genteB, puntos: 0, minipuntos: 0 },
@@ -84,16 +90,25 @@ export function nuevaPartida(o: Opciones, azar: () => number = Math.random): Par
     cantadas: 0,
     segundos: o.segundos,
     minipuntosPorPunto: o.minipuntosPorPunto ?? 3,
-    meta: o.meta,
-    ganador: null,
+    fin: null,
+    emitido: ahora,
     historia: [`Empieza ${abre === 'a' ? o.nombreA : o.nombreB}, por sorteo. A ${o.segundos} segundos por canción.`],
   }
 }
 
-/** Han cantado a tiempo: la pelota pasa al otro equipo con la misma palabra. */
-export function cantada(p: Partida): Partida {
-  if (p.ganador) return p
-  return { ...p, turno: otroLado(p.turno), cantadas: p.cantadas + 1 }
+/** Se pone el reloj en marcha. */
+export function arranca(p: Partida, ahora = Date.now()): Partida {
+  return { ...p, fin: ahora + p.segundos * 1000 }
+}
+
+/** Se para el reloj sin castigo: una pausa, una discusión, lo que sea. */
+export function para(p: Partida): Partida {
+  return { ...p, fin: null }
+}
+
+/** Han cantado a tiempo: la pelota pasa al otro equipo con el reloj a cero. */
+export function cantada(p: Partida, ahora = Date.now()): Partida {
+  return { ...p, turno: otroLado(p.turno), cantadas: p.cantadas + 1, fin: ahora + p.segundos * 1000 }
 }
 
 export type Motivo = 'tiempo' | 'blanco' | 'repetida'
@@ -106,17 +121,12 @@ const COMO: Record<Motivo, string> = {
 
 /**
  * No les ha salido. Minipunto para el contrario y palabra nueva; y si con
- * ese minipunto llega a tres, se lleva el punto y empieza otra prueba.
+ * ese minipunto llega a tres, se lleva el punto.
  */
 export function falla(p: Partida, motivo: Motivo = 'tiempo', azar: () => number = Math.random): Partida {
-  if (p.ganador) return p
-
   const pierde = p.turno
   const gana = otroLado(pierde)
-  const equipos: Record<Lado, Equipo> = {
-    a: { ...p.equipos.a },
-    b: { ...p.equipos.b },
-  }
+  const equipos: Record<Lado, Equipo> = { a: { ...p.equipos.a }, b: { ...p.equipos.b } }
   equipos[gana].minipuntos += 1
 
   const apuntes: string[] = [
@@ -125,18 +135,11 @@ export function falla(p: Partida, motivo: Motivo = 'tiempo', azar: () => number 
     }. Minipunto para ${equipos[gana].nombre}.`,
   ]
 
-  let ganador: Lado | null = null
   if (equipos[gana].minipuntos >= p.minipuntosPorPunto) {
     equipos[gana].puntos += 1
     equipos.a.minipuntos = 0
     equipos.b.minipuntos = 0
-    apuntes.unshift(
-      `¡Punto para ${equipos[gana].nombre}! Van ${equipos.a.puntos}-${equipos.b.puntos}.`,
-    )
-    if (equipos[gana].puntos >= p.meta) {
-      ganador = gana
-      apuntes.unshift(`🏆 ${equipos[gana].nombre} gana la partida.`)
-    }
+    apuntes.unshift(`¡Punto para ${equipos[gana].nombre}! Van ${equipos.a.puntos}-${equipos.b.puntos}.`)
   }
 
   // La palabra siguiente la abre el otro equipo, pase lo que pase: así
@@ -147,20 +150,20 @@ export function falla(p: Partida, motivo: Motivo = 'tiempo', azar: () => number 
   return {
     ...p,
     equipos,
-    ganador,
     turno: abre,
     abre,
     palabra,
     // Cuando se acaban todas, vuelta a empezar la bolsa.
     usadas: p.usadas.length + 1 >= PALABRAS.length ? [palabra] : [...p.usadas, palabra],
     cantadas: 0,
+    // El reloj se para: entre palabra y palabra se habla.
+    fin: null,
     historia: [...apuntes, ...p.historia],
   }
 }
 
 /** Palabra imposible, de esas que no tiene ninguna canción. Sin castigo. */
 export function cambiaPalabra(p: Partida, azar: () => number = Math.random): Partida {
-  if (p.ganador) return p
   const palabra = eligePalabra(p.usadas, azar)
   return {
     ...p,
@@ -168,12 +171,33 @@ export function cambiaPalabra(p: Partida, azar: () => number = Math.random): Par
     usadas: [...p.usadas, palabra],
     cantadas: 0,
     turno: p.abre,
+    fin: null,
     historia: [`Palabra cambiada: «${p.palabra.toUpperCase()}» no valía.`, ...p.historia],
   }
 }
 
+/**
+ * El moderador toca el marcador a mano. Es el juez: si decide que esa
+ * actuación vale un punto, vale un punto, y no hay más que hablar.
+ */
+export function ajustaPuntos(p: Partida, lado: Lado, cuantos: number): Partida {
+  const equipos: Record<Lado, Equipo> = { a: { ...p.equipos.a }, b: { ...p.equipos.b } }
+  const antes = equipos[lado].puntos
+  equipos[lado].puntos = Math.max(0, antes + cuantos)
+  if (equipos[lado].puntos === antes) return p
+  const signo = equipos[lado].puntos > antes ? '+1' : '−1'
+  return {
+    ...p,
+    equipos,
+    historia: [
+      `${signo} a mano para ${equipos[lado].nombre}. Van ${equipos.a.puntos}-${equipos.b.puntos}.`,
+      ...p.historia,
+    ],
+  }
+}
+
 /** Otra partida con los mismos equipos y la misma configuración. */
-export function otraVez(p: Partida, azar: () => number = Math.random): Partida {
+export function otraVez(p: Partida, azar: () => number = Math.random, ahora = Date.now()): Partida {
   return nuevaPartida(
     {
       nombreA: p.equipos.a.nombre,
@@ -181,11 +205,29 @@ export function otraVez(p: Partida, azar: () => number = Math.random): Partida {
       genteA: p.equipos.a.gente,
       genteB: p.equipos.b.gente,
       segundos: p.segundos,
-      meta: p.meta,
       minipuntosPorPunto: p.minipuntosPorPunto,
     },
     azar,
+    ahora,
   )
+}
+
+/** Se marca la hora justo antes de publicar, para que los demás ajusten. */
+export function sella(p: Partida, ahora = Date.now()): Partida {
+  return { ...p, emitido: ahora }
+}
+
+/**
+ * Lo que queda de cuenta atrás en ESTE móvil.
+ *
+ * El `fin` viene con el reloj del moderador, y dos teléfonos no tienen
+ * la misma hora exacta. `desfase` es lo que va del uno al otro, medido
+ * al recibir la partida, y sin corregirlo la cuenta atrás de los demás
+ * podría ir varios segundos adelantada o atrasada.
+ */
+export function restanteDe(p: Partida, desfase = 0, ahora = Date.now()): number {
+  if (p.fin === null) return p.segundos
+  return Math.max(0, (p.fin + desfase - ahora) / 1000)
 }
 
 // ---------------------------------------------------------------------
@@ -193,8 +235,8 @@ export function otraVez(p: Partida, azar: () => number = Math.random): Partida {
 // ---------------------------------------------------------------------
 // Una partida dura un rato largo y el móvil se bloquea solo. Si al
 // desbloquear se hubiera perdido el marcador, el juego no se volvería a
-// usar. No va al servidor: esto se juega alrededor de una mesa, con un
-// solo aparato, y muchas veces sin cobertura.
+// usar. Esto es la red de seguridad del moderador cuando no hay
+// cobertura; cuando la hay, la partida de verdad está en la mesa.
 
 const LLAVE = 'rural69-furor'
 
@@ -213,7 +255,7 @@ export function leePartida(): Partida | null {
     if (!crudo) return null
     const p = JSON.parse(crudo) as Partida
     // Lo mínimo para no pintar una pantalla rota con una partida de otra época.
-    if (p?.version !== 1 || !p.equipos?.a || !p.equipos?.b || typeof p.palabra !== 'string') return null
+    if (p?.version !== 2 || !p.equipos?.a || !p.equipos?.b || typeof p.palabra !== 'string') return null
     return p
   } catch {
     return null

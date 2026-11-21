@@ -56,8 +56,15 @@ export const TABLAS_COPIA = [
  *     nada restauradas y mejor no tenerlas dando vueltas en un archivo.
  *   · `notifications` y `message_reads`: avisos ya leídos y quién leyó
  *     qué. Se regeneran solos y solo abultan.
+ *   · `game_sessions`: la partida que se está jugando ahora mismo. Dura
+ *     lo que dura la noche y no significa nada al día siguiente.
  */
-export const FUERA_DE_LA_COPIA = ['push_subscriptions', 'notifications', 'message_reads']
+export const FUERA_DE_LA_COPIA = [
+  'push_subscriptions',
+  'notifications',
+  'message_reads',
+  'game_sessions',
+]
 
 const CLAVE_FECHA = 'rural69-ultima-copia'
 

@@ -1,21 +1,20 @@
 import { useMemo, useState } from 'react'
-import { Dices, Eraser, Play, Users } from 'lucide-react'
+import { Dices, Eraser, Hand, Play, Users, Volume2 } from 'lucide-react'
 import { Avatar } from '../ui/Avatar'
 import { Boton } from '../ui/Boton'
 import { Campo, Entrada, Lista } from '../ui/Campos'
 import { Tarjeta } from '../ui/Varios'
+import { despiertaElSonido, timbre } from '../../lib/juegos/sonido'
 import { reparteAlAzar, type Lado, type Opciones } from '../../lib/juegos/furor'
 import { COLOR } from './colores'
 import type { Member } from '../../lib/types'
 
 const SEGUNDOS = [15, 20, 30, 45, 60]
-const METAS = [1, 2, 3, 5]
 
 export function FurorEquipos({ gente, onEmpezar }: { gente: Member[]; onEmpezar: (o: Opciones) => void }) {
   const [nombreA, setNombreA] = useState('Ellas')
   const [nombreB, setNombreB] = useState('Ellos')
   const [segundos, setSegundos] = useState(30)
-  const [meta, setMeta] = useState(3)
   const [reparto, setReparto] = useState<Record<string, Lado | undefined>>({})
 
   const equipos = useMemo(() => {
@@ -102,7 +101,7 @@ export function FurorEquipos({ gente, onEmpezar }: { gente: Member[]; onEmpezar:
       </Tarjeta>
 
       <Tarjeta className="space-y-4 p-4">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 items-end gap-3">
           <Campo etiqueta="Tiempo para arrancar" ayuda="Por canción">
             <Lista value={segundos} onChange={(e) => setSegundos(Number(e.target.value))}>
               {SEGUNDOS.map((s) => (
@@ -112,16 +111,25 @@ export function FurorEquipos({ gente, onEmpezar }: { gente: Member[]; onEmpezar:
               ))}
             </Lista>
           </Campo>
-          <Campo etiqueta="Gana quien llegue a" ayuda="Tres minipuntos, un punto">
-            <Lista value={meta} onChange={(e) => setMeta(Number(e.target.value))}>
-              {METAS.map((p) => (
-                <option key={p} value={p}>
-                  {p} {p === 1 ? 'punto' : 'puntos'}
-                </option>
-              ))}
-            </Lista>
-          </Campo>
+          <Boton
+            variante="secundario"
+            onClick={() => {
+              despiertaElSonido()
+              timbre()
+            }}
+          >
+            <Volume2 size={16} /> Probar el timbre
+          </Boton>
         </div>
+        <p className="text-sm text-suave">
+          El timbre suena en todos los móviles cuando se acaba el tiempo. Súbele el volumen ahora, que
+          luego no se oye nada. En iPhone, el interruptor del lateral también lo calla.
+        </p>
+        <p className="flex items-start gap-2 text-sm text-tenue">
+          <Hand size={16} className="mt-0.5 shrink-0 text-bosque-500" />
+          Quien pulse «¡A jugar!» lleva el mando: el cronómetro y el marcador son suyos, y los demás ven
+          la partida en su móvil. El mando se puede pasar luego a cualquiera.
+        </p>
       </Tarjeta>
 
       <Boton
@@ -134,7 +142,6 @@ export function FurorEquipos({ gente, onEmpezar }: { gente: Member[]; onEmpezar:
             genteA: equipos.a,
             genteB: equipos.b,
             segundos,
-            meta,
           })
         }
       >

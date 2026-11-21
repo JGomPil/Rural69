@@ -1,19 +1,17 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, Info, Music } from 'lucide-react'
+import { useAuth } from '../hooks/useAuth'
 import { useGrupo } from '../hooks/useGrupo'
 import { FurorEquipos } from '../components/juegos/FurorEquipos'
 import { FurorPartida } from '../components/juegos/FurorPartida'
-import { guardaPartida, leePartida, nuevaPartida, type Partida } from '../lib/juegos/furor'
+import { Cargando } from '../components/ui/Varios'
+import { nuevaPartida } from '../lib/juegos/furor'
+import { usaMesa } from '../lib/juegos/sincronia'
 
 export function Furor() {
-  const { miembros } = useGrupo()
-  // Si el móvil se bloqueó a mitad de partida, se recupera donde estaba.
-  const [partida, setPartida] = useState<Partida | null>(() => leePartida())
-
-  useEffect(() => {
-    guardaPartida(partida)
-  }, [partida])
+  const { perfil, esAdmin } = useAuth()
+  const { miembros, perfiles } = useGrupo()
+  const mesa = usaMesa('furor', perfil?.id ?? null)
 
   const gente = miembros.filter((m) => m.active)
 
@@ -32,21 +30,24 @@ export function Furor() {
             <Music size={22} className="text-tierra-600" /> Furor
           </h1>
           <p className="text-sm text-tenue">
-            {partida ? 'Partida en marcha.' : 'Haced los equipos y a cantar.'}
+            {mesa.partida ? 'Partida en marcha.' : 'Haced los equipos y a cantar.'}
           </p>
         </div>
       </header>
 
-      {partida ? (
+      {mesa.cargando ? (
+        <Cargando texto="Mirando si hay partida…" />
+      ) : mesa.partida ? (
         <FurorPartida
-          partida={partida}
+          partida={mesa.partida}
           gente={gente}
-          onCambia={setPartida}
-          onDejarlo={() => setPartida(null)}
+          perfiles={perfiles}
+          mesa={mesa}
+          puedeMandar={esAdmin}
         />
       ) : (
         <>
-          <FurorEquipos gente={gente} onEmpezar={(o) => setPartida(nuevaPartida(o))} />
+          <FurorEquipos gente={gente} onEmpezar={(o) => void mesa.empieza(nuevaPartida(o))} />
           <ComoSeJuega />
         </>
       )}
@@ -68,16 +69,21 @@ function ComoSeJuega() {
         </p>
         <p>
           El equipo que se queda en blanco —o que repite una canción ya cantada— le regala un{' '}
-          <strong>minipunto</strong> al contrario. A los tres minipuntos, un punto y palabra nueva. Gana
-          quien llegue antes a los puntos acordados.
+          <strong>minipunto</strong> al contrario. A los tres minipuntos, un punto y palabra nueva.
         </p>
         <p>
           Nadie abre dos palabras seguidas: después de cada fallo, la siguiente la empieza el otro
           equipo. Quién arranca la primera lo echa a suertes la aplicación.
         </p>
+        <p>
+          <strong>Manda el moderador.</strong> Él lleva el cronómetro y él decide el marcador: puede
+          subir o bajar puntos cuando le parezca, y la partida se acaba cuando él dice. Los demás ven la
+          palabra, el turno y la cuenta atrás en su propio móvil, sin botones.
+        </p>
         <p className="text-suave">
           Es la prueba «Tienes la palabra» del Furor de Antena 3. Allí el equipo que perdía se comía un
-          popurrí cantado subido a las mesas, y si lo bordaba, empataba. Eso ya es cosa vuestra.
+          popurrí cantado subido a las mesas, y si lo bordaba, el presentador le daba el punto igual.
+          Para eso están los botones de más y menos.
         </p>
       </div>
     </details>

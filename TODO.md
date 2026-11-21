@@ -404,6 +404,12 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       puntos. La partida se guarda en el aparato por si se bloquea el móvil.
       Reglas probadas aparte de la pantalla, 23 pruebas.
       (`src/lib/juegos/furor.ts`, `src/components/juegos/`)
+- [x] **Moderador, timbre y partida compartida.** El que empieza lleva el mando: el
+      cronómetro y el marcador son suyos y los demás solo miran, impuesto por los permisos
+      de `game_sessions`. Fuera la meta de puntos: el marcador se toca a mano. El aviso del
+      final ya no es un pitido, son tres repiques que se oyen desde la cocina, y suenan en
+      todos los móviles. La cuenta atrás viaja como instante y cada pantalla corrige el
+      desfase de su reloj. (`supabase/22_juegos.sql`, `src/lib/juegos/sincronia.ts`)
 - [ ] **Que salga solo estando allí.** Enganchar la sección a `momentoDe() ===
       'durante'` y esconder el enlace del menú el resto del año.
 - [ ] **El marcador de la casa.** Guardar quién ganó cada partida para picarse
@@ -422,6 +428,8 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       tiempo real, y las tres columnas de silencio en `profiles`, con los perfiles
       del grupo en 23:00 → 8:00. Probada también la escritura: apagar y volver a
       encender el interruptor del perfil, confirmado tras recargar del todo.
+- [ ] Pasar `supabase/22_juegos.sql` en el SQL Editor. Sin él, el Furor funciona pero
+      solo en el móvil del que juega: nadie más ve la partida.
 - [ ] Volver a desplegar la *Edge Function* `avisar` (panel → Edge Functions →
       avisar → Code → pegar `supabase/functions/avisar/index.ts` → Deploy). Sin
       esto, ni el silencio de noche ni el número del icono con la app cerrada.

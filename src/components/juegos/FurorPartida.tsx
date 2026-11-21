@@ -1,11 +1,40 @@
 import { useEffect, useRef, useState } from 'react'
-import { Flag, History, Mic, Pause, Play, RefreshCw, Repeat2, Shuffle, Trophy, Users, X } from 'lucide-react'
+import {
+  CloudOff,
+  Eye,
+  Flag,
+  Hand,
+  History,
+  Mic,
+  Minus,
+  Pause,
+  Play,
+  Plus,
+  RefreshCw,
+  Repeat2,
+  Shuffle,
+  X,
+} from 'lucide-react'
 import { Boton } from '../ui/Boton'
+import { Lista } from '../ui/Campos'
 import { Tarjeta } from '../ui/Varios'
 import { COLOR } from './colores'
-import { bocina, fanfarria, mantenLaPantalla, tic } from '../../lib/juegos/sonido'
-import { cambiaPalabra, cantada, falla, otraVez, otroLado, type Lado, type Partida } from '../../lib/juegos/furor'
-import type { Member } from '../../lib/types'
+import { despiertaElSonido, fanfarria, mantenLaPantalla, tic, timbre } from '../../lib/juegos/sonido'
+import {
+  ajustaPuntos,
+  arranca,
+  cambiaPalabra,
+  cantada,
+  falla,
+  otraVez,
+  otroLado,
+  para,
+  restanteDe,
+  type Lado,
+  type Partida,
+} from '../../lib/juegos/furor'
+import type { Mesa } from '../../lib/juegos/sincronia'
+import type { Member, Profile } from '../../lib/types'
 
 /** El círculo que se vacía. Se ve desde el otro lado de la mesa. */
 function Cuenta({ restante, total }: { restante: number; total: number }) {
@@ -46,16 +75,23 @@ function Minipuntos({ cuantos, de, lado }: { cuantos: number; de: number; lado: 
   return (
     <span className="flex justify-center gap-1" aria-label={`${cuantos} de ${de} minipuntos`}>
       {Array.from({ length: de }, (_, i) => (
-        <span
-          key={i}
-          className={`h-2.5 w-2.5 rounded-full ${i < cuantos ? COLOR[lado].fondo : 'bg-arena'}`}
-        />
+        <span key={i} className={`h-2.5 w-2.5 rounded-full ${i < cuantos ? COLOR[lado].fondo : 'bg-arena'}`} />
       ))}
     </span>
   )
 }
 
-function Marcador({ partida, gente }: { partida: Partida; gente: Member[] }) {
+function Marcador({
+  partida,
+  gente,
+  mando,
+  onAjusta,
+}: {
+  partida: Partida
+  gente: Member[]
+  mando: boolean
+  onAjusta: (lado: Lado, cuantos: number) => void
+}) {
   const nombres = (ids: string[]) =>
     ids
       .map((id) => gente.find((m) => m.id === id)?.name)
@@ -65,13 +101,18 @@ function Marcador({ partida, gente }: { partida: Partida; gente: Member[] }) {
   return (
     <Tarjeta className="p-4">
       {/* `min-w-0` no es decorativo: sin él, la lista de nombres estira su
-          columna y el marcador se sale de la tarjeta. Con ocho nombres por
-          equipo se notaba a la primera. */}
+          columna y el marcador se sale de la tarjeta. */}
       <div className="flex items-start gap-3">
         {(['a', 'b'] as Lado[]).map((lado, i) => (
           <div key={lado} className={`min-w-0 flex-1 ${i === 0 ? 'text-left' : 'text-right'}`}>
             <p className={`truncate font-semibold ${COLOR[lado].texto}`}>{partida.equipos[lado].nombre}</p>
-            <p className="font-display text-3xl text-carbon tabular-nums">{partida.equipos[lado].puntos}</p>
+            <div className={`flex items-center gap-2 ${i === 0 ? 'justify-start' : 'justify-end'}`}>
+              {mando && i === 1 && <Mas onClick={() => onAjusta(lado, -1)} signo="menos" />}
+              <p className="font-display text-3xl text-carbon tabular-nums">{partida.equipos[lado].puntos}</p>
+              {mando && i === 0 && <Mas onClick={() => onAjusta(lado, 1)} signo="mas" />}
+              {mando && i === 0 && <Mas onClick={() => onAjusta(lado, -1)} signo="menos" />}
+              {mando && i === 1 && <Mas onClick={() => onAjusta(lado, 1)} signo="mas" />}
+            </div>
             <div className={i === 0 ? 'flex justify-start' : 'flex justify-end'}>
               <Minipuntos
                 cuantos={partida.equipos[lado].minipuntos}
@@ -85,109 +126,103 @@ function Marcador({ partida, gente }: { partida: Partida; gente: Member[] }) {
           </div>
         ))}
       </div>
-      <p className="mt-2 text-center text-xs text-suave">
-        Gana quien llegue a {partida.meta} {partida.meta === 1 ? 'punto' : 'puntos'}
-      </p>
     </Tarjeta>
+  )
+}
+
+function Mas({ onClick, signo }: { onClick: () => void; signo: 'mas' | 'menos' }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={signo === 'mas' ? 'Un punto más' : 'Un punto menos'}
+      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-arena bg-superficie text-tenue transition active:scale-90 hover:bg-beige"
+    >
+      {signo === 'mas' ? <Plus size={14} /> : <Minus size={14} />}
+    </button>
   )
 }
 
 export function FurorPartida({
   partida,
   gente,
-  onCambia,
-  onDejarlo,
+  perfiles,
+  mesa,
+  puedeMandar,
 }: {
   partida: Partida
   gente: Member[]
-  onCambia: (p: Partida) => void
-  onDejarlo: () => void
+  perfiles: Profile[]
+  mesa: Mesa
+  /** Un administrador puede recoger el mando si el moderador desaparece. */
+  puedeMandar: boolean
 }) {
-  const [fin, setFin] = useState<number | null>(null)
-  const [restante, setRestante] = useState(partida.segundos)
+  const { soyModerador, desfase, publica, aSolas } = mesa
+  const [, repinta] = useState(0)
   const [verHistoria, setVerHistoria] = useState(false)
   const ultimoTic = useRef(0)
-  const corriendo = fin !== null
+  const corriendo = partida.fin !== null
+  const restante = restanteDe(partida, desfase)
 
-  const arranca = () => {
-    setRestante(partida.segundos)
-    ultimoTic.current = partida.segundos
-    setFin(Date.now() + partida.segundos * 1000)
-  }
-  const para = () => setFin(null)
-
-  // El reloj se reinicia solo cada vez que cambia de manos o sale palabra
-  // nueva. No cuenta con `setInterval` a pelo: se compara con la hora de
-  // fin, porque el navegador adormece los temporizadores en segundo plano
-  // y si no el tiempo se estiraría a favor de quien canta.
+  // El reloj no cuenta vueltas: compara con el instante de fin que viaja
+  // dentro de la partida. Por eso la cuenta atrás es la misma en todos los
+  // móviles, y por eso no se estira cuando el navegador adormece el
+  // temporizador en segundo plano.
   useEffect(() => {
-    if (fin === null || partida.ganador) return
+    if (partida.fin === null) return
+    ultimoTic.current = Math.ceil(restanteDe(partida, desfase))
     const reloj = setInterval(() => {
-      const quedan = (fin - Date.now()) / 1000
-      if (quedan <= 0) {
-        clearInterval(reloj)
-        setRestante(0)
-        setFin(null)
-        bocina()
-        onCambia(falla(partida, 'tiempo'))
+      const quedan = restanteDe(partida, desfase)
+      if (quedan > 0) {
+        repinta((n) => n + 1)
+        const entero = Math.ceil(quedan)
+        if (entero <= 3 && entero !== ultimoTic.current) {
+          ultimoTic.current = entero
+          tic()
+        }
         return
       }
-      setRestante(quedan)
-      const entero = Math.ceil(quedan)
-      if (entero <= 3 && entero !== ultimoTic.current) {
-        ultimoTic.current = entero
-        tic()
-      }
+      clearInterval(reloj)
+      // Suena en todos los móviles: es el momento del juego.
+      timbre()
+      // Pero el marcador lo mueve solo quien lleva el mando.
+      if (soyModerador) publica(falla(partida, 'tiempo'))
+      else repinta((n) => n + 1)
     }, 100)
     return () => clearInterval(reloj)
-  }, [fin, partida, onCambia])
+  }, [partida, desfase, soyModerador, publica])
 
-  // Mientras se juega, la pantalla no se apaga.
+  // Mientras corre el reloj, la pantalla no se apaga.
   useEffect(() => {
     void mantenLaPantalla(corriendo)
     return () => void mantenLaPantalla(false)
   }, [corriendo])
 
-  const suenaPunto = useRef(partida.equipos.a.puntos + partida.equipos.b.puntos)
+  const puntosTotales = partida.equipos.a.puntos + partida.equipos.b.puntos
+  const ultimoPunto = useRef(puntosTotales)
   useEffect(() => {
-    const total = partida.equipos.a.puntos + partida.equipos.b.puntos
-    if (total > suenaPunto.current) fanfarria()
-    suenaPunto.current = total
-  }, [partida.equipos.a.puntos, partida.equipos.b.puntos])
+    if (puntosTotales > ultimoPunto.current) fanfarria()
+    ultimoPunto.current = puntosTotales
+  }, [puntosTotales])
 
   const turno = partida.turno
   const rival = otroLado(turno)
 
-  if (partida.ganador) {
-    const g = partida.equipos[partida.ganador]
-    return (
-      <div className="space-y-5">
-        <Tarjeta className="space-y-3 p-8 text-center">
-          <Trophy size={48} className="mx-auto text-tierra-500" />
-          <h2 className="font-display text-2xl text-bosque-800">¡Gana {g.nombre}!</h2>
-          <p className="font-display text-4xl text-carbon tabular-nums">
-            {partida.equipos.a.puntos} — {partida.equipos.b.puntos}
-          </p>
-          <p className="text-sm text-suave">
-            Al perdedor le toca el popurrí: cantar un mix subidos a lo que haya, y si lo bordan, empate.
-          </p>
-        </Tarjeta>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Boton tamanyo="lg" ancho onClick={() => onCambia(otraVez(partida))}>
-            <RefreshCw size={18} /> Otra partida
-          </Boton>
-          <Boton variante="secundario" tamanyo="lg" ancho onClick={onDejarlo}>
-            <Users size={18} /> Cambiar equipos
-          </Boton>
-        </div>
-        <Historia partida={partida} abierta onAlternar={() => undefined} />
-      </div>
-    )
+  const conSonido = (hacer: () => void) => () => {
+    despiertaElSonido()
+    hacer()
   }
 
   return (
     <div className="space-y-4">
-      <Marcador partida={partida} gente={gente} />
+      <Mando mesa={mesa} perfiles={perfiles} puedeMandar={puedeMandar} />
+
+      <Marcador
+        partida={partida}
+        gente={gente}
+        mando={soyModerador}
+        onAjusta={(lado, cuantos) => publica(ajustaPuntos(partida, lado, cuantos))}
+      />
 
       <Tarjeta className="space-y-4 p-5 text-center">
         <p className="text-sm text-suave">Canta una canción que diga…</p>
@@ -210,79 +245,135 @@ export function FurorPartida({
           <Cuenta restante={restante} total={partida.segundos} />
         ) : (
           <div className="flex h-44 flex-col items-center justify-center gap-3">
-            <p className="text-sm text-suave">
-              {partida.historia[0]?.startsWith('¡Punto')
-                ? partida.historia[0]
-                : partida.historia[0] ?? 'Preparados…'}
-            </p>
-            <Boton tamanyo="lg" onClick={arranca}>
-              <Play size={20} /> ¡Ya!
-            </Boton>
+            <p className="text-sm text-suave">{partida.historia[0] ?? 'Preparados…'}</p>
+            {soyModerador ? (
+              <Boton tamanyo="lg" onClick={conSonido(() => publica(arranca(partida)))}>
+                <Play size={20} /> ¡Ya!
+              </Boton>
+            ) : (
+              <p className="text-sm text-tenue">Esperando al moderador…</p>
+            )}
           </div>
         )}
 
-        <Boton
-          tamanyo="lg"
-          ancho
-          disabled={!corriendo}
-          onClick={() => {
-            onCambia(cantada(partida))
-            arranca()
-          }}
-          className={COLOR[turno].fondo}
-        >
-          <Mic size={18} /> ¡Cantada! Le toca a {partida.equipos[rival].nombre}
-        </Boton>
-
-        <div className="grid grid-cols-2 gap-2">
-          <Boton
-            variante="peligro"
-            disabled={!corriendo}
-            onClick={() => {
-              para()
-              bocina()
-              onCambia(falla(partida, 'blanco'))
-            }}
-          >
-            <Flag size={16} /> No les sale
-          </Boton>
-          <Boton
-            variante="peligro"
-            disabled={!corriendo}
-            onClick={() => {
-              para()
-              bocina()
-              onCambia(falla(partida, 'repetida'))
-            }}
-          >
-            <Repeat2 size={16} /> Repiten
-          </Boton>
-        </div>
-
-        <div className="flex items-center justify-center gap-2">
-          {corriendo && (
-            <Boton variante="fantasma" tamanyo="sm" onClick={para}>
-              <Pause size={15} /> Pausa
+        {soyModerador ? (
+          <>
+            <Boton
+              tamanyo="lg"
+              ancho
+              disabled={!corriendo}
+              onClick={conSonido(() => publica(cantada(partida)))}
+              className={COLOR[turno].fondo}
+            >
+              <Mic size={18} /> ¡Cantada! Le toca a {partida.equipos[rival].nombre}
             </Boton>
-          )}
-          <Boton
-            variante="fantasma"
-            tamanyo="sm"
-            onClick={() => {
-              para()
-              onCambia(cambiaPalabra(partida))
-            }}
-          >
-            <Shuffle size={15} /> Otra palabra
-          </Boton>
-          <Boton variante="fantasma" tamanyo="sm" onClick={onDejarlo}>
-            <X size={15} /> Dejarlo
-          </Boton>
-        </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <Boton
+                variante="peligro"
+                disabled={!corriendo}
+                onClick={conSonido(() => {
+                  timbre()
+                  publica(falla(partida, 'blanco'))
+                })}
+              >
+                <Flag size={16} /> No les sale
+              </Boton>
+              <Boton
+                variante="peligro"
+                disabled={!corriendo}
+                onClick={conSonido(() => {
+                  timbre()
+                  publica(falla(partida, 'repetida'))
+                })}
+              >
+                <Repeat2 size={16} /> Repiten
+              </Boton>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {corriendo && (
+                <Boton variante="fantasma" tamanyo="sm" onClick={() => publica(para(partida))}>
+                  <Pause size={15} /> Pausa
+                </Boton>
+              )}
+              <Boton variante="fantasma" tamanyo="sm" onClick={() => publica(cambiaPalabra(partida))}>
+                <Shuffle size={15} /> Otra palabra
+              </Boton>
+              <Boton variante="fantasma" tamanyo="sm" onClick={() => publica(otraVez(partida))}>
+                <RefreshCw size={15} /> Empezar de cero
+              </Boton>
+              <Boton variante="fantasma" tamanyo="sm" onClick={() => void mesa.termina()}>
+                <X size={15} /> Terminar
+              </Boton>
+            </div>
+          </>
+        ) : (
+          <p className="flex items-center justify-center gap-2 rounded-2xl bg-beige px-4 py-3 text-sm text-tenue">
+            <Eye size={16} /> El mando lo lleva otro. Tú canta.
+          </p>
+        )}
       </Tarjeta>
+
+      {aSolas && (
+        <p className="flex items-center justify-center gap-2 text-center text-xs text-suave">
+          <CloudOff size={14} /> Sin línea con el servidor: esta partida solo se ve en este aparato.
+        </p>
+      )}
 
       <Historia partida={partida} abierta={verHistoria} onAlternar={() => setVerHistoria((v) => !v)} />
     </div>
+  )
+}
+
+/** Quién lleva el mando, y cómo cambiarlo. */
+function Mando({
+  mesa,
+  perfiles,
+  puedeMandar,
+}: {
+  mesa: Mesa
+  perfiles: Profile[]
+  puedeMandar: boolean
+}) {
+  const { moderador, soyModerador, aSolas } = mesa
+  if (aSolas) return null
+
+  const quien = perfiles.find((p) => p.id === moderador)
+
+  return (
+    <Tarjeta className="flex flex-wrap items-center gap-2 px-4 py-3">
+      <Hand size={16} className="text-bosque-500" />
+      <span className="text-sm text-tenue">
+        {soyModerador ? 'Llevas tú el mando' : `Lleva el mando ${quien?.display_name ?? 'otro'}`}
+      </span>
+      <span className="flex-1" />
+      {soyModerador ? (
+        <Lista
+          value=""
+          aria-label="Pasar el mando"
+          className="!h-9 !w-40 !text-sm"
+          onChange={(e) => {
+            if (e.target.value) void mesa.pasaElMando(e.target.value)
+          }}
+        >
+          <option value="">Pasar el mando…</option>
+          {perfiles
+            .filter((p) => p.id !== moderador)
+            .map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.display_name}
+              </option>
+            ))}
+        </Lista>
+      ) : (
+        puedeMandar && (
+          <Boton variante="secundario" tamanyo="sm" onClick={() => void mesa.tomaElMando()}>
+            Tomar el mando
+          </Boton>
+        )
+      )}
+    </Tarjeta>
   )
 }
 

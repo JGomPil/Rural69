@@ -649,11 +649,31 @@ repite canción le da un **minipunto** al contrario; a los tres minipuntos, un p
 Nadie abre dos palabras seguidas —después de cada fallo arranca el otro equipo—, y quién
 empieza la primera se echa a suertes, que es lo que marca toda la partida.
 
+**Manda el moderador.** Quien empieza la partida lleva el mando: el cronómetro y el
+marcador son suyos, puede subir o bajar puntos cuando le parezca —como hacía Caparrós— y
+la partida acaba cuando él dice. No hay meta ni ganador automático. Los demás ven en su
+móvil la palabra, el turno, la cuenta atrás y el marcador, y **no tienen botones**. Eso no
+es decoración: lo imponen los permisos de `game_sessions`, que rechazan el cambio de
+cualquiera que no sea el moderador (o un administrador, por si se queda sin batería). El
+mando se puede pasar a otro en marcha.
+
 Decisiones que no se ven:
 
-- **Un solo aparato.** Esto se juega alrededor de una mesa, a voces y muchas veces sin
-  cobertura. No hay base de datos, no hay tiempo real y no hace falta que nadie más tenga
-  la aplicación abierta: el móvil que lleva el juego hace de presentador.
+- **La partida está en la mesa, no en un móvil.** Es una fila en `game_sessions`: el
+  moderador la escribe y a los demás les llega por tiempo real. Tres detalles que costaron
+  más que el resto:
+  - **El eco.** Lo que escribe el moderador le vuelve un instante después; si se lo
+    creyera, su pantalla daría un saltito en cada toque. Se ignora lo que viene firmado
+    por uno mismo.
+  - **El desfase de relojes.** La cuenta atrás viaja como un instante («esto se acaba a
+    las 23:04:11»), no como «quedan 30 segundos», porque dos móviles no tienen la misma
+    hora. Al recibir la partida se mide la diferencia y cada pantalla corrige la suya.
+  - **Sin línea se juega igual.** Si no hay cobertura —o si todavía no se ha pasado el
+    SQL— la partida se queda en este aparato y lo dice; nadie se queda a medias.
+- **El timbre tiene que oírse desde la cocina.** Al acabarse el tiempo suenan tres
+  repiques de dos tonos con onda cuadrada, casi dos segundos, en **todos** los móviles a
+  la vez. Hay un botón para probarlo antes de empezar, porque en iPhone el interruptor del
+  lateral lo calla y el sonido no arranca hasta que alguien toca la pantalla.
 - **Las reglas, aparte de la pantalla.** `src/lib/juegos/furor.ts` son funciones puras
   que reciben una partida y devuelven otra, con el azar inyectado. Por eso se pueden
   probar las 23 pruebas sin cronómetro ni navegador, que es justo lo que no se puede
@@ -661,12 +681,10 @@ Decisiones que no se ven:
 - **El reloj mira la hora, no cuenta vueltas.** Compara con la hora de fin en vez de
   restar en cada `setInterval`, porque el navegador adormece los temporizadores y si no
   el tiempo se estiraría a favor de quien está cantando.
-- **La partida sobrevive al bloqueo del móvil.** Se guarda en el propio aparato. Si se
-  perdiera el marcador al desbloquear, el juego no se usaría una segunda vez.
-- **Suena y no se apaga.** Pitido de aviso en los últimos tres segundos y bocina al
-  acabarse el tiempo, porque nadie está mirando la pantalla; y mientras corre el reloj se
-  pide no apagar la pantalla. Las dos cosas van envueltas en `try`: si el navegador no
-  deja (iOS es tacaño con las dos), se juega igual.
+- **La partida sobrevive al bloqueo del móvil.** El moderador la guarda también en su
+  aparato. Si se perdiera el marcador al desbloquear, el juego no se usaría una segunda vez.
+- **La pantalla no se apaga** mientras corre el reloj, y los últimos tres segundos avisan
+  con un tic. Envuelto en `try`: si el navegador no deja, se juega igual.
 - **179 palabras** elegidas con un criterio: que a cualquiera se le ocurran tres
   canciones sin pensar. No repiten hasta que se acaban todas.
 
