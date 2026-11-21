@@ -442,7 +442,7 @@ function NoMolestar() {
       )}
       <p className="text-sm text-suave">
         {activo
-          ? `A esas horas el móvil no suena: el aviso se crea igual y por la mañana está en la campana. ${
+          ? `A esas horas no suena ninguno de tus aparatos: el aviso se crea igual y por la mañana está en la campana. ${
               callado
                 ? `Ahora mismo son las ${horaBonita(ahora)} en España, así que estarías en silencio.`
                 : `Ahora mismo son las ${horaBonita(ahora)} en España, así que sí sonaría.`
@@ -496,7 +496,6 @@ function AvisosDelGrupo() {
               apuntados en este aparato: si lo cambias o borras los datos del navegador, hay que volver a
               activarlos aquí.
             </p>
-            <NoMolestar />
           </>
         ) : (
           <>
@@ -509,6 +508,11 @@ function AvisosDelGrupo() {
             </p>
           </>
         )}
+
+        {/* Fuera del «activados»: las horas de silencio son tuyas y valen para
+            todos tus aparatos, así que se tienen que poder cambiar desde
+            cualquiera, aunque en este no hayas activado los avisos. */}
+        <NoMolestar />
       </Tarjeta>
     </Seccion>
   )
