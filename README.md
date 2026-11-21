@@ -690,3 +690,21 @@ Decisiones que no se ven:
 
 De momento el enlace está siempre en el menú para poder probarlo. Cuando esté rodado,
 saldrá solo durante la escapada, igual que el panel.
+
+### ¿Quién soy?
+
+El de la carta en la frente. El móvil va pasando de mano en mano: el que lo tiene se lo pone
+en la frente sin mirar, los demás leen el nombre y solo pueden contestar sí o no.
+
+- **Un solo aparato, y a propósito.** Aquí no hay nada que sincronizar: el juego es el móvil
+  pasando de mano en mano. Por eso este no necesita tabla ni moderador, al revés que el Furor.
+- **Con reloj y sin reloj son dos juegos distintos**, y la diferencia sale sola del
+  cronómetro: con reloj, el turno es una ráfaga y cada acierto saca otra carta hasta que se
+  acaba el tiempo; sin reloj, cada turno es una carta y el móvil cambia de manos. Las dos
+  formas son las que la gente espera, así que están las dos.
+- **68 famosos** en cuatro categorías —cine y tele, música, deportes e históricos— que se
+  pueden mezclar. El criterio para entrar es el mismo que el de las palabras del Furor: que
+  cualquiera de la mesa sepa quién es sin que se lo expliquen. Cada carta lleva una pista
+  corta para los que miran, y **ninguna repite en la misma partida**.
+- **Los nombres se ponen tocando.** Los del grupo salen como botones; escribir ocho nombres
+  en un móvil es la forma más rápida de que nadie quiera jugar.

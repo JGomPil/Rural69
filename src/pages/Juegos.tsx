@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ChevronRight, Dices, Music, Sparkles } from 'lucide-react'
+import { ChevronRight, Dices, Music, Smile, Sparkles } from 'lucide-react'
 import { Seccion, Tarjeta } from '../components/ui/Varios'
 
 /**
@@ -22,21 +22,22 @@ export function Juegos() {
       </header>
 
       <Seccion titulo="Listos para jugar" icono={<Dices size={18} />}>
-        <Link
-          to="/juegos/furor"
-          className="tarjeta flex items-center gap-4 p-4 transition hover:-translate-y-0.5"
-        >
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-tierra-100 text-tierra-700">
-            <Music size={24} />
-          </span>
-          <span className="flex-1">
-            <span className="font-display block text-lg text-bosque-800">Furor</span>
-            <span className="block text-sm text-suave">
-              Dos equipos, una palabra y a cantar. El que se queda en blanco, minipunto para el contrario.
-            </span>
-          </span>
-          <ChevronRight size={18} className="text-carbon/30" />
-        </Link>
+        <div className="space-y-3">
+          <Juego
+            a="/juegos/furor"
+            icono={<Music size={24} />}
+            titulo="Furor"
+            que="Dos equipos, una palabra y a cantar. El que se queda en blanco, minipunto para el contrario."
+            como="Por equipos · manda un moderador · se ve en todos los móviles"
+          />
+          <Juego
+            a="/juegos/quien-soy"
+            icono={<Smile size={24} />}
+            titulo="¿Quién soy?"
+            que="La carta en la frente: preguntas, y los demás solo contestan sí o no."
+            como="Uno contra uno por turnos · un solo móvil que va pasando"
+          />
+        </div>
       </Seccion>
 
       <Seccion titulo="En camino" icono={<Sparkles size={18} />}>
@@ -53,5 +54,33 @@ export function Juegos() {
         aparecerá sola durante la escapada.
       </p>
     </div>
+  )
+}
+
+function Juego({
+  a,
+  icono,
+  titulo,
+  que,
+  como,
+}: {
+  a: string
+  icono: React.ReactNode
+  titulo: string
+  que: string
+  como: string
+}) {
+  return (
+    <Link to={a} className="tarjeta flex items-center gap-4 p-4 transition hover:-translate-y-0.5">
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-tierra-100 text-tierra-700">
+        {icono}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="font-display block text-lg text-bosque-800">{titulo}</span>
+        <span className="block text-sm text-suave">{que}</span>
+        <span className="mt-1 block text-xs text-carbon/45">{como}</span>
+      </span>
+      <ChevronRight size={18} className="shrink-0 text-carbon/30" />
+    </Link>
   )
 }
