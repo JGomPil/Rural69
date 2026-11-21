@@ -848,7 +848,7 @@ _Barbie_.
 
 ### ¿Qué canción suena?
 
-El mismo juego con otro repertorio: pop y rock de 1960 a 2010, 340 canciones, un tercio
+El mismo juego con otro repertorio: pop y rock de 1960 a 2010, 431 canciones, un tercio
 en español. Vale el título y vale el grupo, que en el salón se grita lo que salga antes.
 
 - **Es el mismo juego, y por eso es el mismo código.** Las reglas, la pantalla de montar
@@ -867,7 +867,7 @@ en español. Vale el título y vale el grupo, que en el salón se grita lo que s
 - **Treinta segundos y quince rondas, y el reloj tira a corto.** Una canción conocida se saca
   en cuatro segundos, así que los tiempos que se eligen son 45, 30, 15 o 5 segundos —con cinco
   es a muerte súbita— o sin reloj; los noventa segundos del principio no los usaba nadie ni
-  cuando no la sacaba nadie. Las rondas llegan a cincuenta, que con 340 canciones siguen sin
+  cuando no la sacaba nadie. Las rondas llegan a cincuenta, que con 431 canciones siguen sin
   repetirse. Cada juego trae sus valores por defecto y se cambian antes de empezar.
 - **Las que vienen de un recopilatorio pierden contra el disco.** Esto salió jugando: el «Malo»
   de Bebe sonaba raro porque lo único que vende la tienda española es un «Sabor Latino» del
@@ -876,6 +876,24 @@ en español. Vale el título y vale el grupo, que en el salón se grita lo que s
   lo único que hay— y con eso treinta y dos canciones pasaron a sonar desde su álbum: _Maquillaje_
   desde el «Mecano» del 82, _Déjame_ desde el «Los Secretos» del 81, _Eres tú_ desde el
   «Mocedades (1973)». De Bebe entró _Ella_, que sí está en el «Pafuera telarañas».
+- **Y después, noventa y una de rock.** La primera lista tenía pop de sobra y rock justo:
+  dos de Led Zeppelin, dos de Metallica, una de Europe. Así que entró una tanda entera de
+  rock duro, heavy y grunge —Maiden, Priest, Motörhead, Ozzy, Dio, Scorpions, Sabbath con el
+  «Paranoid» entero, el Who, los Kinks, Cream, Dire Straits, Alice In Chains, Smashing
+  Pumpkins, Muse, Audioslave— y con ella el heavy de aquí, que es una tradición propia: Leño,
+  Obús, Ñu, Asfalto, Barón Rojo, Medina Azahara, Platero y Tú, Los Suaves, Barricada,
+  Ilegales, Ska-P, Mägo de Oz, Extremoduro, más el rock de allí que aquí se cantó igual
+  —_De música ligera_, _Lamento boliviano_, _Matador_, _Mujer amante_—. De 62 melenudas a
+  153, que es poco más de un tercio del repertorio.
+- **Las trampas del rock son peores que las del pop.** Un grupo con treinta años de gira
+  tiene diez discos en directo, y la tienda los vende todos: de Alice In Chains solo hay
+  «Man in the Box» en vivo, así que suena _Would?_, que es la del «Dirt». De Marilyn Manson
+  solo hay versiones suyas de tres canciones que ya estaban en el repertorio en su versión
+  original, así que fuera. Y el «El flautista» del Ñu que salía primero es la regrabación del
+  98, de siete minutos: la buena está en un recopilatorio de Chapa del 80. Cuando la tienda
+  tiene la canción pero el buscador no la saca ni poniéndole el disco —«No sé qué hacer
+  contigo» es la séptima de un disco que se llama igual— la ficha lleva el identificador a
+  mano y el script va derecho a por ella.
 - **Un tercio en español, a propósito.** En ese sofá se grita antes _Hijo de la Luna_ que un
   éxito americano del 62. Los sesenta en español son flojitos y están compensados con los
   ochenta y los noventa.

@@ -435,8 +435,9 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       cero para la música y la ronda sigue abierta, que la gente no deja de decir
       títulos porque pite un teléfono.
       (`src/lib/juegos/musica.ts`, `bandas.ts`, `bandas.json`)
-- [x] **¿Qué canción suena?** El mismo juego con otro repertorio: 340 canciones de
-      pop y rock de 1960 a 2010, un tercio en español, por `scripts/canciones.mjs`. Vale
+- [x] **¿Qué canción suena?** El mismo juego con otro repertorio: 431 canciones de
+      pop y rock de 1960 a 2010, un tercio en español y un tercio de rock duro, heavy
+      y grunge, por `scripts/canciones.mjs`. Vale
       el título y vale el grupo. Reloj de 45, 30, 15 o 5 segundos —o sin reloj— y de 5
       a 50 rondas; por defecto 30 segundos y 15 canciones, que una conocida se saca en
       cuatro segundos. Las reglas y las dos pantallas son las mismas para los

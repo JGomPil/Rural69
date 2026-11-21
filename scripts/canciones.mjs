@@ -209,7 +209,7 @@ const CANCIONES = [
   { titulo: 'Escuela de calor', artista: 'Radio Futura', anyo: 1984 },
   { titulo: 'Lobo hombre en París', artista: 'La Unión', anyo: 1984 },
   { titulo: 'No mires a los ojos de la gente', artista: 'Golpes Bajos', anyo: 1983 },
-  { titulo: 'Devuélveme a mi chica', artista: 'Hombres G', anyo: 1985 },
+  { titulo: 'Devuélveme a mi chica', artista: 'Hombres G', anyo: 1985, alias: ['Sufre mamón'] },
   { titulo: 'Venezia', artista: 'Hombres G', anyo: 1986 },
   { titulo: 'Agradecido', artista: 'Rosendo', anyo: 1985 },
   { titulo: 'Cien gaviotas', artista: 'Duncan Dhu', anyo: 1986 },
@@ -393,6 +393,107 @@ const CANCIONES = [
   { titulo: 'La tortura', artista: 'Shakira', anyo: 2005 },
   { titulo: 'Labios compartidos', artista: 'Maná', anyo: 2006 },
   { titulo: 'Me enamora', artista: 'Juanes', anyo: 2007 },
+  // --- Rock del de siempre -------------------------------------------
+  // Faltaba melena. Lo de arriba sale por décadas porque así se ve si una
+  // está vacía; esto va aparte a propósito, que es una tanda entera de
+  // rock duro, heavy y grunge metida después de jugar unas cuantas
+  // partidas y echarlo en falta.
+  { titulo: 'Immigrant Song', artista: 'Led Zeppelin', anyo: 1970 },
+  { titulo: 'Rock and Roll', artista: 'Led Zeppelin', anyo: 1971 },
+  { titulo: 'Kashmir', artista: 'Led Zeppelin', anyo: 1975 },
+  { titulo: 'Master of Puppets', artista: 'Metallica', anyo: 1986 },
+  { titulo: 'One', artista: 'Metallica', anyo: 1988, extra: 'And Justice for All' },
+  { titulo: 'The Unforgiven', artista: 'Metallica', anyo: 1991 },
+  { titulo: 'Paradise City', artista: "Guns N' Roses", anyo: 1987 },
+  { titulo: 'November Rain', artista: "Guns N' Roses", anyo: 1991 },
+  { titulo: 'You Shook Me All Night Long', artista: 'AC/DC', anyo: 1980 },
+  { titulo: 'Iron Man', artista: 'Black Sabbath', anyo: 1970, extra: 'Paranoid' },
+  { titulo: 'War Pigs', artista: 'Black Sabbath', anyo: 1970, extra: 'Paranoid' },
+  { titulo: 'Highway Star', artista: 'Deep Purple', anyo: 1972 },
+  { titulo: 'Run to the Hills', artista: 'Iron Maiden', anyo: 1982 },
+  { titulo: 'The Trooper', artista: 'Iron Maiden', anyo: 1983 },
+  { titulo: 'Breaking the Law', artista: 'Judas Priest', anyo: 1980 },
+  { titulo: 'Ace of Spades', artista: 'Motörhead', anyo: 1980 },
+  { titulo: 'Crazy Train', artista: 'Ozzy Osbourne', anyo: 1980, extra: 'Blizzard of Ozz' },
+  { titulo: 'Holy Diver', artista: 'Dio', anyo: 1983 },
+  { titulo: 'Rock You Like a Hurricane', artista: 'Scorpions', anyo: 1984, extra: 'Love at First Sting' },
+  { titulo: 'Still Loving You', artista: 'Scorpions', anyo: 1984, extra: 'Love at First Sting' },
+  { titulo: 'Wind of Change', artista: 'Scorpions', anyo: 1990 },
+  { titulo: 'Pour Some Sugar on Me', artista: 'Def Leppard', anyo: 1987 },
+  { titulo: 'Here I Go Again', artista: 'Whitesnake', anyo: 1987 },
+  { titulo: "We're Not Gonna Take It", artista: 'Twisted Sister', anyo: 1984 },
+  { titulo: 'Eye of the Tiger', artista: 'Survivor', anyo: 1982 },
+  { titulo: 'Kickstart My Heart', artista: 'Mötley Crüe', anyo: 1989 },
+  { titulo: '18 and Life', artista: 'Skid Row', anyo: 1989 },
+  { titulo: 'More Than Words', artista: 'Extreme', anyo: 1990 },
+  { titulo: "It's My Life", artista: 'Bon Jovi', anyo: 2000 },
+  { titulo: 'Sultans of Swing', artista: 'Dire Straits', anyo: 1978, extra: '1978' },
+  { titulo: 'Money for Nothing', artista: 'Dire Straits', anyo: 1985 },
+  { titulo: 'The Boys Are Back in Town', artista: 'Thin Lizzy', anyo: 1976 },
+  { titulo: 'Sunshine of Your Love', artista: 'Cream', anyo: 1967 },
+  { titulo: 'My Generation', artista: 'The Who', anyo: 1965 },
+  { titulo: "Baba O'Riley", artista: 'The Who', anyo: 1971, alias: ['Teenage Wasteland'] },
+  { titulo: 'You Really Got Me', artista: 'The Kinks', anyo: 1964 },
+  { titulo: 'Get It On', artista: 'T. Rex', anyo: 1971, alias: ['Bang a Gong'] },
+  { titulo: '(Don\'t Fear) The Reaper', artista: 'Blue Öyster Cult', anyo: 1976 },
+  { titulo: 'Barracuda', artista: 'Heart', anyo: 1977 },
+  { titulo: 'All Right Now', artista: 'Free', anyo: 1970 },
+  { titulo: "I Love Rock 'n' Roll", artista: 'Joan Jett & The Blackhearts', anyo: 1982 },
+  { titulo: 'Rebel Yell', artista: 'Billy Idol', anyo: 1983 },
+  { titulo: "Summer of '69", artista: 'Bryan Adams', anyo: 1984 },
+  // --- Grunge y lo que vino detrás -----------------------------------
+  // De Alice In Chains la tienda española solo tiene «Man in the Box» en
+  // directo, así que suena la del «Dirt», que además es la de la peli.
+  { titulo: 'Would?', artista: 'Alice In Chains', anyo: 1992 },
+  { titulo: 'Lithium', artista: 'Nirvana', anyo: 1991 },
+  { titulo: 'Heart-Shaped Box', artista: 'Nirvana', anyo: 1993 },
+  { titulo: 'Plush', artista: 'Stone Temple Pilots', anyo: 1992 },
+  { titulo: 'Bullet With Butterfly Wings', artista: 'The Smashing Pumpkins', anyo: 1995 },
+  { titulo: '1979', artista: 'The Smashing Pumpkins', anyo: 1995 },
+  { titulo: 'Du Hast', artista: 'Rammstein', anyo: 1997 },
+  { titulo: 'Freak On a Leash', artista: 'Korn', anyo: 1998 },
+  { titulo: 'All the Small Things', artista: 'blink-182', anyo: 1999 },
+  { titulo: 'Kryptonite', artista: '3 Doors Down', anyo: 2000 },
+  { titulo: 'Last Resort', artista: 'Papa Roach', anyo: 2000 },
+  { titulo: 'How You Remind Me', artista: 'Nickelback', anyo: 2001 },
+  { titulo: 'Fat Lip', artista: 'Sum 41', anyo: 2001 },
+  { titulo: 'Toxicity', artista: 'System of a Down', anyo: 2001 },
+  { titulo: 'Like a Stone', artista: 'Audioslave', anyo: 2002 },
+  { titulo: 'No One Knows', artista: 'Queens of the Stone Age', anyo: 2002 },
+  { titulo: 'Hysteria', artista: 'Muse', anyo: 2003 },
+  { titulo: 'Supermassive Black Hole', artista: 'Muse', anyo: 2006 },
+  { titulo: 'I Believe in a Thing Called Love', artista: 'The Darkness', anyo: 2003 },
+  // --- Rock duro en español ------------------------------------------
+  { titulo: 'El flautista', artista: 'Ñu', anyo: 1978, extra: 'Chapa el disco de oro' },
+  { titulo: 'Rocinante', artista: 'Asfalto', anyo: 1978 },
+  { titulo: 'Rock and roll en la plaza del pueblo', artista: 'Tequila', anyo: 1978, extra: 'Matrícula de honor' },
+  { titulo: 'Maneras de vivir', artista: 'Leño', anyo: 1981 },
+  { titulo: 'Larga vida al rock & roll', artista: 'Barón Rojo', anyo: 1981, alias: ['Larga vida al rock and roll'] },
+  { titulo: 'Necesito respirar', artista: 'Medina Azahara', anyo: 1979 },
+  { titulo: 'Va a estallar el obús', artista: 'Obús', anyo: 1982 },
+  { titulo: 'Soy un macarra', artista: 'Ilegales', anyo: 1984 },
+  { titulo: 'Bailaré sobre tu tumba', artista: 'Siniestro Total', anyo: 1985 },
+  { titulo: 'No sé qué hacer contigo', artista: 'Barricada', anyo: 1987, id: 1443292489 },
+  { titulo: 'Adiós papá', artista: 'Los Ronaldos', anyo: 1987 },
+  { titulo: 'El rompeolas', artista: 'Loquillo y Los Trogloditas', anyo: 1988 },
+  { titulo: 'Cuéntame un cuento', artista: 'Celtas Cortos', anyo: 1991 },
+  { titulo: 'Sin solución', artista: 'Platero y Tú', anyo: 1992 },
+  { titulo: 'Hay poco rock & roll', artista: 'Platero y Tú', anyo: 1995 },
+  { titulo: 'Dolores se llamaba Lola', artista: 'Los Suaves', anyo: 1988 },
+  { titulo: 'La chispa adecuada', artista: 'Héroes del Silencio', anyo: 1995, alias: ['Bendecida 3'], extra: 'Avalancha' },
+  { titulo: 'Standby', artista: 'Extremoduro', anyo: 2002 },
+  { titulo: 'El vals del obrero', artista: 'Ska-P', anyo: 1996 },
+  { titulo: 'Cannabis', artista: 'Ska-P', anyo: 1998 },
+  { titulo: 'Fiesta pagana', artista: 'Mägo de Oz', anyo: 2000 },
+  { titulo: 'La costa del silencio', artista: 'Mägo de Oz', anyo: 2003 },
+  { titulo: 'Salir', artista: 'Extremoduro', anyo: 1998 },
+  { titulo: 'Que se joda el viento', artista: 'Marea', anyo: 2004 },
+  // Y el rock de allí, que en este sofá suena tanto como el de aquí.
+  { titulo: 'Mujer amante', artista: 'Rata Blanca', anyo: 1990 },
+  { titulo: 'De música ligera', artista: 'Soda Stereo', anyo: 1990 },
+  { titulo: 'Rayando el sol', artista: 'Maná', anyo: 1990 },
+  { titulo: 'Matador', artista: 'Los Fabulosos Cadillacs', anyo: 1993 },
+  { titulo: 'Lamento boliviano', artista: 'Los Enanitos Verdes', anyo: 1994 },
 ]
 
 /** Quita acentos, signos y mayúsculas: se compara lo que suena. */
@@ -417,7 +518,7 @@ const DIRECTOS = /\bvivo\b|\bdirecto\b|\blive\b|\bconcierto\b|unplugged|\bgira\b
 // Recopilatorios de gasolinera. No se descartan —de algunas canciones es lo
 // único que hay— pero pierden contra el disco de verdad: ahí es donde está la
 // grabación que conoce la gente, y no una mezcla rara de la reedición.
-const COMPILADOS = /grandes [eé]xitos|lo mejor de|\d+ grandes|\d+ a[nñ]os|esencial|icollection|sabor latino|lentos|new woman|m[aá]gicos|serie platino|colecci[oó]n|[eé]xitos\b|\bhits\b|\bvol\.? ?\d|canciones que|cu[eé]ntame c[oó]mo pasó|las \d+ mejores|poetas de la canci[oó]n/i
+const COMPILADOS = /grandes [eé]xitos|lo mejor de|\d+ grandes|\d+ a[nñ]os|esencial|icollection|sabor latino|lentos|new woman|m[aá]gicos|serie platino|colecci[oó]n|[eé]xitos\b|\bhits\b|\bvol\.? ?\d|canciones que|cu[eé]ntame c[oó]mo pasó|las \d+ mejores|poetas de la canci[oó]n|very best of|the best of/i
 
 // Y quien no es el grupo: discos de homenajes, bandas de bodas y recopilatorios.
 const IMPOSTORES = /tribute|karaoke|hit crew|studio band|various artists|orquesta|orchestra tribute|the sunshine|cast|party|covers?\b/i
@@ -471,6 +572,22 @@ async function pide(url) {
 }
 
 async function resuelve(ficha) {
+  // `id`: la tienda la tiene pero el buscador no la devuelve ni poniéndole
+  // el disco —le pasa a «No sé qué hacer contigo», que es la séptima de un
+  // disco que se llama igual—. El identificador sale de mirar el disco
+  // entero con /lookup?entity=song, y aquí se va a por él directamente.
+  if (ficha.id) {
+    let datos
+    try {
+      datos = await pide(`https://itunes.apple.com/lookup?id=${ficha.id}&country=ES`)
+    } catch (e) {
+      return { ficha, fallo: e.message }
+    }
+    const uno = (datos.results ?? [])[0]
+    if (!uno) return { ficha, fallo: 'el identificador no existe en la tienda' }
+    if (!uno.previewUrl) return { ficha, fallo: 'sin previsualización' }
+    return { ficha, elegido: uno, puntos: 'a mano' }
+  }
   const term = encodeURIComponent(`${ficha.titulo} ${ficha.artista}${ficha.extra ? ' ' + ficha.extra : ''}`)
   const url = `https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=15&country=ES`
   let datos
