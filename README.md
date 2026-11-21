@@ -848,8 +848,8 @@ _Barbie_.
 
 ### ¿Qué canción suena?
 
-El mismo juego con otro repertorio: pop y rock de 1960 a hoy, 579 canciones, un tercio
-en español. Vale el título y vale el grupo, que en el salón se grita lo que salga antes.
+El mismo juego con otro repertorio: pop y rock del «Jailhouse Rock» a lo de este año,
+609 canciones, un tercio en español. Vale el título y vale el grupo, que en el salón se grita lo que salga antes.
 
 - **Es el mismo juego, y por eso es el mismo código.** Las reglas, la pantalla de montar
   partida y la de jugar viven una sola vez en `musica.ts`, `JuegoDeMusica.tsx`,
@@ -867,7 +867,7 @@ en español. Vale el título y vale el grupo, que en el salón se grita lo que s
 - **Treinta segundos y quince rondas, y el reloj tira a corto.** Una canción conocida se saca
   en cuatro segundos, así que los tiempos que se eligen son 45, 30, 15 o 5 segundos —con cinco
   es a muerte súbita— o sin reloj; los noventa segundos del principio no los usaba nadie ni
-  cuando no la sacaba nadie. Las rondas llegan a cincuenta, que con 579 canciones siguen sin
+  cuando no la sacaba nadie. Las rondas llegan a cincuenta, que con 609 canciones siguen sin
   repetirse. Cada juego trae sus valores por defecto y se cambian antes de empezar.
 - **Las que vienen de un recopilatorio pierden contra el disco.** Esto salió jugando: el «Malo»
   de Bebe sonaba raro porque lo único que vende la tienda española es un «Sabor Latino» del
@@ -917,16 +917,37 @@ en español. Vale el título y vale el grupo, que en el salón se grita lo que s
   es él?_, _Me quedo contigo_, _Bailar pegados_, _La barbacoa_. Son noventa y nueve españolas
   de antes del 90 y tienen montón propio, que es lo que se pide de verdad cuando alguien dice
   «pon españolas».
-- **Se elige qué puede sonar.** Con medio millar de canciones, «de todo» es una tómbola donde
-  al del heavy le toca Camilo Sesto. Así que en la pantalla de montar partida hay un montón
-  que elegir: de todo (579), rock (231), heavy y hard rock (84), pop y baile (235), rap y
-  reguetón (29), solo en español (200), españolas de toda la vida (99), del 60 al 89 (283) o
-  del 2010 para acá (75). Dos
-  detalles que importan: **el estilo lo manda el grupo, no la canción** —la tienda ficha a
-  Extremoduro en pop y en rock a la vez, y por canción «rock» te saca una balada—, y las
-  rondas se recortan a lo que tenga el montón, que ofrecer cincuenta rondas de veintinueve
-  canciones es prometer repetidas. El montón elegido viaja en el estado de la partida, no en
-  el móvil que la montó: la ronda siguiente la saca quien lleve el mando, que puede ser otro.
+- **Las que no pueden faltar.** Repaso con una lista de ciento quince míticas delante,
+  cruzándola con el repertorio por un script: faltaban treinta y una, y había que ver la
+  lista para creérselo —_Stayin' Alive_, _Mamma Mia_, _Boys Don't Cry_, _Johnny B. Goode_,
+  _Jailhouse Rock_, _Gimme Shelter_, _Riders on the Storm_, _Roxanne_, _Smooth Criminal_,
+  _Where Is My Mind?_, _Walk on the Wild Side_, _Ring of Fire_, _What a Wonderful World_,
+  _My Way_, _Unchained Melody_, _I Will Always Love You_, _My Heart Will Go On_,
+  _(Everything I Do) I Do It for You_, _Crazy_, _Hurt_, _Livin' la Vida Loca_, _Lambada_,
+  _Chan Chan_, _Santa Lucía_, _Bailando_, _Pongamos que hablo de Madrid_, _Mujer florero_,
+  _La camisa negra_, _Burbujas de amor_, _Color esperanza_—. De las 115 están 114: la que no
+  es el _Creep_, que la tienda española solo vende en acústico, y por ahí no se pasa. Con el
+  _Jailhouse Rock_ y el _Johnny B. Goode_ el repertorio ya empieza en el 57, así que los
+  textos ya no dicen «del 60 a hoy».
+- **Se elige qué puede sonar, y los montones van en tres grupos.** Con seiscientas canciones,
+  «de todo» es una tómbola donde al del heavy le toca Camilo Sesto. Así que en la pantalla de
+  montar partida hay un montón que elegir: **por estilo** —rock (240), heavy y hard rock (84),
+  pop y baile (256), rap y reguetón (29)—, **por época** —los 50 y los 60 (64), los 70 (101),
+  los 80 (137), los 90 (132), los 2000 (100), del 2010 a hoy (75)— y **por idioma** —solo en
+  español (208), españolas de toda la vida (102)—.
+- **Las épocas no dejan huecos.** La primera versión tenía «del 60 al 89» y «del 2010 para
+  acá», y los noventa y los dos mil se quedaban sin montón: quien quería los 90 no tenía
+  dónde. Ahora son seis décadas que se reparten todos los años y no se pisan, y hay una prueba
+  que recorre del 1950 al 2039 y exige que cada año caiga en una época y en una sola; otra
+  suma las seis y exige el repertorio entero. El idioma sí se cruza con la época a propósito
+  —«españolas de toda la vida» son las de antes del 90—, porque al elegir un solo montón no se
+  pueden juntar dos filtros, y «pon españolas» en una sobremesa quiere decir las de antes.
+- **Tres detalles que importan** del montón: **el estilo lo manda el grupo, no la canción** —la
+  tienda ficha a Extremoduro en pop y en rock a la vez, y por canción «rock» te saca una
+  balada—, las rondas se recortan a lo que tenga el montón, que ofrecer cincuenta rondas de
+  veintinueve canciones es prometer repetidas, y el montón elegido viaja en el estado de la
+  partida, no en el móvil que la montó: la ronda siguiente la saca quien lleve el mando, que
+  puede ser otro.
 - **Un tercio en español, a propósito.** En ese sofá se grita antes _Hijo de la Luna_ que un
   éxito americano del 62. Los sesenta en español son flojitos y están compensados con los
   ochenta y los noventa.

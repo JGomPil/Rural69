@@ -26,7 +26,7 @@ export function MusicaJugadores({
   /** Cuántas hay en el repertorio, para decirlo en pantalla. */
   cuantas: number
   /** Los montones que se pueden elegir, con lo que tiene cada uno. */
-  categorias?: { id: string; nombre: string; cuantas: number }[]
+  categorias?: { id: string; nombre: string; cuantas: number; grupo?: string }[]
   /** «películas» o «canciones». */
   cosas: string
   /** El párrafo de «cómo va esto», que cambia de un juego a otro. */
@@ -143,10 +143,23 @@ export function MusicaJugadores({
         {categorias && categorias.length > 1 && (
           <Campo etiqueta={`Qué ${cosas} pueden sonar`}>
             <Lista value={categoria ?? 'todo'} onChange={(e) => setCategoria(e.target.value)}>
-              {categorias.map((c) => (
-                <option key={c.id} value={c.id} disabled={c.cuantas < 2}>
-                  {c.nombre} ({c.cuantas})
-                </option>
+              {categorias
+                .filter((c) => !c.grupo)
+                .map((c) => (
+                  <option key={c.id} value={c.id} disabled={c.cuantas < 2}>
+                    {c.nombre} ({c.cuantas})
+                  </option>
+                ))}
+              {[...new Set(categorias.map((c) => c.grupo).filter(Boolean))].map((grupo) => (
+                <optgroup key={grupo} label={grupo}>
+                  {categorias
+                    .filter((c) => c.grupo === grupo)
+                    .map((c) => (
+                      <option key={c.id} value={c.id} disabled={c.cuantas < 2}>
+                        {c.nombre} ({c.cuantas})
+                      </option>
+                    ))}
+                </optgroup>
               ))}
             </Lista>
           </Campo>

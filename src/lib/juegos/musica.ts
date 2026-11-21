@@ -59,6 +59,8 @@ export interface Categoria {
   id: string
   nombre: string
   tiene: (p: Pista) => boolean
+  /** Para agruparlas en la lista: «Por estilo», «Por época», «Por idioma». */
+  grupo?: string
 }
 
 export interface Jugador {

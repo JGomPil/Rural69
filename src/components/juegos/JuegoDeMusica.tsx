@@ -126,7 +126,13 @@ export function JuegoDeMusica({
 
   /** Cuántas hay de cada montón, para la pantalla de montar. */
   const conCuentas = useMemo(
-    () => categorias?.map((c) => ({ id: c.id, nombre: c.nombre, cuantas: (pistas ?? []).filter(c.tiene).length })),
+    () =>
+      categorias?.map((c) => ({
+        id: c.id,
+        nombre: c.nombre,
+        grupo: c.grupo,
+        cuantas: (pistas ?? []).filter(c.tiene).length,
+      })),
     [categorias, pistas],
   )
   const etiqueta = elegida && elegida !== 'todo' ? (categorias?.find((c) => c.id === elegida)?.nombre ?? null) : null

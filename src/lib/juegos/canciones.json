@@ -5812,5 +5812,305 @@
   "estilo": "pop",
   "esp": true,
   "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ad/70/e8/ad70e8eb-0af3-60bc-602c-53f374bdde54/mzaf_17248481429583011791.plus.aac.p.m4a"
+ },
+ {
+  "id": 1106775198,
+  "titulo": "Jailhouse Rock",
+  "alias": [],
+  "artista": "Elvis Presley",
+  "anyo": 1957,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e0/4d/cb/e04dcb73-fe10-2d8f-b77e-796cf030d3df/mzaf_18168164550251817886.plus.aac.p.m4a"
+ },
+ {
+  "id": 1425230917,
+  "titulo": "Johnny B. Goode",
+  "alias": [],
+  "artista": "Chuck Berry",
+  "anyo": 1958,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e5/e3/7d/e5e37d79-825b-5412-c7d3-17e0c0858e97/mzaf_2407643628638675650.plus.aac.p.m4a"
+ },
+ {
+  "id": 251002253,
+  "titulo": "Ring of Fire",
+  "alias": [],
+  "artista": "Johnny Cash",
+  "anyo": 1963,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/2c/12/68/2c126894-fd6b-b37c-d556-6d91bd8c0875/mzaf_17832761364720403968.plus.aac.p.m4a"
+ },
+ {
+  "id": 1443912923,
+  "titulo": "Unchained Melody",
+  "alias": [],
+  "artista": "The Righteous Brothers",
+  "anyo": 1965,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/31/aa/f1/31aaf12d-a78d-dfe0-b6dd-2b39b3952510/mzaf_5636173411683808674.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440787254,
+  "titulo": "What a Wonderful World",
+  "alias": [],
+  "artista": "Louis Armstrong",
+  "anyo": 1967,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f0/28/3e/f0283e36-b2b5-ae0d-5276-9b55535cbdf4/mzaf_12728860797817529355.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440765880,
+  "titulo": "Gimme Shelter",
+  "alias": [],
+  "artista": "The Rolling Stones",
+  "anyo": 1969,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f4/ba/33/f4ba33ca-c672-72d6-61eb-af8f3e322e7e/mzaf_3613946222939730052.plus.aac.p.m4a"
+ },
+ {
+  "id": 1443456629,
+  "titulo": "My Way",
+  "alias": [],
+  "artista": "Frank Sinatra",
+  "anyo": 1969,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/33/34/4f/33344f56-a364-7ac5-9c85-a39239ca33ba/mzaf_16341579019992103385.plus.aac.p.m4a"
+ },
+ {
+  "id": 1583624447,
+  "titulo": "Riders on the Storm",
+  "alias": [],
+  "artista": "The Doors",
+  "anyo": 1971,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b1/4a/5b/b14a5bf4-8760-7c20-a847-0fbf77551d23/mzaf_8919037367410804184.plus.aac.p.m4a"
+ },
+ {
+  "id": 976827230,
+  "titulo": "Walk on the Wild Side",
+  "alias": [],
+  "artista": "Lou Reed",
+  "anyo": 1972,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c6/87/97/c6879798-26af-063b-0ee1-549e5dbdcc3a/mzaf_186424191521853168.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440861294,
+  "titulo": "Mamma Mia",
+  "alias": [],
+  "artista": "ABBA",
+  "anyo": 1975,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b6/11/b6/b611b634-d2ea-3413-19be-b3c19daddfe5/mzaf_11228048896593074702.plus.aac.p.m4a"
+ },
+ {
+  "id": 1445669633,
+  "titulo": "Stayin' Alive",
+  "alias": [],
+  "artista": "Bee Gees",
+  "anyo": 1977,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/36/ed/d6/36edd6a5-2093-3aea-43f3-318f2b75373b/mzaf_14646237435212422067.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440805065,
+  "titulo": "Roxanne",
+  "alias": [],
+  "artista": "The Police",
+  "anyo": 1978,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/81/6c/39/816c3912-fee8-23f0-efe7-cdda89c27cf2/mzaf_18110137239948519308.plus.aac.p.m4a"
+ },
+ {
+  "id": 1444157482,
+  "titulo": "Boys Don't Cry",
+  "alias": [],
+  "artista": "The Cure",
+  "anyo": 1979,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5d/c0/a6/5dc0a696-c184-8e3b-3634-ddc809f08f05/mzaf_16877412045427333602.plus.aac.p.m4a"
+ },
+ {
+  "id": 1443918679,
+  "titulo": "Santa Lucía",
+  "alias": [],
+  "artista": "Miguel Ríos",
+  "anyo": 1980,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b0/e6/3d/b0e63d26-9d79-e094-34d1-4e910bb98132/mzaf_3427916070479678717.plus.aac.p.m4a"
+ },
+ {
+  "id": 269780962,
+  "titulo": "Pongamos que hablo de Madrid",
+  "alias": [],
+  "artista": "Joaquín Sabina",
+  "anyo": 1980,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/6a/b4/41/6ab44138-936b-bc3a-301d-e1c9475d977d/mzaf_4679176642507822349.plus.aac.p.m4a"
+ },
+ {
+  "id": 734693472,
+  "titulo": "Bailando",
+  "alias": [],
+  "artista": "Alaska y los Pegamoides",
+  "anyo": 1982,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/96/bd/ab/96bdaba7-daf4-3992-7908-c7841573ae31/mzaf_15493312481638450593.plus.aac.p.m4a"
+ },
+ {
+  "id": 159294551,
+  "titulo": "Smooth Criminal",
+  "alias": [],
+  "artista": "Michael Jackson",
+  "anyo": 1987,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/38/7d/84/387d847b-0a17-d7d0-81fa-3d1e2036a0e3/mzaf_1148403634523455455.plus.aac.p.m4a"
+ },
+ {
+  "id": 1025318629,
+  "titulo": "Where Is My Mind?",
+  "alias": [],
+  "artista": "Pixies",
+  "anyo": 1988,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f0/52/67/f052674a-1a3d-9abb-237c-5bf32178a958/mzaf_9461456227788274932.plus.aac.p.m4a"
+ },
+ {
+  "id": 267982253,
+  "titulo": "Lambada",
+  "alias": [],
+  "artista": "Kaoma",
+  "anyo": 1989,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8b/83/21/8b8321b1-b9c7-48e3-3a0d-0af52e26ed70/mzaf_12220572086153356239.plus.aac.p.m4a"
+ },
+ {
+  "id": 19468968,
+  "titulo": "Burbujas de amor",
+  "alias": [],
+  "artista": "Juan Luis Guerra",
+  "anyo": 1990,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c6/09/3e/c6093e8a-5436-fea2-e385-eaff4e9b5096/mzaf_15890603483954066997.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440784715,
+  "titulo": "(Everything I Do) I Do It for You",
+  "alias": [],
+  "artista": "Bryan Adams",
+  "anyo": 1991,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d0/c9/f6/d0c9f679-5af6-a0d3-ea72-ca97144aec33/mzaf_3810195087857353563.plus.aac.p.m4a"
+ },
+ {
+  "id": 388151901,
+  "titulo": "I Will Always Love You",
+  "alias": [],
+  "artista": "Whitney Houston",
+  "anyo": 1992,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/03/d2/1a/03d21aca-c69e-09af-03ef-118004e68ab5/mzaf_17408932698913708736.plus.aac.p.m4a"
+ },
+ {
+  "id": 693089487,
+  "titulo": "Mujer florero",
+  "alias": [],
+  "artista": "Ella Baila Sola",
+  "anyo": 1996,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/9c/08/2a/9c082ade-883e-3430-abea-34b1fa84913e/mzaf_12645849205339213044.plus.aac.p.m4a"
+ },
+ {
+  "id": 1716598344,
+  "titulo": "Chan Chan",
+  "alias": [],
+  "artista": "Buena Vista Social Club",
+  "anyo": 1997,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6e/c3/0c/6ec30c1a-0458-6ecf-9c9d-8cefa4e45714/mzaf_13929773776901713828.plus.aac.p.m4a"
+ },
+ {
+  "id": 250478333,
+  "titulo": "My Heart Will Go On",
+  "alias": [],
+  "artista": "Céline Dion",
+  "anyo": 1997,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/71/ae/ee/71aeeee4-d00d-e3a1-20dc-9c4d6d21a383/mzaf_16575662987330970143.plus.aac.p.m4a"
+ },
+ {
+  "id": 192821659,
+  "titulo": "Livin' la Vida Loca",
+  "alias": [],
+  "artista": "Ricky Martin",
+  "anyo": 1999,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/08/a7/cb/08a7cb6d-0618-3c01-6b80-2b92aaca7406/mzaf_15654413058067067771.plus.aac.p.m4a"
+ },
+ {
+  "id": 254000385,
+  "titulo": "Color esperanza",
+  "alias": [],
+  "artista": "Diego Torres",
+  "anyo": 2001,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f6/c0/85/f6c08587-c0fc-b4a7-9290-8f38424ca416/mzaf_15622805892500932804.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440811252,
+  "titulo": "Hurt",
+  "alias": [],
+  "artista": "Johnny Cash",
+  "anyo": 2002,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/05/60/f9/0560f982-4780-b042-d152-3d7d458ed070/mzaf_703203013366933038.plus.aac.p.m4a"
+ },
+ {
+  "id": 1492138460,
+  "titulo": "La camisa negra",
+  "alias": [],
+  "artista": "Juanes",
+  "anyo": 2004,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3e/5f/41/3e5f41ee-be9b-268d-41ef-cd494f608e51/mzaf_1147478563772911556.plus.aac.p.m4a"
+ },
+ {
+  "id": 135149703,
+  "titulo": "Crazy",
+  "alias": [],
+  "artista": "Gnarls Barkley",
+  "anyo": 2006,
+  "estilo": "pop",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/be/02/e4/be02e45d-e81a-09e8-4615-9e0f7cfe5ca7/mzaf_12139023665337301104.plus.aac.p.m4a"
  }
 ]

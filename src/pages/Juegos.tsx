@@ -48,7 +48,7 @@ export function Juegos() {
             a="/juegos/que-cancion-suena"
             icono={<Music2 size={24} />}
             titulo="¿Qué canción suena?"
-            que="Treinta segundos de pop y rock, del 60 a hoy. El que la saca, punto."
+            que="Treinta segundos de pop y rock, de los 50 a hoy. El que la saca, punto."
             como="Suena en un móvil · se grita · hace falta internet"
           />
           <Juego

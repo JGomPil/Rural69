@@ -1,7 +1,7 @@
 // =====================================================================
 // Rural69 · ¿Qué canción suena? · El repertorio
 // ---------------------------------------------------------------------
-// Pop y rock de 1960 a hoy, resuelto contra la tienda de Apple por
+// Pop y rock, del rock and roll a hoy, resuelto contra la tienda por
 // `scripts/canciones.mjs`, que guarda el identificador y la
 // previsualización de 30 segundos de cada una. Aquí solo se carga y se
 // traduce a la `Pista` que entienden las reglas.
@@ -27,28 +27,43 @@ interface Cancion {
 }
 
 /**
- * Los montones que se pueden elegir al montar la partida. Con medio
- * millar de canciones, «de todo» es una tómbola donde al del heavy le
- * toca Camilo Sesto; esto es para que cada mesa juegue a lo suyo.
+ * Los montones que se pueden elegir al montar la partida. Con seiscientas
+ * canciones, «de todo» es una tómbola donde al del heavy le toca Camilo
+ * Sesto; esto es para que cada mesa juegue a lo suyo.
  *
- * El estilo lo pone el grupo, no la canción: así «rock» no te saca la
- * balada que la tienda tiene fichada como pop.
+ * Van en tres grupos. El estilo lo pone el grupo musical y no la canción,
+ * así que «rock» no saca la balada que la tienda tiene fichada como pop.
+ * Las épocas son una década cada una y se reparten todos los años sin
+ * dejar huecos. Y el idioma va aparte, que es otra pregunta.
  */
 export const CATEGORIAS: Categoria[] = [
   { id: 'todo', nombre: 'De todo', tiene: () => true },
-  { id: 'rock', nombre: 'Rock', tiene: (p) => p.estilo === 'rock' },
-  { id: 'heavy', nombre: 'Heavy y hard rock', tiene: (p) => p.estilo === 'heavy' },
-  { id: 'pop', nombre: 'Pop y baile', tiene: (p) => p.estilo === 'pop' },
-  { id: 'urbano', nombre: 'Rap y reguetón', tiene: (p) => p.estilo === 'urbano' },
-  { id: 'esp', nombre: 'Solo en español', tiene: (p) => p.esp === true },
-  // La sobremesa del domingo: copla, verbena y pop español de cuando la
-  // tele era en blanco y negro. Es el montón que se pide de verdad
-  // cuando alguien dice «pon españolas», y no vale con cruzar los dos
-  // filtros a mano porque solo se elige uno.
-  { id: 'verbena', nombre: 'Españolas de toda la vida', tiene: (p) => p.esp === true && p.anyo < 1990 },
-  { id: 'viejas', nombre: 'Del 60 al 89', tiene: (p) => p.anyo < 1990 },
-  { id: 'nuevas', nombre: 'Del 2010 para acá', tiene: (p) => p.anyo >= 2010 },
+  // Por estilo. Lo pone el grupo, no la canción.
+  { id: 'rock', grupo: 'Por estilo', nombre: 'Rock', tiene: (p) => p.estilo === 'rock' },
+  { id: 'heavy', grupo: 'Por estilo', nombre: 'Heavy y hard rock', tiene: (p) => p.estilo === 'heavy' },
+  { id: 'pop', grupo: 'Por estilo', nombre: 'Pop y baile', tiene: (p) => p.estilo === 'pop' },
+  { id: 'urbano', grupo: 'Por estilo', nombre: 'Rap y reguetón', tiene: (p) => p.estilo === 'urbano' },
+  // Por época. Las seis se reparten TODOS los años y no se pisan: la
+  // primera versión tenía «del 60 al 89» y «del 2010 para acá», y los
+  // noventa y los dos mil se quedaban sin montón.
+  { id: 'a60', grupo: 'Por época', nombre: 'Los 50 y los 60', tiene: (p) => p.anyo < 1970 },
+  { id: 'a70', grupo: 'Por época', nombre: 'Los 70', tiene: (p) => p.anyo >= 1970 && p.anyo < 1980 },
+  { id: 'a80', grupo: 'Por época', nombre: 'Los 80', tiene: (p) => p.anyo >= 1980 && p.anyo < 1990 },
+  { id: 'a90', grupo: 'Por época', nombre: 'Los 90', tiene: (p) => p.anyo >= 1990 && p.anyo < 2000 },
+  { id: 'a00', grupo: 'Por época', nombre: 'Los 2000', tiene: (p) => p.anyo >= 2000 && p.anyo < 2010 },
+  { id: 'a10', grupo: 'Por época', nombre: 'Del 2010 a hoy', tiene: (p) => p.anyo >= 2010 },
+  // Por idioma. Este sí se cruza con la época a propósito: «pon
+  // españolas» en una sobremesa quiere decir las de antes, no las de
+  // ahora, y al elegir un solo montón no se pueden juntar dos filtros.
+  { id: 'esp', grupo: 'Por idioma', nombre: 'Solo en español', tiene: (p) => p.esp === true },
+  {
+    id: 'verbena',
+    grupo: 'Por idioma',
+    nombre: 'Españolas de toda la vida',
+    tiene: (p) => p.esp === true && p.anyo < 1990,
+  },
 ]
+
 
 let pistas: Pista[] | null = null
 

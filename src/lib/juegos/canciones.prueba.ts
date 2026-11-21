@@ -49,8 +49,24 @@ describe('los montones', () => {
   })
 
   it('y las épocas, por el año de la grabación', () => {
-    expect(dela('viejas')).toEqual([1, 2])
-    expect(dela('nuevas')).toEqual([3, 4])
+    expect(dela('a80')).toEqual([1, 2])
+    expect(dela('a10')).toEqual([3, 4])
+    expect(dela('a90')).toEqual([])
+  })
+
+  it('las épocas se reparten todos los años, sin huecos y sin pisarse', () => {
+    const epocas = CATEGORIAS.filter((c) => c.grupo === 'Por época')
+    expect(epocas.length).toBeGreaterThan(1)
+    for (let anyo = 1950; anyo <= 2039; anyo++) {
+      const suyas = epocas.filter((c) => c.tiene(pista(1, { anyo })))
+      expect(suyas.map((c) => c.nombre), `el año ${anyo}`).toHaveLength(1)
+    }
+  })
+
+  it('y entre todas las épocas está el repertorio entero', () => {
+    const epocas = CATEGORIAS.filter((c) => c.grupo === 'Por época')
+    const suma = epocas.reduce((n, c) => n + MONTON.filter(c.tiene).length, 0)
+    expect(suma).toBe(MONTON.length)
   })
 
   it('no hay dos montones con el mismo nombre ni con la misma llave', () => {

@@ -7,7 +7,7 @@ export function QueCancionSuena() {
       juego="quecancion"
       llave="rural69-quecancion"
       titulo="¿Qué canción suena?"
-      lema="Pop y rock del 60 a hoy, treinta segundos cada una."
+      lema="Pop y rock, del rock and roll a hoy, treinta segundos cada una."
       cosa="canción"
       cosas="canciones"
       // Media canción se saca en cuatro segundos: con sesenta sobraba medio
@@ -27,7 +27,8 @@ export function QueCancionSuena() {
       comoSeJuega={
         <>
           <p>
-            Suenan treinta segundos de una canción de pop o rock de 1960 a hoy y{' '}
+            Suenan treinta segundos de una canción de pop o rock —del «Jailhouse Rock» a lo de este
+            año— y{' '}
             <strong>se grita</strong>. Nadie escribe nada: el que pone la música hace de moderador,
             toca el nombre del que la ha sacado y a la siguiente.
           </p>
@@ -50,9 +51,11 @@ export function QueCancionSuena() {
           <p>
             <strong>Se elige qué puede sonar.</strong> Con medio millar de canciones, «de todo» es
             una tómbola donde al del heavy le toca Camilo Sesto, así que en la pantalla de montar
-            partida se puede acotar el montón: rock, heavy y hard rock, pop y baile, rap y reguetón,
-            solo en español, españolas de toda la vida, del 60 al 89 o del 2010 para acá. El estilo lo manda el grupo y no la
-            canción, para que «rock» no saque la balada que la tienda tiene fichada como pop.
+            partida se puede acotar el montón, y van en tres grupos: por estilo —rock, heavy y hard
+            rock, pop y baile, rap y reguetón—, por época —una década cada una, de los 50 a hoy, sin
+            huecos— y por idioma —en español, o españolas de toda la vida—. El estilo lo manda el
+            grupo y no la canción, para que «rock» no saque la balada que la tienda tiene fichada
+            como pop.
           </p>
           <p>
             El trozo lo elige la tienda, no nosotros: en una canción casi siempre cae el estribillo,

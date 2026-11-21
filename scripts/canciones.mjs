@@ -657,6 +657,43 @@ const CANCIONES = [
   { titulo: 'Bandido', artista: 'Azúcar Moreno', anyo: 1990 },
   { titulo: 'Bailar pegados', artista: 'Sergio Dalma', anyo: 1991 },
   { titulo: 'La barbacoa', artista: 'Georgie Dann', anyo: 1994 },
+  // --- Las que no pueden faltar --------------------------------------
+  // Repaso con una lista de cien míticas delante, a ver cuáles no
+  // estaban. Faltaban treinta y una, y entre ellas el «Stayin' Alive»,
+  // el «Mamma Mia» y el «Boys Don't Cry»: por ahí no se puede pasar.
+  // Aquí entran las dos primeras de antes del 60, que el rock and roll
+  // empieza un poco antes del repertorio.
+  { titulo: 'Jailhouse Rock', artista: 'Elvis Presley', anyo: 1957 },
+  { titulo: 'Johnny B. Goode', artista: 'Chuck Berry', anyo: 1958 },
+  { titulo: 'Ring of Fire', artista: 'Johnny Cash', anyo: 1963 },
+  { titulo: 'Unchained Melody', artista: 'The Righteous Brothers', anyo: 1965 },
+  { titulo: 'What a Wonderful World', artista: 'Louis Armstrong', anyo: 1967 },
+  { titulo: 'Gimme Shelter', artista: 'The Rolling Stones', anyo: 1969 },
+  { titulo: 'My Way', artista: 'Frank Sinatra', anyo: 1969 },
+  { titulo: 'Riders on the Storm', artista: 'The Doors', anyo: 1971 },
+  { titulo: 'Walk on the Wild Side', artista: 'Lou Reed', anyo: 1972 },
+  { titulo: 'Mamma Mia', artista: 'ABBA', anyo: 1975 },
+  { titulo: "Stayin' Alive", artista: 'Bee Gees', anyo: 1977 },
+  { titulo: 'Roxanne', artista: 'The Police', anyo: 1978 },
+  { titulo: "Boys Don't Cry", artista: 'The Cure', anyo: 1979 },
+  { titulo: 'Santa Lucía', artista: 'Miguel Ríos', anyo: 1980 },
+  { titulo: 'Pongamos que hablo de Madrid', artista: 'Joaquín Sabina', anyo: 1980 },
+  { titulo: 'Bailando', artista: 'Alaska y los Pegamoides', anyo: 1982 },
+  { titulo: 'Smooth Criminal', artista: 'Michael Jackson', anyo: 1987 },
+  { titulo: 'Where Is My Mind?', artista: 'Pixies', anyo: 1988 },
+  { titulo: 'Lambada', artista: 'Kaoma', anyo: 1989 },
+  { titulo: 'Burbujas de amor', artista: 'Juan Luis Guerra', anyo: 1990 },
+  { titulo: '(Everything I Do) I Do It for You', artista: 'Bryan Adams', anyo: 1991 },
+  { titulo: 'Creep', artista: 'Radiohead', anyo: 1992, extra: 'Pablo Honey' },
+  { titulo: 'I Will Always Love You', artista: 'Whitney Houston', anyo: 1992 },
+  { titulo: 'Mujer florero', artista: 'Ella Baila Sola', anyo: 1996 },
+  { titulo: 'Chan Chan', artista: 'Buena Vista Social Club', anyo: 1997 },
+  { titulo: 'My Heart Will Go On', artista: 'Céline Dion', anyo: 1997 },
+  { titulo: "Livin' la Vida Loca", artista: 'Ricky Martin', anyo: 1999 },
+  { titulo: 'Color esperanza', artista: 'Diego Torres', anyo: 2001 },
+  { titulo: 'Hurt', artista: 'Johnny Cash', anyo: 2002 },
+  { titulo: 'La camisa negra', artista: 'Juanes', anyo: 2004 },
+  { titulo: 'Crazy', artista: 'Gnarls Barkley', anyo: 2006 },
 ]
 
 /** Quita acentos, signos y mayúsculas: se compara lo que suena. */
@@ -714,7 +751,7 @@ const ESTILOS = {
 // «pon rock» en el salón eso no sirve, así que el estilo lo manda el
 // grupo. Estas cuatro listas pesan más que el género de la tienda.
 const DE_HEAVY = new Set(['AC/DC', 'Aerosmith', 'Alice Cooper', 'Alice In Chains', 'Audioslave', 'Barón Rojo', 'Black Sabbath', 'Blue Öyster Cult', 'Bon Jovi', 'Deep Purple', 'Def Leppard', 'Dio', 'Europe', 'Evanescence', 'Extreme', 'Guns N\' Roses', 'Heart', 'Iron Maiden', 'Judas Priest', 'Korn', 'Led Zeppelin', 'Linkin Park', 'Los Suaves', 'Medina Azahara', 'Metallica', 'Motörhead', 'Mägo de Oz', 'Mötley Crüe', 'Obús', 'Ozzy Osbourne', 'Papa Roach', 'Rammstein', 'Rata Blanca', 'Scorpions', 'Skid Row', 'System of a Down', 'The Darkness', 'Thin Lizzy', 'Twisted Sister', 'Van Halen', 'Whitesnake', 'Ñu'])
-const DE_ROCK = new Set(['091', 'Arctic Monkeys', 'Eagles', 'M Clan', 'Queen', 'Queen & David Bowie', 'Radiohead', 'U2', 'Blondie', 'Bob Dylan', 'David Bowie', 'Dire Straits', 'Elvis Presley', 'Gorillaz', 'Simon & Garfunkel', 'The Beach Boys', 'The Who', 'Asfalto', 'Barricada', 'Beck', 'Blur', 'Burning', 'Celtas Cortos', 'Danza Invisible', 'Dover', 'Duncan Dhu', 'El Último de la Fila', 'Extremoduro', 'Fito y Fitipaldis', 'Foo Fighters', 'Franz Ferdinand', 'Gabinete Caligari', 'Green Day', 'Héroes del Silencio', 'Ilegales', 'Jeff Buckley', 'Leño', 'Los Fabulosos Cadillacs', 'Los Enanitos Verdes', 'Los Planetas', 'Los Rodríguez', 'Los Ronaldos', 'Los Secretos', 'Los Toreros Muertos', 'Loquillo y Trogloditas', 'Loquillo y Los Trogloditas', 'Love of Lesbian', 'Marea', 'Muse', 'Måneskin', 'Nacha Pop', 'Nirvana', 'Oasis', 'Pearl Jam', 'Pereza', 'Platero y Tú', 'Queens of the Stone Age', 'Radio Futura', 'Red Hot Chili Peppers', 'Rosendo', 'Seguridad Social', 'Siniestro Total', 'Ska-P', 'Soda Stereo', 'Soundgarden', 'Stereophonics', 'Stone Temple Pilots', 'Tequila', 'The Cranberries', 'The Offspring', 'The Smashing Pumpkins', 'The Verve', 'Triana', 'Vetusta Morla'])
+const DE_ROCK = new Set(['091', 'Arctic Monkeys', 'Bryan Adams', 'Chuck Berry', 'Lou Reed', 'Pixies', 'The Cure', 'The Doors', 'The Police', 'The Rolling Stones', 'Eagles', 'M Clan', 'Queen', 'Queen & David Bowie', 'Radiohead', 'U2', 'Blondie', 'Bob Dylan', 'David Bowie', 'Dire Straits', 'Elvis Presley', 'Gorillaz', 'Simon & Garfunkel', 'The Beach Boys', 'The Who', 'Asfalto', 'Barricada', 'Beck', 'Blur', 'Burning', 'Celtas Cortos', 'Danza Invisible', 'Dover', 'Duncan Dhu', 'El Último de la Fila', 'Extremoduro', 'Fito y Fitipaldis', 'Foo Fighters', 'Franz Ferdinand', 'Gabinete Caligari', 'Green Day', 'Héroes del Silencio', 'Ilegales', 'Jeff Buckley', 'Leño', 'Los Fabulosos Cadillacs', 'Los Enanitos Verdes', 'Los Planetas', 'Los Rodríguez', 'Los Ronaldos', 'Los Secretos', 'Los Toreros Muertos', 'Loquillo y Trogloditas', 'Loquillo y Los Trogloditas', 'Love of Lesbian', 'Marea', 'Muse', 'Måneskin', 'Nacha Pop', 'Nirvana', 'Oasis', 'Pearl Jam', 'Pereza', 'Platero y Tú', 'Queens of the Stone Age', 'Radio Futura', 'Red Hot Chili Peppers', 'Rosendo', 'Seguridad Social', 'Siniestro Total', 'Ska-P', 'Soda Stereo', 'Soundgarden', 'Stereophonics', 'Stone Temple Pilots', 'Tequila', 'The Cranberries', 'The Offspring', 'The Smashing Pumpkins', 'The Verve', 'Triana', 'Vetusta Morla'])
 const DE_POP = new Set(['Billie Eilish', 'Hombres G', 'Jarabe de Palo', 'Joaquín Sabina', 'Billy Joel', 'Bob Marley & The Wailers', 'Chambao', 'El Canto del Loco', 'Estopa', 'Imagine Dragons', 'La Oreja de Van Gogh', 'Las Grecas', 'Lorde', 'Macaco', 'Maná', 'Robbie Williams', 'Rosana', 'Tones and I'])
 const DE_URBANO = new Set(['2Pac', '50 Cent', 'Bad Bunny', 'Beastie Boys', 'Bizarrap', 'C. Tangana', 'Coolio', 'Daddy Yankee', 'Don Omar', 'Eminem', 'Flo Rida', 'House of Pain', 'J Balvin', 'JAY-Z', 'Karol G', 'Lil Nas X', 'Maluma', 'OutKast', 'Quevedo', 'Rosalía', 'The Sugarhill Gang', 'Wiz Khalifa'])
 
@@ -730,7 +767,7 @@ function estiloDe(ficha, genero) {
 
 // Quién canta en español. Es por grupo porque casi siempre lo es, y la
 // ficha lleva `esp` cuando no: Shakira canta en los dos idiomas.
-const EN_ESPANOL = new Set(['091', 'Alaska y Dinarama', 'Azúcar Moreno', 'Fórmula V', 'Georgie Dann', 'Gipsy Kings', 'Isabel Pantoja', 'José Luis Perales', 'Juan y Junior', 'Los Chunguitos', 'Los Módulos', 'Los Payos', 'Los Pekenikes', 'Los Sirex', 'Luis Aguilé', 'M Clan', 'Mari Trini', 'Marisol', 'Miguel Gallardo', 'Pablo Abraira', 'Peret', 'Rocío Dúrcal', 'Sergio Dalma', 'Alejandro Sanz', 'Aitana & Ana Guerra', 'Amaral', 'Andrés Calamaro', 'Antonio Flores', 'Antonio Vega', 'Asfalto', 'Bad Bunny', 'Barón Rojo', 'Barricada', 'Bebe', 'Bizarrap', 'Burning', 'C. Tangana', 'Camilo Sesto', 'Carlos Vives & Shakira', 'Cecilia', 'Celtas Cortos', 'Chambao', 'Daddy Yankee', 'Danza Invisible', 'Don Omar', 'Duncan Dhu', 'Dúo Dinámico', 'El Canto del Loco', 'El Último de la Fila', 'Ella Baila Sola', 'Enrique Iglesias', 'Estopa', 'Extremoduro', 'Fito y Fitipaldis', 'Gabinete Caligari', 'Golpes Bajos', 'Héroes del Silencio', 'Hombres G', 'Ilegales', 'J Balvin', 'Jarabe de Palo', 'Jarcha', 'Jeanette', 'Joan Manuel Serrat', 'Joaquín Sabina', 'Juanes', 'Julio Iglesias', 'Karina', 'Karol G', 'La Oreja de Van Gogh', 'La Unión', 'Las Grecas', 'Las Ketchup', 'Leño', 'Los Brincos', 'Los Chichos', 'Los Diablos', 'Los Enanitos Verdes', 'Los Fabulosos Cadillacs', 'Los Planetas', 'Los Rodríguez', 'Los Ronaldos', 'Los Secretos', 'Los Suaves', 'Los Toreros Muertos', 'Los del Río', 'Loquillo y Trogloditas', 'Loquillo y Los Trogloditas', 'Love of Lesbian', 'Luis Eduardo Aute', 'Luis Fonsi', 'Luz Casal', 'Macaco', 'Maluma', 'Manolo Escobar', 'Marc Anthony', 'Marea', 'Massiel', 'Maná', 'Mecano', 'Medina Azahara', 'Melendi', 'Miguel Ríos', 'Mocedades', 'Morat', 'Mägo de Oz', 'Nacha Pop', 'Nena Daconte', 'Nino Bravo', 'Obús', 'Olé Olé', 'Pablo Alborán', 'Paco de Lucía', 'Pereza', 'Platero y Tú', 'Quevedo', 'Radio Futura', 'Raphael', 'Rata Blanca', 'Rocío Jurado', 'Romeo Santos', 'Rosalía', 'Rosana', 'Rosendo', 'Rozalén', 'Seguridad Social', 'Siniestro Total', 'Ska-P', 'Soda Stereo', 'Tequila', 'Triana', 'Vetusta Morla', 'Víctor Manuel', 'Ñu'])
+const EN_ESPANOL = new Set(['091', 'Alaska y Dinarama', 'Alaska y los Pegamoides', 'Buena Vista Social Club', 'Diego Torres', 'Juan Luis Guerra', 'Azúcar Moreno', 'Fórmula V', 'Georgie Dann', 'Gipsy Kings', 'Isabel Pantoja', 'José Luis Perales', 'Juan y Junior', 'Los Chunguitos', 'Los Módulos', 'Los Payos', 'Los Pekenikes', 'Los Sirex', 'Luis Aguilé', 'M Clan', 'Mari Trini', 'Marisol', 'Miguel Gallardo', 'Pablo Abraira', 'Peret', 'Rocío Dúrcal', 'Sergio Dalma', 'Alejandro Sanz', 'Aitana & Ana Guerra', 'Amaral', 'Andrés Calamaro', 'Antonio Flores', 'Antonio Vega', 'Asfalto', 'Bad Bunny', 'Barón Rojo', 'Barricada', 'Bebe', 'Bizarrap', 'Burning', 'C. Tangana', 'Camilo Sesto', 'Carlos Vives & Shakira', 'Cecilia', 'Celtas Cortos', 'Chambao', 'Daddy Yankee', 'Danza Invisible', 'Don Omar', 'Duncan Dhu', 'Dúo Dinámico', 'El Canto del Loco', 'El Último de la Fila', 'Ella Baila Sola', 'Enrique Iglesias', 'Estopa', 'Extremoduro', 'Fito y Fitipaldis', 'Gabinete Caligari', 'Golpes Bajos', 'Héroes del Silencio', 'Hombres G', 'Ilegales', 'J Balvin', 'Jarabe de Palo', 'Jarcha', 'Jeanette', 'Joan Manuel Serrat', 'Joaquín Sabina', 'Juanes', 'Julio Iglesias', 'Karina', 'Karol G', 'La Oreja de Van Gogh', 'La Unión', 'Las Grecas', 'Las Ketchup', 'Leño', 'Los Brincos', 'Los Chichos', 'Los Diablos', 'Los Enanitos Verdes', 'Los Fabulosos Cadillacs', 'Los Planetas', 'Los Rodríguez', 'Los Ronaldos', 'Los Secretos', 'Los Suaves', 'Los Toreros Muertos', 'Los del Río', 'Loquillo y Trogloditas', 'Loquillo y Los Trogloditas', 'Love of Lesbian', 'Luis Eduardo Aute', 'Luis Fonsi', 'Luz Casal', 'Macaco', 'Maluma', 'Manolo Escobar', 'Marc Anthony', 'Marea', 'Massiel', 'Maná', 'Mecano', 'Medina Azahara', 'Melendi', 'Miguel Ríos', 'Mocedades', 'Morat', 'Mägo de Oz', 'Nacha Pop', 'Nena Daconte', 'Nino Bravo', 'Obús', 'Olé Olé', 'Pablo Alborán', 'Paco de Lucía', 'Pereza', 'Platero y Tú', 'Quevedo', 'Radio Futura', 'Raphael', 'Rata Blanca', 'Rocío Jurado', 'Romeo Santos', 'Rosalía', 'Rosana', 'Rosendo', 'Rozalén', 'Seguridad Social', 'Siniestro Total', 'Ska-P', 'Soda Stereo', 'Tequila', 'Triana', 'Vetusta Morla', 'Víctor Manuel', 'Ñu'])
 
 function enEspanyol(ficha) {
   return ficha.esp ?? EN_ESPANOL.has(ficha.artista)
