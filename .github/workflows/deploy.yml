@@ -40,6 +40,9 @@ jobs:
       - name: Comprobar contraste
         run: node scripts/contraste.mjs
 
+      - name: Pruebas
+        run: npx vitest run
+
       - name: Construir
         run: npx vite build
         env:

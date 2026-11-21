@@ -38,7 +38,7 @@ export interface Heredado {
 }
 
 /** Días enteros entre dos fechas ISO, o `null` si falta alguna. */
-function desplazamiento(deOrigen: string | null, aDestino: string | null): number | null {
+export function desplazamiento(deOrigen: string | null, aDestino: string | null): number | null {
   if (!deOrigen || !aDestino) return null
   const a = Date.parse(`${deOrigen}T00:00:00Z`)
   const b = Date.parse(`${aDestino}T00:00:00Z`)
@@ -46,7 +46,12 @@ function desplazamiento(deOrigen: string | null, aDestino: string | null): numbe
   return Math.round((b - a) / 86_400_000)
 }
 
-function mueveDia(dia: string | null, dias: number | null): string | null {
+/**
+ * Mueve un día de la escapada vieja a la nueva. Exportada porque es de lo
+ * poco que se puede probar sin base de datos, y es justo lo que hace que
+ * «la cena del viernes» caiga en el viernes nuevo.
+ */
+export function mueveDia(dia: string | null, dias: number | null): string | null {
   if (!dia || dias === null) return null
   const t = Date.parse(`${dia}T00:00:00Z`)
   if (Number.isNaN(t)) return null

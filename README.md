@@ -111,6 +111,8 @@ Scripts disponibles:
 | `npm run build` | Comprobación de tipos + construcción en `dist/` |
 | `npm run preview` | Sirve `dist/` para probarlo |
 | `npm run lint` | Linter (oxlint) |
+| `npm test` | Pruebas de la lógica (vitest, una tanda y fuera) |
+| `npm run test:mirando` | Las mismas, repitiéndose al guardar |
 | `npm run contraste` | Repasa el contraste de los dos temas (falla si alguno baja del mínimo) |
 
 ---
