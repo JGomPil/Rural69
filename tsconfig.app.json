@@ -22,5 +22,7 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  // Las pruebas van en `tsconfig.pruebas.json`, que sí tiene los tipos de Node.
+  "include": ["src"],
+  "exclude": ["src/**/*.prueba.ts", "src/pruebas"]
 }
