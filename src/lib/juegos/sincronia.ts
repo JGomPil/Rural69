@@ -87,25 +87,33 @@ export function useMesa<T extends Estado>(
 
   const soyModerador = aSolas || (miPerfil !== null && moderador === miPerfil)
   const puedoTocar = soyModerador || todosJuegan
-  // En un `ref` porque lo leen cosas que no se vuelven a crear en cada
-  // pintado —el envío y la relectura—, y se pone al día en un efecto: tocar
-  // un `ref` mientras se pinta es justo lo que React pide no hacer.
+  // En un `ref` porque lo lee el envío, que no se vuelve a crear en cada
+  // pintado, y se pone al día en un efecto: tocar un `ref` mientras se pinta
+  // es justo lo que React pide no hacer.
   const puedoTocarRef = useRef(puedoTocar)
   useEffect(() => {
     puedoTocarRef.current = puedoTocar
   }, [puedoTocar])
   /** La hora del último envío propio: así se reconoce el eco sin equivocarse. */
   const ultimoEnvio = useRef(0)
+  /**
+   * La hora de la partida que tengo ahora mismo. Una lectura puede venir
+   * de hace medio segundo y llegar después de un toque mío, y entonces no
+   * vale: se mira la hora, no quién la escribió.
+   */
+  const miHora = useRef(0)
 
   const recoge = useCallback(
     (fila: Fila<T> | null) => {
       if (!fila) {
         setPartida(null)
         setModerador(null)
+        miHora.current = 0
         return
       }
       setPartida(fila.state)
       setModerador(fila.moderator_id)
+      miHora.current = fila.state?.emitido ?? 0
       // La hora del otro contra la mía, medida al recibir.
       setDesfase(typeof fila.state?.emitido === 'number' ? Date.now() - fila.state.emitido : 0)
     },
@@ -121,9 +129,13 @@ export function useMesa<T extends Estado>(
         .eq('game', juego)
         .maybeSingle()
       if (error) throw error
-      // Al moderador no se le pisa su propia partida con una lectura que
-      // puede venir de hace medio segundo: la suya es la buena.
-      if (!puedoTocarRef.current) recoge((data as Fila<T> | null) ?? null)
+      // No se pisa lo que ya tengo con una lectura más vieja —la del que
+      // acaba de mover es la buena—, pero cualquier cosa igual o más nueva
+      // sí entra. Antes esto se decidía por «¿mando yo?», y en un juego en
+      // el que mandan todos eso quería decir «no me entero de nada»: el que
+      // abría el juego con la partida ya empezada no la veía.
+      const fila = (data as Fila<T> | null) ?? null
+      if (!fila || (fila.state?.emitido ?? 0) >= miHora.current) recoge(fila)
       setASolas(false)
     } catch {
       // Ni tabla ni línea: a solas, con lo último que hubiera aquí.
@@ -202,6 +214,7 @@ export function useMesa<T extends Estado>(
       if (!miPerfil) return
       const sellada = { ...p, emitido: Date.now() }
       ultimoEnvio.current = sellada.emitido
+      miHora.current = sellada.emitido
 
       // Durante la partida se CAMBIA la fila, no se da de alta otra vez. No
       // es un detalle: un alta exige firmarla como moderador, y en el
