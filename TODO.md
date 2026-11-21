@@ -354,3 +354,46 @@ coches— se dejó fuera a propósito.
       Probado de punta a punta: sin red, marcado, y al volver la línea estaba en
       el servidor.
 - [ ] **Organizar los coches.** Queda fuera por ahora.
+
+
+---
+
+## Fase 21 · Que aguante el fin de semana de verdad
+
+Las seis que salieron al preguntar «¿algo más?», y además las tres que yo mismo
+había descartado por capricho y que también entraron.
+
+- [x] **Encoger las fotos antes de subirlas.** Era un fallo, no una mejora: el tope
+      estaba en 5 MB, una foto de móvil pesa entre 3 y 6, y no se comprimía nada. El
+      primero que subiera las del finde se comía un «prueba con una más ligera»
+      imposible de cumplir. Ahora 2000 px y JPEG, con el EXIF puesto. (`src/lib/subidas.ts`)
+- [x] **Los datos de llegada de la casa.** Dirección, hora de entrada y salida,
+      teléfono del dueño, clave del portón, wifi y cómo llegar. Se rellenan en una
+      sección plegada de la ficha y salen en el Resumen, que guarda copia local.
+      (`supabase/19_datos_llegada.sql`)
+- [x] **El panel, durante la escapada.** Los tres días que importan ya no pide votar
+      fechas: dice qué se come hoy, qué hay mañana, qué falta por comprar, y lleva
+      las claves de la casa debajo. (`src/lib/estancia.ts`)
+- [x] **Que la siguiente parta de la anterior.** El menú y el equipaje se traen con
+      los días desplazados, así que la cena del viernes cae en el viernes nuevo.
+      (`src/lib/heredar.ts`)
+- [x] **Que el proyecto no se duerma, y la copia completa.** Latido semanal en
+      Actions y la copia de seguridad, que se bajaba 12 tablas de 22, al día y con
+      recordatorio a los 120 días. (`.github/workflows/despierta.yml`, `src/lib/copia.ts`)
+- [x] **Pruebas de lo que calcula.** 84, dos décimas, y en el despliegue antes de
+      construir. Sin jsdom.
+- [x] **Reacciones en el chat.** Un toque en el mensaje en lugar de once «vale».
+      No avisan a nadie a propósito. (`supabase/20_reacciones.sql`)
+- [x] **No molestar de noche.** De 23:00 a 8:00 de España, de serie, y cada cual se
+      lo cambia. Se silencia el empujón, no el aviso. (`supabase/21_no_molestar.sql`)
+- [x] **El número en el icono.** La cuenta de avisos sin leer sobre el icono
+      instalado, puesta desde la aplicación y desde el service worker.
+      (`src/lib/insignia.ts`)
+
+### Pendiente a mano (lo que no puedo hacer yo)
+
+- [ ] Pasar `supabase/19_datos_llegada.sql`, `supabase/20_reacciones.sql` y
+      `supabase/21_no_molestar.sql` en el SQL Editor.
+- [ ] Volver a desplegar la *Edge Function* `avisar` (panel → Edge Functions →
+      avisar → Code → pegar `supabase/functions/avisar/index.ts` → Deploy). Sin
+      esto, ni el silencio de noche ni el número del icono con la app cerrada.

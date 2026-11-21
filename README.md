@@ -140,6 +140,9 @@ Scripts disponibles:
    15. `supabase/16_avisos_chat.sql`
    16. `supabase/17_quien_viene.sql`
    17. `supabase/18_fotos_escapada.sql`
+   18. `supabase/19_datos_llegada.sql`
+   19. `supabase/20_reacciones.sql`
+   20. `supabase/21_no_molestar.sql`
 
    Todos se pueden volver a ejecutar sin miedo, y en cualquier orden: no borran ni
    duplican nada. Los que amplían la lista de tipos de aviso (el 15 y el 16) la leen
@@ -154,6 +157,10 @@ Scripts disponibles:
    de verano se arregla solo. Y para que ese aviso llegue
    al móvil con la aplicación cerrada hace falta además la *Edge Function* `avisar` y su
    webhook, que están explicados en `supabase/functions/avisar/README.md`.
+
+   El 21 añade las horas de silencio, y quien las mira es la *Edge Function* `avisar`:
+   **después de pasarlo hay que volver a desplegar la función**, o seguirá avisando de
+   madrugada.
 
    `09_cosas_a_recordar.sql` no es parte de la instalación: es un apaño suelto que mete en
    la compra de la escapada en marcha lo que siempre se olvida. Pásalo cuando te haga
@@ -186,6 +193,12 @@ desaparece y las políticas RLS dejan de devolverle datos.
 Las fotos se pueden añadir de dos formas: pegando la URL de una imagen de la web de la casa
 (no ocupa nada) o subiéndolas al bucket `fotos`, que `02_rls.sql` crea con lectura pública
 y subida solo para integrantes. El plan gratuito de Supabase incluye 1 GB.
+
+Lo que se sube se encoge antes de salir del teléfono (`src/lib/subidas.ts`): lado largo a
+2000 px —512 para los avatares— y JPEG, respetando la orientación del EXIF. Una foto de
+4 MB se queda en 400 KB, así que ese giro da para muchas escapadas, y subir diez fotos por
+el 4G de un pueblo deja de ser una tarde. Si el navegador no sabe abrir el formato, se sube
+la original tal cual.
 
 ---
 
@@ -540,3 +553,85 @@ renovarlo. Ninguna de las dos tiene arreglo en mitad del monte, que es justo don
 Probado de punta a punta con el móvil emulado: sin red la aplicación abre entera, se marca un
 producto, la tira dice «1 cambio guardado aquí», y al volver la línea se manda solo y queda
 en el servidor.
+
+
+---
+
+## 14. Que aguante el fin de semana de verdad
+
+La tanda anterior consiguió que la aplicación se pudiera abrir allí. Esta va de lo que
+pasaba en cuanto se usaba de verdad: nueve cosas, y la primera no era una mejora sino un
+fallo que nadie había tocado todavía porque la pestaña de *Fotos* acababa de nacer.
+
+**Las fotos del móvil no caben.** El tope de subida eran 5 MB y no se comprimía nada; una
+foto de un móvil de hoy pesa entre 3 y 6. El primero que subiera las del fin de semana se
+comía un «prueba con una más ligera» imposible de cumplir desde el carrete, y las que
+entraran se llevaban el giga gratis de Storage en dos escapadas. Ahora se encogen en el
+teléfono antes de salir: 2000 px de lado largo y JPEG, con la orientación del EXIF puesta
+—que si no, las verticales se suben tumbadas—. De 4 MB a 400 KB sin que se note en una
+pantalla.
+
+**Lo que hace falta al llegar.** De una casa se guardaba todo lo que sirve para decidirla
+y nada de lo que sirve para ir. La dirección exacta, la hora de entrada, el teléfono del
+dueño, la clave del portón, el wifi y el desvío sin señalizar viven en el correo de quien
+reservó, y el correo en el monte no se abre. Diez columnas nuevas en `houses`, una sección
+plegada en la ficha de la casa —al proponer una candidata todavía no se sabe nada de esto—
+y una tarjeta en el *Resumen* con el mapa, el teléfono de un toque y las claves con botón
+de copiar. Como el *Resumen* guarda copia local, es lo único que sigue estando ahí sin
+cobertura.
+
+**El panel cambia de cara.** Los tres días que importan, la aplicación seguía pidiendo
+votar las fechas. Mientras hoy cae dentro del rango, el panel abre con lo del día: qué se
+come hoy con sus platos y quién se encarga, qué hay mañana por si toca descongelar algo,
+qué falta por comprar, un atajo para subir las fotos y debajo las claves de la casa. El
+cálculo de en qué momento estamos vive aparte, en `src/lib/estancia.ts`, porque es
+aritmética de fechas y así se puede probar.
+
+**La siguiente parte de la anterior.** La compra ya se reutilizaba sola —para eso está la
+maestra—, pero el menú y el equipaje había que montarlos de cero cada vez, y el año que
+viene habrá otra vez cena del viernes y el proyector lo llevará el mismo. Al crear una
+escapada viene elegida la anterior, con el menú y el equipaje marcados, a la vista antes
+de pulsar *Crear*. Los días se **desplazan** en vez de copiarse, así que la cena del
+viernes cae en el viernes nuevo; si alguna de las dos no tiene fechas, los tiempos se
+quedan sin día. Nada llega tachado ni comprado.
+
+**Que el proyecto no se duerma, y que la copia sirva.** Supabase pausa los proyectos
+gratuitos que pasan una semana sin actividad de base de datos, y reactivarlo solo puede
+hacerlo quien administra: entre escapadas pasan meses. Un latido semanal en Actions hace
+una consulta de verdad —un «ping» a un endpoint de salud no llega a Postgres y puede no
+contar— y el `pg_cron` horario de los recordatorios ya cuenta por su cuenta. Y la copia de
+seguridad, que existía, se bajaba 12 tablas de 22: faltaban los menús, el recetario, el
+equipaje, las fotos y el chat, o sea tres años de recetario en una copia en la que se
+confía. Ahora la lista vive en `src/lib/copia.ts` con el aviso de mantenerla al día, dice
+cuántas filas se trae, y a los 120 días el panel se lo recuerda a quien administra.
+
+**Pruebas de lo que calcula.** No había ninguna, y lo que se rompe en silencio no son las
+pantallas —una pantalla rota se ve— sino la aritmética. 84 pruebas sobre los módulos que
+calculan, dos décimas, y van en el despliegue antes de construir. Varias están ahí por
+cosas que ya darían guerra: que `hoyISO` dé el día en hora de España y no en UTC, que
+desplazar los días de una escapada sobreviva al cambio de hora de marzo, y que `limpia()`
+se lleve las copias pero no la cola de cambios sin cobertura. Sin jsdom: 30 líneas de
+`src/pruebas/entorno.ts` hacen de navegador.
+
+### Y las tres que había descartado
+
+**Reacciones en el chat.** Once personas y alguien propone algo: once «vale» seguidos que
+entierran la conversación. La clave primaria es (mensaje, persona, emoji), quitar es borrar
+la fila, y **no avisan** a nadie: un aviso por cada pulgar arriba sería justo el ruido que
+se le quitó al chat con el freno de los avisos. Nada depende de pasar el ratón por encima,
+que en un móvil no hay ratón.
+
+**No molestar de noche.** Un móvil vibrando en la mesilla porque un amigo ha propuesto una
+casa es la forma más rápida de que medio grupo apague los avisos para siempre, y entonces
+los recordatorios tampoco llegan. Encendido de serie de 23:00 a 8:00 hora de España, y
+cada cual se lo cambia en su perfil. Se silencia el empujón, no el aviso: la fila se crea
+igual y por la mañana está en la campana. Decide la función `avisar`, que es la que firma
+los envíos, y la regla está escrita dos veces porque Deno no puede importar del navegador
+—las dos copias se señalan la una a la otra—.
+
+**El número en el icono.** La campana de dentro solo se ve si ya has abierto la
+aplicación. El icono instalado lleva ahora el circulito con la cuenta de avisos sin leer:
+lo pone la aplicación cada vez que esa cuenta cambia, y el service worker al llegar un
+empujón con la aplicación cerrada, con el número que le manda la función dentro del aviso
+(un service worker no habla con la base de datos). En una pestaña normal no existe, y eso
+no es un error: falla en silencio.
