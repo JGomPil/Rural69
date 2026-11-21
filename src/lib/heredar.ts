@@ -188,12 +188,12 @@ export async function hereda({ origen, destino, que, perfilId }: Encargo): Promi
   return hecho
 }
 
-/** «8 tiempos, 12 platos y 9 cosas de equipaje». */
+/** «8 tiempos, 12 platos y 9 cosas comunes». */
 export function resumeHeredado(h: Heredado): string {
   const partes = [
     h.tiempos && `${h.tiempos} ${h.tiempos === 1 ? 'tiempo' : 'tiempos'}`,
     h.platos && `${h.platos} ${h.platos === 1 ? 'plato' : 'platos'}`,
-    h.equipaje && `${h.equipaje} ${h.equipaje === 1 ? 'cosa de equipaje' : 'cosas de equipaje'}`,
+    h.equipaje && `${h.equipaje} ${h.equipaje === 1 ? 'cosa común' : 'cosas comunes'}`,
     h.compra && `${h.compra} ${h.compra === 1 ? 'producto' : 'productos'}`,
   ].filter(Boolean) as string[]
   if (partes.length === 0) return 'No había nada que traer.'

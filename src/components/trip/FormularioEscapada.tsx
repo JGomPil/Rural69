@@ -236,7 +236,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
               <CopyPlus size={16} className="text-bosque-600" /> Partir de una anterior
             </p>
             <p className="mb-3 text-xs text-suave">
-              El menú y el equipaje se repiten casi enteros de un año para otro. Los días se desplazan solos: la cena
+              El menú y lo común se repiten casi enteros de un año para otro. Los días se desplazan solos: la cena
               del viernes cae en el viernes nuevo.
             </p>
             <Lista value={origenId} onChange={(e) => setOrigen(e.target.value)}>
@@ -257,7 +257,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
                 <Casilla
                   checked={queTraer.equipaje}
                   onChange={() => setQueTraer((p) => ({ ...p, equipaje: !p.equipaje }))}
-                  etiqueta="El equipaje: quién llevaba qué, otra vez sin tachar"
+                  etiqueta="Lo común: quién llevaba qué, otra vez sin tachar"
                 />
                 <Casilla
                   checked={queTraer.compra}

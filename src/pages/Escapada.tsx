@@ -38,7 +38,7 @@ const PESTANYAS = [
   { a: 'compra', texto: 'Compra' },
   // Va después de la compra a propósito: primero lo que se compra allí,
   // luego lo que se lleva de casa.
-  { a: 'equipaje', texto: 'Equipaje' },
+  { a: 'equipaje', texto: 'Común' },
   { a: 'sobrantes', texto: 'Sobrantes' },
   // Las de después, no las de la casa candidata.
   { a: 'fotos', texto: 'Fotos' },

@@ -40,7 +40,7 @@ describe('resumeHeredado', () => {
   it('lo dice en castellano y en singular cuando toca', () => {
     expect(resumeHeredado({ tiempos: 1, platos: 0, equipaje: 0, compra: 0 })).toBe('Traído: 1 tiempo.')
     expect(resumeHeredado({ tiempos: 8, platos: 12, equipaje: 9, compra: 0 })).toBe(
-      'Traído: 8 tiempos, 12 platos y 9 cosas de equipaje.',
+      'Traído: 8 tiempos, 12 platos y 9 cosas comunes.',
     )
   })
 

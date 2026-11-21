@@ -13,7 +13,11 @@ import { Persona } from '../ui/Persona'
 import type { Member, TripPacking } from '../../lib/types'
 
 /**
- * Lo que se lleva de casa y nunca está en ninguna parte.
+ * Lo común: lo que se lleva de casa y nunca está en ninguna parte.
+ *
+ * Se llamaba «equipaje» y el nombre engañaba: esto no es la maleta de
+ * cada uno, es lo que hace falta para la casa y que alguien tiene que
+ * acordarse de meter en el coche.
  *
  * Los sacos, las toallas, el altavoz, la paellera, el desayuno que lleva cada
  * uno. Se acuerda por WhatsApp y se olvida, y siempre acaba faltando algo o
@@ -125,7 +129,7 @@ export function Equipaje() {
     else await refrescar(true)
   }
 
-  if (cargando) return <Cargando texto="Cargando el equipaje…" />
+  if (cargando) return <Cargando texto="Cargando lo común…" />
   if (error) return <AvisoError texto={error} onReintentar={() => void refrescar()} />
 
   const sinDuenyo = lista.filter((c) => !c.member_id).length
