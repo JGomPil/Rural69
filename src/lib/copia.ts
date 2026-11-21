@@ -46,6 +46,7 @@ export const TABLAS_COPIA = [
   'trip_photos',
   'trip_reminders',
   'messages',
+  'message_reactions',
 ] as const
 
 /**

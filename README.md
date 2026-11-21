@@ -240,7 +240,7 @@ solo. En local el valor por defecto es `/Rural69/`, definido en `vite.config.ts`
 
 ## 6. Mantenimiento
 
-* **Copias de seguridad**: *Ajustes → Copia de seguridad* descarga un JSON con las 22 tablas
+* **Copias de seguridad**: *Ajustes → Copia de seguridad* descarga un JSON con las 23 tablas
   de contenido (la lista está en `src/lib/copia.ts`; **si añades una tabla al esquema,
   añádela ahí**). Quedan fuera a propósito las claves de los navegadores
   (`push_subscriptions`) y los avisos ya leídos. Las fotos no van dentro: van sus
@@ -600,7 +600,7 @@ gratuitos que pasan una semana sin actividad de base de datos, y reactivarlo sol
 hacerlo quien administra: entre escapadas pasan meses. Un latido semanal en Actions hace
 una consulta de verdad —un «ping» a un endpoint de salud no llega a Postgres y puede no
 contar— y el `pg_cron` horario de los recordatorios ya cuenta por su cuenta. Y la copia de
-seguridad, que existía, se bajaba 12 tablas de 22: faltaban los menús, el recetario, el
+seguridad, que existía, se bajaba 12 tablas de 23: faltaban los menús, el recetario, el
 equipaje, las fotos y el chat, o sea tres años de recetario en una copia en la que se
 confía. Ahora la lista vive en `src/lib/copia.ts` con el aviso de mantenerla al día, dice
 cuántas filas se trae, y a los 120 días el panel se lo recuerda a quien administra.

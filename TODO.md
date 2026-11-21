@@ -378,7 +378,7 @@ había descartado por capricho y que también entraron.
       los días desplazados, así que la cena del viernes cae en el viernes nuevo.
       (`src/lib/heredar.ts`)
 - [x] **Que el proyecto no se duerma, y la copia completa.** Latido semanal en
-      Actions y la copia de seguridad, que se bajaba 12 tablas de 22, al día y con
+      Actions y la copia de seguridad, que se bajaba 12 tablas de 23, al día y con
       recordatorio a los 120 días. (`.github/workflows/despierta.yml`, `src/lib/copia.ts`)
 - [x] **Pruebas de lo que calcula.** 84, dos décimas, y en el despliegue antes de
       construir. Sin jsdom.
