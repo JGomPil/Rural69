@@ -84,7 +84,7 @@ const CANCIONES = [
   { titulo: 'El baúl de los recuerdos', artista: 'Karina', anyo: 1969 },
   { titulo: 'Soy rebelde', artista: 'Jeanette', anyo: 1971 },
   { titulo: 'Un rayo de sol', artista: 'Los Diablos', anyo: 1970 },
-  { titulo: 'Eres tú', artista: 'Mocedades', anyo: 1973 },
+  { titulo: 'Eres tú', artista: 'Mocedades', anyo: 1973, extra: 'Mocedades 1973' },
   { titulo: 'Un beso y una flor', artista: 'Nino Bravo', anyo: 1972 },
   { titulo: 'Libre', artista: 'Nino Bravo', anyo: 1972 },
   { titulo: 'Mediterráneo', artista: 'Joan Manuel Serrat', anyo: 1971 },
@@ -137,7 +137,7 @@ const CANCIONES = [
   { titulo: 'Vivir así es morir de amor', artista: 'Camilo Sesto', anyo: 1978 },
   { titulo: 'Te estoy amando locamente', artista: 'Las Grecas', anyo: 1974 },
   { titulo: 'Libertad sin ira', artista: 'Jarcha', anyo: 1976 },
-  { titulo: 'Mi querida España', artista: 'Cecilia', anyo: 1975 },
+  { titulo: 'Mi querida España', artista: 'Cecilia', anyo: 1975, extra: 'Un Ramito de Violetas' },
   { titulo: 'Abre la puerta', artista: 'Triana', anyo: 1975 },
   { titulo: 'Quiero ser libre', artista: 'Los Chichos', anyo: 1974 },
   { titulo: '¿Qué hace una chica como tú en un sitio como este?', artista: 'Burning', anyo: 1978 },
@@ -379,7 +379,7 @@ const CANCIONES = [
   { titulo: 'Te necesito', artista: 'Amaral', anyo: 2002 },
   { titulo: 'Zapatillas', artista: 'El Canto del Loco', anyo: 2003 },
   { titulo: 'Puede ser', artista: 'El Canto del Loco', anyo: 2002, extra: 'A Contracorriente' },
-  { titulo: 'Malo', artista: 'Bebe', anyo: 2004 },
+  { titulo: 'Ella', artista: 'Bebe', anyo: 2003, extra: 'Pafuera Telarañas' },
   { titulo: 'Pokito a poko', artista: 'Chambao', anyo: 2005 },
   { titulo: 'Estrella polar', artista: 'Pereza', anyo: 2005 },
   { titulo: 'Princesas', artista: 'Pereza', anyo: 2005 },
@@ -413,6 +413,11 @@ const OTRAS = /\blive\b|\ben vivo\b|\ben directo\b|\bdirecto\b|remix|re-?mix|ref
 // Discos grabados en un concierto, que no siempre se anuncian en el título
 // de la canción.
 const DIRECTOS = /\bvivo\b|\bdirecto\b|\blive\b|\bconcierto\b|unplugged|\bgira\b|\btour\b/i
+
+// Recopilatorios de gasolinera. No se descartan —de algunas canciones es lo
+// único que hay— pero pierden contra el disco de verdad: ahí es donde está la
+// grabación que conoce la gente, y no una mezcla rara de la reedición.
+const COMPILADOS = /grandes [eé]xitos|lo mejor de|\d+ grandes|\d+ a[nñ]os|esencial|icollection|sabor latino|lentos|new woman|m[aá]gicos|serie platino|colecci[oó]n|[eé]xitos\b|\bhits\b|\bvol\.? ?\d|canciones que|cu[eé]ntame c[oó]mo pasó|las \d+ mejores|poetas de la canci[oó]n/i
 
 // Y quien no es el grupo: discos de homenajes, bandas de bodas y recopilatorios.
 const IMPOSTORES = /tribute|karaoke|hit crew|studio band|various artists|orquesta|orchestra tribute|the sunshine|cast|party|covers?\b/i
@@ -451,6 +456,7 @@ function puntua(ficha, r) {
   // «Vivo... Para Contarlo» no lleva paréntesis ninguno y dentro está el
   // «Soldadito marinero» de siete minutos con el público cantando.
   if (DIRECTOS.test(r.collectionName ?? '')) p -= 7
+  if (COMPILADOS.test(r.collectionName ?? '')) p -= 2
   if (!mismo && IMPOSTORES.test(r.artistName ?? '')) p -= 7
   // Un trozo de menos de minuto y medio no es la canción, es un interludio.
   if ((r.trackTimeMillis ?? 0) > 0 && r.trackTimeMillis < 90_000) p -= 3

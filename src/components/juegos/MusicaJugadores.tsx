@@ -7,8 +7,10 @@ import { despiertaElSonido } from '../../lib/juegos/sonido'
 import type { Opciones } from '../../lib/juegos/musica'
 import type { Member } from '../../lib/types'
 
-const TIEMPOS = [30, 45, 60, 90, 0]
-const RONDAS = [5, 10, 15, 20]
+// Los tiempos cortos son los que se usan: con noventa segundos la ronda se
+// hace larga hasta cuando nadie la saca, y con cinco es a muerte súbita.
+const TIEMPOS = [45, 30, 15, 5, 0]
+const RONDAS = [5, 10, 15, 20, 30, 50]
 
 export function MusicaJugadores({
   gente,
@@ -150,7 +152,9 @@ export function MusicaJugadores({
           {cuantas} {cosas} en el repertorio, y en una partida no se repite ninguna.
           {segundos === 0
             ? ' Sin reloj: la música da vueltas hasta que alguien la saque o os rindáis.'
-            : ` La música se repite hasta que se acaben los ${segundos} segundos.`}
+            : segundos <= 15
+              ? ` ${segundos} segundos y a la siguiente: no da tiempo a pensarlo.`
+              : ` La música se repite hasta que se acaben los ${segundos} segundos.`}
         </p>
       </Tarjeta>
 

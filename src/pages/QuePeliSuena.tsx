@@ -10,7 +10,7 @@ export function QuePeliSuena() {
       lema="Treinta segundos de banda sonora, y a ver quién la saca."
       cosa="película"
       cosas="películas"
-      segundosPorDefecto={60}
+      segundosPorDefecto={45}
       rondasPorDefecto={10}
       carga={cargaLasBandas}
       comoVa={

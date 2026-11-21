@@ -435,8 +435,9 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       (`src/lib/juegos/musica.ts`, `bandas.ts`, `bandas.json`)
 - [x] **¿Qué canción suena?** El mismo juego con otro repertorio: 340 canciones de
       pop y rock de 1960 a 2010, un tercio en español, por `scripts/canciones.mjs`. Vale
-      el título y vale el grupo. Reloj de 30 segundos y 15 rondas, que una canción
-      conocida se saca en cuatro. Las reglas y las dos pantallas son las mismas para los
+      el título y vale el grupo. Reloj de 45, 30, 15 o 5 segundos —o sin reloj— y de 5
+      a 50 rondas; por defecto 30 segundos y 15 canciones, que una conocida se saca en
+      cuatro segundos. Las reglas y las dos pantallas son las mismas para los
       dos juegos, con la palabra y el repertorio por parámetro. 23 pruebas.
       (`src/lib/juegos/musica.ts`, `canciones.ts`, `canciones.json`,
       `components/juegos/JuegoDeMusica.tsx`)

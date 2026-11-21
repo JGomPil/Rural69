@@ -853,9 +853,18 @@ en español. Vale el título y vale el grupo, que en el salón se grita lo que s
   `scripts/canciones.mjs` resta por «live», «remix», «demo», «acoustic» y compañía, y suma si
   el año de la grabación cuadra con el de la ficha: un remaster conserva el año original en los
   metadatos y una regrabación no. Lo que diga «Remastered» pasa, que es la misma cinta.
-- **Treinta segundos y quince rondas, no sesenta y diez.** Una canción conocida se saca en
-  cuatro segundos; con el reloj de las películas sobraba medio minuto de relleno en cada ronda.
-  Los dos juegos traen sus propios valores por defecto y se pueden cambiar antes de empezar.
+- **Treinta segundos y quince rondas, y el reloj tira a corto.** Una canción conocida se saca
+  en cuatro segundos, así que los tiempos que se eligen son 45, 30, 15 o 5 segundos —con cinco
+  es a muerte súbita— o sin reloj; los noventa segundos del principio no los usaba nadie ni
+  cuando no la sacaba nadie. Las rondas llegan a cincuenta, que con 340 canciones siguen sin
+  repetirse. Cada juego trae sus valores por defecto y se cambian antes de empezar.
+- **Las que vienen de un recopilatorio pierden contra el disco.** Esto salió jugando: el «Malo»
+  de Bebe sonaba raro porque lo único que vende la tienda española es un «Sabor Latino» del
+  2011, y lo que hay dentro no es la grabación del disco. Ahora el puntuador resta a los
+  «Grandes Éxitos», «Esencial», «Lo mejor de» y compañía —sin descartarlos, que de algunas es
+  lo único que hay— y con eso treinta y dos canciones pasaron a sonar desde su álbum: _Maquillaje_
+  desde el «Mecano» del 82, _Déjame_ desde el «Los Secretos» del 81, _Eres tú_ desde el
+  «Mocedades (1973)». De Bebe entró _Ella_, que sí está en el «Pafuera telarañas».
 - **Un tercio en español, a propósito.** En ese sofá se grita antes _Hijo de la Luna_ que un
   éxito americano del 62. Los sesenta en español son flojitos y están compensados con los
   ochenta y los noventa.
