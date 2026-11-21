@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
 import { useConsulta } from '../../hooks/useConsulta'
 import { useGrupo } from '../../hooks/useGrupo'
-import { mensajeError, supabase } from '../../lib/supabase'
+import { faltaPasarSql, mensajeError, supabase } from '../../lib/supabase'
 import { subeFoto } from '../../lib/subidas'
 import { clave } from '../../lib/cantidades'
 import { diaDeChat, hora } from '../../lib/formato'
@@ -15,7 +15,8 @@ import { Avatar } from '../ui/Avatar'
 import { BotonIcono } from '../ui/Boton'
 import { Confirmar } from '../ui/Modal'
 import { AvisoError, Cargando } from '../ui/Varios'
-import type { Message, Profile } from '../../lib/types'
+import { Reacciones } from './Reacciones'
+import type { Message, MessageReaction, Profile } from '../../lib/types'
 
 /** Dos mensajes seguidos de la misma persona en menos de 5 min van juntos. */
 const AGRUPA_MS = 5 * 60 * 1000
@@ -98,19 +99,37 @@ export function Chat() {
 
   const { datos, cargando, error, refrescar } = useConsulta(
     async () => {
-      const { data, error: err } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('trip_id', escapada.id)
-        .order('created_at')
-      if (err) throw err
-      return (data ?? []) as Message[]
+      const [mensajes, reacciones] = await Promise.all([
+        supabase.from('messages').select('*').eq('trip_id', escapada.id).order('created_at'),
+        // `message_reactions` no tiene trip_id: cuelga del mensaje, así que se
+        // piden todas y se quedan las de aquí.
+        supabase.from('message_reactions').select('*'),
+      ])
+      if (mensajes.error) throw mensajes.error
+      // Mientras no se haya pasado `20_reacciones.sql` la tabla no existe, y el
+      // chat no se va a quedar sin funcionar por eso: se sigue sin reacciones.
+      if (reacciones.error && !faltaPasarSql(reacciones.error)) throw reacciones.error
+      const mios = (mensajes.data ?? []) as Message[]
+      const ids = new Set(mios.map((m) => m.id))
+      return {
+        mensajes: mios,
+        reacciones: ((reacciones.data ?? []) as MessageReaction[]).filter((r) => ids.has(r.message_id)),
+      }
     },
     [escapada.id],
-    { realtime: ['messages'], copia: `chat:${escapada.id}` },
+    { realtime: ['messages', 'message_reactions'], copia: `chat:${escapada.id}:v2` },
   )
 
-  const mensajes = useMemo(() => datos ?? [], [datos])
+  const mensajes = useMemo(() => datos?.mensajes ?? [], [datos])
+
+  /** Las reacciones de cada mensaje. */
+  const reaccionesDe = useMemo(() => {
+    const mapa = new Map<string, MessageReaction[]>()
+    for (const r of datos?.reacciones ?? []) {
+      mapa.set(r.message_id, [...(mapa.get(r.message_id) ?? []), r])
+    }
+    return mapa
+  }, [datos?.reacciones])
 
   // Los más recientes primero: al buscar algo que se dijo, casi siempre es
   // lo último que se dijo de eso.
@@ -240,6 +259,27 @@ export function Chat() {
     }
   }
 
+  /**
+   * Poner o quitar una reacción: es la misma pulsación. Si ya era mía se
+   * quita, que es lo que espera cualquiera que haya usado un chat.
+   */
+  const reacciona = async (mensajeId: string, emoji: string) => {
+    if (!perfil) return
+    const mia = (reaccionesDe.get(mensajeId) ?? []).some((r) => r.profile_id === perfil.id && r.emoji === emoji)
+    try {
+      const { error: err } = mia
+        ? await supabase
+            .from('message_reactions')
+            .delete()
+            .match({ message_id: mensajeId, profile_id: perfil.id, emoji })
+        : await supabase.from('message_reactions').insert({ message_id: mensajeId, profile_id: perfil.id, emoji })
+      if (err) throw err
+      await refrescar(true)
+    } catch (err) {
+      avisos.error(faltaPasarSql(err) ?? mensajeError(err))
+    }
+  }
+
   const teclado = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // Enter envía; Mayús+Enter hace salto de línea, como en WhatsApp de escritorio.
     if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
@@ -356,35 +396,44 @@ export function Chat() {
                     {!seguido && <Avatar src={fotoDe(m.author_id)} nombre={nombreDe(m.author_id)} tamanyo="sm" />}
                   </span>
 
-                  <div
-                    className={`max-w-[min(32rem,78%)] rounded-2xl px-3 py-2 shadow-sm transition ${
-                      mio ? 'bg-bosque-600 text-tinta-fuerte' : 'bg-superficie text-carbon'
-                    } ${seguido ? (mio ? 'rounded-tr-md' : 'rounded-tl-md') : ''} ${
-                      resaltado === m.id ? 'ring-2 ring-tierra-500' : ''
-                    }`}
-                  >
-                    {!seguido && !mio && (
-                      <p className="mb-0.5 text-xs font-bold text-bosque-700">{nombreDe(m.author_id)}</p>
-                    )}
-                    {m.image_url && (
-                      <button
-                        type="button"
-                        onClick={() => setAmpliada(m.image_url)}
-                        className="mb-1 block overflow-hidden rounded-xl"
-                      >
-                        <img
-                          src={m.image_url}
-                          alt="Foto enviada al chat"
-                          className="max-h-72 w-full object-cover"
-                          loading="lazy"
-                        />
-                      </button>
-                    )}
-                    {m.body && <p className="text-sm whitespace-pre-wrap break-words">{m.body}</p>}
-                    <p className={`mt-0.5 text-right text-[11px] ${mio ? 'text-tinta-fuerte/60' : 'text-suave'}`}>
-                      {m.edited_at && 'editado · '}
-                      {hora(m.created_at)}
-                    </p>
+                  <div className={`flex min-w-0 max-w-[min(32rem,78%)] flex-col ${mio ? 'items-end' : 'items-start'}`}>
+                    <div
+                      className={`max-w-full rounded-2xl px-3 py-2 shadow-sm transition ${
+                        mio ? 'bg-bosque-600 text-tinta-fuerte' : 'bg-superficie text-carbon'
+                      } ${seguido ? (mio ? 'rounded-tr-md' : 'rounded-tl-md') : ''} ${
+                        resaltado === m.id ? 'ring-2 ring-tierra-500' : ''
+                      }`}
+                    >
+                      {!seguido && !mio && (
+                        <p className="mb-0.5 text-xs font-bold text-bosque-700">{nombreDe(m.author_id)}</p>
+                      )}
+                      {m.image_url && (
+                        <button
+                          type="button"
+                          onClick={() => setAmpliada(m.image_url)}
+                          className="mb-1 block overflow-hidden rounded-xl"
+                        >
+                          <img
+                            src={m.image_url}
+                            alt="Foto enviada al chat"
+                            className="max-h-72 w-full object-cover"
+                            loading="lazy"
+                          />
+                        </button>
+                      )}
+                      {m.body && <p className="text-sm whitespace-pre-wrap break-words">{m.body}</p>}
+                      <p className={`mt-0.5 text-right text-[11px] ${mio ? 'text-tinta-fuerte/60' : 'text-suave'}`}>
+                        {m.edited_at && 'editado · '}
+                        {hora(m.created_at)}
+                      </p>
+                    </div>
+                    <Reacciones
+                      reacciones={reaccionesDe.get(m.id) ?? []}
+                      miPerfil={perfil?.id ?? null}
+                      nombreDe={nombreDe}
+                      onToca={(emoji) => void reacciona(m.id, emoji)}
+                      mio={mio}
+                    />
                   </div>
 
                   {(mio || esAdmin) && (

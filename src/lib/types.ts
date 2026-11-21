@@ -247,6 +247,13 @@ export interface Message {
   created_at: string
 }
 
+/** Un toque en un mensaje del chat. Llegó en `20_reacciones.sql`. */
+export interface MessageReaction {
+  message_id: string
+  profile_id: string
+  emoji: string
+  created_at: string
+}
 export interface MessageRead {
   trip_id: string
   profile_id: string
