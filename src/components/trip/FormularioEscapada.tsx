@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Users } from 'lucide-react'
+import { CopyPlus, Users } from 'lucide-react'
 import { Boton } from '../ui/Boton'
 import { AreaTexto, Campo, Casilla, Entrada, Lista } from '../ui/Campos'
 import { Modal } from '../ui/Modal'
@@ -12,6 +12,7 @@ import { faltaPasarSql, mensajeError, supabase } from '../../lib/supabase'
 import { ESTADOS } from '../../lib/constantes'
 import { personasEquivalentes } from '../../lib/cantidades'
 import { numero } from '../../lib/formato'
+import { hereda, resumeHeredado, type QueHeredar } from '../../lib/heredar'
 import type { EstadoEscapada, Trip } from '../../lib/types'
 
 interface Props {
@@ -23,7 +24,7 @@ interface Props {
 }
 
 export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: Props) {
-  const { miembros, hogares, refrescar } = useGrupo()
+  const { miembros, hogares, escapadas, refrescar } = useGrupo()
   const { perfil } = useAuth()
   const avisos = useAvisos()
   const editando = Boolean(escapada)
@@ -38,6 +39,24 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
   const [participantes, setParticipantes] = useState<Set<string>>(new Set())
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // De qué escapada parte esta, y qué se trae de ella.
+  // `null` = nadie ha tocado la lista todavía, y entonces manda la anterior.
+  // Así un refresco por detrás (hay realtime) no te cambia lo que acabas de
+  // elegir, y tampoco hace falta rellenarlo desde un efecto.
+  const [origen, setOrigen] = useState<string | null>(null)
+  const [queTraer, setQueTraer] = useState<QueHeredar>({ menu: true, equipaje: true, compra: false })
+
+  /** Las que ya existen, de la más reciente a la más vieja. La primera es
+   *  «la anterior», que es de la que se parte casi siempre. */
+  const anteriores = useMemo(
+    () =>
+      escapadas
+        .filter((t) => t.id !== escapada?.id)
+        .slice()
+        .sort((a, b) => (b.start_date ?? '').localeCompare(a.start_date ?? '') || b.created_at.localeCompare(a.created_at)),
+    [escapadas, escapada?.id],
+  )
+  const origenId = origen ?? anteriores[0]?.id ?? ''
 
   useEffect(() => {
     if (!abierto) return
@@ -73,6 +92,10 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
       setObservaciones('')
       setEstado('planificacion')
       setParticipantes(new Set(miembros.filter((m) => m.active).map((m) => m.id)))
+      // La anterior viene elegida: es lo que se quiere el 90 % de las veces,
+      // y está a la vista antes de pulsar «Crear», no escondida en un ajuste.
+      setOrigen(null)
+      setQueTraer({ menu: true, equipaje: true, compra: false })
     }
   }, [abierto, escapada, miembros])
 
@@ -144,8 +167,27 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
         }
       }
 
+      // Lo heredado va al final y aparte: si algo falla aquí, la escapada ya
+      // existe y lo que no se puede es perderla por una copia a medias.
+      let traido = ''
+      const deDonde = anteriores.find((t) => t.id === origenId)
+      if (!editando && id && deDonde && (queTraer.menu || queTraer.equipaje || queTraer.compra)) {
+        try {
+          const hecho = await hereda({
+            origen: { id: deDonde.id, start_date: deDonde.start_date },
+            destino: { id, start_date: inicio || null },
+            que: queTraer,
+            perfilId: perfil?.id ?? null,
+          })
+          traido = ` ${resumeHeredado(hecho)}`
+        } catch (e) {
+          console.error('Rural69: no se ha podido heredar de la escapada anterior', e)
+          avisos.error(`La escapada se ha creado, pero no se ha podido traer lo de «${deDonde.title}»: ${mensajeError(e)}`)
+        }
+      }
+
       await refrescar()
-      avisos.ok(editando ? 'Escapada actualizada.' : '¡Escapada creada! Ya podéis proponer casas.')
+      avisos.ok(editando ? 'Escapada actualizada.' : `¡Escapada creada!${traido || ' Ya podéis proponer casas.'}`)
       onCerrar()
       if (id && onGuardada) onGuardada(id)
     } catch (e) {
@@ -187,6 +229,45 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
         <Campo etiqueta="Nombre de la escapada" requerido>
           <Entrada value={titulo} onChange={(e) => setTitulo(e.target.value)} placeholder="Escapada de otoño" required />
         </Campo>
+
+        {!editando && anteriores.length > 0 && (
+          <div className="rounded-2xl border border-arena bg-superficie p-4">
+            <p className="mb-1 flex items-center gap-1.5 text-sm font-semibold text-tenue">
+              <CopyPlus size={16} className="text-bosque-600" /> Partir de una anterior
+            </p>
+            <p className="mb-3 text-xs text-suave">
+              El menú y el equipaje se repiten casi enteros de un año para otro. Los días se desplazan solos: la cena
+              del viernes cae en el viernes nuevo.
+            </p>
+            <Lista value={origenId} onChange={(e) => setOrigen(e.target.value)}>
+              <option value="">Empezar de cero</option>
+              {anteriores.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.title}
+                </option>
+              ))}
+            </Lista>
+            {origenId && (
+              <div className="mt-3 space-y-1.5 border-t border-arena pt-3">
+                <Casilla
+                  checked={queTraer.menu}
+                  onChange={() => setQueTraer((p) => ({ ...p, menu: !p.menu }))}
+                  etiqueta="El menú: los tiempos del finde y qué se cocinaba en cada uno"
+                />
+                <Casilla
+                  checked={queTraer.equipaje}
+                  onChange={() => setQueTraer((p) => ({ ...p, equipaje: !p.equipaje }))}
+                  etiqueta="El equipaje: quién llevaba qué, otra vez sin tachar"
+                />
+                <Casilla
+                  checked={queTraer.compra}
+                  onChange={() => setQueTraer((p) => ({ ...p, compra: !p.compra }))}
+                  etiqueta="La lista de la compra: sin marcar y sin precios"
+                />
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Campo etiqueta="Fecha de ida" ayuda="Si todavía están por decidir, déjalas en blanco: saldrá «Fechas por decidir».">
