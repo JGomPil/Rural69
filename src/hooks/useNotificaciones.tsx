@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { desuscribe, suscribe } from '../lib/push'
+import { ponInsignia } from '../lib/insignia'
 import type { Notification as Aviso } from '../lib/types'
 import { useAuth } from './useAuth'
 import { useConsulta } from './useConsulta'
@@ -101,6 +102,17 @@ export function NotificacionesProvider({ children }: { children: React.ReactNode
   // pintado y el contexto cambiaría siempre, repintando media aplicación.
   const lista = useMemo(() => datos ?? [], [datos])
   const sinLeer = lista.filter((a) => !a.read_at).length
+
+  // ---------------------------------------------------------------
+  // El número en el icono de la pantalla de inicio
+  // ---------------------------------------------------------------
+  // La campana de dentro solo se ve si ya has abierto la aplicación. Esto
+  // es lo de fuera, y se apaga en el momento en que abres el buzón. No
+  // depende de tener los avisos del sistema activados: es otra cosa, y en
+  // una aplicación instalada funciona igual.
+  useEffect(() => {
+    void ponInsignia(sinLeer)
+  }, [sinLeer])
 
   // ---------------------------------------------------------------
   // Avisos del sistema para lo que acaba de llegar

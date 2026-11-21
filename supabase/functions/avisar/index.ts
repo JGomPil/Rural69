@@ -164,11 +164,24 @@ Deno.serve(async (peticion) => {
     return new Response('Sin aparatos suscritos', { status: 200 })
   }
 
+  // Cuántos avisos sin leer tiene ahora mismo: es el número que el service
+  // worker pondrá sobre el icono de la pantalla de inicio. Aquí se puede
+  // contar y allí no, que un service worker no habla con la base de datos.
+  // La fila de este aviso ya está escrita, así que entra en la cuenta.
+  const { count: sinLeer, error: errCuenta } = await supabase
+    .from('notifications')
+    .select('id', { count: 'exact', head: true })
+    .eq('profile_id', aviso.profile_id)
+    .is('read_at', null)
+
+  if (errCuenta) console.error('No he podido contar los avisos sin leer:', errCuenta.message)
+
   const carga = JSON.stringify({
     title: aviso.title,
     body: aviso.body ?? '',
     url: aviso.url ?? '',
     kind: aviso.kind ?? 'aviso',
+    sin_leer: sinLeer ?? null,
   })
 
   // Las suscripciones muertas se borran: un móvil que se formateó o un

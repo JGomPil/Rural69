@@ -23,7 +23,7 @@
 // llegan los dos, uno sustituye al otro en vez de sonar dos veces.
 // =====================================================================
 
-const VERSION = 'rural69-v4'
+const VERSION = 'rural69-v5'
 const CACHE = `${VERSION}-estatico`
 
 self.addEventListener('install', (e) => {
@@ -95,7 +95,7 @@ self.addEventListener('fetch', (e) => {
 self.addEventListener('push', (e) => {
   // Sin datos no se puede decir nada útil, pero callarse del todo tampoco
   // vale: el navegador obliga a mostrar algo cuando llega un push.
-  let aviso = { title: 'Rural69', body: 'Hay novedades en el grupo.', url: '', kind: 'aviso' }
+  let aviso = { title: 'Rural69', body: 'Hay novedades en el grupo.', url: '', kind: 'aviso', sin_leer: null }
   if (e.data) {
     try {
       aviso = Object.assign(aviso, e.data.json())
@@ -104,16 +104,32 @@ self.addEventListener('push', (e) => {
     }
   }
 
+  // El número en el icono de la pantalla de inicio. La cuenta la manda el
+  // servidor dentro del aviso, porque aquí no se puede preguntar a la base
+  // de datos. Si el navegador no sabe hacerlo, no pasa nada.
+  const insignia = async () => {
+    try {
+      if (typeof aviso.sin_leer !== 'number' || !self.navigator) return
+      if (aviso.sin_leer > 0) await self.navigator.setAppBadge?.(aviso.sin_leer)
+      else await self.navigator.clearAppBadge?.()
+    } catch {
+      /* sin insignia: el aviso ya se ve igual */
+    }
+  }
+
   e.waitUntil(
-    self.registration.showNotification(aviso.title, {
-      body: aviso.body || undefined,
-      icon: './icon-192.png',
-      badge: './icon-192.png',
-      // La misma etiqueta que usa la aplicación cuando está abierta: si una
-      // votación se abre y estás mirando, no suena dos veces.
-      tag: aviso.kind || 'aviso',
-      data: { url: aviso.url || '' },
-    }),
+    Promise.all([
+      self.registration.showNotification(aviso.title, {
+        body: aviso.body || undefined,
+        icon: './icon-192.png',
+        badge: './icon-192.png',
+        // La misma etiqueta que usa la aplicación cuando está abierta: si una
+        // votación se abre y estás mirando, no suena dos veces.
+        tag: aviso.kind || 'aviso',
+        data: { url: aviso.url || '' },
+      }),
+      insignia(),
+    ]),
   )
 })
 
