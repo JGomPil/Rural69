@@ -64,9 +64,12 @@ function Marcador({ partida, gente }: { partida: Partida; gente: Member[] }) {
 
   return (
     <Tarjeta className="p-4">
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+      {/* `min-w-0` no es decorativo: sin él, la lista de nombres estira su
+          columna y el marcador se sale de la tarjeta. Con ocho nombres por
+          equipo se notaba a la primera. */}
+      <div className="flex items-start gap-3">
         {(['a', 'b'] as Lado[]).map((lado, i) => (
-          <div key={lado} className={i === 0 ? 'text-left' : 'text-right'}>
+          <div key={lado} className={`min-w-0 flex-1 ${i === 0 ? 'text-left' : 'text-right'}`}>
             <p className={`truncate font-semibold ${COLOR[lado].texto}`}>{partida.equipos[lado].nombre}</p>
             <p className="font-display text-3xl text-carbon tabular-nums">{partida.equipos[lado].puntos}</p>
             <div className={i === 0 ? 'flex justify-start' : 'flex justify-end'}>
@@ -81,8 +84,10 @@ function Marcador({ partida, gente }: { partida: Partida; gente: Member[] }) {
             )}
           </div>
         ))}
-        <span className="self-start pt-7 text-sm text-suave">a {partida.meta}</span>
       </div>
+      <p className="mt-2 text-center text-xs text-suave">
+        Gana quien llegue a {partida.meta} {partida.meta === 1 ? 'punto' : 'puntos'}
+      </p>
     </Tarjeta>
   )
 }
