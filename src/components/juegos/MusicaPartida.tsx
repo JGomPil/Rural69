@@ -57,6 +57,8 @@ export function MusicaPartida({
   /** El audio no se puede traer: sin internet, o la URL ha caducado del todo. */
   const [roto, setRoto] = useState(false)
   const audio = useRef<HTMLAudioElement | null>(null)
+  /** El temporizador que corta una escucha de las de «otra vez». */
+  const corte = useRef<number | null>(null)
   const ultimoTic = useRef(0)
   const comoEstaba = useRef<string | null>(null)
 
@@ -73,6 +75,12 @@ export function MusicaPartida({
   const pista = partida.ronda.pista
   const Cosa = cosa.charAt(0).toUpperCase() + cosa.slice(1)
 
+  /** Se deja de vigilar el corte: lo que suene, suena hasta que lo paren. */
+  const olvidaElCorte = () => {
+    if (corte.current !== null) window.clearTimeout(corte.current)
+    corte.current = null
+  }
+
   // --- La música -----------------------------------------------------
   // Solo suena en un móvil. Da vueltas a propósito: la preview son
   // treinta segundos y una ronda puede durar noventa.
@@ -84,6 +92,7 @@ export function MusicaPartida({
       el.pause()
       return
     }
+    olvidaElCorte()
     el.currentTime = 0
     void el
       .play()
@@ -98,6 +107,32 @@ export function MusicaPartida({
         setMudo(true)
       })
   }, [pista.id, partida.fase, soyModerador])
+
+  // Y al salir de la pantalla tampoco se queda nada colgando.
+  useEffect(() => olvidaElCorte, [])
+
+  /**
+   * Ponerla otra vez: `segundos` para escucharla el mismo rato que dura
+   * la ronda, o `null` para toda la previsualización, que es lo que
+   * deja la tienda. El `loop` del elemento está puesto para las rondas
+   * largas, así que el que corta es un temporizador.
+   */
+  const vuelveASonar = (segundos: number | null) => {
+    despiertaElSonido()
+    const el = audio.current
+    if (!el) return
+    olvidaElCorte()
+    el.currentTime = 0
+    void el.play().catch(() => setMudo(true))
+    const entera = Number.isFinite(el.duration) && el.duration > 1 ? el.duration : 30
+    corte.current = window.setTimeout(
+      () => {
+        el.pause()
+        corte.current = null
+      },
+      Math.max(500, (segundos ?? entera) * 1000 - 150),
+    )
+  }
 
   // Si la URL ha caducado, se pide otra a la tienda. Una vez.
   const arregla = async () => {
@@ -118,6 +153,10 @@ export function MusicaPartida({
   // --- El reloj ------------------------------------------------------
   useEffect(() => {
     if (partida.fin === null || partida.fase !== 'sonando') return
+    // Si el tiempo ya se había acabado, aquí no hay nada que contar. Sin
+    // esto, cualquier cosa que repinte la ronda —volver a poner la
+    // canción, por ejemplo— volvía a tocar la campana del final.
+    if (restanteDe(partida, desfase) <= 0) return
     ultimoTic.current = restanteDe(partida, desfase)
     const reloj = setInterval(() => {
       const quedan = restanteDe(partida, desfase)
@@ -175,7 +214,10 @@ export function MusicaPartida({
         onPlay={() => {
           setSonando(true)
           // El reloj de la ronda empieza aquí, cuando suena de verdad.
-          if (puedoMandar) onCambia(arrancaElReloj(partida))
+          // Si ya estaba andando, `arrancaElReloj` devuelve la misma
+          // partida y no hay nada que contar a los demás.
+          const conReloj = arrancaElReloj(partida)
+          if (puedoMandar && conReloj !== partida) onCambia(conReloj)
         }}
         onPause={() => setSonando(false)}
       />
@@ -226,13 +268,14 @@ export function MusicaPartida({
                     El móvil no deja sonar nada hasta que toques la pantalla. Toca el botón.
                   </p>
                 )}
-                <div className="flex justify-center gap-2">
+                <div className="flex flex-wrap justify-center gap-2">
                   <Boton
                     variante={sonando ? 'secundario' : 'primario'}
                     onClick={() => {
                       despiertaElSonido()
                       const el = audio.current
                       if (!el) return
+                      olvidaElCorte()
                       if (sonando) el.pause()
                       else void el.play().catch(() => setMudo(true))
                     }}
@@ -240,18 +283,20 @@ export function MusicaPartida({
                     {sonando ? <Pause size={17} /> : <Play size={17} />}
                     {sonando ? 'Parar' : 'Que suene'}
                   </Boton>
-                  <Boton
-                    variante="suave"
-                    onClick={() => {
-                      const el = audio.current
-                      if (!el) return
-                      el.currentTime = 0
-                      void el.play().catch(() => setMudo(true))
-                    }}
-                  >
-                    <RefreshCw size={16} /> Desde el principio
+                  {partida.segundos > 0 && (
+                    <Boton variante="suave" onClick={() => vuelveASonar(partida.segundos)}>
+                      <RefreshCw size={16} /> Otra vez, {partida.segundos} s
+                    </Boton>
+                  )}
+                  <Boton variante="suave" onClick={() => vuelveASonar(null)}>
+                    <Music size={16} /> Entera
                   </Boton>
                 </div>
+                <p className="text-xs text-suave">
+                  «Otra vez» la pone desde el principio y la corta a los {partida.segundos || 30}{' '}
+                  segundos, como en la ronda. «Entera» deja correr todo lo que suelta la tienda, que
+                  son treinta segundos.
+                </p>
               </>
             ) : (
               <>
@@ -313,16 +358,8 @@ export function MusicaPartida({
             <p className="text-xs text-suave">O, como la llama media España, «{pista.alias[0]}».</p>
           )}
           {soyModerador && (
-            <Boton
-              variante="suave"
-              onClick={() => {
-                const el = audio.current
-                if (!el) return
-                el.currentTime = 0
-                void el.play()
-              }}
-            >
-              <Play size={16} /> Oírla otra vez
+            <Boton variante="suave" onClick={() => vuelveASonar(null)}>
+              <Play size={16} /> Oírla entera
             </Boton>
           )}
           {puedoMandar ? (

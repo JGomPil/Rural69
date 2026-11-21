@@ -827,6 +827,11 @@ _Barbie_.
   —el pitido, y a correr—; la ronda se queda abierta y si alguien la saca entonces se le apunta
   igual. Quien lleva el mando la cierra con el nombre del que acertó o con «no la sacó nadie»,
   que es el que oye si alguien la ha dicho.
+- **Dos maneras de volver a ponerla.** «Otra vez» la pone desde el principio y la corta en el
+  mismo tiempo que la ronda —cinco segundos otros cinco segundos—, que es lo que se pide cuando
+  la mesa quiere oírla una vez más en igualdad de condiciones. «Entera» deja correr los treinta
+  segundos que suelta la tienda, para cuando ya se ha discutido y lo que falta es reconocerla.
+  El `loop` del audio está para las rondas largas, así que el corte lo pone un temporizador.
 - **Los jugadores son nombres, no cuentas.** En este no hay sillas que repartir: juega quien
   está en el sofá, con móvil o sin él. Hacen falta dos nombres y un teléfono.
 - **Un punto por acierto, sin premio a la rapidez.** Estuvo puesto el doble para el que
