@@ -392,8 +392,13 @@ había descartado por capricho y que también entraron.
 
 ### Pendiente a mano (lo que no puedo hacer yo)
 
-- [ ] Pasar `supabase/19_datos_llegada.sql`, `supabase/20_reacciones.sql` y
-      `supabase/21_no_molestar.sql` en el SQL Editor.
+- [x] Pasar `supabase/19_datos_llegada.sql`, `supabase/20_reacciones.sql` y
+      `supabase/21_no_molestar.sql` en el SQL Editor (21/11/2026). Comprobado uno
+      por uno contra la base de datos: las diez columnas de llegada en `houses`,
+      la tabla `message_reactions` con sus tres políticas y en la publicación de
+      tiempo real, y las tres columnas de silencio en `profiles`, con los perfiles
+      del grupo en 23:00 → 8:00. Probada también la escritura: apagar y volver a
+      encender el interruptor del perfil, confirmado tras recargar del todo.
 - [ ] Volver a desplegar la *Edge Function* `avisar` (panel → Edge Functions →
       avisar → Code → pegar `supabase/functions/avisar/index.ts` → Deploy). Sin
       esto, ni el silencio de noche ni el número del icono con la app cerrada.
