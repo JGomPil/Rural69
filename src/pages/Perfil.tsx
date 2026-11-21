@@ -410,33 +410,36 @@ function NoMolestar() {
       {activo && (
         <div className="flex flex-wrap items-center gap-2 text-sm text-tenue">
           <span>De</span>
-          <Lista
-            aria-label="Hora a la que empieza el silencio"
-            value={String(desde)}
-            disabled={guardando}
-            onChange={(e) => void guarda({ quiet_from: Number(e.target.value) })}
-            className="w-24"
-          >
-            {horas.map((h) => (
-              <option key={h} value={h}>
-                {horaBonita(h)}
-              </option>
-            ))}
-          </Lista>
+          {/* El ancho lo pone el envoltorio: el campo es `w-full` por dentro. */}
+          <span className="w-26">
+            <Lista
+              aria-label="Hora a la que empieza el silencio"
+              value={String(desde)}
+              disabled={guardando}
+              onChange={(e) => void guarda({ quiet_from: Number(e.target.value) })}
+            >
+              {horas.map((h) => (
+                <option key={h} value={h}>
+                  {horaBonita(h)}
+                </option>
+              ))}
+            </Lista>
+          </span>
           <span>a</span>
-          <Lista
-            aria-label="Hora a la que se acaba el silencio"
-            value={String(hasta)}
-            disabled={guardando}
-            onChange={(e) => void guarda({ quiet_to: Number(e.target.value) })}
-            className="w-24"
-          >
-            {horas.map((h) => (
-              <option key={h} value={h}>
-                {horaBonita(h)}
-              </option>
-            ))}
-          </Lista>
+          <span className="w-26">
+            <Lista
+              aria-label="Hora a la que se acaba el silencio"
+              value={String(hasta)}
+              disabled={guardando}
+              onChange={(e) => void guarda({ quiet_to: Number(e.target.value) })}
+            >
+              {horas.map((h) => (
+                <option key={h} value={h}>
+                  {horaBonita(h)}
+                </option>
+              ))}
+            </Lista>
+          </span>
           <span>hora de España</span>
         </div>
       )}
