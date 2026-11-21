@@ -8,6 +8,7 @@ import {
   Mic,
   Minus,
   Pause,
+  Pencil,
   Play,
   Plus,
   RefreshCw,
@@ -16,7 +17,7 @@ import {
   X,
 } from 'lucide-react'
 import { Boton } from '../ui/Boton'
-import { Lista } from '../ui/Campos'
+import { Entrada, Lista } from '../ui/Campos'
 import { Tarjeta } from '../ui/Varios'
 import { COLOR } from './colores'
 import { despiertaElSonido, fanfarria, mantenLaPantalla, tic, timbre } from '../../lib/juegos/sonido'
@@ -29,6 +30,7 @@ import {
   otraVez,
   otroLado,
   para,
+  ponPalabra,
   restanteDe,
   type Lado,
   type Partida,
@@ -160,6 +162,8 @@ export function FurorPartida({
   const { soyModerador, desfase, publica, aSolas } = mesa
   const [, repinta] = useState(0)
   const [verHistoria, setVerHistoria] = useState(false)
+  const [escribiendo, setEscribiendo] = useState(false)
+  const [aMano, setAMano] = useState('')
   const ultimoTic = useRef(0)
   const corriendo = partida.fin !== null
   const restante = restanteDe(partida, desfase)
@@ -291,6 +295,29 @@ export function FurorPartida({
               </Boton>
             </div>
 
+            {escribiendo && (
+              <form
+                className="flex gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  publica(ponPalabra(partida, aMano))
+                  setAMano('')
+                  setEscribiendo(false)
+                }}
+              >
+                <Entrada
+                  value={aMano}
+                  onChange={(e) => setAMano(e.target.value)}
+                  placeholder="La palabra que quieras"
+                  maxLength={24}
+                  autoFocus
+                />
+                <Boton type="submit" disabled={aMano.trim() === ''}>
+                  Ponerla
+                </Boton>
+              </form>
+            )}
+
             <div className="flex flex-wrap items-center justify-center gap-2">
               {corriendo && (
                 <Boton variante="fantasma" tamanyo="sm" onClick={() => publica(para(partida))}>
@@ -298,7 +325,10 @@ export function FurorPartida({
                 </Boton>
               )}
               <Boton variante="fantasma" tamanyo="sm" onClick={() => publica(cambiaPalabra(partida))}>
-                <Shuffle size={15} /> Otra palabra
+                <Shuffle size={15} /> Otra al azar
+              </Boton>
+              <Boton variante="fantasma" tamanyo="sm" onClick={() => setEscribiendo((v) => !v)}>
+                <Pencil size={15} /> Escribirla yo
               </Boton>
               <Boton variante="fantasma" tamanyo="sm" onClick={() => publica(otraVez(partida))}>
                 <RefreshCw size={15} /> Empezar de cero

@@ -177,6 +177,24 @@ export function cambiaPalabra(p: Partida, azar: () => number = Math.random): Par
 }
 
 /**
+ * La palabra la pone el moderador, en vez de dejársela al azar. Cuenta
+ * como palabra nueva: turno para quien abría y el reloj parado.
+ */
+export function ponPalabra(p: Partida, texto: string): Partida {
+  const palabra = texto.trim().toLowerCase()
+  if (!palabra) return p
+  return {
+    ...p,
+    palabra,
+    usadas: p.usadas.includes(palabra) ? p.usadas : [...p.usadas, palabra],
+    cantadas: 0,
+    turno: p.abre,
+    fin: null,
+    historia: [`Palabra puesta por el moderador: «${palabra.toUpperCase()}».`, ...p.historia],
+  }
+}
+
+/**
  * El moderador toca el marcador a mano. Es el juez: si decide que esa
  * actuación vale un punto, vale un punto, y no hay más que hablar.
  */

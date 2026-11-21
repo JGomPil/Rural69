@@ -62,8 +62,13 @@ export function useMesa(juego: string, miPerfil: string | null): Mesa {
   const [desfase, setDesfase] = useState(0)
 
   const soyModerador = aSolas || (miPerfil !== null && moderador === miPerfil)
+  // En un `ref` porque lo leen cosas que no se vuelven a crear en cada
+  // pintado —el envío y la relectura—, y se pone al día en un efecto: tocar
+  // un `ref` mientras se pinta es justo lo que React pide no hacer.
   const soyModeradorRef = useRef(soyModerador)
-  soyModeradorRef.current = soyModerador
+  useEffect(() => {
+    soyModeradorRef.current = soyModerador
+  }, [soyModerador])
   /** La hora del último envío propio: así se reconoce el eco sin equivocarse. */
   const ultimoEnvio = useRef(0)
 
@@ -83,35 +88,51 @@ export function useMesa(juego: string, miPerfil: string | null): Mesa {
   )
 
   // Lo que hay puesto ahora mismo en la mesa.
-  useEffect(() => {
-    let vivo = true
-    const mira = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('game_sessions')
-          .select('state, moderator_id')
-          .eq('game', juego)
-          .maybeSingle()
-        if (error) throw error
-        if (!vivo) return
-        recoge((data as Fila | null) ?? null)
-        setASolas(false)
-      } catch {
-        // Ni tabla ni línea: a solas, con lo último que hubiera aquí.
-        if (!vivo) return
-        setASolas(true)
-        setPartida(leePartida())
-        setModerador(null)
-        setDesfase(0)
-      } finally {
-        if (vivo) setCargando(false)
-      }
-    }
-    void mira()
-    return () => {
-      vivo = false
+  const mira = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('game_sessions')
+        .select('state, moderator_id')
+        .eq('game', juego)
+        .maybeSingle()
+      if (error) throw error
+      // Al moderador no se le pisa su propia partida con una lectura que
+      // puede venir de hace medio segundo: la suya es la buena.
+      if (!soyModeradorRef.current) recoge((data as Fila | null) ?? null)
+      setASolas(false)
+    } catch {
+      // Ni tabla ni línea: a solas, con lo último que hubiera aquí.
+      setASolas(true)
+      setPartida((antes) => antes ?? leePartida())
+      setModerador(null)
+      setDesfase(0)
+    } finally {
+      setCargando(false)
     }
   }, [juego, recoge])
+
+  useEffect(() => {
+    // Sin `void` directo: así el primer `setCargando` cae en otro tic y no
+    // encadena pintados dentro del propio efecto.
+    const id = setTimeout(() => void mira(), 0)
+    return () => clearTimeout(id)
+  }, [mira])
+
+  // Y se vuelve a mirar cuando el móvil despierta. Un teléfono bloqueado
+  // pierde el cable del tiempo real sin avisar, y al desbloquearlo la
+  // pantalla se habría quedado congelada en la jugada de hace diez
+  // minutos: esto es lo que la pone al día.
+  useEffect(() => {
+    const despierta = () => {
+      if (document.visibilityState === 'visible') void mira()
+    }
+    document.addEventListener('visibilitychange', despierta)
+    window.addEventListener('online', despierta)
+    return () => {
+      document.removeEventListener('visibilitychange', despierta)
+      window.removeEventListener('online', despierta)
+    }
+  }, [mira])
 
   // Y lo que vaya pasando, sin recargar.
   useEffect(() => {
@@ -133,11 +154,16 @@ export function useMesa(juego: string, miPerfil: string | null): Mesa {
           setASolas(false)
         },
       )
-    canal.subscribe()
+    canal.subscribe((estado) => {
+      // Entre que la página carga y el canal queda dado de alta pasan unos
+      // segundos, y lo que ocurra en ese hueco no llega nunca. Al quedar
+      // suscrito se relee la mesa, que es barato y cierra el agujero.
+      if (estado === 'SUBSCRIBED') void mira()
+    })
     return () => {
       void supabase.removeChannel(canal)
     }
-  }, [juego, miPerfil, recoge])
+  }, [juego, recoge, mira])
 
   // La copia de este aparato es la red de seguridad del que lleva el mando.
   useEffect(() => {

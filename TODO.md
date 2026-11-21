@@ -414,9 +414,11 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       'durante'` y esconder el enlace del menú el resto del año.
 - [ ] **El marcador de la casa.** Guardar quién ganó cada partida para picarse
       entre escapadas. Necesita tabla y SQL.
-- [x] **¿Quién soy?** La carta en la frente, con 68 famosos en cuatro categorías, reloj
-      opcional, vueltas y clasificación final. Un solo aparato que va pasando: este no
-      necesita servidor. 24 pruebas. (`src/lib/juegos/quiensoy.ts`, `famosos.ts`)
+- [x] **¿Quién soy?** Una carta por cabeza, ves las de los demás menos la tuya, una
+      pregunta por turno. Acaba cuando alguien acierta, y ahí se pregunta si se sigue hasta
+      que acierten todos. Vueltas sin límite, reloj opcional, 68 famosos en cuatro
+      categorías. Un solo aparato que va pasando: este no necesita servidor. 24 pruebas.
+      (`src/lib/juegos/quiensoy.ts`, `famosos.ts`)
 - [ ] **Más juegos.** El cajón está hecho para eso.
 - [ ] **Pendiente de probar con gente.** Si 30 segundos se hacen largos, si los
       botones se entienden a voces y si la lista de 179 palabras aguanta una

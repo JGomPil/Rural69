@@ -10,6 +10,7 @@ import {
   nuevaPartida,
   otroLado,
   para,
+  ponPalabra,
   reparteAlAzar,
   restanteDe,
   sella,
@@ -193,6 +194,27 @@ describe('el marcador a mano', () => {
     const conMini = falla(arrancaPartida(), 'tiempo', azarFijo([0.3]))
     const p = ajustaPuntos(conMini, 'b', 1)
     expect(p.equipos.b.minipuntos).toBe(conMini.equipos.b.minipuntos)
+  })
+})
+
+describe('la palabra la pone el moderador', () => {
+  it('se escribe y manda sobre la que había', () => {
+    const p = ponPalabra(cantada(arrancaPartida()), '  Verbena ')
+    expect(p.palabra).toBe('verbena')
+    expect(p.cantadas).toBe(0)
+    expect(p.turno).toBe(p.abre)
+    expect(p.fin).toBeNull()
+    expect(p.historia[0]).toContain('VERBENA')
+  })
+
+  it('queda marcada como usada, para que el azar no la repita', () => {
+    const p = ponPalabra(arrancaPartida(), 'verbena')
+    expect(p.usadas).toContain('verbena')
+  })
+
+  it('en blanco no hace nada', () => {
+    const antes = arrancaPartida()
+    expect(ponPalabra(antes, '   ')).toBe(antes)
   })
 })
 

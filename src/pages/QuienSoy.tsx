@@ -59,21 +59,20 @@ function ComoSeJuega() {
       </summary>
       <div className="space-y-2 border-t border-arena px-4 py-3 text-sm text-tenue">
         <p>
-          El móvil va pasando de mano en mano. Al que le toca se lo pone en la frente con la pantalla
-          hacia fuera, <strong>sin mirar</strong>, y los demás ven el nombre del famoso.
+          Al empezar, a cada uno le toca un famoso, y nadie sabe cuál es el suyo. El móvil va pasando
+          de mano en mano: el que lo tiene <strong>ve las cartas de todos los demás menos la suya</strong>.
         </p>
         <p>
-          El de la carta pregunta y los demás solo pueden contestar <strong>sí o no</strong>: ¿estoy
-          vivo?, ¿soy español?, ¿canto? Si lo adivina, punto.
+          En su turno hace <strong>una sola pregunta</strong> a la mesa —¿estoy vivo?, ¿soy español?,
+          ¿canto?— y le contestan sí o no. Luego pasa el móvil al siguiente, sepa algo más o no.
         </p>
         <p>
-          <strong>Con reloj</strong>, el turno es una ráfaga: cada acierto saca otra carta hasta que se
-          acaba el tiempo, y entonces suena el timbre. <strong>Sin reloj</strong>, cada turno es una
-          carta y ya: se acierta o se pasa, y el móvil cambia de manos.
+          El juego se acaba en cuanto alguien adivina quién es. En ese momento se os pregunta si
+          queréis <strong>seguir hasta que acierten todos</strong>, que es como suele acabar.
         </p>
         <p>
-          Hay 68 famosos entre cine y tele, música, deportes e históricos. En una misma partida no se
-          repite ninguno, así que el mazo da para una noche larga.
+          El reloj es opcional —son segundos para preguntar, no para acertar— y las vueltas pueden ir
+          sin límite. Hay 68 famosos entre cine y tele, música, deportes e históricos.
         </p>
       </div>
     </details>

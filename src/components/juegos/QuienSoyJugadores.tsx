@@ -3,14 +3,15 @@ import { Play, Plus, UserRound, X } from 'lucide-react'
 import { Boton } from '../ui/Boton'
 import { Campo, Entrada, Lista } from '../ui/Campos'
 import { Tarjeta } from '../ui/Varios'
-import { despiertaElSonido, timbre } from '../../lib/juegos/sonido'
+import { despiertaElSonido } from '../../lib/juegos/sonido'
 import { CATEGORIAS, EMOJI_CATEGORIA, NOMBRE_CATEGORIA, cartasDe } from '../../lib/juegos/famosos'
 import type { Categoria } from '../../lib/juegos/famosos'
 import type { Opciones } from '../../lib/juegos/quiensoy'
 import type { Member } from '../../lib/types'
 
 const TIEMPOS = [0, 30, 60, 90]
-const VUELTAS = [1, 2, 3, 4, 5]
+/** `0` es «sin límite»: se juega hasta que acierten todos o se corte. */
+const VUELTAS = [0, 2, 3, 5, 10]
 
 export function QuienSoyJugadores({
   gente,
@@ -22,8 +23,8 @@ export function QuienSoyJugadores({
   const [nombres, setNombres] = useState<string[]>([])
   const [suelto, setSuelto] = useState('')
   const [categoria, setCategoria] = useState<Categoria | 'mezclado'>('mezclado')
-  const [segundos, setSegundos] = useState(60)
-  const [vueltas, setVueltas] = useState(2)
+  const [segundos, setSegundos] = useState(0)
+  const [vueltas, setVueltas] = useState(0)
 
   const anyade = (nombre: string) => {
     const limpio = nombre.trim()
@@ -32,6 +33,7 @@ export function QuienSoyJugadores({
   }
 
   const cartas = cartasDe(categoria).length
+  const sobran = nombres.length > cartas
 
   return (
     <div className="space-y-5">
@@ -120,11 +122,12 @@ export function QuienSoyJugadores({
           </Lista>
         </Campo>
         <p className="text-sm text-suave">
-          {cartas} cartas, y ninguna repite en la misma partida.
+          {cartas} famosos, y a cada uno le toca uno distinto.
+          {sobran && ' Sois más que cartas: quitad gente o cambiad de categoría.'}
         </p>
 
         <div className="grid grid-cols-2 gap-3">
-          <Campo etiqueta="Tiempo por turno">
+          <Campo etiqueta="Tiempo por pregunta">
             <Lista value={segundos} onChange={(e) => setSegundos(Number(e.target.value))}>
               {TIEMPOS.map((s) => (
                 <option key={s} value={s}>
@@ -137,7 +140,7 @@ export function QuienSoyJugadores({
             <Lista value={vueltas} onChange={(e) => setVueltas(Number(e.target.value))}>
               {VUELTAS.map((v) => (
                 <option key={v} value={v}>
-                  {v} {v === 1 ? 'vuelta' : 'vueltas'}
+                  {v === 0 ? 'Sin límite' : `${v} vueltas`}
                 </option>
               ))}
             </Lista>
@@ -146,30 +149,21 @@ export function QuienSoyJugadores({
 
         <p className="text-sm text-suave">
           {segundos === 0
-            ? 'Sin reloj, cada turno es una carta: se acierta o se pasa, y el móvil cambia de manos.'
-            : `Con reloj, el turno es una ráfaga: cada acierto saca otra carta hasta que se acaben los ${segundos} segundos.`}
+            ? 'Sin reloj: cada uno se toma lo que necesite para su pregunta.'
+            : `Con reloj, ${segundos} segundos para preguntar; si se pasa, el móvil cambia de manos igual.`}
+          {vueltas === 0
+            ? ' Sin límite de vueltas: se da por acabado cuando acierten todos, o cuando digáis.'
+            : ` A las ${vueltas} vueltas se acaba, acierten todos o no.`}
         </p>
-
-        {segundos > 0 && (
-          <Boton
-            variante="secundario"
-            onClick={() => {
-              despiertaElSonido()
-              timbre()
-            }}
-          >
-            Probar el timbre
-          </Boton>
-        )}
       </Tarjeta>
 
       <Boton
         tamanyo="lg"
         ancho
-        disabled={nombres.length < 2}
+        disabled={nombres.length < 2 || sobran}
         onClick={() => {
           despiertaElSonido()
-          onEmpezar({ nombres, categoria, segundos, vueltas })
+          onEmpezar({ nombres, categoria, segundos, vueltas: vueltas === 0 ? null : vueltas })
         }}
       >
         <Play size={18} /> ¡Empezar!

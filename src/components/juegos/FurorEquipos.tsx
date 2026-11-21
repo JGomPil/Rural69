@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
-import { Dices, Eraser, Hand, Play, Users, Volume2 } from 'lucide-react'
+import { Dices, Eraser, Hand, Play, Users } from 'lucide-react'
 import { Avatar } from '../ui/Avatar'
 import { Boton } from '../ui/Boton'
 import { Campo, Entrada, Lista } from '../ui/Campos'
 import { Tarjeta } from '../ui/Varios'
-import { despiertaElSonido, timbre } from '../../lib/juegos/sonido'
+import { despiertaElSonido } from '../../lib/juegos/sonido'
 import { reparteAlAzar, type Lado, type Opciones } from '../../lib/juegos/furor'
 import { COLOR } from './colores'
 import type { Member } from '../../lib/types'
@@ -101,29 +101,18 @@ export function FurorEquipos({ gente, onEmpezar }: { gente: Member[]; onEmpezar:
       </Tarjeta>
 
       <Tarjeta className="space-y-4 p-4">
-        <div className="grid grid-cols-2 items-end gap-3">
-          <Campo etiqueta="Tiempo para arrancar" ayuda="Por canción">
-            <Lista value={segundos} onChange={(e) => setSegundos(Number(e.target.value))}>
-              {SEGUNDOS.map((s) => (
-                <option key={s} value={s}>
-                  {s} segundos
-                </option>
-              ))}
-            </Lista>
-          </Campo>
-          <Boton
-            variante="secundario"
-            onClick={() => {
-              despiertaElSonido()
-              timbre()
-            }}
-          >
-            <Volume2 size={16} /> Probar el timbre
-          </Boton>
-        </div>
+        <Campo etiqueta="Tiempo para arrancar" ayuda="Por canción">
+          <Lista value={segundos} onChange={(e) => setSegundos(Number(e.target.value))}>
+            {SEGUNDOS.map((s) => (
+              <option key={s} value={s}>
+                {s} segundos
+              </option>
+            ))}
+          </Lista>
+        </Campo>
         <p className="text-sm text-suave">
-          El timbre suena en todos los móviles cuando se acaba el tiempo. Súbele el volumen ahora, que
-          luego no se oye nada. En iPhone, el interruptor del lateral también lo calla.
+          Al acabarse el tiempo suena un timbre en todos los móviles. Subid el volumen; en iPhone, el
+          interruptor del lateral también lo calla.
         </p>
         <p className="flex items-start gap-2 text-sm text-tenue">
           <Hand size={16} className="mt-0.5 shrink-0 text-bosque-500" />
@@ -135,7 +124,10 @@ export function FurorEquipos({ gente, onEmpezar }: { gente: Member[]; onEmpezar:
       <Boton
         tamanyo="lg"
         ancho
-        onClick={() =>
+        onClick={() => {
+          // El primer toque de la noche: aquí es donde iOS permite
+          // despertar el sonido, y sin esto el timbre no suena luego.
+          despiertaElSonido()
           onEmpezar({
             nombreA: nombreA.trim() || 'Equipo 1',
             nombreB: nombreB.trim() || 'Equipo 2',
@@ -143,7 +135,7 @@ export function FurorEquipos({ gente, onEmpezar }: { gente: Member[]; onEmpezar:
             genteB: equipos.b,
             segundos,
           })
-        }
+        }}
       >
         <Play size={18} /> ¡A jugar!
       </Boton>

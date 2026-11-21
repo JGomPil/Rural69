@@ -3,14 +3,18 @@ import {
   acierta,
   baraja,
   clasificacion,
+  cuantosCaben,
   guardaJuego,
   leeJuego,
-  muestra,
+  loQueVe,
+  mira,
   nuevoJuego,
   pasa,
+  quedanPorAcertar,
   restanteDe,
   seAcabaElTiempo,
-  termina,
+  seguirJugando,
+  terminaAqui,
   type Juego,
 } from './quiensoy'
 import { BARAJA, CATEGORIAS, cartasDe } from './famosos'
@@ -22,9 +26,12 @@ const azarFijo = (valores: number[]) => {
 
 const empieza = (extra: Partial<Parameters<typeof nuevoJuego>[0]> = {}) =>
   nuevoJuego(
-    { nombres: ['Javi', 'Vero', 'Leo'], categoria: 'mezclado', segundos: 60, vueltas: 2, ...extra },
+    { nombres: ['Javi', 'Vero', 'Leo'], categoria: 'mezclado', segundos: 60, vueltas: null, ...extra },
     azarFijo([0.3, 0.7, 0.1, 0.9]),
   )
+
+/** Un turno entero: coger el móvil, preguntar y pasar. */
+const turnoEntero = (j: Juego) => pasa(mira(j, 1_000_000))
 
 describe('la baraja de famosos', () => {
   it('tiene de sobra y ninguno repetido', () => {
@@ -32,8 +39,8 @@ describe('la baraja de famosos', () => {
     expect(new Set(BARAJA.map((c) => c.nombre)).size).toBe(BARAJA.length)
   })
 
-  it('todas las categorías tienen cartas suficientes', () => {
-    for (const c of CATEGORIAS) expect(cartasDe(c).length).toBeGreaterThanOrEqual(15)
+  it('todas las categorías dan para una mesa grande', () => {
+    for (const c of CATEGORIAS) expect(cuantosCaben(c)).toBeGreaterThanOrEqual(15)
     expect(cartasDe('mezclado')).toHaveLength(BARAJA.length)
   })
 
@@ -51,140 +58,133 @@ describe('la baraja de famosos', () => {
   })
 })
 
-describe('empezar', () => {
-  it('todos a cero, el primero en pasar el móvil', () => {
+describe('el reparto', () => {
+  it('da una carta a cada uno, y distinta', () => {
     const j = empieza()
-    expect(j.jugadores.map((p) => p.puntos)).toEqual([0, 0, 0])
-    expect(j.fase).toBe('pasa')
-    expect(j.turno).toBe(0)
-    expect(j.carta).toBeNull()
+    expect(j.jugadores).toHaveLength(3)
+    expect(new Set(j.jugadores.map((p) => p.carta.nombre)).size).toBe(3)
   })
 
-  it('con una categoría, solo salen de esa', () => {
-    const j = empieza({ categoria: 'deporte' })
-    expect(j.mazo.every((c) => c.categoria === 'deporte')).toBe(true)
+  it('respeta la categoría elegida', () => {
+    const j = empieza({ categoria: 'musica' })
+    expect(j.jugadores.every((p) => p.carta.categoria === 'musica')).toBe(true)
+  })
+
+  it('empiezan todos sin saber quiénes son', () => {
+    const j = empieza()
+    expect(j.jugadores.every((p) => p.puesto === 0 && p.preguntas === 0)).toBe(true)
+    expect(j.fase).toBe('pasa')
+    expect(quedanPorAcertar(j)).toHaveLength(3)
   })
 })
 
-describe('mostrar la carta', () => {
-  it('saca una del mazo y arranca el reloj', () => {
-    const j = muestra(empieza(), 1_000_000)
-    expect(j.fase).toBe('jugando')
-    expect(j.carta).not.toBeNull()
-    expect(j.fin).toBe(1_060_000)
+describe('lo que ve el que tiene el móvil', () => {
+  it('ve a los demás, nunca su propia carta', () => {
+    const j = empieza()
+    const visto = loQueVe(j)
+    expect(visto).toHaveLength(2)
+    expect(visto.map((p) => p.nombre)).toEqual(['Vero', 'Leo'])
+    expect(visto.map((p) => p.carta.nombre)).not.toContain(j.jugadores[0].carta.nombre)
   })
 
-  it('sin reloj, no hay cuenta atrás', () => {
-    const j = muestra(empieza({ segundos: 0 }), 1_000_000)
+  it('y cambia con el turno', () => {
+    const j = turnoEntero(empieza())
+    expect(loQueVe(j).map((p) => p.nombre)).toEqual(['Javi', 'Leo'])
+  })
+})
+
+describe('una pregunta por turno', () => {
+  it('mirar arranca el reloj cuando lo hay', () => {
+    expect(mira(empieza(), 1_000_000).fin).toBe(1_060_000)
+    expect(mira(empieza({ segundos: 0 }), 1_000_000).fin).toBeNull()
+    expect(restanteDe(mira(empieza(), 1_000_000), 1_010_000)).toBe(50)
+  })
+
+  it('pasar cuenta la pregunta y cambia de manos', () => {
+    const j = turnoEntero(empieza())
+    expect(j.jugadores[0].preguntas).toBe(1)
+    expect(j.turno).toBe(1)
+    expect(j.fase).toBe('pasa')
     expect(j.fin).toBeNull()
-    expect(restanteDe(j, 1_000_000)).toBe(0)
   })
 
-  it('la carta sale del mazo y no puede volver a salir', () => {
-    const inicial = empieza()
-    const j = muestra(inicial, 1_000_000)
-    expect(j.mazo).toHaveLength(inicial.mazo.length - 1)
-    expect(j.mazo.map((c) => c.nombre)).not.toContain(j.carta?.nombre)
-  })
-})
-
-describe('con reloj, el turno es una ráfaga', () => {
-  it('acertar suma un punto y saca otra carta para el mismo', () => {
-    const j = acierta(muestra(empieza(), 1_000_000), 1_010_000)
-    expect(j.jugadores[0].puntos).toBe(1)
-    expect(j.turno).toBe(0)
-    expect(j.fase).toBe('jugando')
-    expect(j.carta).not.toBeNull()
-  })
-
-  it('pasar no suma, pero también saca otra', () => {
-    const j = pasa(muestra(empieza(), 1_000_000), 1_010_000)
-    expect(j.jugadores[0].puntos).toBe(0)
-    expect(j.turno).toBe(0)
-    expect(j.carta).not.toBeNull()
-  })
-
-  it('no repite cartas dentro del mismo turno', () => {
-    let j = muestra(empieza(), 1_000_000)
-    const salidas = [j.carta?.nombre]
-    for (let i = 0; i < 10; i++) {
-      j = acierta(j, 1_000_000 + i * 1000)
-      salidas.push(j.carta?.nombre)
-    }
-    expect(new Set(salidas).size).toBe(salidas.length)
-  })
-
-  it('al acabarse el tiempo, el móvil cambia de manos sin punto', () => {
-    const j = seAcabaElTiempo(muestra(empieza(), 1_000_000))
-    expect(j.turno).toBe(1)
-    expect(j.fase).toBe('pasa')
-    expect(j.carta).toBeNull()
-    expect(j.jugadores[0].puntos).toBe(0)
-    expect(j.historia[0]).toContain('a Javi se le acabó el tiempo'.replace('a J', 'A J'))
-  })
-
-  it('acertar con el tiempo ya cumplido cierra el turno', () => {
-    const j = acierta(muestra(empieza(), 1_000_000), 1_099_000)
-    expect(j.jugadores[0].puntos).toBe(1)
-    expect(j.turno).toBe(1)
-    expect(j.fase).toBe('pasa')
-  })
-})
-
-describe('sin reloj, el turno es una carta', () => {
-  it('acertar suma y pasa el móvil', () => {
-    const j = acierta(muestra(empieza({ segundos: 0 }), 1_000_000), 1_000_100)
-    expect(j.jugadores[0].puntos).toBe(1)
-    expect(j.turno).toBe(1)
-    expect(j.fase).toBe('pasa')
-  })
-
-  it('pasar no suma y pasa el móvil', () => {
-    const j = pasa(muestra(empieza({ segundos: 0 }), 1_000_000), 1_000_100)
-    expect(j.jugadores[0].puntos).toBe(0)
-    expect(j.turno).toBe(1)
-  })
-})
-
-describe('las vueltas', () => {
-  it('se acaba cuando todos han jugado sus vueltas', () => {
-    let j = empieza({ segundos: 0, vueltas: 2 })
-    for (let i = 0; i < 6; i++) j = acierta(muestra(j, 1_000_000), 1_000_100)
-    expect(j.fase).toBe('fin')
-    expect(j.jugadores.every((p) => p.puntos === 2)).toBe(true)
-  })
-
-  it('la vuelta sube al volver al primero', () => {
-    let j = empieza({ segundos: 0, vueltas: 3 })
+  it('al volver al primero sube la vuelta', () => {
+    let j = empieza()
     expect(j.vuelta).toBe(1)
-    for (let i = 0; i < 3; i++) j = acierta(muestra(j, 1_000_000), 1_000_100)
+    for (let i = 0; i < 3; i++) j = turnoEntero(j)
     expect(j.vuelta).toBe(2)
     expect(j.turno).toBe(0)
   })
 
-  it('también se acaba si se agota el mazo', () => {
-    let j = empieza({ categoria: 'deporte', segundos: 0, vueltas: 99 })
-    const cartas = j.mazo.length
-    for (let i = 0; i < cartas; i++) j = acierta(muestra(j, 1_000_000), 1_000_100)
-    expect(j.fase).toBe('fin')
-    expect(j.mazo).toHaveLength(0)
+  it('quedarse sin tiempo pasa el turno sin contar pregunta', () => {
+    const j = seAcabaElTiempo(mira(empieza(), 1_000_000))
+    expect(j.turno).toBe(1)
+    expect(j.jugadores[0].preguntas).toBe(0)
+    expect(j.historia[0]).toContain('se le acabó el tiempo')
+  })
+})
+
+describe('acertar', () => {
+  it('el primero que acierta para el juego y pregunta si se sigue', () => {
+    const j = acierta(mira(empieza(), 1_000_000))
+    expect(j.fase).toBe('alguien-acerto')
+    expect(j.jugadores[0].puesto).toBe(1)
+    expect(j.historia[0]).toContain('¡Javi era')
   })
 
-  it('se puede terminar antes', () => {
-    const j = termina(muestra(empieza(), 1_000_000))
+  it('se puede terminar ahí', () => {
+    expect(terminaAqui(acierta(mira(empieza(), 1_000_000))).fase).toBe('fin')
+  })
+
+  it('o seguir hasta que acierten todos, saltándose al que ya sabe', () => {
+    const j = seguirJugando(acierta(mira(empieza(), 1_000_000)))
+    expect(j.fase).toBe('pasa')
+    expect(j.turno).toBe(1)
+    expect(j.seguir).toBe(true)
+    // Y en las vueltas siguientes ya no le toca al que acertó.
+    const vuelta = turnoEntero(turnoEntero(j))
+    expect(vuelta.turno).toBe(1)
+  })
+
+  it('tras decidir seguir, los demás aciertos ya no preguntan nada', () => {
+    let j = seguirJugando(acierta(mira(empieza(), 1_000_000)))
+    j = acierta(mira(j, 1_000_000))
+    expect(j.fase).toBe('pasa')
+    expect(j.jugadores[1].puesto).toBe(2)
+  })
+
+  it('cuando aciertan todos, se acaba', () => {
+    let j = seguirJugando(acierta(mira(empieza(), 1_000_000)))
+    j = acierta(mira(j, 1_000_000))
+    j = acierta(mira(j, 1_000_000))
     expect(j.fase).toBe('fin')
-    expect(j.carta).toBeNull()
+    expect(quedanPorAcertar(j)).toHaveLength(0)
+  })
+})
+
+describe('las vueltas', () => {
+  it('sin límite, se puede jugar indefinidamente', () => {
+    let j = empieza({ vueltas: null })
+    for (let i = 0; i < 30; i++) j = turnoEntero(j)
+    expect(j.fase).toBe('pasa')
+    expect(j.vuelta).toBe(11)
+  })
+
+  it('con límite, se acaba al pasarse', () => {
+    let j = empieza({ vueltas: 2 })
+    for (let i = 0; i < 6; i++) j = turnoEntero(j)
+    expect(j.fase).toBe('fin')
   })
 })
 
 describe('la clasificación', () => {
-  it('ordena de más a menos puntos', () => {
-    let j = empieza({ segundos: 0, vueltas: 2 })
-    j = acierta(muestra(j, 1), 2) // Javi 1
-    j = pasa(muestra(j, 1), 2) // Vero 0
-    j = acierta(muestra(j, 1), 2) // Leo 1
-    j = acierta(muestra(j, 1), 2) // Javi 2
-    expect(clasificacion(j).map((p) => `${p.nombre}:${p.puntos}`)).toEqual(['Javi:2', 'Leo:1', 'Vero:0'])
+  it('primero los que acertaron por orden, y detrás los que no', () => {
+    let j = seguirJugando(acierta(mira(empieza(), 1_000_000))) // Javi, 1º
+    j = turnoEntero(j) // Vero pregunta
+    j = acierta(mira(j, 1_000_000)) // Leo, 2º
+    const tabla = clasificacion(j)
+    expect(tabla.map((p) => p.nombre)).toEqual(['Javi', 'Leo', 'Vero'])
+    expect(tabla[2].puesto).toBe(0)
   })
 })
 
@@ -192,7 +192,7 @@ describe('el juego guardado en el aparato', () => {
   beforeEach(() => localStorage.clear())
 
   it('sobrevive al bloqueo del móvil', () => {
-    const j = muestra(empieza(), 1_000_000)
+    const j = mira(empieza(), 1_000_000)
     guardaJuego(j)
     expect(leeJuego()).toEqual(j)
   })
@@ -203,8 +203,7 @@ describe('el juego guardado en el aparato', () => {
   })
 
   it('un juego de otra versión no se recupera', () => {
-    const viejo = { ...(empieza() as Juego), version: 0 }
-    localStorage.setItem('rural69-quiensoy', JSON.stringify(viejo))
+    localStorage.setItem('rural69-quiensoy', JSON.stringify({ ...empieza(), version: 1 }))
     expect(leeJuego()).toBeNull()
   })
 })

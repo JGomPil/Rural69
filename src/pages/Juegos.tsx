@@ -34,8 +34,8 @@ export function Juegos() {
             a="/juegos/quien-soy"
             icono={<Smile size={24} />}
             titulo="¿Quién soy?"
-            que="La carta en la frente: preguntas, y los demás solo contestan sí o no."
-            como="Uno contra uno por turnos · un solo móvil que va pasando"
+            que="Cada uno es un famoso y no sabe cuál. Ves las cartas de los demás, la tuya no."
+            como="Una pregunta por turno · un solo móvil que va pasando"
           />
         </div>
       </Seccion>

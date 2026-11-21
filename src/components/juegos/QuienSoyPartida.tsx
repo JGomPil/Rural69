@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Check, Eye, EyeOff, RefreshCw, SkipForward, Trophy, Users, X } from 'lucide-react'
+import { Check, Eye, EyeOff, HelpCircle, History, RefreshCw, SkipForward, Trophy, Users, X } from 'lucide-react'
 import { Boton } from '../ui/Boton'
 import { Tarjeta } from '../ui/Varios'
 import { despiertaElSonido, mantenLaPantalla, tic, timbre } from '../../lib/juegos/sonido'
@@ -7,12 +7,15 @@ import { EMOJI_CATEGORIA } from '../../lib/juegos/famosos'
 import {
   acierta,
   clasificacion,
-  muestra,
+  loQueVe,
+  mira,
   otraVez,
   pasa,
+  quedanPorAcertar,
   restanteDe,
   seAcabaElTiempo,
-  termina,
+  seguirJugando,
+  terminaAqui,
   type Juego,
 } from '../../lib/juegos/quiensoy'
 
@@ -29,10 +32,10 @@ export function QuienSoyPartida({
   const ultimoTic = useRef(0)
   const restante = restanteDe(juego)
 
-  // El reloj mira la hora de fin, no cuenta vueltas: así no se estira si el
-  // navegador adormece el temporizador mientras el móvil está en una frente.
+  // El reloj mira la hora de fin en vez de contar vueltas: así no se estira
+  // cuando el navegador adormece el temporizador.
   useEffect(() => {
-    if (juego.fin === null || juego.fase !== 'jugando') return
+    if (juego.fin === null || juego.fase !== 'mirando') return
     ultimoTic.current = Math.ceil(restanteDe(juego))
     const reloj = setInterval(() => {
       const quedan = restanteDe(juego)
@@ -52,15 +55,42 @@ export function QuienSoyPartida({
     return () => clearInterval(reloj)
   }, [juego, onCambia])
 
-  const enJuego = juego.fase === 'jugando'
+  const mirando = juego.fase === 'mirando'
   useEffect(() => {
-    void mantenLaPantalla(enJuego)
+    void mantenLaPantalla(mirando)
     return () => void mantenLaPantalla(false)
-  }, [enJuego])
+  }, [mirando])
 
   if (juego.fase === 'fin') return <Final juego={juego} onCambia={onCambia} onSalir={onSalir} />
 
   const jugador = juego.jugadores[juego.turno]
+
+  if (juego.fase === 'alguien-acerto') {
+    const acertado = [...juego.jugadores].filter((p) => p.puesto > 0).pop()
+    return (
+      <div className="space-y-5">
+        <Tarjeta className="space-y-4 p-7 text-center">
+          <Trophy size={44} className="mx-auto text-tierra-500" />
+          <h2 className="font-display text-2xl text-bosque-800">¡{acertado?.nombre} lo ha adivinado!</h2>
+          <p className="text-base text-tenue">
+            Era <strong>{acertado?.carta.nombre}</strong>.
+          </p>
+          <p className="text-sm text-suave">
+            Aquí se acaba el juego… salvo que queráis seguir hasta que acierten todos. Quedan{' '}
+            {quedanPorAcertar(juego).length} por saber quiénes son.
+          </p>
+        </Tarjeta>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Boton tamanyo="lg" ancho onClick={() => onCambia(seguirJugando(juego))}>
+            Seguir hasta que acierten todos
+          </Boton>
+          <Boton variante="secundario" tamanyo="lg" ancho onClick={() => onCambia(terminaAqui(juego))}>
+            Terminar aquí
+          </Boton>
+        </div>
+      </div>
+    )
+  }
 
   if (juego.fase === 'pasa') {
     return (
@@ -72,25 +102,24 @@ export function QuienSoyPartida({
             <p className="text-sm text-suave">Pasa el móvil a</p>
             <p className="font-display text-3xl text-bosque-800">{jugador.nombre}</p>
           </div>
-          <p className="text-base font-semibold text-tierra-700">¡No mires la pantalla!</p>
           <p className="text-sm text-tenue">
-            Póntelo en la frente con la pantalla hacia fuera. Los demás verán el nombre y te
-            contestarán solo sí o no.
+            Verás las cartas de los demás, nunca la tuya. Haces <strong>una sola pregunta</strong> a la
+            mesa, te contestan sí o no, y el móvil pasa al siguiente.
           </p>
           <Boton
             tamanyo="lg"
             ancho
             onClick={() => {
               despiertaElSonido()
-              onCambia(muestra(juego))
+              onCambia(mira(juego))
             }}
           >
-            <Eye size={18} /> Mostrar mi carta
+            <Eye size={18} /> Ya lo tengo yo
           </Boton>
         </Tarjeta>
-        <Marcador juego={juego} />
+        <Historia juego={juego} />
         <div className="flex justify-center">
-          <Boton variante="fantasma" tamanyo="sm" onClick={() => onCambia(termina(juego))}>
+          <Boton variante="fantasma" tamanyo="sm" onClick={() => onCambia(terminaAqui(juego))}>
             <X size={15} /> Terminar la partida
           </Boton>
         </div>
@@ -104,41 +133,59 @@ export function QuienSoyPartida({
     <div className="space-y-4">
       <Vueltas juego={juego} />
 
-      <Tarjeta className={`space-y-4 p-5 text-center ${apurado ? 'border-tierra-300' : ''}`}>
-        <p className="text-sm text-suave">{jugador.nombre}, no mires</p>
-
-        <p className="text-4xl" aria-hidden>
-          {juego.carta ? EMOJI_CATEGORIA[juego.carta.categoria] : ''}
-        </p>
-        <p className="font-display text-5xl leading-tight break-words text-bosque-800 sm:text-7xl">
-          {juego.carta?.nombre}
-        </p>
-
-        {juego.fin !== null && (
-          <p
-            className={`font-display text-4xl tabular-nums ${
-              apurado ? 'animate-pulse text-tierra-700' : 'text-tenue'
-            }`}
-          >
-            {Math.ceil(restante)}
+      <Tarjeta className="space-y-3 p-5">
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm text-suave">
+            <strong className="text-bosque-700">{jugador.nombre}</strong>, una pregunta y pasas
           </p>
-        )}
-
-        <p className="text-sm text-suave">
-          <span className="font-semibold">Pista para los demás:</span> {juego.carta?.pista}
-        </p>
-
-        <div className="grid gap-2">
-          <Boton tamanyo="lg" ancho onClick={() => onCambia(acierta(juego))}>
-            <Check size={20} /> ¡Lo adiviné!
-          </Boton>
-          <Boton variante="secundario" tamanyo="lg" ancho onClick={() => onCambia(pasa(juego))}>
-            <SkipForward size={18} /> {juego.segundos > 0 ? 'Paso, otra carta' : 'Paso, siguiente turno'}
-          </Boton>
+          {juego.fin !== null && (
+            <span
+              className={`font-display text-2xl tabular-nums ${
+                apurado ? 'animate-pulse text-tierra-700' : 'text-tenue'
+              }`}
+            >
+              {Math.ceil(restante)}
+            </span>
+          )}
         </div>
+
+        <div className="rounded-2xl bg-beige px-4 py-3 text-center">
+          <p className="text-xs text-suave">Tú eres</p>
+          <p className="font-display text-3xl text-carbon">❓</p>
+        </div>
+
+        <p className="text-xs text-suave">Los demás son:</p>
+        <ul className="space-y-1.5">
+          {loQueVe(juego).map((p) => (
+            <li
+              key={p.nombre}
+              className={`flex items-center gap-3 rounded-xl px-3 py-2 ${
+                p.puesto > 0 ? 'bg-bosque-50' : 'bg-superficie border border-arena'
+              }`}
+            >
+              <span className="w-20 shrink-0 truncate text-sm text-tenue">{p.nombre}</span>
+              <span className="flex-1 truncate font-semibold text-bosque-800">
+                {EMOJI_CATEGORIA[p.carta.categoria]} {p.carta.nombre}
+              </span>
+              {p.puesto > 0 && <Check size={15} className="shrink-0 text-bosque-600" />}
+            </li>
+          ))}
+        </ul>
       </Tarjeta>
 
-      <Marcador juego={juego} />
+      <div className="grid gap-2">
+        <Boton tamanyo="lg" ancho onClick={() => onCambia(acierta(juego))}>
+          <Check size={20} /> ¡Ya sé quién soy!
+        </Boton>
+        <Boton variante="secundario" tamanyo="lg" ancho onClick={() => onCambia(pasa(juego))}>
+          <SkipForward size={18} /> Preguntado, al siguiente
+        </Boton>
+      </div>
+
+      <p className="flex items-start gap-2 px-2 text-xs text-suave">
+        <HelpCircle size={14} className="mt-0.5 shrink-0" />
+        Si te la juegas y fallas, pulsa «al siguiente»: se cuenta como pregunta y ya está.
+      </p>
     </div>
   )
 }
@@ -146,23 +193,23 @@ export function QuienSoyPartida({
 function Vueltas({ juego }: { juego: Juego }) {
   return (
     <p className="text-center text-sm text-suave">
-      Vuelta {Math.min(juego.vuelta, juego.vueltas)} de {juego.vueltas} · quedan {juego.mazo.length}{' '}
-      cartas
+      Vuelta {juego.vuelta}
+      {juego.vueltas !== null && ` de ${juego.vueltas}`} · faltan por saberlo{' '}
+      {quedanPorAcertar(juego).length} de {juego.jugadores.length}
     </p>
   )
 }
 
-function Marcador({ juego }: { juego: Juego }) {
+function Historia({ juego }: { juego: Juego }) {
+  if (juego.historia.length === 0) return null
   return (
-    <Tarjeta className="p-3">
-      <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm">
-        {juego.jugadores.map((p, i) => (
-          <li
-            key={p.nombre}
-            className={i === juego.turno ? 'font-semibold text-bosque-700' : 'text-tenue'}
-          >
-            {p.nombre} <span className="tabular-nums">{p.puntos}</span>
-          </li>
+    <Tarjeta className="px-4 py-3">
+      <p className="mb-1 flex items-center gap-2 text-xs font-semibold text-bosque-700">
+        <History size={14} /> Lo último
+      </p>
+      <ul className="space-y-1 text-sm text-tenue">
+        {juego.historia.slice(0, 3).map((linea, i) => (
+          <li key={`${i}-${linea.slice(0, 10)}`}>{linea}</li>
         ))}
       </ul>
     </Tarjeta>
@@ -179,31 +226,30 @@ function Final({
   onSalir: () => void
 }) {
   const tabla = clasificacion(juego)
-  const mejor = tabla[0]?.puntos ?? 0
-  const campeones = tabla.filter((p) => p.puntos === mejor && mejor > 0)
+  const campeon = tabla.find((p) => p.puesto === 1)
 
   return (
     <div className="space-y-5">
       <Tarjeta className="space-y-4 p-6 text-center">
         <Trophy size={44} className="mx-auto text-tierra-500" />
         <h2 className="font-display text-2xl text-bosque-800">
-          {campeones.length === 0
-            ? 'Se acabó'
-            : campeones.length === 1
-              ? `¡Gana ${campeones[0].nombre}!`
-              : `Empate: ${campeones.map((p) => p.nombre).join(' y ')}`}
+          {campeon ? `¡Gana ${campeon.nombre}!` : 'Se acabó sin que nadie lo adivinara'}
         </h2>
         <ol className="space-y-1.5 text-left">
-          {tabla.map((p, i) => (
-            <li
-              key={p.nombre}
-              className="flex items-center gap-3 rounded-xl bg-beige px-4 py-2.5"
-            >
-              <span className="w-6 text-center text-lg">
-                {i === 0 && p.puntos > 0 ? '🏆' : `${i + 1}.`}
+          {tabla.map((p) => (
+            <li key={p.nombre} className="flex items-center gap-3 rounded-xl bg-beige px-4 py-2.5">
+              <span className="w-6 shrink-0 text-center text-lg">
+                {p.puesto === 1 ? '🏆' : p.puesto > 0 ? `${p.puesto}.` : '—'}
               </span>
-              <span className="flex-1 truncate font-semibold text-carbon">{p.nombre}</span>
-              <span className="font-display text-xl text-bosque-800 tabular-nums">{p.puntos}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-semibold text-carbon">{p.nombre}</span>
+                <span className="block truncate text-sm text-suave">
+                  {EMOJI_CATEGORIA[p.carta.categoria]} {p.carta.nombre}
+                </span>
+              </span>
+              <span className="shrink-0 text-sm text-tenue tabular-nums">
+                {p.preguntas} {p.preguntas === 1 ? 'pregunta' : 'preguntas'}
+              </span>
             </li>
           ))}
         </ol>

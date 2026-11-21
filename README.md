@@ -672,8 +672,11 @@ Decisiones que no se ven:
     SQL— la partida se queda en este aparato y lo dice; nadie se queda a medias.
 - **El timbre tiene que oírse desde la cocina.** Al acabarse el tiempo suenan tres
   repiques de dos tonos con onda cuadrada, casi dos segundos, en **todos** los móviles a
-  la vez. Hay un botón para probarlo antes de empezar, porque en iPhone el interruptor del
-  lateral lo calla y el sonido no arranca hasta que alguien toca la pantalla.
+  la vez. El sonido se despierta con el primer botón que se pulsa, porque iOS no deja sonar
+  nada antes de que alguien toque la pantalla; y el interruptor de silencio del lateral lo
+  calla igualmente, eso no hay forma de arreglarlo desde la web.
+- **La palabra puede ponerla el moderador.** Sale una al azar, pero hay un botón para
+  escribirla: a mitad de la noche siempre aparece la palabra que alguien quiere proponer.
 - **Las reglas, aparte de la pantalla.** `src/lib/juegos/furor.ts` son funciones puras
   que reciben una partida y devuelven otra, con el azar inyectado. Por eso se pueden
   probar las 23 pruebas sin cronómetro ni navegador, que es justo lo que no se puede
@@ -693,18 +696,23 @@ saldrá solo durante la escapada, igual que el panel.
 
 ### ¿Quién soy?
 
-El de la carta en la frente. El móvil va pasando de mano en mano: el que lo tiene se lo pone
-en la frente sin mirar, los demás leen el nombre y solo pueden contestar sí o no.
+Al empezar, a cada uno le toca un famoso y nadie sabe cuál es el suyo. El móvil va pasando de
+mano en mano: el que lo tiene ve las cartas de todos los demás menos la suya, hace **una sola
+pregunta** a la mesa y le contestan sí o no.
 
-- **Un solo aparato, y a propósito.** Aquí no hay nada que sincronizar: el juego es el móvil
-  pasando de mano en mano. Por eso este no necesita tabla ni moderador, al revés que el Furor.
-- **Con reloj y sin reloj son dos juegos distintos**, y la diferencia sale sola del
-  cronómetro: con reloj, el turno es una ráfaga y cada acierto saca otra carta hasta que se
-  acaba el tiempo; sin reloj, cada turno es una carta y el móvil cambia de manos. Las dos
-  formas son las que la gente espera, así que están las dos.
+- **La pantalla guarda el secreto, y esa es toda la gracia.** Lo que cada cual no puede saber
+  es lo suyo, y de eso se encarga el aparato: nada de papelitos, cintas en la frente ni un
+  árbitro que lo sepa todo. Por eso el turno enseña la lista de los demás y una interrogación
+  donde va el tuyo.
+- **Un solo aparato, y a propósito.** Aquí no hay nada que sincronizar —el juego *es* el móvil
+  pasando—, así que, al revés que el Furor, no necesita tabla ni moderador.
+- **El final lo decidís en caliente.** El juego se acaba cuando alguien adivina quién es, y en
+  ese mismo momento se pregunta si se sigue hasta que acierten todos. Antes de empezar nadie
+  sabe si va a querer seguir, así que no tiene sentido preguntarlo entonces.
+- **Las vueltas pueden ir sin límite**, y el reloj es opcional: son segundos para preguntar, no
+  para acertar.
 - **68 famosos** en cuatro categorías —cine y tele, música, deportes e históricos— que se
   pueden mezclar. El criterio para entrar es el mismo que el de las palabras del Furor: que
-  cualquiera de la mesa sepa quién es sin que se lo expliquen. Cada carta lleva una pista
-  corta para los que miran, y **ninguna repite en la misma partida**.
+  cualquiera de la mesa sepa quién es sin que se lo expliquen.
 - **Los nombres se ponen tocando.** Los del grupo salen como botones; escribir ocho nombres
   en un móvil es la forma más rápida de que nadie quiera jugar.
