@@ -519,9 +519,10 @@ sigue pudiendo tocar la lista entera en el formulario de la escapada.
 
 **Dos cosas pequeñas que faltaban.** El chat tiene su cajón de emojis —ochenta elegidos, no
 un buscador: caras, manos, fiesta, comida y campo, que es lo que se usa de verdad—, y el
-emoji entra donde está el cursor, no al final. Y el resumen tiene un botón que va **derecho a
-WhatsApp** (`wa.me`, que en el móvil abre la aplicación y en el ordenador WhatsApp Web), sin
-tener que buscar el icono en el menú de compartir del sistema, que sigue estando al lado.
+emoji entra donde está el cursor, no al final. Y el resumen se manda **derecho a WhatsApp**
+(`wa.me`, que en el móvil abre la aplicación y en el ordenador WhatsApp Web). El botón de
+compartir del sistema que había antes se ha quitado: enseñaba diez sitios para elegir uno
+que ya sabíamos cuál era.
 
 **Las fotos del fin de semana.** Las que había eran las de la casa candidata, que sirven para
 decidir y se quedan en *Casas*. Estas son las de después: pestaña propia, varias de golpe,
@@ -728,8 +729,9 @@ tapada: en su turno hace **una sola pregunta** a la mesa y le contestan sí o no
   sabe si va a querer seguir, así que no tiene sentido preguntarlo entonces.
 - **Las vueltas pueden ir sin límite**, y el reloj es opcional: son segundos para preguntar, no
   para acertar.
-- **152 personajes** en cinco categorías —cine y tele, música, deportes, históricos y de
-  ficción— que se pueden mezclar. El criterio para entrar es el mismo que el de las palabras
+- **586 personajes** en cinco categorías —cine y tele 107, música 101, deportes 93,
+  históricos 107 y de ficción 177— que se pueden mezclar. Con diez jugadores y una baraja de
+  cien, a la tercera partida se repiten; con esta no. El criterio para entrar es el mismo que el de las palabras
   del Furor: que cualquiera de la mesa sepa quién es sin que se lo expliquen.
 - **La mitad no existen, y es a propósito.** Superman o Darth Vader los conoce todo el mundo,
   de los quince a los setenta, mejor que a la mitad de los políticos; y además se prestan a
