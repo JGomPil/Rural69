@@ -635,3 +635,40 @@ lo pone la aplicación cada vez que esa cuenta cambia, y el service worker al ll
 empujón con la aplicación cerrada, con el número que le manda la función dentro del aviso
 (un service worker no habla con la base de datos). En una pestaña normal no existe, y eso
 no es un error: falla en silencio.
+
+---
+
+## 15. Los juegos de la casa
+
+Una sección para las noches de allí, cuando ya se ha cenado. Empieza con uno y está
+hecha para que quepan más.
+
+**Furor.** Es la prueba «Tienes la palabra» del concurso de Antena 3: sale una palabra,
+los dos equipos cantan por turnos una canción que la diga, y el que se queda en blanco o
+repite canción le da un **minipunto** al contrario; a los tres minipuntos, un punto.
+Nadie abre dos palabras seguidas —después de cada fallo arranca el otro equipo—, y quién
+empieza la primera se echa a suertes, que es lo que marca toda la partida.
+
+Decisiones que no se ven:
+
+- **Un solo aparato.** Esto se juega alrededor de una mesa, a voces y muchas veces sin
+  cobertura. No hay base de datos, no hay tiempo real y no hace falta que nadie más tenga
+  la aplicación abierta: el móvil que lleva el juego hace de presentador.
+- **Las reglas, aparte de la pantalla.** `src/lib/juegos/furor.ts` son funciones puras
+  que reciben una partida y devuelven otra, con el azar inyectado. Por eso se pueden
+  probar las 23 pruebas sin cronómetro ni navegador, que es justo lo que no se puede
+  comprobar a mano con once personas cantando.
+- **El reloj mira la hora, no cuenta vueltas.** Compara con la hora de fin en vez de
+  restar en cada `setInterval`, porque el navegador adormece los temporizadores y si no
+  el tiempo se estiraría a favor de quien está cantando.
+- **La partida sobrevive al bloqueo del móvil.** Se guarda en el propio aparato. Si se
+  perdiera el marcador al desbloquear, el juego no se usaría una segunda vez.
+- **Suena y no se apaga.** Pitido de aviso en los últimos tres segundos y bocina al
+  acabarse el tiempo, porque nadie está mirando la pantalla; y mientras corre el reloj se
+  pide no apagar la pantalla. Las dos cosas van envueltas en `try`: si el navegador no
+  deja (iOS es tacaño con las dos), se juega igual.
+- **179 palabras** elegidas con un criterio: que a cualquiera se le ocurran tres
+  canciones sin pensar. No repiten hasta que se acaban todas.
+
+De momento el enlace está siempre en el menú para poder probarlo. Cuando esté rodado,
+saldrá solo durante la escapada, igual que el panel.

@@ -390,6 +390,29 @@ había descartado por capricho y que también entraron.
       instalado, puesta desde la aplicación y desde el service worker.
       (`src/lib/insignia.ts`)
 
+## Fase 22 · Los juegos de la casa (en marcha)
+
+La idea es un cajón de juegos para las noches de allí, con varios dentro. De
+momento está siempre visible en el menú para poder probarlo; cuando esté
+rodado, saldrá solo durante la escapada, igual que el panel.
+
+- [x] **El cajón.** `/juegos` con su entrada en el menú y sitio para los que
+      vengan. (`src/pages/Juegos.tsx`)
+- [x] **Furor, primera versión jugable.** La prueba «Tienes la palabra» del
+      programa: palabra, turnos, cronómetro, minipuntos y puntos. Equipos a mano
+      o a suertes, nombres editables, reloj de 15 a 60 segundos, partida a 1-5
+      puntos. La partida se guarda en el aparato por si se bloquea el móvil.
+      Reglas probadas aparte de la pantalla, 23 pruebas.
+      (`src/lib/juegos/furor.ts`, `src/components/juegos/`)
+- [ ] **Que salga solo estando allí.** Enganchar la sección a `momentoDe() ===
+      'durante'` y esconder el enlace del menú el resto del año.
+- [ ] **El marcador de la casa.** Guardar quién ganó cada partida para picarse
+      entre escapadas. Necesita tabla y SQL.
+- [ ] **Más juegos.** El cajón está hecho para eso.
+- [ ] **Pendiente de probar con gente.** Si 30 segundos se hacen largos, si los
+      botones se entienden a voces y si la lista de 179 palabras aguanta una
+      noche entera.
+
 ### Pendiente a mano (lo que no puedo hacer yo)
 
 - [x] Pasar `supabase/19_datos_llegada.sql`, `supabase/20_reacciones.sql` y

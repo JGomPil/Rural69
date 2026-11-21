@@ -6,6 +6,7 @@ import {
   ChefHat,
   ChevronRight,
   CloudOff,
+  Dices,
   House,
   ListChecks,
   LogOut,
@@ -89,6 +90,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const secundarios: Enlace[] = [
     { a: '/lista-maestra', texto: 'Lista maestra', icono: ListChecks },
     { a: '/recetario', texto: 'Recetario', icono: ChefHat },
+    { a: '/juegos', texto: 'Juegos', icono: Dices },
     { a: '/historial', texto: 'Historial', icono: BarChart3 },
     { a: '/perfil', texto: 'Mi perfil', icono: UserRound },
     { a: '/ajustes', texto: 'Ajustes', icono: Settings },
