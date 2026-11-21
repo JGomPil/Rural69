@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { ChevronRight, Dices, Music, Smile, Sparkles } from 'lucide-react'
+import { ChevronRight, Clapperboard, Dices, Music, Smile, Sparkles } from 'lucide-react'
 import { Seccion, Tarjeta } from '../components/ui/Varios'
 
 /**
- * El cajón de los juegos de la casa. De momento hay uno.
+ * El cajón de los juegos de la casa.
  *
  * Esta sección acabará saliendo sola cuando estéis allí —igual que el
  * panel cambia de cara durante la escapada—, pero mientras se diseñan
@@ -38,6 +38,13 @@ export function Juegos() {
             como="Cada uno desde su móvil · se tocan las casillas · se pueden añadir preguntas"
           />
           <Juego
+            a="/juegos/que-peli-suena"
+            icono={<Clapperboard size={24} />}
+            titulo="¿Qué peli suena?"
+            que="Treinta segundos de banda sonora y a ver quién la saca antes. Vale el título a medias."
+            como="Suena en un móvil · se escribe desde el tuyo · hace falta internet"
+          />
+          <Juego
             a="/juegos/quien-soy"
             icono={<Smile size={24} />}
             titulo="¿Quién soy?"
@@ -50,8 +57,8 @@ export function Juegos() {
       <Seccion titulo="En camino" icono={<Sparkles size={18} />}>
         <Tarjeta className="p-4">
           <p className="text-sm text-tenue">
-            Este cajón se irá llenando. Hay sitio para el que se nos ocurra: adivinar canciones, pruebas
-            por parejas, preguntas sobre el propio grupo… Si se te ocurre uno, se diseña.
+            Este cajón se irá llenando. Hay sitio para el que se nos ocurra: pruebas por parejas,
+            mímica, preguntas sobre el propio grupo… Si se te ocurre uno, se diseña.
           </p>
         </Tarjeta>
       </Seccion>

@@ -1,0 +1,594 @@
+[
+ {
+  "id": 1376671117,
+  "peli": "La guerra de las galaxias",
+  "alias": [
+   "Star Wars"
+  ],
+  "anyo": 1977,
+  "tema": "Main Title",
+  "autor": "John Williams & London Symphony Orchestra",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6f/a0/b9/6fa0b936-f52d-1665-ade9-1f3420fd20b8/mzaf_8154199070911747658.plus.aac.p.m4a"
+ },
+ {
+  "id": 1400941657,
+  "peli": "Indiana Jones",
+  "alias": [
+   "En busca del arca perdida"
+  ],
+  "anyo": 1981,
+  "tema": "Raiders March",
+  "autor": "John Williams",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3c/d5/1d/3cd51d95-0ee5-f5fe-ced2-12d8a854361b/mzaf_2431570209513524121.plus.aac.p.m4a"
+ },
+ {
+  "id": 1443483126,
+  "peli": "Tiburón",
+  "alias": [
+   "Jaws"
+  ],
+  "anyo": 1975,
+  "tema": "Main Title (Theme from \"Jaws\")",
+  "autor": "John Williams",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ab/67/f4/ab67f441-b14f-1902-f353-4100c6e932aa/mzaf_4470349713199856556.plus.aac.p.m4a"
+ },
+ {
+  "id": 1046366480,
+  "peli": "E.T.",
+  "alias": [
+   "ET",
+   "El extraterrestre"
+  ],
+  "anyo": 1982,
+  "tema": "Flying Theme (From \"E.T. the Extra-Terrestrial\")",
+  "autor": "London Symphony Orchestra & John Williams",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/db/d0/55/dbd05522-d160-e09d-2c11-e1d8efa9d432/mzaf_13424697987029959637.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440800213,
+  "peli": "Parque Jurásico",
+  "alias": [
+   "Jurassic Park"
+  ],
+  "anyo": 1993,
+  "tema": "Theme from Jurassic Park",
+  "autor": "John Williams",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f1/35/b0/f135b050-e26f-1bee-8f24-67b755164d03/mzaf_4917044184840233126.plus.aac.p.m4a"
+ },
+ {
+  "id": 50235930,
+  "peli": "Superman",
+  "alias": [],
+  "anyo": 1978,
+  "tema": "Theme from Superman (Concert Version)",
+  "autor": "John Williams & London Symphony Orchestra",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/18/c6/69/18c669a3-2454-b039-9e07-7e82a6777909/mzaf_17034237260232107457.plus.aac.p.m4a"
+ },
+ {
+  "id": 89285956,
+  "peli": "Harry Potter",
+  "alias": [],
+  "anyo": 2001,
+  "tema": "Hedwig's Theme",
+  "autor": "John Williams",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/81/ee/ae/81eeae0a-da63-1fc7-42c1-21b498b85de8/mzaf_13621452881875123588.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440502971,
+  "peli": "La lista de Schindler",
+  "alias": [],
+  "anyo": 1993,
+  "tema": "Theme from Schindler's List",
+  "autor": "John Williams, Itzhak Perlman & Boston Symphony Orchestra",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/87/66/5f/87665fc0-803f-a5a9-e2c8-1650fa8d2971/mzaf_2983154669099044974.plus.aac.p.m4a"
+ },
+ {
+  "id": 1853914819,
+  "peli": "Solo en casa",
+  "alias": [
+   "Home Alone"
+  ],
+  "anyo": 1990,
+  "tema": "Somewhere in My Memory",
+  "autor": "John Williams",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/39/3e/20/393e20ff-d4d8-237c-db4e-78f7d943e04d/mzaf_17330960514763193031.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440831168,
+  "peli": "Regreso al futuro",
+  "alias": [
+   "Back to the Future"
+  ],
+  "anyo": 1985,
+  "tema": "The Future",
+  "autor": "Alan Silvestri",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b6/4b/e1/b64be13e-94a0-4440-f78a-7ca2748319c5/mzaf_7044987737690873714.plus.aac.p.m4a"
+ },
+ {
+  "id": 418557001,
+  "peli": "Forrest Gump",
+  "alias": [],
+  "anyo": 1994,
+  "tema": "Forrest Gump Suite",
+  "autor": "Alan Silvestri",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cf/03/5f/cf035f70-4ea7-05d3-dc19-e9fd61fe3712/mzaf_13825196697094444997.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440663698,
+  "peli": "Los Vengadores",
+  "alias": [
+   "Vengadores",
+   "Avengers"
+  ],
+  "anyo": 2012,
+  "tema": "The Avengers",
+  "autor": "Alan Silvestri",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bf/a7/9f/bfa79f79-b635-0f8c-d72f-e59db79108af/mzaf_9009025771638181825.plus.aac.p.m4a"
+ },
+ {
+  "id": 716216763,
+  "peli": "Rocky",
+  "alias": [],
+  "anyo": 1976,
+  "tema": "Gonna Fly Now",
+  "autor": "Bill Conti",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/01/16/9e/01169ead-7632-d4d9-989c-39538ab940a3/mzaf_15171404787156306248.plus.aac.p.m4a"
+ },
+ {
+  "id": 724369568,
+  "peli": "Piratas del Caribe",
+  "alias": [],
+  "anyo": 2003,
+  "tema": "He's a Pirate",
+  "autor": "Klaus Badelt",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/76/0f/14/760f14dd-bc4f-3ce9-05ca-75ce8b2982fb/mzaf_3389900659346103080.plus.aac.p.m4a"
+ },
+ {
+  "id": 323714096,
+  "peli": "El Señor de los Anillos",
+  "alias": [
+   "Lord of the Rings"
+  ],
+  "anyo": 2001,
+  "tema": "Concerning Hobbits",
+  "autor": "Howard Shore",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cd/1e/2c/cd1e2c74-a074-aa60-ec24-8abee7dcec43/mzaf_12399500222028997548.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440844677,
+  "peli": "El Padrino",
+  "alias": [
+   "The Godfather"
+  ],
+  "anyo": 1972,
+  "tema": "Love Theme from \"The Godfather\"",
+  "autor": "Nino Rota & Carlo Savina",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e2/24/ae/e224ae62-6b7c-b659-8d8d-5e3c19eea17e/mzaf_4624736163810955756.plus.aac.p.m4a"
+ },
+ {
+  "id": 52324180,
+  "peli": "Misión Imposible",
+  "alias": [
+   "Mission Impossible"
+  ],
+  "anyo": 1996,
+  "tema": "Mission: Impossible Theme",
+  "autor": "John E. Davis & Lalo Schifrin",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/db/de/4c/dbde4cc1-1678-da2e-5510-c081c8c0c29f/mzaf_16290550036431991286.plus.aac.p.m4a"
+ },
+ {
+  "id": 844451797,
+  "peli": "James Bond",
+  "alias": [
+   "007",
+   "Agente 007"
+  ],
+  "anyo": 1962,
+  "tema": "James Bond Theme",
+  "autor": "John Barry & Monty Norman",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/68/de/e8/68dee8b0-29b2-3b38-c216-04b2bf769d20/mzaf_17097584948384375992.plus.aac.p.m4a"
+ },
+ {
+  "id": 1745568934,
+  "peli": "Titanic",
+  "alias": [],
+  "anyo": 1997,
+  "tema": "My Heart Will Go On",
+  "autor": "Céline Dion",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0d/2e/a9/0d2ea9b0-2a97-f4c4-a281-7397fc51666e/mzaf_7167897467950688773.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440563274,
+  "peli": "Gladiator",
+  "alias": [
+   "El gladiador"
+  ],
+  "anyo": 2000,
+  "tema": "Now We Are Free",
+  "autor": "Lisa Gerrard, Gavin Greenaway, The Lyndhurst Orchestra, Bruce Fowler, Yvonne S. Moriarty, Walt Fowler, Ladd McIntosh, Elizabeth Finch, Jack Smalley & Hans Zimmer",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/08/1c/62/081c6242-de2e-80ef-d1d6-51c21620fbf1/mzaf_8911425336835289037.plus.aac.p.m4a"
+ },
+ {
+  "id": 1533984393,
+  "peli": "Interstellar",
+  "alias": [],
+  "anyo": 2014,
+  "tema": "Cornfield Chase",
+  "autor": "Hans Zimmer",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3a/ee/23/3aee2300-f6f7-a006-e20f-28092e814cbe/mzaf_1624587954644600228.plus.aac.p.m4a"
+ },
+ {
+  "id": 1442813319,
+  "peli": "El rey león",
+  "alias": [
+   "Lion King"
+  ],
+  "anyo": 1994,
+  "tema": "Circle of Life",
+  "autor": "Elton John",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f2/34/dc/f234dc60-9940-c49a-0d95-88e80c41f131/mzaf_15300188754417833089.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440844700,
+  "peli": "Grease",
+  "alias": [],
+  "anyo": 1978,
+  "tema": "You're the One That I Want",
+  "autor": "John Travolta & Olivia Newton-John",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f0/c9/3a/f0c93aff-230f-a7f6-d1b6-37ebcc02d62c/mzaf_5514414658492873704.plus.aac.p.m4a"
+ },
+ {
+  "id": 254938549,
+  "peli": "Dirty Dancing",
+  "alias": [],
+  "anyo": 1987,
+  "tema": "(I've Had) The Time of My Life",
+  "autor": "Bill Medley & Jennifer Warnes",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/41/f3/49/41f34968-bfb6-7253-58f6-e2d56b0e0979/mzaf_6987448208011331365.plus.aac.p.m4a"
+ },
+ {
+  "id": 1442259185,
+  "peli": "Fiebre del sábado noche",
+  "alias": [
+   "Saturday Night Fever"
+  ],
+  "anyo": 1977,
+  "tema": "Stayin' Alive",
+  "autor": "Bee Gees",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/75/b7/30/75b730e8-541d-980d-54d4-f111ae9aece8/mzaf_732787148297582194.plus.aac.p.m4a"
+ },
+ {
+  "id": 280711410,
+  "peli": "Flashdance",
+  "alias": [],
+  "anyo": 1983,
+  "tema": "Flashdance...What a Feeling",
+  "autor": "Irene Cara",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ee/f0/fd/eef0fda5-3a77-ba9a-41e1-31e0fe603faa/mzaf_4287430643698303778.plus.aac.p.m4a"
+ },
+ {
+  "id": 1164757333,
+  "peli": "Footloose",
+  "alias": [],
+  "anyo": 1984,
+  "tema": "Footloose",
+  "autor": "Kenny Loggins",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/22/18/68/2218688a-ff36-7277-56de-c6b221d691c8/mzaf_12250270063124855744.plus.aac.p.m4a"
+ },
+ {
+  "id": 564356975,
+  "peli": "Pulp Fiction",
+  "alias": [],
+  "anyo": 1994,
+  "tema": "Misirlou",
+  "autor": "Dick Dale",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/68/6a/3e/686a3eaa-d9fa-f5bb-3ad0-41d5ff1242d3/mzaf_1754524748973980427.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440795874,
+  "peli": "Psicosis",
+  "alias": [
+   "Psycho"
+  ],
+  "anyo": 1960,
+  "tema": "The Murder",
+  "autor": "Bernard Herrmann, Joel McNeely & Royal Scottish National Orchestra",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d0/88/f9/d088f9cd-33f8-33c6-942d-d7713fd5451c/mzaf_7215195866405288345.plus.aac.p.m4a"
+ },
+ {
+  "id": 1478145271,
+  "peli": "Halloween",
+  "alias": [],
+  "anyo": 1978,
+  "tema": "Halloween Theme",
+  "autor": "John Carpenter, Cody Carpenter & Daniel Davies",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e9/25/cd/e925cd21-73f5-8220-c6a7-beaf71960f32/mzaf_16514897033700028383.plus.aac.p.m4a"
+ },
+ {
+  "id": 1484413134,
+  "peli": "Los cazafantasmas",
+  "alias": [
+   "Ghostbusters"
+  ],
+  "anyo": 1984,
+  "tema": "Ghostbusters",
+  "autor": "Ray Parker Jr.",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/63/8b/e3/638be3a1-2f5e-5cff-9b58-085e3b793cbd/mzaf_10733010531783613784.plus.aac.p.m4a"
+ },
+ {
+  "id": 279366591,
+  "peli": "Men in Black",
+  "alias": [
+   "Hombres de negro"
+  ],
+  "anyo": 1997,
+  "tema": "Men In Black",
+  "autor": "Will Smith",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/df/76/60/df7660a8-6330-d384-2df7-c3ac9566bd8c/mzaf_5968128030680647840.plus.aac.p.m4a"
+ },
+ {
+  "id": 388151901,
+  "peli": "El guardaespaldas",
+  "alias": [
+   "The Bodyguard"
+  ],
+  "anyo": 1992,
+  "tema": "I Will Always Love You",
+  "autor": "Whitney Houston",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/03/d2/1a/03d21aca-c69e-09af-03ef-118004e68ab5/mzaf_17408932698913708736.plus.aac.p.m4a"
+ },
+ {
+  "id": 872478306,
+  "peli": "Pretty Woman",
+  "alias": [],
+  "anyo": 1990,
+  "tema": "Oh, Pretty Woman",
+  "autor": "Roy Orbison",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bc/45/c5/bc45c5e4-61d9-8074-df34-6117fb8146c2/mzaf_17905078581365919431.plus.aac.p.m4a"
+ },
+ {
+  "id": 387193955,
+  "peli": "Top Gun",
+  "alias": [],
+  "anyo": 1986,
+  "tema": "Danger Zone",
+  "autor": "Kenny Loggins",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8d/c8/19/8dc81935-5620-0b29-3f4c-acc3f6479796/mzaf_14998514993249023640.plus.aac.p.m4a"
+ },
+ {
+  "id": 1500818928,
+  "peli": "Terminator 2",
+  "alias": [
+   "Terminator"
+  ],
+  "anyo": 1991,
+  "tema": "Main Title - The Terminator",
+  "autor": "Brad Fiedel",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f3/83/ba/f383baaa-eac4-c630-e91b-2ae649f640bc/mzaf_12668565942234754287.plus.aac.p.m4a"
+ },
+ {
+  "id": 328871284,
+  "peli": "Matrix",
+  "alias": [],
+  "anyo": 1999,
+  "tema": "Furious Angels (Instrumental)",
+  "autor": "Rob Dougan",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7e/0f/06/7e0f0606-c9ec-c888-bd45-e6438df17ef2/mzaf_1512499186585584679.plus.aac.p.m4a"
+ },
+ {
+  "id": 73327205,
+  "peli": "Blade Runner",
+  "alias": [],
+  "anyo": 1982,
+  "tema": "Blade Runner (Main Titles)",
+  "autor": "Vangelis",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d7/87/0b/d7870b02-65de-af58-df2e-8d54fcd5330d/mzaf_12483161989392342141.plus.aac.p.m4a"
+ },
+ {
+  "id": 1450958914,
+  "peli": "Carros de fuego",
+  "alias": [
+   "Chariots of Fire"
+  ],
+  "anyo": 1981,
+  "tema": "Chariots of Fire",
+  "autor": "Vangelis",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/30/88/44/308844c4-a813-aa22-1da2-c5cd7657adad/mzaf_11412573995450483451.plus.aac.p.m4a"
+ },
+ {
+  "id": 953539278,
+  "peli": "La pantera rosa",
+  "alias": [
+   "Pink Panther"
+  ],
+  "anyo": 1963,
+  "tema": "The Pink Panther Theme",
+  "autor": "Henry Mancini",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c5/f5/e7/c5f5e70b-fa31-14f2-d67f-acef1c3f4c83/mzaf_9141276117602715702.plus.aac.p.m4a"
+ },
+ {
+  "id": 306677750,
+  "peli": "Desayuno con diamantes",
+  "alias": [],
+  "anyo": 1961,
+  "tema": "Moon River",
+  "autor": "Henry Mancini",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3c/53/9a/3c539a2a-27aa-9234-9ea9-79e1c1cf6565/mzaf_4232262252737264718.plus.aac.p.m4a"
+ },
+ {
+  "id": 1455420758,
+  "peli": "Cantando bajo la lluvia",
+  "alias": [
+   "Singin in the Rain"
+  ],
+  "anyo": 1952,
+  "tema": "Singin' In the Rain",
+  "autor": "Gene Kelly",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2f/c8/e3/2fc8e3e7-2bcf-e562-73df-5155ee8fd129/mzaf_18175992472636427493.plus.aac.p.m4a"
+ },
+ {
+  "id": 1550188252,
+  "peli": "Sonrisas y lágrimas",
+  "alias": [
+   "The Sound of Music"
+  ],
+  "anyo": 1965,
+  "tema": "Do-Re-Mi",
+  "autor": "Julie Andrews, Nicholas Hammond, Debbie Turner, Duane Chase, Heather Menzies, Angela Cartwright, Kym Karath & Charmian Carr",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/22/96/01/2296010e-0dad-69a5-0f2b-a89556ec6f72/mzaf_7947295163722150528.plus.aac.p.m4a"
+ },
+ {
+  "id": 775874329,
+  "peli": "Mary Poppins",
+  "alias": [],
+  "anyo": 1964,
+  "tema": "Supercalifragilisticexpialidocious",
+  "autor": "Dick Van Dyke & Julie Andrews",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/58/39/3f/58393f7c-d298-db2b-c3c4-54a504d17d26/mzaf_5792790756479085991.plus.aac.p.m4a"
+ },
+ {
+  "id": 1455918432,
+  "peli": "El mago de Oz",
+  "alias": [],
+  "anyo": 1939,
+  "tema": "Over the Rainbow",
+  "autor": "Judy Garland",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/79/d1/07/79d1070a-1928-8b2a-523f-794546bf9b36/mzaf_7130207738050443148.plus.aac.p.m4a"
+ },
+ {
+  "id": 1455698341,
+  "peli": "Casablanca",
+  "alias": [],
+  "anyo": 1942,
+  "tema": "As Time Goes By",
+  "autor": "Dooley Wilson",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/58/6c/56/586c568d-722e-6001-6d04-838736a48430/mzaf_6896495258682822464.plus.aac.p.m4a"
+ },
+ {
+  "id": 486088027,
+  "peli": "El bueno, el feo y el malo",
+  "alias": [],
+  "anyo": 1966,
+  "tema": "The Good, the Bad and the Ugly (Titles)",
+  "autor": "Ennio Morricone",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/84/d3/ca/84d3ca17-1855-2c91-1dd0-d698536a8991/mzaf_9643900716597219222.plus.aac.p.m4a"
+ },
+ {
+  "id": 830679927,
+  "peli": "Hasta que llegó su hora",
+  "alias": [
+   "Érase una vez en el Oeste"
+  ],
+  "anyo": 1968,
+  "tema": "Once Upon a Time In the West",
+  "autor": "Ennio Morricone",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e7/79/52/e77952f6-02f4-642f-c3c1-2a9093366d84/mzaf_14614799276542573515.plus.aac.p.m4a"
+ },
+ {
+  "id": 830673236,
+  "peli": "Cinema Paradiso",
+  "alias": [],
+  "anyo": 1988,
+  "tema": "Cinema Paradiso (Main Theme)",
+  "autor": "Ennio Morricone",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/Music/v4/c2/51/33/c2513378-24ec-4676-a3cc-b6d1e6b96d15/mzaf_3622668059441093772.plus.aac.p.m4a"
+ },
+ {
+  "id": 714408605,
+  "peli": "La misión",
+  "alias": [
+   "The Mission"
+  ],
+  "anyo": 1986,
+  "tema": "Gabriel's Oboe",
+  "autor": "Ennio Morricone",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/43/fb/81/43fb81f9-13ab-e725-a4fa-f064de518fb4/mzaf_17899952900385438792.plus.aac.p.m4a"
+ },
+ {
+  "id": 437514899,
+  "peli": "La vida es bella",
+  "alias": [],
+  "anyo": 1997,
+  "tema": "La vita e' bella",
+  "autor": "Nicola Piovani",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d0/9d/49/d09d49d3-e964-5a5a-56b8-1154f40af32b/mzaf_2216357528840958829.plus.aac.p.m4a"
+ },
+ {
+  "id": 1575400467,
+  "peli": "Amélie",
+  "alias": [
+   "Amelie"
+  ],
+  "anyo": 2001,
+  "tema": "Comptine d'un autre été, l'après-midi",
+  "autor": "Yann Tiersen",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/62/54/5e/62545ee7-29dc-5b25-345a-976d2be8ad6e/mzaf_13593239243179866678.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440768339,
+  "peli": "Mamma Mia",
+  "alias": [],
+  "anyo": 2008,
+  "tema": "Mamma Mia",
+  "autor": "Meryl Streep",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/22/9b/c4/229bc444-8a11-5cd4-e88e-329606c66e64/mzaf_7300248637054509010.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440810229,
+  "peli": "Toy Story",
+  "alias": [],
+  "anyo": 1995,
+  "tema": "You've Got a Friend In Me (Para el Buzz Español) [feat. Nicolas Reyes & Tonino Baliardo]",
+  "autor": "Gipsy Kings",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7a/99/1e/7a991eee-e8e8-2db5-4311-44122578c794/mzaf_909086359267925117.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440617708,
+  "peli": "Up",
+  "alias": [
+   "Una aventura de altura"
+  ],
+  "anyo": 2009,
+  "tema": "Married Life",
+  "autor": "Michael Giacchino",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/70/d5/7a/70d57aab-e4fa-1dc0-a58f-9357e38c567b/mzaf_14650083088179348809.plus.aac.p.m4a"
+ },
+ {
+  "id": 724345138,
+  "peli": "Los Increíbles",
+  "alias": [],
+  "anyo": 2004,
+  "tema": "The Incredits",
+  "autor": "Michael Giacchino",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/63/77/c8/6377c8a2-2a00-0d16-7827-d585307953a2/mzaf_5859759319990837209.plus.aac.p.m4a"
+ },
+ {
+  "id": 724255550,
+  "peli": "Buscando a Nemo",
+  "alias": [
+   "Nemo"
+  ],
+  "anyo": 2003,
+  "tema": "Nemo Egg (Main Title)",
+  "autor": "Thomas Newman",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e5/be/ad/e5bead38-0811-a1e9-2461-c9087c4ad0c6/mzaf_12290177138208221812.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440517537,
+  "peli": "Shrek",
+  "alias": [],
+  "anyo": 2001,
+  "tema": "All Star",
+  "autor": "Smash Mouth",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8b/2c/42/8b2c42eb-a194-0327-eeb4-caaaa14ee61b/mzaf_13415710220894021381.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440668814,
+  "peli": "Coco",
+  "alias": [],
+  "anyo": 2017,
+  "tema": "Recuérdame",
+  "autor": "Carlos Rivera",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e7/33/99/e73399e0-dd5d-6bb7-f8d5-ebe88e9d1820/mzaf_10333963352583074573.plus.aac.p.m4a"
+ }
+]

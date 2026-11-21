@@ -789,3 +789,45 @@ quesitos y 1.523 preguntas, de las que **199 van de nosotros**.
 - **La pregunta viaja entera en el estado, con la respuesta buena dentro.** Quien abra las
   herramientas del navegador puede verla. En una casa con amigos eso no es un agujero de
   seguridad: es alguien haciendo trampas, y para eso no hay programa que valga.
+
+### ¿Qué peli suena?
+
+Suenan treinta segundos de una banda sonora y gana el punto el primero que escribe de qué
+película es. 57 películas, de _Tiburón_ a _Barbie_.
+
+- **La música sale de la tienda de Apple, y eso es lo que hace que exista el juego.** La
+  pregunta de verdad no era cómo programarlo, era de dónde salen los audios: un banco propio
+  significa recortar cien clips a mano y guardarlos con sus derechos. La API de búsqueda de
+  iTunes devuelve una **previsualización de 30 segundos** de cualquier canción, servida desde
+  su CDN, que es exactamente lo que suena al mirar una canción antes de comprarla.
+- **Resuelto en tiempo de compilación, no en la partida.** La tienda corta a las veinte
+  peticiones por minuto **por IP**, y diez móviles en el wifi de una casa rural son una sola
+  IP: preguntando en vivo nos quedaríamos sin música en la tercera ronda. Así que
+  `scripts/bandas-sonoras.mjs` resuelve la lista entera una vez y escribe un `.json` con el
+  identificador y la URL de cada tema. En la partida no se le pide nada a la tienda: el móvil
+  que hace de altavoz va directo al archivo de sonido, que está en una CDN sin ese límite.
+- **La lista se escribe a mano, con autor.** Buscar «Piratas del Caribe» en la tienda devuelve
+  cuatro orquestas de tributo antes que la banda sonora, así que cada ficha lleva el
+  compositor y el script puntúa los candidatos: la grabación original suma, los discos de
+  versiones restan. Lo que no resuelve con confianza lo deja fuera y lo dice.
+- **Suena en un solo móvil.** Diez teléfonos medio segundo desincronizados no es música, es
+  ruido. Uno hace de altavoz —el que esté al lado del bafle— y los demás solo escriben;
+  cualquiera puede quedarse con la música tocando un botón. Quien la pone juega igual: no ve
+  nada que no oigan los demás. La canción se repite en bucle, porque la previsualización dura
+  treinta segundos y una ronda puede durar noventa.
+- **Se escribe, no se grita.** Como en el «¿Quién soy?»: decirlo a voces y discutir después
+  quién lo dijo antes no lo arregla nadie. Vale el título a medias —«piratas» por «Piratas del
+  Caribe»—, valen los alias —«Star Wars» por «La guerra de las galaxias»— y las tildes dan
+  igual. El que falla lo ve toda la mesa y puede volver a probar: la gracia está en el
+  «¡¿Tiburón?!», no en castigar.
+- **Un punto por acierto, sin premio a la rapidez.** Estuvo puesto el doble para el que
+  corría y se quitó: hay que explicarlo, y un juego de salón que necesita explicar el marcador
+  ya ha perdido.
+- **Si la URL caduca, se pide otra.** Las previsualizaciones cambian de sitio de higos a
+  brevas. Por eso el `.json` guarda también el identificador: cuando el audio falla se pide
+  una URL nueva —una sola petición, y solo cuando ha fallado— y la ronda sigue.
+- **Lo que no se puede arreglar desde aquí:** el trozo que suena lo elige Apple, no nosotros.
+  En las canciones suele caer el estribillo, que es lo ideal; en algunas bandas sonoras
+  instrumentales empieza por la mitad del tema. Cambiar el corte es cambiar de tema en la
+  lista del script y volver a pasarlo. Y esto es lo único del fin de semana que **necesita
+  internet**: sin línea, el juego avisa y no se puede jugar.

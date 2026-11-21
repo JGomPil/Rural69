@@ -22,6 +22,7 @@ import { Historial } from './pages/Historial'
 import { Juegos } from './pages/Juegos'
 import { Furor } from './pages/Furor'
 import { QuienSoy } from './pages/QuienSoy'
+import { QuePeliSuena } from './pages/QuePeliSuena'
 import { Trivial } from './pages/Trivial'
 import { Ajustes } from './pages/Ajustes'
 import { Perfil } from './pages/Perfil'
@@ -149,6 +150,7 @@ export function App() {
                 <Route path="/juegos/furor" element={<Furor />} />
                 <Route path="/juegos/quien-soy" element={<QuienSoy />} />
                 <Route path="/juegos/trivial" element={<Trivial />} />
+                <Route path="/juegos/que-peli-suena" element={<QuePeliSuena />} />
                 <Route path="/ajustes" element={<Ajustes />} />
                 <Route path="/perfil" element={<Perfil />} />
               </Route>
