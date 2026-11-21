@@ -381,7 +381,7 @@ function Pie({
         <>
           <p className="text-center text-xs text-suave">
             Esta pantalla es la de <strong>{yo}</strong>. Cuidado con mirar el móvil de al lado: ahí sí
-            sale tu famoso.
+            sale tu personaje.
           </p>
           {sinMovil.length > 0 && (
             <p className="text-center text-xs text-suave">

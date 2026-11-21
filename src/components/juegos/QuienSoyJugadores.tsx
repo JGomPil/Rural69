@@ -111,7 +111,7 @@ export function QuienSoyJugadores({
       </Tarjeta>
 
       <Tarjeta className="space-y-4 p-4">
-        <Campo etiqueta="De qué van los famosos">
+        <Campo etiqueta="De qué van los personajes">
           <Lista value={categoria} onChange={(e) => setCategoria(e.target.value as Categoria | 'mezclado')}>
             <option value="mezclado">🎲 Mezclado</option>
             {CATEGORIAS.map((c) => (
@@ -122,7 +122,7 @@ export function QuienSoyJugadores({
           </Lista>
         </Campo>
         <p className="text-sm text-suave">
-          {cartas} famosos, y a cada uno le toca uno distinto.
+          {cartas} personajes, y a cada uno le toca uno distinto.
           {sobran && ' Sois más que cartas: quitad gente o cambiad de categoría.'}
         </p>
 

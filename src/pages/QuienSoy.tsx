@@ -33,7 +33,7 @@ export function QuienSoy() {
             <Smile size={22} className="text-tierra-600" /> ¿Quién soy?
           </h1>
           <p className="text-sm text-tenue">
-            {mesa.partida ? 'Partida en marcha.' : 'Cada uno es un famoso y no sabe cuál.'}
+            {mesa.partida ? 'Partida en marcha.' : 'Cada uno es un personaje y no sabe cuál.'}
           </p>
         </div>
       </header>
@@ -78,7 +78,8 @@ function ComoSeJuega() {
       </summary>
       <div className="space-y-2 border-t border-arena px-4 py-3 text-sm text-tenue">
         <p>
-          Al empezar, a cada uno le toca un famoso y nadie sabe cuál es el suyo.{' '}
+          Al empezar, a cada uno le toca un personaje —real o inventado— y nadie sabe cuál es el
+          suyo.{' '}
           <strong>Cada cual abre el juego en su propio móvil y dice quién es</strong>: desde ese momento
           ve las cartas de todos los demás, con la suya tapada.
         </p>
@@ -96,7 +97,8 @@ function ComoSeJuega() {
           <strong>seguir hasta que acierten todos</strong>.
         </p>
         <p className="text-suave">
-          Cuidado con mirar el móvil del de al lado: tu famoso sale en la pantalla de todos los demás.
+          Cuidado con mirar el móvil del de al lado: tu personaje sale en la pantalla de todos los
+          demás.
           Y si no hay cobertura, se juega con un solo móvil que va pasando.
         </p>
       </div>
