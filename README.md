@@ -792,8 +792,9 @@ quesitos y 1.523 preguntas, de las que **199 van de nosotros**.
 
 ### ¿Qué peli suena?
 
-Suenan treinta segundos de una banda sonora y gana el punto el primero que escribe de qué
-película es. 57 películas, de _Tiburón_ a _Barbie_.
+Suenan treinta segundos de una banda sonora y la mesa grita de qué película es. El que pone
+la música hace de moderador y apunta quién la ha sacado. 119 películas, de _Tiburón_ a
+_Barbie_.
 
 - **La música sale de la tienda de Apple, y eso es lo que hace que exista el juego.** La
   pregunta de verdad no era cómo programarlo, era de dónde salen los audios: un banco propio
@@ -811,15 +812,17 @@ película es. 57 películas, de _Tiburón_ a _Barbie_.
   compositor y el script puntúa los candidatos: la grabación original suma, los discos de
   versiones restan. Lo que no resuelve con confianza lo deja fuera y lo dice.
 - **Suena en un solo móvil.** Diez teléfonos medio segundo desincronizados no es música, es
-  ruido. Uno hace de altavoz —el que esté al lado del bafle— y los demás solo escriben;
-  cualquiera puede quedarse con la música tocando un botón. Quien la pone juega igual: no ve
-  nada que no oigan los demás. La canción se repite en bucle, porque la previsualización dura
-  treinta segundos y una ronda puede durar noventa.
-- **Se escribe, no se grita.** Como en el «¿Quién soy?»: decirlo a voces y discutir después
-  quién lo dijo antes no lo arregla nadie. Vale el título a medias —«piratas» por «Piratas del
-  Caribe»—, valen los alias —«Star Wars» por «La guerra de las galaxias»— y las tildes dan
-  igual. El que falla lo ve toda la mesa y puede volver a probar: la gracia está en el
-  «¡¿Tiburón?!», no en castigar.
+  ruido. Uno hace de altavoz —el que esté al lado del bafle— y ese mismo lleva el mando. La
+  canción se repite en bucle, porque la previsualización dura treinta segundos y una ronda
+  puede durar noventa. Si el que la lleva se va a por hielo con el móvil en el bolsillo,
+  cualquiera recoge el mando con «que suene aquí» sin montar otra partida.
+- **Se grita, y lo apunta el moderador.** La primera versión se escribía, como el «¿Quién
+  soy?», y era peor juego: mientras uno teclea «la guerra de las galaxias» la mesa ya lo ha
+  dicho tres veces, y la gracia está en el grito. Así que no hay teclado. El móvil que pone la
+  música muestra los nombres y toca el del que la ha sacado. Lo que vale y lo que no lo decide
+  la mesa, como en el salón de casa: para eso ya hay gente delante.
+- **Los jugadores son nombres, no cuentas.** En este no hay sillas que repartir: juega quien
+  está en el sofá, con móvil o sin él. Hacen falta dos nombres y un teléfono.
 - **Un punto por acierto, sin premio a la rapidez.** Estuvo puesto el doble para el que
   corría y se quitó: hay que explicarlo, y un juego de salón que necesita explicar el marcador
   ya ha perdido.

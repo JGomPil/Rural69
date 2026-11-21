@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, CloudOff, Info, Music } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
@@ -21,12 +21,23 @@ import {
 export function QuePeliSuena() {
   const { perfil } = useAuth()
   const { miembros } = useGrupo()
-  // De los abiertos: cada uno escribe desde su móvil.
+  // De los abiertos: el mando puede cambiar de móvil sin montar otra partida.
   const mesa = useMesa<PartidaB>('quepeli', perfil?.id ?? null, {
     guarda: guardaPartidaB,
     lee: leePartidaB,
     todosJuegan: true,
   })
+
+  // Una partida de la versión anterior —cuando la película se escribía— no se
+  // puede pintar con estas reglas: no trae moderador y trae sillas. Se da por
+  // terminada, y la mesa vuelve a la pantalla de empezar.
+  const yaLimpiada = useRef(false)
+  const vieja = mesa.partida !== null && mesa.partida.version !== 2
+  useEffect(() => {
+    if (!vieja || yaLimpiada.current) return
+    yaLimpiada.current = true
+    void mesa.termina()
+  }, [vieja, mesa])
 
   // El repertorio va en un .json aparte que se trae solo al entrar aquí.
   const [bandas, setBandas] = useState<Banda[] | null>(null)
@@ -40,9 +51,10 @@ export function QuePeliSuena() {
   )
 
   const empieza = useCallback(
-    (o: Omit<OpcionesB, 'altavoz'>) => {
+    (o: Omit<OpcionesB, 'moderador'>) => {
       // Quien monta la partida se queda con la música, que para eso la monta.
-      const partida = nuevaPartidaB({ ...o, altavoz: perfil?.id ?? null }, saca)
+      const mando = perfil ? { perfil: perfil.id, nombre: perfil.display_name } : null
+      const partida = nuevaPartidaB({ ...o, moderador: mando }, saca)
       if (partida) void mesa.empieza(partida)
     },
     [mesa, saca, perfil],
@@ -68,13 +80,16 @@ export function QuePeliSuena() {
         </div>
       </header>
 
-      {mesa.cargando || !bandas ? (
-        <Cargando texto={bandas ? 'Mirando si hay partida…' : 'Buscando la música…'} />
+      {mesa.cargando || !bandas || vieja ? (
+        <Cargando
+          texto={vieja ? 'Cerrando la partida de antes…' : bandas ? 'Mirando si hay partida…' : 'Buscando la música…'}
+        />
       ) : mesa.partida ? (
         <>
           <PeliPartida
             partida={mesa.partida}
             miPerfil={perfil?.id ?? null}
+            miNombre={perfil?.display_name ?? 'Alguien'}
             aSolas={mesa.aSolas}
             desfase={mesa.desfase}
             onCambia={mesa.publica}
@@ -88,8 +103,8 @@ export function QuePeliSuena() {
           />
           {mesa.aSolas && (
             <p className="flex items-center justify-center gap-2 text-center text-xs text-suave">
-              <CloudOff size={14} /> Sin línea con el servidor: se juega con este móvil, que hace
-              también de altavoz.
+              <CloudOff size={14} /> Sin línea con el servidor: se juega con este móvil, que pone la
+              música y apunta.
             </p>
           )}
         </>
@@ -115,20 +130,20 @@ function ComoSeJuega() {
       </summary>
       <div className="space-y-2 border-t border-arena px-4 py-3 text-sm text-tenue">
         <p>
-          Suenan treinta segundos de una banda sonora —el tema de la película, no una versión— y
-          gana el punto el primero que escribe de qué película es. La música da vueltas hasta que
-          alguien la saca o se acaba el tiempo.
+          Suenan treinta segundos de una banda sonora —el tema de la película, no una versión— y{' '}
+          <strong>se grita</strong>. Nadie escribe nada: el que pone la música hace de moderador,
+          toca el nombre del que la ha sacado y a la siguiente. La música da vueltas hasta
+          entonces, o hasta que se acabe el tiempo.
         </p>
         <p>
           <strong>Suena en un solo móvil</strong>, el que esté más cerca del altavoz. Diez teléfonos
-          medio segundo desincronizados no es música, es ruido. Quien pone la música juega igual: no
-          ve nada que no oigan los demás. Cualquiera puede quedarse con ella tocando «que suene
-          aquí».
+          medio segundo desincronizados no es música, es ruido. Quien modera juega igual: no ve nada
+          que no oigan los demás hasta que se destapa. Y si se va con el móvil en el bolsillo,
+          cualquiera recoge el mando con «que suene aquí».
         </p>
         <p>
-          Vale el título a medias: para «Piratas del Caribe» cuenta «piratas», y para «La guerra de
-          las galaxias» cuenta «Star Wars». Las tildes dan igual. El que falla lo ve toda la mesa y
-          puede volver a probar: no hay castigo.
+          Lo que vale y lo que no lo decide la mesa, como en el salón de casa: «la de los piratas»
+          cuenta si todo el mundo está de acuerdo.
         </p>
         <p className="text-suave">
           La música son las previsualizaciones de la tienda de Apple, las mismas que suenan al mirar

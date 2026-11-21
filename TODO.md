@@ -426,13 +426,13 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       juego. El movimiento está comprobado contra el `server.py` original en las 276
       combinaciones posibles. 32 pruebas. (`src/lib/juegos/trivial.ts`, `geometria.ts`,
       `baraja.ts`, `supabase/25_preguntas_trivial.sql`)
-- [x] **¿Qué peli suena?** Treinta segundos de banda sonora y gana el primero que
-      escribe la película. 57 películas resueltas contra la tienda de Apple por
-      `scripts/bandas-sonoras.mjs`, que guarda el identificador y la URL del trozo de
-      30 segundos: en la partida no se le pide nada a la tienda, que corta a las veinte
-      peticiones por minuto por IP. Suena en un solo móvil y se escribe desde el tuyo.
-      Vale el título a medias. 23 pruebas. (`src/lib/juegos/bandasonora.ts`,
-      `bandas.ts`, `bandas.json`)
+- [x] **¿Qué peli suena?** Treinta segundos de banda sonora, la mesa lo grita y el que
+      pone la música apunta quién la ha sacado. 119 películas resueltas contra la tienda
+      de Apple por `scripts/bandas-sonoras.mjs`, que guarda el identificador y la URL del
+      trozo de 30 segundos: en la partida no se le pide nada a la tienda, que corta a las
+      veinte peticiones por minuto por IP. Suena en un solo móvil, y ese mismo lleva el
+      mando; si se va, cualquiera lo recoge. 19 pruebas.
+      (`src/lib/juegos/bandasonora.ts`, `bandas.ts`, `bandas.json`)
 - [ ] **Más juegos.** El cajón está hecho para eso.
 - [ ] **Pendiente de probar con gente.** Si 30 segundos se hacen largos, si los
       botones se entienden a voces y si la lista de 179 palabras aguanta una

@@ -1,50 +1,57 @@
 // =====================================================================
 // Rural69 · ¿Qué peli suena? · Las reglas
 // ---------------------------------------------------------------------
-// Suenan treinta segundos de una banda sonora y hay que decir de qué
-// película es. Escribiéndolo, como en el «¿Quién soy?»: decirlo a
-// voces y luego discutir quién lo dijo antes no lo arregla nadie, y
-// escrito lo arregla el reloj del servidor.
+// Suenan treinta segundos de una banda sonora y la gente grita de qué
+// película es. Como en el salón de toda la vida: a voces. El que pone
+// la música hace de moderador y apunta quién la ha sacado.
 //
 // Tres decisiones que no son obvias:
 //
 //   · Suena en UN móvil, no en diez. Diez teléfonos medio segundo
 //     desincronizados no es música, es ruido. Uno hace de altavoz —el
-//     que esté más cerca del bafle— y los demás solo ven y escriben.
-//     Quien hace de altavoz juega igual: la música no le dice nada que
-//     no oigan los demás.
+//     que esté más cerca del bafle— y ese mismo lleva el mando.
+//   · No se escribe nada. Lo probé escrito y mata el juego: la gracia
+//     está en el grito, y mientras uno teclea «la guerra de las
+//     galaxias» la mesa ya lo ha dicho tres veces. Quien modera toca el
+//     nombre del que la ha sacado y a la siguiente.
 //   · Un punto por acierto, sin bonus por rapidez. Probé a dar doble
 //     al que corre y lo quité: hay que explicarlo, y un juego de salón
 //     que necesita explicar el marcador ya ha perdido.
-//   · El que falla, falla en público. Su intento sale en todas las
-//     pantallas y puede volver a probar. Sin penalización: la gracia
-//     está en el «¡¿Tiburón?!», no en castigar.
+//
+// Los jugadores son nombres, no cuentas: aquí no juega el móvil de
+// nadie, juega la gente que está en el sofá. Por eso no hay sillas que
+// repartir como en el «¿Quién soy?», solo un móvil con el mando.
 //
 // Funciones puras con el azar y la hora inyectados, como los demás.
 // =====================================================================
 
-import { levanta, sienta, sitioDe } from './sillas'
 import type { Banda } from './bandas'
 
 export interface JugadorB {
   nombre: string
-  /** Qué cuenta se ha sentado aquí. `null`, nadie todavía. */
-  perfil: string | null
   puntos: number
 }
 
 export type FaseB = 'sonando' | 'resuelta' | 'fin'
 
+/**
+ * Quién lleva la partida: la cuenta, para que solo ese móvil reproduzca
+ * y apunte, y el nombre, para poder decirlo en las demás pantallas sin
+ * salir a buscar a nadie.
+ */
+export interface Mando {
+  perfil: string
+  nombre: string
+}
+
 export interface RondaB {
   banda: Banda
   /** Quién la sacó, por nombre. `null` si se acabó el tiempo. */
   acertante: string | null
-  /** Lo que ha dicho la gente y no era. Se ve en todas las pantallas. */
-  fallos: { nombre: string; dicho: string }[]
 }
 
 export interface PartidaB {
-  version: 1
+  version: 2
   /** Hora del envío. La mesa compartida la necesita para el desfase. */
   emitido: number
   jugadores: JugadorB[]
@@ -59,8 +66,8 @@ export interface PartidaB {
   /** Instante en que se acaba la cuenta atrás. `null` es reloj parado. */
   fin: number | null
   fase: FaseB
-  /** Qué cuenta hace de altavoz. Es la única que reproduce. */
-  altavoz: string | null
+  /** Quién lleva la partida: pone la música y apunta los aciertos. */
+  moderador: Mando | null
   historia: string[]
 }
 
@@ -68,7 +75,7 @@ export interface OpcionesB {
   nombres: string[]
   rondas: number
   segundos: number
-  altavoz: string | null
+  moderador: Mando | null
 }
 
 /** De dónde salen las películas. Inyectado para poder probar sin JSON. */
@@ -83,11 +90,11 @@ export function nuevaPartidaB(
   const banda = saca([], azar)
   if (!banda) return null
   return {
-    version: 1,
+    version: 2,
     emitido: ahora,
-    jugadores: o.nombres.map((nombre) => ({ nombre, perfil: null, puntos: 0 })),
+    jugadores: o.nombres.map((nombre) => ({ nombre, puntos: 0 })),
     usadas: [banda.id],
-    ronda: { banda, acertante: null, fallos: [] },
+    ronda: { banda, acertante: null },
     numero: 1,
     rondas: o.rondas,
     segundos: o.segundos,
@@ -95,78 +102,30 @@ export function nuevaPartidaB(
     // coge el móvil y le da al botón se iban diez segundos de ronda.
     fin: null,
     fase: 'sonando',
-    altavoz: o.altavoz,
+    moderador: o.moderador,
     historia: [],
   }
 }
 
-/** Quita acentos, signos y mayúsculas: se compara lo que suena. */
-function pelado(texto: string): string {
-  return texto
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9ñ ]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
-/** «el», «la», «los»… delante no cuentan: nadie escribe el artículo. */
-function sinArticulo(texto: string): string {
-  return texto.replace(/^(el|la|los|las|un|una|unos|unas|the|a) /, '')
-}
-
 /**
- * ¿Lo que ha escrito es la película?
+ * La ha sacado alguien: punto y a destapar la película. Quien lo dice
+ * es el móvil que lleva el mando, tocando el nombre del que ha gritado.
  *
- * Vale el título, valen los alias que lleva cada ficha —«Star Wars» por
- * «La guerra de las galaxias»— y vale un trozo largo con el que no se
- * confunda: «piratas» por «Piratas del Caribe». Y vale al revés, porque
- * medio mundo escribe «la de los piratas del caribe».
+ * Va por sitio en la lista y no por cuenta a propósito: el que grita
+ * puede no tener móvil en la mano, o puede no tener cuenta siquiera.
  */
-export function esLaPeli(texto: string, banda: Banda): boolean {
-  const dicho = sinArticulo(pelado(texto))
-  if (dicho.length < 2) return false
-  const nombres = [banda.peli, ...banda.alias].map((n) => sinArticulo(pelado(n)))
-  for (const real of nombres) {
-    if (dicho === real) return true
-    if (dicho.length >= 5 && real.includes(dicho)) return true
-    if (real.length >= 4 && dicho.includes(real)) return true
-  }
-  return false
-}
-
-const nombreDe = (p: PartidaB, perfil: string | null): string =>
-  p.jugadores.find((j) => j.perfil === perfil)?.nombre ?? 'Alguien'
-
-/**
- * Alguien se moja. Si acierta, punto y a la siguiente; si no, su
- * intento se queda escrito para que lo vea la mesa y puede repetir.
- *
- * Va por SILLA y no por cuenta a propósito: sin línea con el servidor
- * se juega con un solo móvil que va pasando, y ahí el punto hay que
- * poder dárselo a quien lo ha dicho en voz alta.
- */
-export function intentaB(p: PartidaB, indice: number, texto: string, ahora = Date.now()): PartidaB {
+export function aciertaB(p: PartidaB, indice: number, ahora = Date.now()): PartidaB {
   if (p.fase !== 'sonando') return p
-  const dicho = texto.trim()
-  if (!dicho) return p
-  const quien = p.jugadores[indice]?.nombre ?? 'Alguien'
-  if (!esLaPeli(dicho, p.ronda.banda)) {
-    return {
-      ...p,
-      emitido: ahora,
-      ronda: { ...p.ronda, fallos: [{ nombre: quien, dicho }, ...p.ronda.fallos].slice(0, 12) },
-    }
-  }
+  const quien = p.jugadores[indice]
+  if (!quien) return p
   return {
     ...p,
     emitido: ahora,
     jugadores: p.jugadores.map((j, i) => (i === indice ? { ...j, puntos: j.puntos + 1 } : j)),
-    ronda: { ...p.ronda, acertante: quien },
+    ronda: { ...p.ronda, acertante: quien.nombre },
     fin: null,
     fase: 'resuelta',
-    historia: [`${quien} acertó «${p.ronda.banda.peli}».`, ...p.historia],
+    historia: [`${quien.nombre} sacó «${p.ronda.banda.peli}».`, ...p.historia],
   }
 }
 
@@ -205,7 +164,7 @@ export function siguienteB(p: PartidaB, saca: SacaBanda, azar: () => number = Ma
     ...p,
     emitido: ahora,
     usadas: [...p.usadas, banda.id],
-    ronda: { banda, acertante: null, fallos: [] },
+    ronda: { banda, acertante: null },
     numero: p.numero + 1,
     fin: null,
     fase: 'sonando',
@@ -221,7 +180,7 @@ export function otraPartidaB(p: PartidaB, saca: SacaBanda, azar: () => number = 
     emitido: ahora,
     jugadores: p.jugadores.map((j) => ({ ...j, puntos: 0 })),
     usadas: [...p.usadas, banda.id],
-    ronda: { banda, acertante: null, fallos: [] },
+    ronda: { banda, acertante: null },
     numero: 1,
     fin: null,
     fase: 'sonando',
@@ -229,39 +188,20 @@ export function otraPartidaB(p: PartidaB, saca: SacaBanda, azar: () => number = 
   }
 }
 
-// --- Sillas y altavoz ------------------------------------------------
+// --- El mando ---------------------------------------------------------
 
-export const miSitioB = (p: PartidaB, perfil: string | null): number => sitioDe(p.jugadores, perfil)
-
-export function tomaSitioB(p: PartidaB, indice: number, perfil: string, ahora = Date.now()): PartidaB {
-  if (indice < 0 || indice >= p.jugadores.length) return p
+/**
+ * «Que suene aquí»: este móvil se lleva la música y, con ella, el
+ * mando. Si el que moderaba se ha ido a por hielo con el teléfono en el
+ * bolsillo, cualquiera puede recogerlo sin montar una partida nueva.
+ */
+export function tomaElMandoB(p: PartidaB, perfil: string, nombre: string, ahora = Date.now()): PartidaB {
+  if (p.moderador?.perfil === perfil) return p
   return {
     ...p,
     emitido: ahora,
-    jugadores: sienta(p.jugadores, indice, perfil),
-    // El primero que se sienta se queda de altavoz si no había ninguno.
-    altavoz: p.altavoz ?? perfil,
-  }
-}
-
-export function dejaElSitioB(p: PartidaB, perfil: string, ahora = Date.now()): PartidaB {
-  if (!p.jugadores.some((j) => j.perfil === perfil)) return p
-  return {
-    ...p,
-    emitido: ahora,
-    jugadores: levanta(p.jugadores, perfil),
-    altavoz: p.altavoz === perfil ? null : p.altavoz,
-  }
-}
-
-/** «Que suene aquí»: este móvil se pone al lado del altavoz. */
-export function ponAltavoz(p: PartidaB, perfil: string, ahora = Date.now()): PartidaB {
-  if (p.altavoz === perfil) return p
-  return {
-    ...p,
-    emitido: ahora,
-    altavoz: perfil,
-    historia: [`${nombreDe(p, perfil)} pone la música.`, ...p.historia],
+    moderador: { perfil, nombre },
+    historia: [`${nombre} pone la música.`, ...p.historia],
   }
 }
 
@@ -295,7 +235,7 @@ export function leePartidaB(): PartidaB | null {
     const crudo = localStorage.getItem(LLAVE)
     if (!crudo) return null
     const p = JSON.parse(crudo) as PartidaB
-    return p.version === 1 ? p : null
+    return p.version === 2 ? p : null
   } catch {
     return null
   }

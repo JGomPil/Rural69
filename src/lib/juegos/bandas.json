@@ -396,6 +396,17 @@
   "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/30/88/44/308844c4-a813-aa22-1da2-c5cd7657adad/mzaf_11412573995450483451.plus.aac.p.m4a"
  },
  {
+  "id": 6817788703,
+  "peli": "2001: Una odisea del espacio",
+  "alias": [
+   "2001"
+  ],
+  "anyo": 1968,
+  "tema": "Also sprach Zarathustra, Op. 30, TrV 176: I. Einleitung",
+  "autor": "Serge Koussevitzky & Boston Symphony Orchestra",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e8/20/4a/e8204af8-d991-ca37-d152-76da75a155e9/mzaf_2088623876847903699.plus.aac.p.m4a"
+ },
+ {
   "id": 953539278,
   "peli": "La pantera rosa",
   "alias": [
@@ -525,6 +536,24 @@
   "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/62/54/5e/62545ee7-29dc-5b25-345a-976d2be8ad6e/mzaf_13593239243179866678.plus.aac.p.m4a"
  },
  {
+  "id": 1440863663,
+  "peli": "La La Land",
+  "alias": [],
+  "anyo": 2016,
+  "tema": "Another Day of Sun",
+  "autor": "La La Land Cast",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8e/12/47/8e12477a-25e0-25dc-ff4c-44497def0d4c/mzaf_11995182933802224875.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440892107,
+  "peli": "Moulin Rouge",
+  "alias": [],
+  "anyo": 2001,
+  "tema": "Lady Marmalade",
+  "autor": "Christina Aguilera, Lil' Kim, Mýa & pink",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5c/1e/3e/5c1e3e93-f8a8-a7f3-b5b7-ddee312407e4/mzaf_12001892607201862453.plus.aac.p.m4a"
+ },
+ {
   "id": 1440768339,
   "peli": "Mamma Mia",
   "alias": [],
@@ -532,6 +561,26 @@
   "tema": "Mamma Mia",
   "autor": "Meryl Streep",
   "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/22/9b/c4/229bc444-8a11-5cd4-e88e-329606c66e64/mzaf_7300248637054509010.plus.aac.p.m4a"
+ },
+ {
+  "id": 6781027645,
+  "peli": "Bohemian Rhapsody",
+  "alias": [],
+  "anyo": 2018,
+  "tema": "Bohemian Rhapsody",
+  "autor": "Queen",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/44/10/de/4410de9b-4b10-c763-baf8-c4911c032248/mzaf_3700911105004619705.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440666290,
+  "peli": "Frozen",
+  "alias": [
+   "El reino del hielo"
+  ],
+  "anyo": 2013,
+  "tema": "¡Sueltalo!",
+  "autor": "Gisela",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/42/55/cd/4255cd38-bdab-9958-7f4e-916bc323bc6f/mzaf_519884151328066517.plus.aac.p.m4a"
  },
  {
   "id": 1440810229,
@@ -583,6 +632,17 @@
   "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8b/2c/42/8b2c42eb-a194-0327-eeb4-caaaa14ee61b/mzaf_13415710220894021381.plus.aac.p.m4a"
  },
  {
+  "id": 1440638151,
+  "peli": "Vaiana",
+  "alias": [
+   "Moana"
+  ],
+  "anyo": 2016,
+  "tema": "How Far I'll Go",
+  "autor": "Auli'i Cravalho",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b4/0e/bf/b40ebf34-bea6-492c-e7ab-b6796bde8f2f/mzaf_13889667210464465780.plus.aac.p.m4a"
+ },
+ {
   "id": 1440668814,
   "peli": "Coco",
   "alias": [],
@@ -590,5 +650,540 @@
   "tema": "Recuérdame",
   "autor": "Carlos Rivera",
   "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e7/33/99/e73399e0-dd5d-6bb7-f8d5-ebe88e9d1820/mzaf_10333963352583074573.plus.aac.p.m4a"
+ },
+ {
+  "id": 1607034574,
+  "peli": "Encanto",
+  "alias": [],
+  "anyo": 2021,
+  "tema": "No Se Habla de Bruno",
+  "autor": "Faty Crespo & Ricardo Padua",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/8f/6d/57/8f6d574f-3870-f0ba-51f2-3cc1e18ed18a/mzaf_18023905636231492649.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440661297,
+  "peli": "La sirenita",
+  "alias": [],
+  "anyo": 1989,
+  "tema": "Under the Sea",
+  "autor": "Samuel E. Wright",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6d/56/f1/6d56f14e-6eb9-bccb-f35f-cc095198b214/mzaf_12691324882737178120.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440802006,
+  "peli": "La bella y la bestia",
+  "alias": [],
+  "anyo": 1991,
+  "tema": "Beauty and the Beast (Remastered 2018)",
+  "autor": "Angela Lansbury",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c1/9b/88/c19b8828-ea9c-6240-1748-207af8eff244/mzaf_5418451915872353377.plus.aac.p.m4a"
+ },
+ {
+  "id": 1460037029,
+  "peli": "Aladdín",
+  "alias": [
+   "Aladin"
+  ],
+  "anyo": 1992,
+  "tema": "Un Mundo Ideal (Tema de Aladdín)",
+  "autor": "Enrique del Pozo & Michelle",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ba/0b/bf/ba0bbf90-c73c-40a6-0b87-13764da7ba13/mzaf_9944599861952174275.plus.aac.p.m4a"
+ },
+ {
+  "id": 1467938146,
+  "peli": "El libro de la selva",
+  "alias": [
+   "The Jungle Book"
+  ],
+  "anyo": 1967,
+  "tema": "The Bare Necessities",
+  "autor": "Phil Harris & Bruce Reitherman",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bf/05/b2/bf05b212-7c57-f08d-19ae-5f6d9734aa79/mzaf_2140314652471816418.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440662805,
+  "peli": "Mulán",
+  "alias": [
+   "Mulan"
+  ],
+  "anyo": 1998,
+  "tema": "I'll Make a Man Out of You",
+  "autor": "Donny Osmond",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0f/36/68/0f36686c-5e20-6fa3-86d8-0aa19a1a8025/mzaf_12152013571508836328.plus.aac.p.m4a"
+ },
+ {
+  "id": 724189570,
+  "peli": "Pocahontas",
+  "alias": [],
+  "anyo": 1995,
+  "tema": "Colors of the Wind",
+  "autor": "Judy Kuhn",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/dc/68/ed/dc68edea-ab4e-f372-3883-96e8701a2406/mzaf_1239567039462513693.plus.aac.p.m4a"
+ },
+ {
+  "id": 1437333658,
+  "peli": "Tarzán",
+  "alias": [],
+  "anyo": 1999,
+  "tema": "Two Worlds",
+  "autor": "Phil Collins",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/91/b7/40/91b7401c-5888-bed2-3a30-b81ecb00ebb4/mzaf_7689147845756406890.plus.aac.p.m4a"
+ },
+ {
+  "id": 712408739,
+  "peli": "Ratatouille",
+  "alias": [],
+  "anyo": 2007,
+  "tema": "Le festin",
+  "autor": "Camille",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1a/43/8e/1a438e7c-d03a-0440-5f88-d2adbd86250b/mzaf_13616561596727761426.plus.aac.p.m4a"
+ },
+ {
+  "id": 1445606413,
+  "peli": "Wall-E",
+  "alias": [
+   "Wall E"
+  ],
+  "anyo": 2008,
+  "tema": "Define Dancing",
+  "autor": "Thomas Newman",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cf/82/16/cf821635-fa94-7f0c-a182-c246e53fcada/mzaf_9821078878571299602.plus.aac.p.m4a"
+ },
+ {
+  "id": 1444209180,
+  "peli": "Monstruos S.A.",
+  "alias": [
+   "Monstruos SA"
+  ],
+  "anyo": 2001,
+  "tema": "If I Didn't Have You",
+  "autor": "Billy Crystal & John Goodman",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ef/56/b2/ef56b21d-6571-a2d4-42ce-ad1f70e46a28/mzaf_2596331799958604761.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440667482,
+  "peli": "Cars",
+  "alias": [],
+  "anyo": 2006,
+  "tema": "Life Is a Highway",
+  "autor": "Rascal Flatts",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c1/4f/24/c14f24fb-b08a-6f30-ae9d-6e9ee6df367c/mzaf_8556579710511332330.plus.aac.p.m4a"
+ },
+ {
+  "id": 1450669522,
+  "peli": "Kung Fu Panda",
+  "alias": [],
+  "anyo": 2008,
+  "tema": "Kung Fu Fighting (feat. Jack Black)",
+  "autor": "Cee-Lo",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/21/c4/ba/21c4bac1-dba4-0913-e2ac-7d4d500594d3/mzaf_13644763843029391702.plus.aac.p.m4a"
+ },
+ {
+  "id": 1451766573,
+  "peli": "Madagascar",
+  "alias": [],
+  "anyo": 2005,
+  "tema": "I Like to Move It",
+  "autor": "will.i.am",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8e/4e/90/8e4e904a-20c5-cef2-b541-c36238b01fe5/mzaf_8178599408006355193.plus.aac.p.m4a"
+ },
+ {
+  "id": 863835363,
+  "peli": "Gru, mi villano favorito",
+  "alias": [
+   "Gru",
+   "Los minions"
+  ],
+  "anyo": 2013,
+  "tema": "Happy (From \"Despicable Me 2\")",
+  "autor": "Pharrell Williams",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ed/a0/19/eda019cf-2794-66d1-208d-2e2e74c26c3d/mzaf_16469762943852039623.plus.aac.p.m4a"
+ },
+ {
+  "id": 264542090,
+  "peli": "Spider-Man",
+  "alias": [
+   "Spiderman"
+  ],
+  "anyo": 2002,
+  "tema": "Main Title",
+  "autor": "Danny Elfman",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f1/76/9c/f1769c37-d087-b885-2723-ff86c358f43c/mzaf_4345584946932881049.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440790067,
+  "peli": "Eduardo Manostijeras",
+  "alias": [],
+  "anyo": 1990,
+  "tema": "Ice Dance",
+  "autor": "Danny Elfman",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d7/8f/83/d78f83ca-8ed3-4bbd-531a-37f71ca5b997/mzaf_310250659656718187.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440662847,
+  "peli": "Pesadilla antes de Navidad",
+  "alias": [],
+  "anyo": 1993,
+  "tema": "This Is Halloween",
+  "autor": "Danny Elfman",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/10/32/35/103235a0-4c6a-4eb2-acb3-f87086143048/mzaf_13228789195537957728.plus.aac.p.m4a"
+ },
+ {
+  "id": 284530521,
+  "peli": "El caballero oscuro",
+  "alias": [
+   "The Dark Knight"
+  ],
+  "anyo": 2008,
+  "tema": "Why So Serious?",
+  "autor": "James Newton Howard & Hans Zimmer",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/97/98/5d/97985da8-5a50-bf01-ad64-3387d26ef2f7/mzaf_1097861028012296191.plus.aac.p.m4a"
+ },
+ {
+  "id": 380350246,
+  "peli": "Origen",
+  "alias": [
+   "Inception"
+  ],
+  "anyo": 2010,
+  "tema": "Time",
+  "autor": "Hans Zimmer",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e0/1d/a4/e01da4a2-a75f-7ebf-9971-3d49e17efc57/mzaf_10500078769097048384.plus.aac.p.m4a"
+ },
+ {
+  "id": 1580377539,
+  "peli": "Dune",
+  "alias": [],
+  "anyo": 2021,
+  "tema": "Paul's Dream",
+  "autor": "Hans Zimmer",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9f/5e/3d/9f5e3da8-e698-31b3-c4e4-5964df457951/mzaf_11074540054311181787.plus.aac.p.m4a"
+ },
+ {
+  "id": 1445882015,
+  "peli": "Piratas del Caribe 2",
+  "alias": [
+   "El cofre del hombre muerto"
+  ],
+  "anyo": 2006,
+  "tema": "Jack Sparrow",
+  "autor": "Hans Zimmer",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d5/5d/9f/d55d9f9d-f757-8bc7-7884-de31d0e10130/mzaf_6341470117852937710.plus.aac.p.m4a"
+ },
+ {
+  "id": 1436091877,
+  "peli": "El gran showman",
+  "alias": [
+   "The Greatest Showman"
+  ],
+  "anyo": 2017,
+  "tema": "This Is Me",
+  "autor": "Keala Settle & The Greatest Showman Ensemble",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/63/46/5b/63465b42-35a9-8bb4-6e53-6b7cc90f2756/mzaf_15016442944298305141.plus.aac.p.m4a"
+ },
+ {
+  "id": 1689238922,
+  "peli": "Barbie",
+  "alias": [],
+  "anyo": 2023,
+  "tema": "Dance The Night",
+  "autor": "Dua Lipa",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9d/9f/56/9d9f566f-abf6-5f10-bcdb-09e14dcace42/mzaf_10277018989080903908.plus.aac.p.m4a"
+ },
+ {
+  "id": 1697599275,
+  "peli": "Oppenheimer",
+  "alias": [],
+  "anyo": 2023,
+  "tema": "Can You Hear the Music",
+  "autor": "Ludwig Göransson",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0d/b0/b8/0db0b839-4fbc-2bb6-e280-3c9dc1302cf2/mzaf_12466660795519790459.plus.aac.p.m4a"
+ },
+ {
+  "id": 342383917,
+  "peli": "Avatar",
+  "alias": [],
+  "anyo": 2009,
+  "tema": "I See You (Theme from Avatar)",
+  "autor": "Leona Lewis",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/70/d7/c7/70d7c70d-f539-e517-6bf0-cca75a2724bc/mzaf_10680690267321627775.plus.aac.p.m4a"
+ },
+ {
+  "id": 1445870931,
+  "peli": "Los juegos del hambre",
+  "alias": [
+   "Hunger Games"
+  ],
+  "anyo": 2012,
+  "tema": "Safe & Sound (from \"the Hunger Games\" Soundtrack) [feat. The Civil Wars]",
+  "autor": "Taylor Swift",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/da/72/40/da72409d-e99b-b8ac-ea9a-98c3d5973337/mzaf_5743948582539645147.plus.aac.p.m4a"
+ },
+ {
+  "id": 690456025,
+  "peli": "Guardianes de la galaxia",
+  "alias": [],
+  "anyo": 2014,
+  "tema": "Hooked On a Feeling",
+  "autor": "Blue Swede & Björn Skifs",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/13/2e/5c/132e5c06-0153-744c-4fce-7347b5023dbe/mzaf_16236958159127056163.plus.aac.p.m4a"
+ },
+ {
+  "id": 921016974,
+  "peli": "El silencio de los corderos",
+  "alias": [],
+  "anyo": 1991,
+  "tema": "Main Title",
+  "autor": "Howard Shore",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5c/10/d9/5c10d93a-232b-c8fb-0138-76190ad2de6b/mzaf_8798308775487279059.plus.aac.p.m4a"
+ },
+ {
+  "id": 1443907750,
+  "peli": "Sexto sentido",
+  "alias": [
+   "El sexto sentido"
+  ],
+  "anyo": 1999,
+  "tema": "Malcolm Is Dead",
+  "autor": "James Newton Howard & Pete Anthony",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7d/ac/ed/7daced5b-c5ea-3672-24f1-3f423d006966/mzaf_1397596028873284099.plus.aac.p.m4a"
+ },
+ {
+  "id": 1375729448,
+  "peli": "Náufrago",
+  "alias": [
+   "Cast Away"
+  ],
+  "anyo": 2000,
+  "tema": "End Credits",
+  "autor": "Alan Silvestri",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fc/cb/44/fccb44d7-6c2b-68fc-cccc-24975e4783b1/mzaf_9578952133318748464.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440773933,
+  "peli": "Braveheart",
+  "alias": [],
+  "anyo": 1995,
+  "tema": "For the Love of a Princess",
+  "autor": "London Symphony Orchestra & James Horner",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d1/3b/38/d13b3816-26d7-ea11-04e0-9f4d4f95060d/mzaf_7932412271688888140.plus.aac.p.m4a"
+ },
+ {
+  "id": 179905650,
+  "peli": "Memorias de África",
+  "alias": [
+   "Out of Africa"
+  ],
+  "anyo": 1985,
+  "tema": "Main Title",
+  "autor": "John Barry",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/45/ba/4f/45ba4f13-a01c-785c-fb1d-a14183a7336c/mzaf_9667502116198092056.plus.aac.p.m4a"
+ },
+ {
+  "id": 322943245,
+  "peli": "Bailando con lobos",
+  "alias": [],
+  "anyo": 1990,
+  "tema": "The John Dunbar Theme",
+  "autor": "John Barry",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/63/0a/a6/630aa669-0e35-ebd5-8fe8-8605663374c2/mzaf_431799218776581514.plus.aac.p.m4a"
+ },
+ {
+  "id": 1443912923,
+  "peli": "Ghost",
+  "alias": [
+   "Más allá del amor"
+  ],
+  "anyo": 1990,
+  "tema": "Unchained Melody",
+  "autor": "The Righteous Brothers",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/31/aa/f1/31aaf12d-a78d-dfe0-b6dd-2b39b3952510/mzaf_5636173411683808674.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440847524,
+  "peli": "Reservoir Dogs",
+  "alias": [],
+  "anyo": 1992,
+  "tema": "Stuck in the Middle with You",
+  "autor": "Stealers Wheel",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/28/28/27/282827d0-72ac-6f9a-b010-25e93ee6001e/mzaf_1595593082487644279.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440882903,
+  "peli": "Trainspotting",
+  "alias": [],
+  "anyo": 1996,
+  "tema": "Lust For Life",
+  "autor": "Iggy Pop",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f9/2d/6f/f92d6f27-1d12-0f58-20dd-be6e85f2bfd7/mzaf_7936117502874238455.plus.aac.p.m4a"
+ },
+ {
+  "id": 207445080,
+  "peli": "Rocky III",
+  "alias": [
+   "Rocky 3"
+  ],
+  "anyo": 1982,
+  "tema": "Eye of the Tiger",
+  "autor": "Survivor",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/88/98/17/889817e8-2454-4696-dd3e-8bdef3f5ed7e/mzaf_18139591310479474983.plus.aac.p.m4a"
+ },
+ {
+  "id": 299116865,
+  "peli": "Los Goonies",
+  "alias": [],
+  "anyo": 1985,
+  "tema": "The Goonies 'R' Good Enough",
+  "autor": "Cyndi Lauper",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d7/99/6f/d7996ff3-ff51-e3f5-90e3-965ee46f6943/mzaf_7248693301716785843.plus.aac.p.m4a"
+ },
+ {
+  "id": 309226521,
+  "peli": "Dumb y Dumber",
+  "alias": [
+   "Dos tontos muy tontos"
+  ],
+  "anyo": 1994,
+  "tema": "Mmm Mmm Mmm Mmm",
+  "autor": "Crash Test Dummies",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/91/05/9d/91059dac-d46f-a14a-1608-868e9c1310f5/mzaf_8831457129779330483.plus.aac.p.m4a"
+ },
+ {
+  "id": 953564154,
+  "peli": "El guateque",
+  "alias": [
+   "The Party"
+  ],
+  "anyo": 1968,
+  "tema": "Nothing to Lose",
+  "autor": "Henry Mancini",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/47/85/9a/47859af0-9b04-f182-83ad-41daace3f519/mzaf_6370809550742455940.plus.aac.p.m4a"
+ },
+ {
+  "id": 1442577520,
+  "peli": "El exorcista",
+  "alias": [],
+  "anyo": 1973,
+  "tema": "Tubular Bells",
+  "autor": "Mike Oldfield",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8a/bb/09/8abb0900-05c5-d004-5094-91d25b2fd37e/mzaf_5581750472043778641.plus.aac.p.m4a"
+ },
+ {
+  "id": 207444127,
+  "peli": "Rocky IV",
+  "alias": [
+   "Rocky 4"
+  ],
+  "anyo": 1985,
+  "tema": "Burning Heart",
+  "autor": "Survivor",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f3/6e/4e/f36e4ec5-006e-4bc7-5fe3-9fad48aadd85/mzaf_14953140060410922437.plus.aac.p.m4a"
+ },
+ {
+  "id": 303156673,
+  "peli": "Space Jam",
+  "alias": [],
+  "anyo": 1996,
+  "tema": "I Believe I Can Fly",
+  "autor": "R. Kelly",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/87/81/26/878126ab-5d62-4e01-a11b-c6915fb2c86c/mzaf_9581716423463693804.plus.aac.p.m4a"
+ },
+ {
+  "id": 1653090535,
+  "peli": "Lo imposible",
+  "alias": [],
+  "anyo": 2012,
+  "tema": "The Best Holiday Season Ever",
+  "autor": "Fernando Velázquez",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/c4/50/f3/c450f3b8-b7ad-87a9-df47-9012c54b4eba/mzaf_2547063289285425484.plus.aac.p.m4a"
+ },
+ {
+  "id": 1498124448,
+  "peli": "Mar adentro",
+  "alias": [],
+  "anyo": 2004,
+  "tema": "Por Qué Morir",
+  "autor": "Alejandro Amenábar",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview113/v4/39/a6/a0/39a6a09b-5be5-c5b1-b2ae-0c486c816b3c/mzaf_4093188081257934669.plus.aac.p.m4a"
+ },
+ {
+  "id": 780452343,
+  "peli": "Volver",
+  "alias": [],
+  "anyo": 2006,
+  "tema": "Volver",
+  "autor": "Estrella Morente",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/74/4e/88/744e8805-cd05-917c-d746-4f4a4cb5d73e/mzaf_10369588181722848343.plus.aac.p.m4a"
+ },
+ {
+  "id": 996703868,
+  "peli": "Jurassic World",
+  "alias": [],
+  "anyo": 2015,
+  "tema": "Welcome to Jurassic World",
+  "autor": "Michael Giacchino",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/77/52/0a/77520ae3-ceb1-941a-fd01-abff67eb61b6/mzaf_6558404206009662700.plus.aac.p.m4a"
+ },
+ {
+  "id": 1444174467,
+  "peli": "Rey Arturo",
+  "alias": [
+   "El rey Arturo"
+  ],
+  "anyo": 2004,
+  "tema": "Woad to Ruin",
+  "autor": "Hans Zimmer",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d8/0e/4e/d80e4e0e-2783-ab33-801d-c1b858e5dd46/mzaf_1737385520940172193.plus.aac.p.m4a"
+ },
+ {
+  "id": 1443459047,
+  "peli": "Múnich 72",
+  "alias": [
+   "Munich"
+  ],
+  "anyo": 2005,
+  "tema": "A Prayer for Peace",
+  "autor": "John Williams",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/a9/56/d4/a956d4bf-0f76-4324-a3c9-d5e47e1ec878/mzaf_7630410887507694443.plus.aac.p.m4a"
+ },
+ {
+  "id": 206733742,
+  "peli": "La máscara",
+  "alias": [
+   "The Mask"
+  ],
+  "anyo": 1994,
+  "tema": "Cuban Pete (C & C Pop Radio Edit)",
+  "autor": "Jim Carrey",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5a/07/c8/5a07c8dc-1b39-b7e6-d85a-c28acff9dcf8/mzaf_7760691004891116704.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440913251,
+  "peli": "Grease 2",
+  "alias": [],
+  "anyo": 1982,
+  "tema": "Cool Rider",
+  "autor": "Michelle Pfeiffer",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2c/ed/1a/2ced1aeb-c2e3-bd32-2e35-0a4707973493/mzaf_3382470684514689593.plus.aac.p.m4a"
+ },
+ {
+  "id": 331545686,
+  "peli": "Cadena perpetua",
+  "alias": [
+   "The Shawshank Redemption"
+  ],
+  "anyo": 1994,
+  "tema": "Shawshank Redemption",
+  "autor": "Thomas Newman",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3d/e3/ff/3de3ffb9-dc09-a446-45b7-caed376548d3/mzaf_2410324166119979615.plus.aac.p.m4a"
+ },
+ {
+  "id": 1437293491,
+  "peli": "American Beauty",
+  "alias": [],
+  "anyo": 1999,
+  "tema": "Any Other Name",
+  "autor": "Thomas Newman",
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/54/05/8f/54058f81-cc14-3781-820c-6c9d0395d6ca/mzaf_10122493023170300110.plus.aac.p.m4a"
  }
 ]

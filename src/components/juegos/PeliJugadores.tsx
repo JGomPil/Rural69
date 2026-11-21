@@ -18,7 +18,7 @@ export function PeliJugadores({
   gente: Member[]
   /** Cuántas películas hay en el repertorio, para decirlo en pantalla. */
   cuantas: number
-  onEmpezar: (o: Omit<OpcionesB, 'altavoz'>) => void
+  onEmpezar: (o: Omit<OpcionesB, 'moderador'>) => void
 }) {
   const [nombres, setNombres] = useState<string[]>([])
   const [suelto, setSuelto] = useState('')
@@ -38,9 +38,9 @@ export function PeliJugadores({
           <Music size={17} className="text-bosque-500" /> Cómo va esto
         </h2>
         <p className="text-sm text-tenue">
-          Suenan treinta segundos de una banda sonora y hay que escribir de qué película es. La
-          música sale por <strong>un solo móvil</strong> —el que esté al lado del altavoz—, y los
-          demás solo escriben. Vale el título a medias: «piratas» cuenta.
+          Suenan treinta segundos de una banda sonora y se grita de qué película es. La música sale
+          por <strong>un solo móvil</strong> —el que esté al lado del altavoz—, y ese mismo apunta
+          quién la ha sacado. Nadie escribe nada.
         </p>
       </Tarjeta>
 
@@ -48,6 +48,9 @@ export function PeliJugadores({
         <h2 className="flex items-center gap-2 text-base text-bosque-800">
           <UserRound size={17} className="text-bosque-500" /> Quién juega
         </h2>
+        <p className="text-sm text-suave">
+          Todos los que estén en el sofá, tengan móvil o no: aquí solo hace falta uno.
+        </p>
 
         {nombres.length > 0 && (
           <ul className="flex flex-wrap gap-2">

@@ -27,8 +27,9 @@ import { dirname, join } from 'node:path'
 const AQUI = dirname(fileURLToPath(import.meta.url))
 const DESTINO = join(AQUI, '..', 'src', 'lib', 'juegos', 'bandas.json')
 
-// peli: cómo se llama en España · alias: lo que también vale al escribir
+// peli: cómo se llama en España · alias: cómo la llama el resto del mundo
 // tema/autor: qué buscar en la tienda · anyo: para el remate de la ronda
+// busca: el artista con el que preguntar, cuando no es quien firma el tema
 const PELICULAS = [
   { peli: 'La guerra de las galaxias', alias: ['Star Wars'], anyo: 1977, tema: 'Main Title', autor: 'John Williams' },
   { peli: 'Indiana Jones', alias: ['En busca del arca perdida'], anyo: 1981, tema: 'Raiders March', autor: 'John Williams' },
@@ -69,7 +70,9 @@ const PELICULAS = [
   { peli: 'Matrix', alias: [], anyo: 1999, tema: 'Clubbed to Death', autor: 'Rob Dougan' },
   { peli: 'Blade Runner', alias: [], anyo: 1982, tema: 'Main Titles', autor: 'Vangelis' },
   { peli: 'Carros de fuego', alias: ['Chariots of Fire'], anyo: 1981, tema: 'Chariots of Fire', autor: 'Vangelis' },
-  { peli: '2001: Una odisea del espacio', alias: ['2001'], anyo: 1968, tema: 'Also sprach Zarathustra', autor: 'Richard Strauss' },
+  // De esta no hay banda sonora: hay grabaciones de Strauss, firmadas por la
+  // orquesta, y el amanecer es el primer movimiento. De ahí el `busca`.
+  { peli: '2001: Una odisea del espacio', alias: ['2001'], anyo: 1968, tema: 'Also sprach Zarathustra, Op. 30, TrV 176: I. Einleitung', autor: 'Richard Strauss', busca: 'Boston Symphony Orchestra' },
   { peli: 'La pantera rosa', alias: ['Pink Panther'], anyo: 1963, tema: 'The Pink Panther Theme', autor: 'Henry Mancini' },
   { peli: 'Desayuno con diamantes', alias: [], anyo: 1961, tema: 'Moon River', autor: 'Henry Mancini' },
   { peli: 'Cantando bajo la lluvia', alias: ['Singin in the Rain'], anyo: 1952, tema: "Singin' in the Rain", autor: 'Gene Kelly' },
@@ -99,9 +102,11 @@ const PELICULAS = [
   { peli: 'La sirenita', alias: [], anyo: 1989, tema: 'Bajo el mar', autor: 'Samuel E. Wright' },
   { peli: 'La bella y la bestia', alias: [], anyo: 1991, tema: 'Bella y Bestia son', autor: 'Angela Lansbury' },
   { peli: 'Aladdín', alias: ['Aladin'], anyo: 1992, tema: 'Un mundo ideal', autor: 'Michelle Kuo' },
-  { peli: 'El libro de la selva', alias: [], anyo: 1967, tema: 'Busca lo más vital', autor: 'Phil Harris' },
-  { peli: 'Mulán', alias: [], anyo: 1998, tema: 'Hombres de acción', autor: 'Donny Osmond' },
-  { peli: 'Pocahontas', alias: [], anyo: 1995, tema: 'Colores en el viento', autor: 'Judy Kuhn' },
+  // Los clásicos de Disney están en la tienda en inglés: pedirlos por el
+  // título del doblaje no devuelve nada.
+  { peli: 'El libro de la selva', alias: ['The Jungle Book'], anyo: 1967, tema: 'The Bare Necessities', autor: 'Phil Harris' },
+  { peli: 'Mulán', alias: ['Mulan'], anyo: 1998, tema: "I'll Make a Man Out of You", autor: 'Donny Osmond' },
+  { peli: 'Pocahontas', alias: [], anyo: 1995, tema: 'Colors of the Wind', autor: 'Judy Kuhn' },
   { peli: 'Tarzán', alias: [], anyo: 1999, tema: 'Two Worlds', autor: 'Phil Collins' },
   { peli: 'Ratatouille', alias: [], anyo: 2007, tema: 'Le Festin', autor: 'Camille' },
   { peli: 'Wall-E', alias: ['Wall E'], anyo: 2008, tema: 'Define Dancing', autor: 'Thomas Newman' },
@@ -111,14 +116,15 @@ const PELICULAS = [
   { peli: 'Madagascar', alias: [], anyo: 2005, tema: 'I Like to Move It', autor: 'Sacha Baron Cohen' },
   { peli: 'Gru, mi villano favorito', alias: ['Gru', 'Los minions'], anyo: 2013, tema: 'Happy', autor: 'Pharrell Williams' },
   { peli: 'Spider-Man', alias: ['Spiderman'], anyo: 2002, tema: 'Main Title', autor: 'Danny Elfman' },
-  { peli: 'Batman', alias: [], anyo: 1989, tema: 'The Batman Theme', autor: 'Danny Elfman' },
+  // Del Batman del 89 la tienda solo tiene versiones de orquesta, así que
+  // se queda fuera: el juego promete el tema, no un tributo.
   { peli: 'Eduardo Manostijeras', alias: [], anyo: 1990, tema: 'Ice Dance', autor: 'Danny Elfman' },
   { peli: 'Pesadilla antes de Navidad', alias: [], anyo: 1993, tema: "This Is Halloween", autor: 'Danny Elfman' },
   { peli: 'El caballero oscuro', alias: ['The Dark Knight'], anyo: 2008, tema: "Why So Serious?", autor: 'Hans Zimmer' },
   { peli: 'Origen', alias: ['Inception'], anyo: 2010, tema: 'Time', autor: 'Hans Zimmer' },
   { peli: 'Dune', alias: [], anyo: 2021, tema: 'Paul’s Dream', autor: 'Hans Zimmer' },
   { peli: 'Piratas del Caribe 2', alias: ['El cofre del hombre muerto'], anyo: 2006, tema: 'Jack Sparrow', autor: 'Hans Zimmer' },
-  { peli: 'El rey del circo', alias: ['El gran showman', 'The Greatest Showman'], anyo: 2017, tema: 'This Is Me', autor: 'Keala Settle' },
+  { peli: 'El gran showman', alias: ['The Greatest Showman'], anyo: 2017, tema: 'This Is Me', autor: 'Keala Settle' },
   { peli: 'Barbie', alias: [], anyo: 2023, tema: 'Dance the Night', autor: 'Dua Lipa' },
   { peli: 'Oppenheimer', alias: [], anyo: 2023, tema: 'Can You Hear the Music', autor: 'Ludwig Göransson' },
   { peli: 'Avatar', alias: [], anyo: 2009, tema: 'I See You', autor: 'Leona Lewis' },
@@ -135,14 +141,14 @@ const PELICULAS = [
   { peli: 'Trainspotting', alias: [], anyo: 1996, tema: 'Lust for Life', autor: 'Iggy Pop' },
   { peli: 'Rocky III', alias: ['Rocky 3'], anyo: 1982, tema: 'Eye of the Tiger', autor: 'Survivor' },
   { peli: 'Los Goonies', alias: [], anyo: 1985, tema: 'The Goonies R Good Enough', autor: 'Cyndi Lauper' },
-  { peli: 'Dumb y Dumber', alias: [], anyo: 1994, tema: 'The Rembrandts', autor: 'The Rembrandts' },
+  { peli: 'Dumb y Dumber', alias: ['Dos tontos muy tontos'], anyo: 1994, tema: 'Mmm Mmm Mmm Mmm', autor: 'Crash Test Dummies' },
   { peli: 'El guateque', alias: ['The Party'], anyo: 1968, tema: 'Nothing to Lose', autor: 'Henry Mancini' },
   { peli: 'El exorcista', alias: [], anyo: 1973, tema: 'Tubular Bells', autor: 'Mike Oldfield' },
   { peli: 'Rocky IV', alias: ['Rocky 4'], anyo: 1985, tema: "Burning Heart", autor: 'Survivor' },
   { peli: 'Space Jam', alias: [], anyo: 1996, tema: 'I Believe I Can Fly', autor: 'R. Kelly' },
   { peli: 'Lo imposible', alias: [], anyo: 2012, tema: 'Lo imposible', autor: 'Fernando Velázquez' },
-  { peli: 'El laberinto del fauno', alias: [], anyo: 2006, tema: 'Long, Long Time Ago', autor: 'Javier Navarrete' },
-  { peli: 'Los otros', alias: [], anyo: 2001, tema: 'The Others', autor: 'Alejandro Amenábar' },
+  // «El laberinto del fauno» y «Los otros» se quedan fuera: de la primera la
+  // tienda solo tiene versiones a piano y flauta, y de la segunda nada.
   { peli: 'Mar adentro', alias: [], anyo: 2004, tema: 'Mar adentro', autor: 'Alejandro Amenábar' },
   { peli: 'Volver', alias: [], anyo: 2006, tema: 'Volver', autor: 'Estrella Morente' },
   { peli: 'Jurassic World', alias: [], anyo: 2015, tema: 'Welcome to Jurassic World', autor: 'Michael Giacchino' },
@@ -150,7 +156,8 @@ const PELICULAS = [
   { peli: 'Múnich 72', alias: ['Munich'], anyo: 2005, tema: 'A Prayer for Peace', autor: 'John Williams' },
   { peli: 'La máscara', alias: ['The Mask'], anyo: 1994, tema: 'Cuban Pete', autor: 'Jim Carrey' },
   { peli: 'Grease 2', alias: [], anyo: 1982, tema: 'Cool Rider', autor: 'Michelle Pfeiffer' },
-  { peli: 'Sister Act', alias: ['Una monja de cuidado'], anyo: 1992, tema: 'I Will Follow Him', autor: 'Whoopi Goldberg' },
+  // «Sister Act» tampoco: de «I Will Follow Him» hay el original de los 60 y
+  // la grabación del musical, pero no lo que se canta en la película.
   { peli: 'Cadena perpetua', alias: ['The Shawshank Redemption'], anyo: 1994, tema: 'Shawshank Redemption', autor: 'Thomas Newman' },
   { peli: 'American Beauty', alias: [], anyo: 1999, tema: 'Any Other Name', autor: 'Thomas Newman' },
 ]
@@ -168,7 +175,7 @@ const VERSIONES = /symphony orchestra|tribute|cover|karaoke|various artists|orqu
 const BANDAS = /soundtrack|motion picture|banda sonora|original score|b\.s\.o|ost|cast recording|original television/i
 
 function puntua(ficha, r) {
-  const autor = limpia(ficha.autor)
+  const autor = limpia(ficha.busca ?? ficha.autor)
   const artista = limpia(r.artistName ?? '')
   const album = r.collectionName ?? ''
   const tema = limpia(ficha.tema)
@@ -197,7 +204,7 @@ async function pide(url) {
 }
 
 async function resuelve(ficha) {
-  const term = encodeURIComponent(`${ficha.tema} ${ficha.autor}`)
+  const term = encodeURIComponent(`${ficha.tema} ${ficha.busca ?? ficha.autor}`)
   const url = `https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=12&country=ES`
   let datos
   try {

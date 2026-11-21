@@ -41,8 +41,8 @@ export function Juegos() {
             a="/juegos/que-peli-suena"
             icono={<Clapperboard size={24} />}
             titulo="¿Qué peli suena?"
-            que="Treinta segundos de banda sonora y a ver quién la saca antes. Vale el título a medias."
-            como="Suena en un móvil · se escribe desde el tuyo · hace falta internet"
+            que="Treinta segundos de banda sonora y a ver quién la saca antes. A voces, como en casa."
+            como="Suena en un móvil · se grita · hace falta internet"
           />
           <Juego
             a="/juegos/quien-soy"

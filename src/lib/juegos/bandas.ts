@@ -21,7 +21,7 @@ export interface Banda {
   /** El de la tienda. Sirve para no repetir y para pedir otra URL. */
   id: number
   peli: string
-  /** Otros títulos que también valen al escribir. */
+  /** Otros títulos de la misma peli. Se dicen al destaparla. */
   alias: string[]
   anyo: number
   /** El tema concreto que suena, para el remate de la ronda. */

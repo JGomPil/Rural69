@@ -1,39 +1,35 @@
 import { useEffect, useRef, useState } from 'react'
 import {
-  Clapperboard,
   Flag,
   Hourglass,
+  History,
   Music,
   Pause,
   Play,
   RefreshCw,
   SkipForward,
-  Smartphone,
   Trophy,
   Volume2,
-  X,
 } from 'lucide-react'
 import { Boton } from '../ui/Boton'
-import { Entrada } from '../ui/Campos'
 import { Tarjeta } from '../ui/Varios'
-import { acierto, despiertaElSonido, fallo, mantenLaPantalla, quesito, tic, timbre } from '../../lib/juegos/sonido'
+import { acierto, despiertaElSonido, mantenLaPantalla, quesito, tic, timbre } from '../../lib/juegos/sonido'
 import { refrescaElSonido } from '../../lib/juegos/bandas'
 import {
+  aciertaB,
   arrancaElRelojB,
   clasificacionB,
-  intentaB,
-  miSitioB,
-  ponAltavoz,
   restanteDeB,
   rindeteB,
   seAcabaElTiempoB,
-  tomaSitioB,
+  tomaElMandoB,
   type PartidaB,
 } from '../../lib/juegos/bandasonora'
 
 export function PeliPartida({
   partida,
   miPerfil,
+  miNombre,
   aSolas,
   desfase,
   onCambia,
@@ -43,6 +39,8 @@ export function PeliPartida({
 }: {
   partida: PartidaB
   miPerfil: string | null
+  /** Cómo se llama el que mira esta pantalla, para contarlo si coge la música. */
+  miNombre: string
   /** Sin línea: un solo móvil hace de todo, también de altavoz. */
   aSolas: boolean
   desfase: number
@@ -52,25 +50,23 @@ export function PeliPartida({
   onSalir: () => void
 }) {
   const [, repinta] = useState(0)
-  const [dicho, setDicho] = useState('')
   const [sonando, setSonando] = useState(false)
-  /** Sin línea: a quién se le apunta el acierto en este único móvil. */
-  const [quienDice, setQuienDice] = useState(0)
   const [mudo, setMudo] = useState(false)
   /** El audio no se puede traer: sin internet, o la URL ha caducado del todo. */
   const [roto, setRoto] = useState(false)
   const audio = useRef<HTMLAudioElement | null>(null)
   const ultimoTic = useRef(0)
-  const comoEstaba = useRef<{ acertante: string | null; fallo: string } | null>(null)
+  const comoEstaba = useRef<string | null>(null)
 
-  const sitio = miSitioB(partida, miPerfil)
-  const sentado = aSolas || sitio >= 0
-  const soyAltavoz = aSolas || (miPerfil !== null && partida.altavoz === miPerfil)
-  const altavoz = partida.jugadores.find((j) => j.perfil === partida.altavoz)
+  const soyModerador = aSolas || (miPerfil !== null && partida.moderador?.perfil === miPerfil)
+  /**
+   * Quien puede tocar la ronda: el que lleva el mando, y si no lo lleva
+   * nadie —se fue a por hielo con el móvil— cualquiera, que si no la
+   * partida se queda clavada y no hay manera de seguir.
+   */
+  const puedoMandar = soyModerador || !partida.moderador
   const restante = restanteDeB(partida, desfase)
   const banda = partida.ronda.banda
-  /** Quién da por acabada la ronda cuando se agota el reloj. Uno y solo uno. */
-  const cierroYo = soyAltavoz || (!partida.altavoz && sitio === 0)
 
   // --- La música -----------------------------------------------------
   // Solo suena en un móvil. Da vueltas a propósito: la preview son
@@ -78,7 +74,7 @@ export function PeliPartida({
   useEffect(() => {
     const el = audio.current
     if (!el) return
-    if (!soyAltavoz || partida.fase !== 'sonando') {
+    if (!soyModerador || partida.fase !== 'sonando') {
       // Parar ya dispara `onPause`, que es quien apaga el indicador.
       el.pause()
       return
@@ -96,7 +92,7 @@ export function PeliPartida({
         setSonando(false)
         setMudo(true)
       })
-  }, [banda.id, partida.fase, soyAltavoz])
+  }, [banda.id, partida.fase, soyModerador])
 
   // Si la URL ha caducado, se pide otra a la tienda. Una vez.
   const arregla = async () => {
@@ -126,32 +122,25 @@ export function PeliPartida({
         // música: ahí se pisaría con la canción.
         if (quedan <= 3 && quedan !== ultimoTic.current) {
           ultimoTic.current = quedan
-          if (!soyAltavoz) tic()
+          if (!soyModerador) tic()
         }
         return
       }
       clearInterval(reloj)
       timbre()
-      // Lo cierra uno solo: el que pone la música. Y si se ha ido con la
-      // música puesta, el de la primera silla, que si no la ronda se
-      // queda clavada en cero y nadie puede seguir.
-      if (cierroYo) onCambia(seAcabaElTiempoB(partida))
+      // La cierra uno solo, o se escribiría dos veces lo mismo.
+      if (puedoMandar) onCambia(seAcabaElTiempoB(partida))
       else repinta((n) => n + 1)
     }, 150)
     return () => clearInterval(reloj)
-  }, [partida, desfase, cierroYo, soyAltavoz, onCambia])
+  }, [partida, desfase, puedoMandar, soyModerador, onCambia])
 
   // El veredicto suena en todos los móviles.
   useEffect(() => {
-    const ahora = {
-      acertante: partida.ronda.acertante,
-      fallo: partida.ronda.fallos[0] ? `${partida.ronda.fallos[0].nombre}:${partida.ronda.fallos[0].dicho}` : '',
-    }
+    const ahora = partida.ronda.acertante
     const antes = comoEstaba.current
     comoEstaba.current = ahora
-    if (!antes) return
-    if (ahora.acertante && !antes.acertante) quesito()
-    else if (ahora.fallo && ahora.fallo !== antes.fallo) fallo()
+    if (antes === null && ahora) quesito()
   }, [partida])
 
   useEffect(() => {
@@ -168,35 +157,6 @@ export function PeliPartida({
     return <Final partida={partida} onOtra={onOtra} onSalir={onSalir} />
   }
 
-  // Un móvil que no ha dicho quién es no puntúa: que lo diga primero.
-  if (!sentado) {
-    return (
-      <Tarjeta className="space-y-4 p-6 text-center">
-        <Smartphone size={40} className="mx-auto text-tierra-500" />
-        <h2 className="font-display text-xl text-bosque-800">¿Quién eres tú?</h2>
-        <p className="text-sm text-tenue">
-          Para apuntarte los aciertos. El primero que lo diga se queda con la música.
-        </p>
-        <div className="grid gap-2">
-          {partida.jugadores.map((p, i) => (
-            <Boton
-              key={p.nombre}
-              variante={p.perfil ? 'suave' : 'secundario'}
-              ancho
-              onClick={() => {
-                despiertaElSonido()
-                if (miPerfil) onCambia(tomaSitioB(partida, i, miPerfil))
-              }}
-            >
-              {p.nombre}
-              {p.perfil && ' · ya tiene móvil'}
-            </Boton>
-          ))}
-        </div>
-      </Tarjeta>
-    )
-  }
-
   return (
     <div className="space-y-4">
       {/* El reproductor vive siempre, aunque solo suene en un móvil. */}
@@ -209,7 +169,7 @@ export function PeliPartida({
         onPlay={() => {
           setSonando(true)
           // El reloj de la ronda empieza aquí, cuando suena de verdad.
-          if (cierroYo) onCambia(arrancaElRelojB(partida))
+          if (puedoMandar) onCambia(arrancaElRelojB(partida))
         }}
         onPause={() => setSonando(false)}
       />
@@ -240,7 +200,7 @@ export function PeliPartida({
               <Music size={34} />
             </div>
 
-            {soyAltavoz ? (
+            {soyModerador ? (
               <>
                 <p className="text-sm text-tenue">
                   {sonando
@@ -288,13 +248,15 @@ export function PeliPartida({
             ) : (
               <>
                 <p className="text-sm text-tenue">
-                  {altavoz ? `Suena en el móvil de ${altavoz.nombre}.` : 'Nadie está poniendo la música.'}
+                  {partida.moderador
+                    ? `Suena en el móvil de ${partida.moderador.nombre}, y ahí se apuntan los aciertos.`
+                    : 'Nadie está poniendo la música.'}
                 </p>
                 <Boton
                   variante="secundario"
                   onClick={() => {
                     despiertaElSonido()
-                    if (miPerfil) onCambia(ponAltavoz(partida, miPerfil))
+                    if (miPerfil) onCambia(tomaElMandoB(partida, miPerfil, miNombre))
                   }}
                 >
                   <Volume2 size={17} /> Que suene aquí
@@ -303,72 +265,33 @@ export function PeliPartida({
             )}
           </Tarjeta>
 
-          <Tarjeta className="space-y-3 p-4">
-            <form
-              className="flex gap-2"
-              onSubmit={(e) => {
-                e.preventDefault()
-                if (!dicho.trim()) return
-                onCambia(intentaB(partida, aSolas ? quienDice : sitio, dicho))
-                setDicho('')
-              }}
-            >
-              <Entrada
-                value={dicho}
-                onChange={(e) => setDicho(e.target.value)}
-                placeholder="¿Qué película es?"
-                maxLength={60}
-                autoComplete="off"
-              />
-              <Boton type="submit" disabled={!dicho.trim()}>
-                <Clapperboard size={17} /> ¡Es esa!
-              </Boton>
-            </form>
-            {aSolas && (
-              <div>
-                <p className="mb-1.5 text-xs text-suave">¿Quién la ha dicho?</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {partida.jugadores.map((j, i) => (
-                    <button
-                      key={j.nombre}
-                      type="button"
-                      onClick={() => setQuienDice(i)}
-                      className={`rounded-full px-3 py-1.5 text-sm font-semibold transition ${
-                        i === quienDice ? 'bg-bosque-600 text-white' : 'bg-beige text-tenue hover:bg-arena'
-                      }`}
-                    >
-                      {j.nombre}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            <p className="text-xs text-suave">
-              Con el título a medias basta. Si fallas no pasa nada: puedes volver a probar.
-            </p>
-          </Tarjeta>
-
-          {partida.ronda.fallos.length > 0 && (
-            <Tarjeta className="space-y-1.5 p-4">
-              <p className="text-xs font-semibold text-suave">Ya se ha dicho, y no era:</p>
-              <ul className="flex flex-wrap gap-1.5">
-                {partida.ronda.fallos.map((f, i) => (
-                  <li
-                    key={`${f.nombre}-${f.dicho}-${i}`}
-                    className="flex items-center gap-1 rounded-full bg-tierra-100 px-2.5 py-1 text-xs text-tierra-700"
-                  >
-                    <X size={12} /> {f.dicho} <span className="text-tierra-600/70">· {f.nombre}</span>
-                  </li>
+          {puedoMandar ? (
+            <Tarjeta className="space-y-3 p-4">
+              <p className="text-sm font-semibold text-bosque-800">¿Quién la ha sacado?</p>
+              <div className="grid grid-cols-2 gap-2">
+                {partida.jugadores.map((j, i) => (
+                  <Boton key={j.nombre} variante="secundario" ancho onClick={() => onCambia(aciertaB(partida, i))}>
+                    {j.nombre}
+                  </Boton>
                 ))}
-              </ul>
+              </div>
+              <p className="text-xs text-suave">
+                Se dice a voces y tú apuntas. Si no la saca nadie, «nos rendimos» la destapa.
+              </p>
             </Tarjeta>
+          ) : (
+            <p className="text-center text-sm text-suave">
+              Grítalo: lo apunta quien lleva la música.
+            </p>
           )}
 
-          <div className="flex justify-center">
-            <Boton variante="suave" onClick={() => onCambia(rindeteB(partida))}>
-              <Flag size={16} /> Nos rendimos
-            </Boton>
-          </div>
+          {puedoMandar && (
+            <div className="flex justify-center">
+              <Boton variante="suave" onClick={() => onCambia(rindeteB(partida))}>
+                <Flag size={16} /> Nos rendimos
+              </Boton>
+            </div>
+          )}
         </>
       ) : (
         <Tarjeta className="space-y-4 p-5 text-center">
@@ -379,7 +302,10 @@ export function PeliPartida({
           <p className="text-sm text-tenue">
             {banda.anyo} · «{banda.tema}», de {banda.autor}
           </p>
-          {soyAltavoz && (
+          {banda.alias.length > 0 && (
+            <p className="text-xs text-suave">O, como la llama media España, «{banda.alias[0]}».</p>
+          )}
+          {soyModerador && (
             <Boton
               variante="suave"
               onClick={() => {
@@ -392,13 +318,18 @@ export function PeliPartida({
               <Play size={16} /> Oírla otra vez
             </Boton>
           )}
-          <Boton tamanyo="lg" ancho onClick={onSiguiente}>
-            <SkipForward size={18} /> {partida.numero >= partida.rondas ? 'Ver el marcador' : 'Siguiente película'}
-          </Boton>
+          {puedoMandar ? (
+            <Boton tamanyo="lg" ancho onClick={onSiguiente}>
+              <SkipForward size={18} /> {partida.numero >= partida.rondas ? 'Ver el marcador' : 'Siguiente película'}
+            </Boton>
+          ) : (
+            <p className="text-sm text-suave">A la siguiente pasa quien lleva la música.</p>
+          )}
         </Tarjeta>
       )}
 
-      <Marcador partida={partida} miPerfil={miPerfil} />
+      <Marcador partida={partida} />
+      <LoQueVaCayendo partida={partida} />
 
       <div className="flex justify-center pt-1">
         <button type="button" onClick={onSalir} className="text-xs text-suave underline-offset-2 hover:underline">
@@ -409,24 +340,37 @@ export function PeliPartida({
   )
 }
 
-function Marcador({ partida, miPerfil }: { partida: PartidaB; miPerfil: string | null }) {
+function Marcador({ partida }: { partida: PartidaB }) {
   return (
     <Tarjeta className="p-3">
       <ul className="flex flex-wrap gap-1.5">
         {clasificacionB(partida).map((j) => (
           <li
             key={j.nombre}
-            className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold ${
-              j.perfil && j.perfil === miPerfil
-                ? 'bg-bosque-600 text-white'
-                : 'bg-beige text-tenue'
-            }`}
+            className="flex items-center gap-1.5 rounded-full bg-beige px-3 py-1 text-sm font-semibold text-tenue"
           >
             {j.nombre} <span className="tabular-nums">{j.puntos}</span>
           </li>
         ))}
       </ul>
     </Tarjeta>
+  )
+}
+
+function LoQueVaCayendo({ partida }: { partida: PartidaB }) {
+  if (partida.historia.length === 0) return null
+  return (
+    <details className="group rounded-2xl border border-arena bg-superficie">
+      <summary className="flex cursor-pointer items-center gap-2 px-4 py-2.5 text-sm font-semibold text-bosque-700">
+        <History size={15} /> Lo que va cayendo
+        <span className="ml-auto text-xs font-normal text-suave">{partida.historia.length}</span>
+      </summary>
+      <ul className="space-y-1 border-t border-arena px-4 py-3 text-sm text-tenue">
+        {partida.historia.slice(0, 20).map((linea, i) => (
+          <li key={`${linea}-${i}`}>{linea}</li>
+        ))}
+      </ul>
+    </details>
   )
 }
 
