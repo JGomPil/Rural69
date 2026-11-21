@@ -431,8 +431,15 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       de Apple por `scripts/bandas-sonoras.mjs`, que guarda el identificador y la URL del
       trozo de 30 segundos: en la partida no se le pide nada a la tienda, que corta a las
       veinte peticiones por minuto por IP. Suena en un solo móvil, y ese mismo lleva el
-      mando; si se va, cualquiera lo recoge. 19 pruebas.
-      (`src/lib/juegos/bandasonora.ts`, `bandas.ts`, `bandas.json`)
+      mando; si se va, cualquiera lo recoge.
+      (`src/lib/juegos/musica.ts`, `bandas.ts`, `bandas.json`)
+- [x] **¿Qué canción suena?** El mismo juego con otro repertorio: 340 canciones de
+      pop y rock de 1960 a 2010, un tercio en español, por `scripts/canciones.mjs`. Vale
+      el título y vale el grupo. Reloj de 30 segundos y 15 rondas, que una canción
+      conocida se saca en cuatro. Las reglas y las dos pantallas son las mismas para los
+      dos juegos, con la palabra y el repertorio por parámetro. 23 pruebas.
+      (`src/lib/juegos/musica.ts`, `canciones.ts`, `canciones.json`,
+      `components/juegos/JuegoDeMusica.tsx`)
 - [ ] **Más juegos.** El cajón está hecho para eso.
 - [ ] **Pendiente de probar con gente.** Si 30 segundos se hacen largos, si los
       botones se entienden a voces y si la lista de 179 palabras aguanta una

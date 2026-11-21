@@ -834,3 +834,33 @@ _Barbie_.
   instrumentales empieza por la mitad del tema. Cambiar el corte es cambiar de tema en la
   lista del script y volver a pasarlo. Y esto es lo único del fin de semana que **necesita
   internet**: sin línea, el juego avisa y no se puede jugar.
+
+### ¿Qué canción suena?
+
+El mismo juego con otro repertorio: pop y rock de 1960 a 2010, 340 canciones, un tercio
+en español. Vale el título y vale el grupo, que en el salón se grita lo que salga antes.
+
+- **Es el mismo juego, y por eso es el mismo código.** Las reglas, la pantalla de montar
+  partida y la de jugar viven una sola vez en `musica.ts`, `JuegoDeMusica.tsx`,
+  `MusicaJugadores.tsx` y `MusicaPartida.tsx`; cada juego pasa lo suyo —su repertorio, su fila
+  en `game_sessions`, su llave de guardado y la palabra que se pinta, «película» o «canción»—.
+  Copiar las cuatrocientas líneas y cambiarles los textos habría sido más rápido esta tarde y
+  más caro cada vez que se toque una regla.
+- **Las trampas de la tienda no son las mismas que con las bandas sonoras.** Allí lo que salía
+  primero eran orquestas de tributo; aquí es la misma canción pero en directo, remezclada, en
+  acústico, en maqueta o regrabada treinta años después por el único miembro que queda del
+  grupo. Todas se llaman igual y ninguna es la que la gente conoce, así que el puntuador de
+  `scripts/canciones.mjs` resta por «live», «remix», «demo», «acoustic» y compañía, y suma si
+  el año de la grabación cuadra con el de la ficha: un remaster conserva el año original en los
+  metadatos y una regrabación no. Lo que diga «Remastered» pasa, que es la misma cinta.
+- **Treinta segundos y quince rondas, no sesenta y diez.** Una canción conocida se saca en
+  cuatro segundos; con el reloj de las películas sobraba medio minuto de relleno en cada ronda.
+  Los dos juegos traen sus propios valores por defecto y se pueden cambiar antes de empezar.
+- **Un tercio en español, a propósito.** En ese sofá se grita antes _Hijo de la Luna_ que un
+  éxito americano del 62. Los sesenta en español son flojitos y están compensados con los
+  ochenta y los noventa.
+- **La lista se repasó a mano, una por una.** Es la parte que no se puede automatizar: la
+  tienda devuelve algo para casi todo, y lo que devuelve a veces no es la canción. Mirando las
+  trescientas salieron los casos que el puntuador no cazaba, y por el mismo repaso en las
+  películas ya habían salido un «Batman» que era el tema de _Alicia_ y un «Dumb y Dumber» que
+  era la cabecera de _Friends_.

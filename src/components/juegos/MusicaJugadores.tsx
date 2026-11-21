@@ -1,29 +1,39 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Music, Play, Plus, UserRound, X } from 'lucide-react'
 import { Boton } from '../ui/Boton'
 import { Campo, Entrada, Lista } from '../ui/Campos'
 import { Tarjeta } from '../ui/Varios'
 import { despiertaElSonido } from '../../lib/juegos/sonido'
-import type { OpcionesB } from '../../lib/juegos/bandasonora'
+import type { Opciones } from '../../lib/juegos/musica'
 import type { Member } from '../../lib/types'
 
 const TIEMPOS = [30, 45, 60, 90, 0]
 const RONDAS = [5, 10, 15, 20]
 
-export function PeliJugadores({
+export function MusicaJugadores({
   gente,
   cuantas,
+  cosas,
+  comoVa,
+  segundosPorDefecto,
+  rondasPorDefecto,
   onEmpezar,
 }: {
   gente: Member[]
-  /** Cuántas películas hay en el repertorio, para decirlo en pantalla. */
+  /** Cuántas hay en el repertorio, para decirlo en pantalla. */
   cuantas: number
-  onEmpezar: (o: Omit<OpcionesB, 'moderador'>) => void
+  /** «películas» o «canciones». */
+  cosas: string
+  /** El párrafo de «cómo va esto», que cambia de un juego a otro. */
+  comoVa: ReactNode
+  segundosPorDefecto: number
+  rondasPorDefecto: number
+  onEmpezar: (o: Omit<Opciones, 'moderador'>) => void
 }) {
   const [nombres, setNombres] = useState<string[]>([])
   const [suelto, setSuelto] = useState('')
-  const [segundos, setSegundos] = useState(60)
-  const [rondas, setRondas] = useState(10)
+  const [segundos, setSegundos] = useState(segundosPorDefecto)
+  const [rondas, setRondas] = useState(rondasPorDefecto)
 
   const anyade = (nombre: string) => {
     const limpio = nombre.trim()
@@ -37,11 +47,7 @@ export function PeliJugadores({
         <h2 className="flex items-center gap-2 text-base text-bosque-800">
           <Music size={17} className="text-bosque-500" /> Cómo va esto
         </h2>
-        <p className="text-sm text-tenue">
-          Suenan treinta segundos de una banda sonora y se grita de qué película es. La música sale
-          por <strong>un solo móvil</strong> —el que esté al lado del altavoz—, y ese mismo apunta
-          quién la ha sacado. Nadie escribe nada.
-        </p>
+        <p className="text-sm text-tenue">{comoVa}</p>
       </Tarjeta>
 
       <Tarjeta className="space-y-4 p-4">
@@ -134,14 +140,14 @@ export function PeliJugadores({
             <Lista value={rondas} onChange={(e) => setRondas(Number(e.target.value))}>
               {RONDAS.map((r) => (
                 <option key={r} value={r}>
-                  {r} películas
+                  {r} {cosas}
                 </option>
               ))}
             </Lista>
           </Campo>
         </div>
         <p className="text-sm text-suave">
-          {cuantas} películas en el repertorio, y en una partida no se repite ninguna.
+          {cuantas} {cosas} en el repertorio, y en una partida no se repite ninguna.
           {segundos === 0
             ? ' Sin reloj: la música da vueltas hasta que alguien la saque o os rindáis.'
             : ` La música se repite hasta que se acaben los ${segundos} segundos.`}

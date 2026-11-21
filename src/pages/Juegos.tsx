@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ChevronRight, Clapperboard, Dices, Music, Smile, Sparkles } from 'lucide-react'
+import { ChevronRight, Clapperboard, Dices, Music, Music2, Smile, Sparkles } from 'lucide-react'
 import { Seccion, Tarjeta } from '../components/ui/Varios'
 
 /**
@@ -42,6 +42,13 @@ export function Juegos() {
             icono={<Clapperboard size={24} />}
             titulo="¿Qué peli suena?"
             que="Treinta segundos de banda sonora y a ver quién la saca antes. A voces, como en casa."
+            como="Suena en un móvil · se grita · hace falta internet"
+          />
+          <Juego
+            a="/juegos/que-cancion-suena"
+            icono={<Music2 size={24} />}
+            titulo="¿Qué canción suena?"
+            que="Treinta segundos de pop y rock del 60 al 2010. El que la saca, punto."
             como="Suena en un móvil · se grita · hace falta internet"
           />
           <Juego
