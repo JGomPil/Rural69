@@ -848,7 +848,7 @@ _Barbie_.
 
 ### ¿Qué canción suena?
 
-El mismo juego con otro repertorio: pop y rock de 1960 a hoy, 506 canciones, un tercio
+El mismo juego con otro repertorio: pop y rock de 1960 a hoy, 579 canciones, un tercio
 en español. Vale el título y vale el grupo, que en el salón se grita lo que salga antes.
 
 - **Es el mismo juego, y por eso es el mismo código.** Las reglas, la pantalla de montar
@@ -867,7 +867,7 @@ en español. Vale el título y vale el grupo, que en el salón se grita lo que s
 - **Treinta segundos y quince rondas, y el reloj tira a corto.** Una canción conocida se saca
   en cuatro segundos, así que los tiempos que se eligen son 45, 30, 15 o 5 segundos —con cinco
   es a muerte súbita— o sin reloj; los noventa segundos del principio no los usaba nadie ni
-  cuando no la sacaba nadie. Las rondas llegan a cincuenta, que con 506 canciones siguen sin
+  cuando no la sacaba nadie. Las rondas llegan a cincuenta, que con 579 canciones siguen sin
   repetirse. Cada juego trae sus valores por defecto y se cambian antes de empezar.
 - **Las que vienen de un recopilatorio pierden contra el disco.** Esto salió jugando: el «Malo»
   de Bebe sonaba raro porque lo único que vende la tienda española es un «Sabor Latino» del
@@ -885,6 +885,11 @@ en español. Vale el título y vale el grupo, que en el salón se grita lo que s
   Ilegales, Ska-P, Mägo de Oz, Extremoduro, más el rock de allí que aquí se cantó igual
   —_De música ligera_, _Lamento boliviano_, _Matador_, _Mujer amante_—. De 62 melenudas a
   153, que es poco más de un tercio del repertorio.
+- **Lo que avisa de una versión rara va entre paréntesis.** El filtro buscaba «live» en todo
+  el título y así se cayó el _Live Forever_ de Oasis, que es la del disco. Ahora mira solo lo
+  que va entre paréntesis o corchetes —«(Live)», «[K-Mix]», «(Remasterizado)»— y el nombre del
+  disco. Lo mismo le pasaba a «tour», que tiraba el «EL ÚLTIMO TOUR DEL MUNDO» de Bad Bunny:
+  un disco de estudio con nombre de gira.
 - **Las trampas del rock son peores que las del pop.** Un grupo con treinta años de gira
   tiene diez discos en directo, y la tienda los vende todos: de Alice In Chains solo hay
   «Man in the Box» en vivo, así que suena _Would?_, que es la del «Dirt». De Marilyn Manson
@@ -901,10 +906,22 @@ en español. Vale el título y vale el grupo, que en el salón se grita lo que s
   _Lo malo_, _Tú me dejaste de querer_, la sesión de Quevedo. Cuatro no las vende la tienda
   española por mucho que tenga el disco —_Tusa_, _Dákiti_, _Me porto bonito_, _Despechá_—, y
   en su sitio entraron otras de los mismos.
+- **Segunda vuelta por los que se reconocen con dos notas.** Más Queen —el _Bohemian
+  Rhapsody_ no estaba, que ya es para darse de comer aparte—, más U2, más AC/DC, Van Halen,
+  Mötley Crüe, Guns N' Roses, Bon Jovi, Oasis, Radiohead, Nirvana y Eagles; y de aquí, más
+  Héroes del Silencio, Barricada, La Unión, Los Secretos, Nacha Pop con _Lucha de gigantes_,
+  Celtas Cortos, Barón Rojo, y dos que faltaban: M Clan y 091.
+- **Y las de toda la vida**, que son las que se cantan en la sobremesa sin que nadie ponga la
+  música: _Tómbola_, _Eva María_, _María Isabel_, _Un sorbito de champagne_, _Que se mueran
+  los feos_, _Porque te vas_, _Un ramito de violetas_, _Penélope_, _Y viva España_, _¿Y cómo
+  es él?_, _Me quedo contigo_, _Bailar pegados_, _La barbacoa_. Son noventa y nueve españolas
+  de antes del 90 y tienen montón propio, que es lo que se pide de verdad cuando alguien dice
+  «pon españolas».
 - **Se elige qué puede sonar.** Con medio millar de canciones, «de todo» es una tómbola donde
   al del heavy le toca Camilo Sesto. Así que en la pantalla de montar partida hay un montón
-  que elegir: de todo (506), rock (203), heavy y hard rock (71), pop y baile (203), rap y
-  reguetón (29), solo en español (156), del 60 al 89 (233) o del 2010 para acá (75). Dos
+  que elegir: de todo (579), rock (231), heavy y hard rock (84), pop y baile (235), rap y
+  reguetón (29), solo en español (200), españolas de toda la vida (99), del 60 al 89 (283) o
+  del 2010 para acá (75). Dos
   detalles que importan: **el estilo lo manda el grupo, no la canción** —la tienda ficha a
   Extremoduro en pop y en rock a la vez, y por canción «rock» te saca una balada—, y las
   rondas se recortan a lo que tenga el montón, que ofrecer cincuenta rondas de veintinueve

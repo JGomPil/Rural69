@@ -17,7 +17,7 @@ const pista = (id: number, extra: Partial<Pista>): Pista => ({
 
 const MONTON: Pista[] = [
   pista(1, { estilo: 'heavy', anyo: 1980 }),
-  pista(2, { estilo: 'rock', esp: true, anyo: 1991 }),
+  pista(2, { estilo: 'rock', esp: true, anyo: 1985 }),
   pista(3, { estilo: 'pop', anyo: 2014 }),
   pista(4, { estilo: 'urbano', esp: true, anyo: 2022 }),
 ]
@@ -44,8 +44,12 @@ describe('los montones', () => {
     expect(dela('esp')).toEqual([2, 4])
   })
 
+  it('las españolas de toda la vida cruzan idioma y época', () => {
+    expect(dela('verbena')).toEqual([2])
+  })
+
   it('y las épocas, por el año de la grabación', () => {
-    expect(dela('viejas')).toEqual([1])
+    expect(dela('viejas')).toEqual([1, 2])
     expect(dela('nuevas')).toEqual([3, 4])
   })
 

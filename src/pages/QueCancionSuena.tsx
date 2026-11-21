@@ -51,7 +51,7 @@ export function QueCancionSuena() {
             <strong>Se elige qué puede sonar.</strong> Con medio millar de canciones, «de todo» es
             una tómbola donde al del heavy le toca Camilo Sesto, así que en la pantalla de montar
             partida se puede acotar el montón: rock, heavy y hard rock, pop y baile, rap y reguetón,
-            solo en español, del 60 al 89 o del 2010 para acá. El estilo lo manda el grupo y no la
+            solo en español, españolas de toda la vida, del 60 al 89 o del 2010 para acá. El estilo lo manda el grupo y no la
             canción, para que «rock» no saque la balada que la tienda tiene fichada como pop.
           </p>
           <p>

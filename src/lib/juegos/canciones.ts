@@ -41,6 +41,11 @@ export const CATEGORIAS: Categoria[] = [
   { id: 'pop', nombre: 'Pop y baile', tiene: (p) => p.estilo === 'pop' },
   { id: 'urbano', nombre: 'Rap y reguetón', tiene: (p) => p.estilo === 'urbano' },
   { id: 'esp', nombre: 'Solo en español', tiene: (p) => p.esp === true },
+  // La sobremesa del domingo: copla, verbena y pop español de cuando la
+  // tele era en blanco y negro. Es el montón que se pide de verdad
+  // cuando alguien dice «pon españolas», y no vale con cruzar los dos
+  // filtros a mano porque solo se elige uno.
+  { id: 'verbena', nombre: 'Españolas de toda la vida', tiene: (p) => p.esp === true && p.anyo < 1990 },
   { id: 'viejas', nombre: 'Del 60 al 89', tiene: (p) => p.anyo < 1990 },
   { id: 'nuevas', nombre: 'Del 2010 para acá', tiene: (p) => p.anyo >= 2010 },
 ]

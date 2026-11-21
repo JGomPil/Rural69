@@ -575,6 +575,88 @@ const CANCIONES = [
   { titulo: 'Beso', artista: 'Rosalía', anyo: 2023 },
   { titulo: 'Quédate', artista: 'Quevedo', anyo: 2022, alias: ['Bzrp Music Sessions 52'], id: 1632746802 },
   { titulo: 'Shakira: Bzrp Music Sessions, Vol. 53', artista: 'Bizarrap', anyo: 2023, alias: ['La sesión de Shakira'] },
+  // --- Más de los que pide la mesa -----------------------------------
+  // Segunda vuelta por los grupos que en el salón se reconocen con dos
+  // notas. Y sí: el «Bohemian Rhapsody» no estaba.
+  { titulo: 'Bohemian Rhapsody', artista: 'Queen', anyo: 1975, extra: 'A Night at the Opera' },
+  { titulo: 'Somebody to Love', artista: 'Queen', anyo: 1976 },
+  { titulo: 'I Want to Break Free', artista: 'Queen', anyo: 1984 },
+  { titulo: 'Radio Ga Ga', artista: 'Queen', anyo: 1984 },
+  { titulo: 'The Show Must Go On', artista: 'Queen', anyo: 1991 },
+  { titulo: 'Patience', artista: "Guns N' Roses", anyo: 1988 },
+  { titulo: "Don't Cry", artista: "Guns N' Roses", anyo: 1991 },
+  { titulo: 'Always', artista: 'Bon Jovi', anyo: 1994 },
+  { titulo: 'Bed of Roses', artista: 'Bon Jovi', anyo: 1992 },
+  { titulo: 'Keep the Faith', artista: 'Bon Jovi', anyo: 1992 },
+  { titulo: 'Sunday Bloody Sunday', artista: 'U2', anyo: 1983 },
+  { titulo: 'Pride (In the Name of Love)', artista: 'U2', anyo: 1984 },
+  { titulo: "I Still Haven't Found What I'm Looking For", artista: 'U2', anyo: 1987 },
+  { titulo: 'One', artista: 'U2', anyo: 1991, extra: 'Achtung Baby' },
+  { titulo: 'T.N.T.', artista: 'AC/DC', anyo: 1975 },
+  { titulo: 'Hells Bells', artista: 'AC/DC', anyo: 1980 },
+  { titulo: 'Panama', artista: 'Van Halen', anyo: 1984 },
+  { titulo: "Ain't Talkin' 'Bout Love", artista: 'Van Halen', anyo: 1978 },
+  { titulo: 'Dr. Feelgood', artista: 'Mötley Crüe', anyo: 1989 },
+  { titulo: 'Girls, Girls, Girls', artista: 'Mötley Crüe', anyo: 1987 },
+  { titulo: 'Home Sweet Home', artista: 'Mötley Crüe', anyo: 1985 },
+  { titulo: 'Live Forever', artista: 'Oasis', anyo: 1994 },
+  { titulo: 'Champagne Supernova', artista: 'Oasis', anyo: 1995 },
+  { titulo: 'High and Dry', artista: 'Radiohead', anyo: 1995 },
+  { titulo: 'Paranoid Android', artista: 'Radiohead', anyo: 1997 },
+  { titulo: 'In Bloom', artista: 'Nirvana', anyo: 1991 },
+  { titulo: 'All Apologies', artista: 'Nirvana', anyo: 1993 },
+  { titulo: 'Take It Easy', artista: 'Eagles', anyo: 1972 },
+  { titulo: 'Desperado', artista: 'Eagles', anyo: 1973 },
+  // --- Y más rock de aquí --------------------------------------------
+  { titulo: 'Héroe de leyenda', artista: 'Héroes del Silencio', anyo: 1987 },
+  { titulo: 'Nuestros nombres', artista: 'Héroes del Silencio', anyo: 1993 },
+  { titulo: 'Avalancha', artista: 'Héroes del Silencio', anyo: 1995 },
+  { titulo: 'La senda del tiempo', artista: 'Celtas Cortos', anyo: 1991 },
+  { titulo: 'En blanco y negro', artista: 'Barricada', anyo: 1991 },
+  { titulo: 'Sildavia', artista: 'La Unión', anyo: 1984 },
+  { titulo: 'Carolina', artista: 'M Clan', anyo: 1996 },
+  { titulo: 'Llamando a la Tierra', artista: 'M Clan', anyo: 1999 },
+  { titulo: 'Ojos de gata', artista: 'Los Secretos', anyo: 1991 },
+  { titulo: 'Pero a tu lado', artista: 'Los Secretos', anyo: 1983 },
+  { titulo: 'Lucha de gigantes', artista: 'Nacha Pop', anyo: 1986 },
+  { titulo: 'Qué fue del siglo XX', artista: '091', anyo: 1988 },
+  { titulo: 'Chica de la ciudad', artista: 'Barón Rojo', anyo: 1981 },
+  // --- Las de toda la vida -------------------------------------------
+  // Las que se cantan en la sobremesa del domingo sin que nadie ponga
+  // la música: copla, verbena y pop español de cuando la tele era en
+  // blanco y negro. Aquí no hace falta ni el título: con dos compases
+  // ya está la mesa entera cantando.
+  { titulo: 'Tómbola', artista: 'Marisol', anyo: 1962 },
+  { titulo: 'Corazón contento', artista: 'Marisol', anyo: 1968 },
+  { titulo: 'Que se mueran los feos', artista: 'Los Sirex', anyo: 1965 },
+  { titulo: 'Un sorbito de champagne', artista: 'Los Brincos', anyo: 1966 },
+  { titulo: 'Hilo de seda', artista: 'Los Pekenikes', anyo: 1967 },
+  { titulo: 'La caza', artista: 'Juan y Junior', anyo: 1967 },
+  { titulo: 'Cuando salí de Cuba', artista: 'Luis Aguilé', anyo: 1967 },
+  { titulo: 'Las flechas del amor', artista: 'Karina', anyo: 1968 },
+  { titulo: 'María Isabel', artista: 'Los Payos', anyo: 1969 },
+  { titulo: 'Todo tiene su fin', artista: 'Los Módulos', anyo: 1969 },
+  { titulo: 'Penélope', artista: 'Joan Manuel Serrat', anyo: 1969 },
+  { titulo: 'El chiringuito', artista: 'Georgie Dann', anyo: 1988 },
+  { titulo: 'Yo no soy esa', artista: 'Mari Trini', anyo: 1971 },
+  { titulo: 'Algo de mí', artista: 'Camilo Sesto', anyo: 1972 },
+  { titulo: 'Eva María', artista: 'Fórmula V', anyo: 1973 },
+  { titulo: 'Y viva España', artista: 'Manolo Escobar', anyo: 1973 },
+  { titulo: 'Porque te vas', artista: 'Jeanette', anyo: 1974 },
+  { titulo: 'Un ramito de violetas', artista: 'Cecilia', anyo: 1975 },
+  { titulo: 'Hoy tengo ganas de ti', artista: 'Miguel Gallardo', anyo: 1975 },
+  { titulo: 'Gavilán o paloma', artista: 'Pablo Abraira', anyo: 1976 },
+  { titulo: 'Escándalo', artista: 'Raphael', anyo: 1991 },
+  { titulo: 'Ese hombre', artista: 'Rocío Jurado', anyo: 1979 },
+  { titulo: 'Amor de hombre', artista: 'Mocedades', anyo: 1982 },
+  { titulo: '¿Y cómo es él?', artista: 'José Luis Perales', anyo: 1982 },
+  { titulo: 'Me quedo contigo', artista: 'Los Chunguitos', anyo: 1980 },
+  { titulo: 'Amor eterno', artista: 'Rocío Dúrcal', anyo: 1984 },
+  { titulo: 'Marinero de luces', artista: 'Isabel Pantoja', anyo: 1985 },
+  { titulo: 'Bamboleo', artista: 'Gipsy Kings', anyo: 1987 },
+  { titulo: 'Bandido', artista: 'Azúcar Moreno', anyo: 1990 },
+  { titulo: 'Bailar pegados', artista: 'Sergio Dalma', anyo: 1991 },
+  { titulo: 'La barbacoa', artista: 'Georgie Dann', anyo: 1994 },
 ]
 
 /** Quita acentos, signos y mayúsculas: se compara lo que suena. */
@@ -632,7 +714,7 @@ const ESTILOS = {
 // «pon rock» en el salón eso no sirve, así que el estilo lo manda el
 // grupo. Estas cuatro listas pesan más que el género de la tienda.
 const DE_HEAVY = new Set(['AC/DC', 'Aerosmith', 'Alice Cooper', 'Alice In Chains', 'Audioslave', 'Barón Rojo', 'Black Sabbath', 'Blue Öyster Cult', 'Bon Jovi', 'Deep Purple', 'Def Leppard', 'Dio', 'Europe', 'Evanescence', 'Extreme', 'Guns N\' Roses', 'Heart', 'Iron Maiden', 'Judas Priest', 'Korn', 'Led Zeppelin', 'Linkin Park', 'Los Suaves', 'Medina Azahara', 'Metallica', 'Motörhead', 'Mägo de Oz', 'Mötley Crüe', 'Obús', 'Ozzy Osbourne', 'Papa Roach', 'Rammstein', 'Rata Blanca', 'Scorpions', 'Skid Row', 'System of a Down', 'The Darkness', 'Thin Lizzy', 'Twisted Sister', 'Van Halen', 'Whitesnake', 'Ñu'])
-const DE_ROCK = new Set(['Arctic Monkeys', 'Blondie', 'Bob Dylan', 'David Bowie', 'Dire Straits', 'Elvis Presley', 'Gorillaz', 'Simon & Garfunkel', 'The Beach Boys', 'The Who', 'Asfalto', 'Barricada', 'Beck', 'Blur', 'Burning', 'Celtas Cortos', 'Danza Invisible', 'Dover', 'Duncan Dhu', 'El Último de la Fila', 'Extremoduro', 'Fito y Fitipaldis', 'Foo Fighters', 'Franz Ferdinand', 'Gabinete Caligari', 'Green Day', 'Héroes del Silencio', 'Ilegales', 'Jeff Buckley', 'Leño', 'Los Fabulosos Cadillacs', 'Los Enanitos Verdes', 'Los Planetas', 'Los Rodríguez', 'Los Ronaldos', 'Los Secretos', 'Los Toreros Muertos', 'Loquillo y Trogloditas', 'Loquillo y Los Trogloditas', 'Love of Lesbian', 'Marea', 'Muse', 'Måneskin', 'Nacha Pop', 'Nirvana', 'Oasis', 'Pearl Jam', 'Pereza', 'Platero y Tú', 'Queens of the Stone Age', 'Radio Futura', 'Red Hot Chili Peppers', 'Rosendo', 'Seguridad Social', 'Siniestro Total', 'Ska-P', 'Soda Stereo', 'Soundgarden', 'Stereophonics', 'Stone Temple Pilots', 'Tequila', 'The Cranberries', 'The Offspring', 'The Smashing Pumpkins', 'The Verve', 'Triana', 'Vetusta Morla'])
+const DE_ROCK = new Set(['091', 'Arctic Monkeys', 'Eagles', 'M Clan', 'Queen', 'Queen & David Bowie', 'Radiohead', 'U2', 'Blondie', 'Bob Dylan', 'David Bowie', 'Dire Straits', 'Elvis Presley', 'Gorillaz', 'Simon & Garfunkel', 'The Beach Boys', 'The Who', 'Asfalto', 'Barricada', 'Beck', 'Blur', 'Burning', 'Celtas Cortos', 'Danza Invisible', 'Dover', 'Duncan Dhu', 'El Último de la Fila', 'Extremoduro', 'Fito y Fitipaldis', 'Foo Fighters', 'Franz Ferdinand', 'Gabinete Caligari', 'Green Day', 'Héroes del Silencio', 'Ilegales', 'Jeff Buckley', 'Leño', 'Los Fabulosos Cadillacs', 'Los Enanitos Verdes', 'Los Planetas', 'Los Rodríguez', 'Los Ronaldos', 'Los Secretos', 'Los Toreros Muertos', 'Loquillo y Trogloditas', 'Loquillo y Los Trogloditas', 'Love of Lesbian', 'Marea', 'Muse', 'Måneskin', 'Nacha Pop', 'Nirvana', 'Oasis', 'Pearl Jam', 'Pereza', 'Platero y Tú', 'Queens of the Stone Age', 'Radio Futura', 'Red Hot Chili Peppers', 'Rosendo', 'Seguridad Social', 'Siniestro Total', 'Ska-P', 'Soda Stereo', 'Soundgarden', 'Stereophonics', 'Stone Temple Pilots', 'Tequila', 'The Cranberries', 'The Offspring', 'The Smashing Pumpkins', 'The Verve', 'Triana', 'Vetusta Morla'])
 const DE_POP = new Set(['Billie Eilish', 'Hombres G', 'Jarabe de Palo', 'Joaquín Sabina', 'Billy Joel', 'Bob Marley & The Wailers', 'Chambao', 'El Canto del Loco', 'Estopa', 'Imagine Dragons', 'La Oreja de Van Gogh', 'Las Grecas', 'Lorde', 'Macaco', 'Maná', 'Robbie Williams', 'Rosana', 'Tones and I'])
 const DE_URBANO = new Set(['2Pac', '50 Cent', 'Bad Bunny', 'Beastie Boys', 'Bizarrap', 'C. Tangana', 'Coolio', 'Daddy Yankee', 'Don Omar', 'Eminem', 'Flo Rida', 'House of Pain', 'J Balvin', 'JAY-Z', 'Karol G', 'Lil Nas X', 'Maluma', 'OutKast', 'Quevedo', 'Rosalía', 'The Sugarhill Gang', 'Wiz Khalifa'])
 
@@ -648,7 +730,7 @@ function estiloDe(ficha, genero) {
 
 // Quién canta en español. Es por grupo porque casi siempre lo es, y la
 // ficha lleva `esp` cuando no: Shakira canta en los dos idiomas.
-const EN_ESPANOL = new Set(['Alaska y Dinarama', 'Alejandro Sanz', 'Aitana & Ana Guerra', 'Amaral', 'Andrés Calamaro', 'Antonio Flores', 'Antonio Vega', 'Asfalto', 'Bad Bunny', 'Barón Rojo', 'Barricada', 'Bebe', 'Bizarrap', 'Burning', 'C. Tangana', 'Camilo Sesto', 'Carlos Vives & Shakira', 'Cecilia', 'Celtas Cortos', 'Chambao', 'Daddy Yankee', 'Danza Invisible', 'Don Omar', 'Duncan Dhu', 'Dúo Dinámico', 'El Canto del Loco', 'El Último de la Fila', 'Ella Baila Sola', 'Enrique Iglesias', 'Estopa', 'Extremoduro', 'Fito y Fitipaldis', 'Gabinete Caligari', 'Golpes Bajos', 'Héroes del Silencio', 'Hombres G', 'Ilegales', 'J Balvin', 'Jarabe de Palo', 'Jarcha', 'Jeanette', 'Joan Manuel Serrat', 'Joaquín Sabina', 'Juanes', 'Julio Iglesias', 'Karina', 'Karol G', 'La Oreja de Van Gogh', 'La Unión', 'Las Grecas', 'Las Ketchup', 'Leño', 'Los Brincos', 'Los Chichos', 'Los Diablos', 'Los Enanitos Verdes', 'Los Fabulosos Cadillacs', 'Los Planetas', 'Los Rodríguez', 'Los Ronaldos', 'Los Secretos', 'Los Suaves', 'Los Toreros Muertos', 'Los del Río', 'Loquillo y Trogloditas', 'Loquillo y Los Trogloditas', 'Love of Lesbian', 'Luis Eduardo Aute', 'Luis Fonsi', 'Luz Casal', 'Macaco', 'Maluma', 'Manolo Escobar', 'Marc Anthony', 'Marea', 'Massiel', 'Maná', 'Mecano', 'Medina Azahara', 'Melendi', 'Miguel Ríos', 'Mocedades', 'Morat', 'Mägo de Oz', 'Nacha Pop', 'Nena Daconte', 'Nino Bravo', 'Obús', 'Olé Olé', 'Pablo Alborán', 'Paco de Lucía', 'Pereza', 'Platero y Tú', 'Quevedo', 'Radio Futura', 'Raphael', 'Rata Blanca', 'Rocío Jurado', 'Romeo Santos', 'Rosalía', 'Rosana', 'Rosendo', 'Rozalén', 'Seguridad Social', 'Siniestro Total', 'Ska-P', 'Soda Stereo', 'Tequila', 'Triana', 'Vetusta Morla', 'Víctor Manuel', 'Ñu'])
+const EN_ESPANOL = new Set(['091', 'Alaska y Dinarama', 'Azúcar Moreno', 'Fórmula V', 'Georgie Dann', 'Gipsy Kings', 'Isabel Pantoja', 'José Luis Perales', 'Juan y Junior', 'Los Chunguitos', 'Los Módulos', 'Los Payos', 'Los Pekenikes', 'Los Sirex', 'Luis Aguilé', 'M Clan', 'Mari Trini', 'Marisol', 'Miguel Gallardo', 'Pablo Abraira', 'Peret', 'Rocío Dúrcal', 'Sergio Dalma', 'Alejandro Sanz', 'Aitana & Ana Guerra', 'Amaral', 'Andrés Calamaro', 'Antonio Flores', 'Antonio Vega', 'Asfalto', 'Bad Bunny', 'Barón Rojo', 'Barricada', 'Bebe', 'Bizarrap', 'Burning', 'C. Tangana', 'Camilo Sesto', 'Carlos Vives & Shakira', 'Cecilia', 'Celtas Cortos', 'Chambao', 'Daddy Yankee', 'Danza Invisible', 'Don Omar', 'Duncan Dhu', 'Dúo Dinámico', 'El Canto del Loco', 'El Último de la Fila', 'Ella Baila Sola', 'Enrique Iglesias', 'Estopa', 'Extremoduro', 'Fito y Fitipaldis', 'Gabinete Caligari', 'Golpes Bajos', 'Héroes del Silencio', 'Hombres G', 'Ilegales', 'J Balvin', 'Jarabe de Palo', 'Jarcha', 'Jeanette', 'Joan Manuel Serrat', 'Joaquín Sabina', 'Juanes', 'Julio Iglesias', 'Karina', 'Karol G', 'La Oreja de Van Gogh', 'La Unión', 'Las Grecas', 'Las Ketchup', 'Leño', 'Los Brincos', 'Los Chichos', 'Los Diablos', 'Los Enanitos Verdes', 'Los Fabulosos Cadillacs', 'Los Planetas', 'Los Rodríguez', 'Los Ronaldos', 'Los Secretos', 'Los Suaves', 'Los Toreros Muertos', 'Los del Río', 'Loquillo y Trogloditas', 'Loquillo y Los Trogloditas', 'Love of Lesbian', 'Luis Eduardo Aute', 'Luis Fonsi', 'Luz Casal', 'Macaco', 'Maluma', 'Manolo Escobar', 'Marc Anthony', 'Marea', 'Massiel', 'Maná', 'Mecano', 'Medina Azahara', 'Melendi', 'Miguel Ríos', 'Mocedades', 'Morat', 'Mägo de Oz', 'Nacha Pop', 'Nena Daconte', 'Nino Bravo', 'Obús', 'Olé Olé', 'Pablo Alborán', 'Paco de Lucía', 'Pereza', 'Platero y Tú', 'Quevedo', 'Radio Futura', 'Raphael', 'Rata Blanca', 'Rocío Jurado', 'Romeo Santos', 'Rosalía', 'Rosana', 'Rosendo', 'Rozalén', 'Seguridad Social', 'Siniestro Total', 'Ska-P', 'Soda Stereo', 'Tequila', 'Triana', 'Vetusta Morla', 'Víctor Manuel', 'Ñu'])
 
 function enEspanyol(ficha) {
   return ficha.esp ?? EN_ESPANOL.has(ficha.artista)
@@ -683,7 +765,12 @@ function puntua(ficha, r) {
   // volvió a grabar en el 2012 con un solo miembro original.
   const anyo = Number((r.releaseDate ?? '').slice(0, 4))
   if (anyo && Math.abs(anyo - ficha.anyo) <= 1) p += 2
-  if (OTRAS.test(r.trackName ?? '') || OTRAS.test(r.collectionName ?? '')) p -= 7
+  // Lo que avisa de una versión rara va entre paréntesis —«(Live)»,
+  // «[K-Mix]», «(Remastered)»— o en el nombre del disco. En el título a
+  // secas no: «Live Forever» de Oasis es la del disco y se caía por
+  // llamarse Live.
+  const avisos = ((r.trackName ?? '').match(/[([][^)\]]*[)\]]/g) ?? []).join(' ')
+  if (OTRAS.test(avisos) || OTRAS.test(r.collectionName ?? '')) p -= 7
   // Y el disco entero puede ser un directo sin que lo diga la canción:
   // «Vivo... Para Contarlo» no lleva paréntesis ninguno y dentro está el
   // «Soldadito marinero» de siete minutos con el público cantando.

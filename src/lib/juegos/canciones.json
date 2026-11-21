@@ -5082,5 +5082,735 @@
   "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0a/e1/0e/0ae10eda-19d6-9acb-2dd4-3a8f87c076c9/mzaf_11017736900654766444.plus.aac.p.m4a",
   "estilo": "urbano",
   "esp": true
+ },
+ {
+  "id": 6781024437,
+  "titulo": "Bohemian Rhapsody",
+  "alias": [],
+  "artista": "Queen",
+  "anyo": 1975,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4b/83/09/4b8309c3-e3b2-10bd-ea80-ec017d832503/mzaf_9752264660400108875.plus.aac.p.m4a"
+ },
+ {
+  "id": 6781024333,
+  "titulo": "Somebody to Love",
+  "alias": [],
+  "artista": "Queen",
+  "anyo": 1976,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d1/54/c1/d154c15d-d528-76c7-f748-b05dfb29a0c1/mzaf_18037013541971714698.plus.aac.p.m4a"
+ },
+ {
+  "id": 6781077477,
+  "titulo": "I Want to Break Free",
+  "alias": [],
+  "artista": "Queen",
+  "anyo": 1984,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fa/c9/ef/fac9ef0d-36ff-0fbb-882a-417e2879bd56/mzaf_16198351730692320631.plus.aac.p.m4a"
+ },
+ {
+  "id": 6781081105,
+  "titulo": "Radio Ga Ga",
+  "alias": [],
+  "artista": "Queen",
+  "anyo": 1984,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/50/44/08/504408c7-85af-69a0-0ce4-ff71e6e56978/mzaf_9527261405524641600.plus.aac.p.m4a"
+ },
+ {
+  "id": 6781081188,
+  "titulo": "The Show Must Go On",
+  "alias": [],
+  "artista": "Queen",
+  "anyo": 1991,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/11/09/c7/1109c744-3638-28ef-4622-8422677fe80f/mzaf_426825901484806279.plus.aac.p.m4a"
+ },
+ {
+  "id": 1377827086,
+  "titulo": "Patience",
+  "alias": [],
+  "artista": "Guns N' Roses",
+  "anyo": 1988,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/88/35/b5/8835b589-17b0-2c15-3658-80ac9790f435/mzaf_3359186037511875187.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440896173,
+  "titulo": "Don't Cry",
+  "alias": [],
+  "artista": "Guns N' Roses",
+  "anyo": 1991,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/19/34/86/193486f5-08ed-62a1-3aed-24ef52345aab/mzaf_10055600496027634278.plus.aac.p.m4a"
+ },
+ {
+  "id": 1423285054,
+  "titulo": "Always",
+  "alias": [],
+  "artista": "Bon Jovi",
+  "anyo": 1994,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cf/8a/de/cf8adec9-48f4-eb82-b842-f86b7b227317/mzaf_16179737682157436334.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440826868,
+  "titulo": "Bed of Roses",
+  "alias": [],
+  "artista": "Bon Jovi",
+  "anyo": 1992,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/85/08/c5/8508c531-39f6-bcb5-d645-e447da5d4762/mzaf_9918215604809050335.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440826861,
+  "titulo": "Keep the Faith",
+  "alias": [],
+  "artista": "Bon Jovi",
+  "anyo": 1992,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/41/1c/2c/411c2ca7-56bf-ed14-4bff-f17415e788f2/mzaf_16042746704727686809.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440746347,
+  "titulo": "Sunday Bloody Sunday",
+  "alias": [],
+  "artista": "U2",
+  "anyo": 1983,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4f/b4/dd/4fb4dd4c-201d-fa98-b9d3-8028c3cb9db0/mzaf_14497299272928993851.plus.aac.p.m4a"
+ },
+ {
+  "id": 1443184298,
+  "titulo": "Pride (In the Name of Love)",
+  "alias": [],
+  "artista": "U2",
+  "anyo": 1984,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/62/15/eb/6215eb77-5dd8-8447-c74d-36e681641407/mzaf_1131690959287415963.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440729858,
+  "titulo": "I Still Haven't Found What I'm Looking For",
+  "alias": [],
+  "artista": "U2",
+  "anyo": 1987,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/40/82/52/40825242-1dd9-7928-9718-3e29a9055825/mzaf_11348176573945258573.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440809274,
+  "titulo": "One",
+  "alias": [],
+  "artista": "U2",
+  "anyo": 1991,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6b/52/c4/6b52c439-8c2d-951e-560e-c18021267ac1/mzaf_5624277994579076441.plus.aac.p.m4a"
+ },
+ {
+  "id": 574124824,
+  "titulo": "T.N.T.",
+  "alias": [],
+  "artista": "AC/DC",
+  "anyo": 1975,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/45/06/89/450689e7-c41a-6077-aaa2-70ecc80ba7d6/mzaf_11685623573551796541.plus.aac.p.m4a"
+ },
+ {
+  "id": 574050495,
+  "titulo": "Hells Bells",
+  "alias": [],
+  "artista": "AC/DC",
+  "anyo": 1980,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4a/c3/2f/4ac32f48-a005-9e46-5052-399f9d94975b/mzaf_13248563403692727275.plus.aac.p.m4a"
+ },
+ {
+  "id": 976832496,
+  "titulo": "Panama",
+  "alias": [],
+  "artista": "Van Halen",
+  "anyo": 1984,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/44/06/da/4406da6f-91f9-863b-4412-d280734bc0fc/mzaf_14793287219191082489.plus.aac.p.m4a"
+ },
+ {
+  "id": 976820538,
+  "titulo": "Ain't Talkin' 'Bout Love",
+  "alias": [],
+  "artista": "Van Halen",
+  "anyo": 1978,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c2/03/bf/c203bfcd-0136-4be1-4bd4-f29c3e3b2d6d/mzaf_8076290197720489084.plus.aac.p.m4a"
+ },
+ {
+  "id": 1764395683,
+  "titulo": "Dr. Feelgood",
+  "alias": [],
+  "artista": "Mötley Crüe",
+  "anyo": 1989,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/78/bb/73/78bb7373-1b3a-5c8e-8a22-c2565832604f/mzaf_4189700458828704641.plus.aac.p.m4a"
+ },
+ {
+  "id": 1606692510,
+  "titulo": "Girls, Girls, Girls",
+  "alias": [],
+  "artista": "Mötley Crüe",
+  "anyo": 1987,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4a/8e/01/4a8e01ef-71f4-63fe-dc95-7b0633568935/mzaf_2586631373780183427.plus.aac.p.m4a"
+ },
+ {
+  "id": 1606706137,
+  "titulo": "Home Sweet Home",
+  "alias": [],
+  "artista": "Mötley Crüe",
+  "anyo": 1985,
+  "estilo": "heavy",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/89/d5/6b/89d56b74-f7e4-126c-fb92-366ce28a051c/mzaf_13527674943374655863.plus.aac.p.m4a"
+ },
+ {
+  "id": 1517506707,
+  "titulo": "Live Forever",
+  "alias": [],
+  "artista": "Oasis",
+  "anyo": 1994,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/16/f1/ac/16f1ac05-b12f-fd37-d862-ae5cd9772187/mzaf_16674267505849232959.plus.aac.p.m4a"
+ },
+ {
+  "id": 1517447869,
+  "titulo": "Champagne Supernova",
+  "alias": [],
+  "artista": "Oasis",
+  "anyo": 1995,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/26/5b/a4/265ba488-b2d6-4167-c7e7-d5e742c127f1/mzaf_3887073145349385194.plus.aac.p.m4a"
+ },
+ {
+  "id": 1097862833,
+  "titulo": "High and Dry",
+  "alias": [],
+  "artista": "Radiohead",
+  "anyo": 1995,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/97/28/68/972868b4-3ee8-24ec-2e38-466feb0218f2/mzaf_11025138326733736785.plus.aac.p.m4a"
+ },
+ {
+  "id": 1097861770,
+  "titulo": "Paranoid Android",
+  "alias": [],
+  "artista": "Radiohead",
+  "anyo": 1997,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/67/6c/04/676c04b5-624a-6101-2d63-dc9c971e2a4e/mzaf_680078368934998544.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440783633,
+  "titulo": "In Bloom",
+  "alias": [],
+  "artista": "Nirvana",
+  "anyo": 1991,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/88/ca/8a/88ca8a9f-831c-b455-fdaa-f24e7bbe84f8/mzaf_7200097641492539486.plus.aac.p.m4a"
+ },
+ {
+  "id": 1440859612,
+  "titulo": "All Apologies",
+  "alias": [],
+  "artista": "Nirvana",
+  "anyo": 1993,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/09/af/91/09af9163-f85a-b85d-d638-71f442a65e2c/mzaf_15732394013627380669.plus.aac.p.m4a"
+ },
+ {
+  "id": 635791802,
+  "titulo": "Take It Easy",
+  "alias": [],
+  "artista": "Eagles",
+  "anyo": 1972,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8a/69/a4/8a69a49b-db4a-22bb-4485-5209a1722724/mzaf_7773642911906509237.plus.aac.p.m4a"
+ },
+ {
+  "id": 635800400,
+  "titulo": "Desperado",
+  "alias": [],
+  "artista": "Eagles",
+  "anyo": 1973,
+  "estilo": "rock",
+  "esp": false,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3a/a9/e0/3aa9e01f-125d-d599-03ba-754c3d2855bf/mzaf_18051488524776453305.plus.aac.p.m4a"
+ },
+ {
+  "id": 696839873,
+  "titulo": "Héroe de leyenda",
+  "alias": [],
+  "artista": "Héroes del Silencio",
+  "anyo": 1987,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/73/c8/b1/73c8b14c-1c5c-5491-4503-22ae8edef727/mzaf_1732949764086070176.plus.aac.p.m4a"
+ },
+ {
+  "id": 693440349,
+  "titulo": "Nuestros nombres",
+  "alias": [],
+  "artista": "Héroes del Silencio",
+  "anyo": 1993,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bc/6d/1d/bc6d1d82-4d97-fcdf-bf23-79c47a00b52f/mzaf_9601951534900849107.plus.aac.p.m4a"
+ },
+ {
+  "id": 695669769,
+  "titulo": "Avalancha",
+  "alias": [],
+  "artista": "Héroes del Silencio",
+  "anyo": 1995,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/15/8c/b2/158cb231-61d7-e006-5a5a-4c314e3e7856/mzaf_16988377327261672357.plus.aac.p.m4a"
+ },
+ {
+  "id": 79315984,
+  "titulo": "La senda del tiempo",
+  "alias": [],
+  "artista": "Celtas Cortos",
+  "anyo": 1991,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d2/63/5f/d2635f67-c29f-ac16-8ecd-bb37b0c55592/mzaf_6069480321547531160.plus.aac.p.m4a"
+ },
+ {
+  "id": 1443263751,
+  "titulo": "En blanco y negro",
+  "alias": [],
+  "artista": "Barricada",
+  "anyo": 1991,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9e/d3/c0/9ed3c0cf-2bd2-f828-ad30-2ba6e0a7647b/mzaf_17104768248057714230.plus.aac.p.m4a"
+ },
+ {
+  "id": 79660965,
+  "titulo": "Sildavia",
+  "alias": [],
+  "artista": "La Unión",
+  "anyo": 1984,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a9/4f/bb/a94fbbaf-2407-8b9b-c3f2-6fdb3f0109a7/mzaf_1369206867974063701.plus.aac.p.m4a"
+ },
+ {
+  "id": 160709826,
+  "titulo": "Carolina",
+  "alias": [],
+  "artista": "M Clan",
+  "anyo": 1996,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/f2/6e/40/f26e409e-4584-baa9-554d-b988732cfd74/mzaf_12089043611243561295.plus.aac.p.m4a"
+ },
+ {
+  "id": 1400317996,
+  "titulo": "Llamando a la Tierra",
+  "alias": [],
+  "artista": "M Clan",
+  "anyo": 1999,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/eb/fb/a1/ebfba1cb-8cab-c4e5-7c6a-adbca0ce72c1/mzaf_17742617594626564046.plus.aac.p.m4a"
+ },
+ {
+  "id": 79317213,
+  "titulo": "Ojos de gata",
+  "alias": [],
+  "artista": "Los Secretos",
+  "anyo": 1991,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c9/12/81/c91281c1-dce1-f1ff-fb1d-09ce3c4a79ca/mzaf_9460134430051274500.plus.aac.p.m4a"
+ },
+ {
+  "id": 101189509,
+  "titulo": "Pero a tu lado",
+  "alias": [],
+  "artista": "Los Secretos",
+  "anyo": 1983,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/51/6e/4f/516e4fbd-42dd-b322-eeb9-39faaa62494c/mzaf_15496889357285322343.plus.aac.p.m4a"
+ },
+ {
+  "id": 693122394,
+  "titulo": "Lucha de gigantes",
+  "alias": [],
+  "artista": "Nacha Pop",
+  "anyo": 1986,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e5/20/ab/e520ab7b-1075-656a-82e1-5d5ba7026c32/mzaf_13002592581370532008.plus.aac.p.m4a"
+ },
+ {
+  "id": 1057145834,
+  "titulo": "Qué fue del siglo XX",
+  "alias": [],
+  "artista": "091",
+  "anyo": 1988,
+  "estilo": "rock",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/30/2a/86/302a8646-410d-70e5-c559-07ea57e68323/mzaf_8158777603798471882.plus.aac.p.m4a"
+ },
+ {
+  "id": 298579415,
+  "titulo": "Chica de la ciudad",
+  "alias": [],
+  "artista": "Barón Rojo",
+  "anyo": 1981,
+  "estilo": "heavy",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4b/97/56/4b9756f5-8869-cfd2-89fd-d43b56486de2/mzaf_18184792703061041629.plus.aac.p.m4a"
+ },
+ {
+  "id": 1600238284,
+  "titulo": "Tómbola",
+  "alias": [],
+  "artista": "Marisol",
+  "anyo": 1962,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/05/e0/72/05e07278-2250-04a7-6015-8835d86b2dfd/mzaf_1791834434425520974.plus.aac.p.m4a"
+ },
+ {
+  "id": 268479379,
+  "titulo": "Corazón contento",
+  "alias": [],
+  "artista": "Marisol",
+  "anyo": 1968,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/5d/c8/8d/5dc88df0-06bc-c51d-d9e2-87d75075ef6b/mzaf_959651557307013680.plus.aac.p.m4a"
+ },
+ {
+  "id": 313845785,
+  "titulo": "Que se mueran los feos",
+  "alias": [],
+  "artista": "Los Sirex",
+  "anyo": 1965,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f5/a3/e4/f5a3e483-a976-8d9f-e79c-44e31e0cf4b9/mzaf_17522210845256573398.plus.aac.p.m4a"
+ },
+ {
+  "id": 313845469,
+  "titulo": "Un sorbito de champagne",
+  "alias": [],
+  "artista": "Los Brincos",
+  "anyo": 1966,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/06/e2/03/06e20381-efa3-d52d-c4bb-dfe65f312bc7/mzaf_9930845188612297212.plus.aac.p.m4a"
+ },
+ {
+  "id": 930074703,
+  "titulo": "Hilo de seda",
+  "alias": [],
+  "artista": "Los Pekenikes",
+  "anyo": 1967,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/df/de/ec/dfdeec36-04ba-03e8-4217-5aff4cb45195/mzaf_7940571832385694073.plus.aac.p.m4a"
+ },
+ {
+  "id": 1401320314,
+  "titulo": "La caza",
+  "alias": [],
+  "artista": "Juan y Junior",
+  "anyo": 1967,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/e4/13/8d/e4138d90-67ba-edb8-f345-50708b018475/mzaf_17945972877925809612.plus.aac.p.m4a"
+ },
+ {
+  "id": 1483849063,
+  "titulo": "Cuando salí de Cuba",
+  "alias": [],
+  "artista": "Luis Aguilé",
+  "anyo": 1967,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/a9/4a/51/a94a5115-b799-55eb-985f-cd89244e3e58/mzaf_3469418202338581956.plus.aac.p.m4a"
+ },
+ {
+  "id": 1302227858,
+  "titulo": "Las flechas del amor",
+  "alias": [],
+  "artista": "Karina",
+  "anyo": 1968,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/b2/51/3c/b2513c9b-7600-f973-ab7c-3f2e2c6fea65/mzaf_10480649355546611238.plus.aac.p.m4a"
+ },
+ {
+  "id": 930074761,
+  "titulo": "María Isabel",
+  "alias": [],
+  "artista": "Los Payos",
+  "anyo": 1969,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a1/02/de/a102dea7-0ffb-fc94-48f8-2c4c7bf5caf9/mzaf_13698701312647294234.plus.aac.p.m4a"
+ },
+ {
+  "id": 1600694460,
+  "titulo": "Todo tiene su fin",
+  "alias": [],
+  "artista": "Los Módulos",
+  "anyo": 1969,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/d2/f8/89/d2f8899c-207d-5ce1-8f12-aaf480691452/mzaf_1256163320386325299.plus.aac.p.m4a"
+ },
+ {
+  "id": 266293478,
+  "titulo": "Penélope",
+  "alias": [],
+  "artista": "Joan Manuel Serrat",
+  "anyo": 1969,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e9/c1/0e/e9c10ea9-fd37-d6b8-b767-206233d90632/mzaf_4927770298542392036.plus.aac.p.m4a"
+ },
+ {
+  "id": 255679965,
+  "titulo": "El chiringuito",
+  "alias": [],
+  "artista": "Georgie Dann",
+  "anyo": 1988,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/51/e0/7d/51e07dca-37c5-7e4b-c4f8-099a64526a83/mzaf_12917420324321600314.plus.aac.p.m4a"
+ },
+ {
+  "id": 726389266,
+  "titulo": "Yo no soy esa",
+  "alias": [],
+  "artista": "Mari Trini",
+  "anyo": 1971,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/40/ab/8f/40ab8f3e-3bc6-a7ff-27f3-92e2a313a908/mzaf_2634523909978203659.plus.aac.p.m4a"
+ },
+ {
+  "id": 313154158,
+  "titulo": "Algo de mí",
+  "alias": [],
+  "artista": "Camilo Sesto",
+  "anyo": 1972,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b4/68/7b/b4687b9f-42dc-febb-8366-5a38b30e77cb/mzaf_4688097919112439178.plus.aac.p.m4a"
+ },
+ {
+  "id": 1503131354,
+  "titulo": "Eva María",
+  "alias": [],
+  "artista": "Fórmula V",
+  "anyo": 1973,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6e/96/68/6e9668e9-bafd-19cc-eae9-1670bacdb09c/mzaf_13357055651968144649.plus.aac.p.m4a"
+ },
+ {
+  "id": 155661081,
+  "titulo": "Y viva España",
+  "alias": [],
+  "artista": "Manolo Escobar",
+  "anyo": 1973,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/af/88/c1/af88c156-c840-e6ca-beb8-95bd4a1f9742/mzaf_12248080118021389737.plus.aac.p.m4a"
+ },
+ {
+  "id": 690832301,
+  "titulo": "Porque te vas",
+  "alias": [],
+  "artista": "Jeanette",
+  "anyo": 1974,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4a/37/3e/4a373e40-dbb8-a018-a5bb-63a4b46dec49/mzaf_11597434793407483484.plus.aac.p.m4a"
+ },
+ {
+  "id": 288164783,
+  "titulo": "Un ramito de violetas",
+  "alias": [],
+  "artista": "Cecilia",
+  "anyo": 1975,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/2c/97/e6/2c97e603-b10b-a0b2-19a2-ec96b4f0baf0/mzaf_7308707836828795423.plus.aac.p.m4a"
+ },
+ {
+  "id": 1232678096,
+  "titulo": "Hoy tengo ganas de ti",
+  "alias": [],
+  "artista": "Miguel Gallardo",
+  "anyo": 1975,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f9/04/ca/f904cae6-aa64-b6ff-6a01-99691acfa253/mzaf_3459266131236879051.plus.aac.p.m4a"
+ },
+ {
+  "id": 1887829557,
+  "titulo": "Gavilán o paloma",
+  "alias": [],
+  "artista": "Pablo Abraira",
+  "anyo": 1976,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f2/0d/8a/f20d8a1f-8249-1d4c-c5b5-542764180335/mzaf_17551191353877333094.plus.aac.p.m4a"
+ },
+ {
+  "id": 1158274341,
+  "titulo": "Escándalo",
+  "alias": [],
+  "artista": "Raphael",
+  "anyo": 1991,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7a/9b/4e/7a9b4ecb-444d-3c43-08ea-f3e2dc9cb250/mzaf_14940140789548031422.plus.aac.p.m4a"
+ },
+ {
+  "id": 268946363,
+  "titulo": "Ese hombre",
+  "alias": [],
+  "artista": "Rocío Jurado",
+  "anyo": 1979,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/96/ab/8b/96ab8b7d-3a8b-3039-51c0-97bf9a646c21/mzaf_9227731547330353209.plus.aac.p.m4a"
+ },
+ {
+  "id": 712637879,
+  "titulo": "Amor de hombre",
+  "alias": [],
+  "artista": "Mocedades",
+  "anyo": 1982,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/57/ed/44/57ed449c-696c-48f8-8d8d-e4d00fc26337/mzaf_12490187036867211845.plus.aac.p.m4a"
+ },
+ {
+  "id": 695509254,
+  "titulo": "¿Y cómo es él?",
+  "alias": [],
+  "artista": "José Luis Perales",
+  "anyo": 1982,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/62/c3/86/62c38684-9bfd-c960-46e7-2d86e5cd8490/mzaf_12355927897830268139.plus.aac.p.m4a"
+ },
+ {
+  "id": 691914430,
+  "titulo": "Me quedo contigo",
+  "alias": [],
+  "artista": "Los Chunguitos",
+  "anyo": 1980,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0c/e4/b3/0ce4b368-8923-9e1e-834a-6859a02c364f/mzaf_11411167672032893021.plus.aac.p.m4a"
+ },
+ {
+  "id": 322289901,
+  "titulo": "Amor eterno",
+  "alias": [],
+  "artista": "Rocío Dúrcal",
+  "anyo": 1984,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/12/b3/bc/12b3bc5f-3be7-8836-b90d-76b0fb65ef45/mzaf_15419227712724016570.plus.aac.p.m4a"
+ },
+ {
+  "id": 276169917,
+  "titulo": "Marinero de luces",
+  "alias": [],
+  "artista": "Isabel Pantoja",
+  "anyo": 1985,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f8/8b/c9/f88bc980-3a17-50d4-34d2-79ce7ea6e00e/mzaf_11662869750858210579.plus.aac.p.m4a"
+ },
+ {
+  "id": 1512944637,
+  "titulo": "Bamboleo",
+  "alias": [],
+  "artista": "Gipsy Kings",
+  "anyo": 1987,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1e/72/43/1e724343-a67b-d367-4a62-855e715a8605/mzaf_10790579924680606845.plus.aac.p.m4a"
+ },
+ {
+  "id": 268435800,
+  "titulo": "Bandido",
+  "alias": [],
+  "artista": "Azúcar Moreno",
+  "anyo": 1990,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5c/3e/bb/5c3ebb6b-fe61-b9b5-e95b-8679a18b269b/mzaf_2705776359164855215.plus.aac.p.m4a"
+ },
+ {
+  "id": 1442768867,
+  "titulo": "Bailar pegados",
+  "alias": [],
+  "artista": "Sergio Dalma",
+  "anyo": 1991,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/98/74/98/9874987f-ca0c-f4f6-5b04-a16264886d0e/mzaf_5170813523946939257.plus.aac.p.m4a"
+ },
+ {
+  "id": 255678856,
+  "titulo": "La barbacoa",
+  "alias": [],
+  "artista": "Georgie Dann",
+  "anyo": 1994,
+  "estilo": "pop",
+  "esp": true,
+  "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ad/70/e8/ad70e8eb-0af3-60bc-602c-53f374bdde54/mzaf_17248481429583011791.plus.aac.p.m4a"
  }
 ]

@@ -58,7 +58,10 @@ for (const c of canciones) {
     const titulo = limpia(c.titulo)
     if (!(suyo.includes(mio) || mio.includes(suyo))) avisos.push(`otro grupo: ${t.artistName}`)
     if (!(pista === titulo || pista.includes(titulo) || titulo.includes(pista))) avisos.push(`otro título: ${t.trackName}`)
-    if (RARAS.test(t.trackName ?? '') || RARAS.test(t.collectionName ?? '')) avisos.push('¿versión rara?')
+    // Solo lo que va entre paréntesis y el nombre del disco: en el
+    // título a secas, «Live Forever» no es un directo.
+    const avisos2 = ((t.trackName ?? '').match(/[([][^)\]]*[)\]]/g) ?? []).join(' ')
+    if (RARAS.test(avisos2) || RARAS.test(t.collectionName ?? '')) avisos.push('¿versión rara?')
     const anyo = Number((t.releaseDate ?? '').slice(0, 4))
     if (anyo && Math.abs(anyo - c.anyo) > 2) avisos.push(`año en la tienda: ${anyo}`)
     if (!t.previewUrl) avisos.push('sin previsualización')
