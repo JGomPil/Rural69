@@ -2,13 +2,24 @@
 // Rural69 · ¿Quién soy? · Las reglas
 // ---------------------------------------------------------------------
 // Cada uno es un famoso y no sabe cuál. Al empezar se reparte una carta
-// por cabeza, y el móvil va pasando de mano en mano: el que lo tiene ve
-// las cartas de TODOS LOS DEMÁS menos la suya, hace UNA pregunta a la
-// mesa —«¿estoy vivo?», «¿canto?»— y se la contestan sí o no.
+// por cabeza y cada cual ve EN SU PROPIO MÓVIL las cartas de todos los
+// demás, con la suya tapada. En su turno hace UNA pregunta a la mesa
+// —«¿estoy vivo?», «¿canto?»— y se la contestan sí o no.
 //
-// Una pregunta por turno, y el móvil cambia de manos. El juego se acaba
-// en cuanto alguien adivina quién es, pero se puede seguir hasta que
-// acierten todos: eso se pregunta en el momento, no antes.
+// Una pregunta por turno. El juego se acaba en cuanto alguien adivina
+// quién es, pero se puede seguir hasta que acierten todos: eso se
+// pregunta en el momento, no antes.
+//
+// Dos cosas que decidí a conciencia:
+//
+//   · Para acertar hay que ESCRIBIR el nombre. Decirlo en voz alta y
+//     pulsar «ya lo sé» deja la puerta abierta al «si yo ya lo sabía»;
+//     escrito, no hay discusión. Si falla, se le cuenta la pregunta y
+//     pasa el turno, que para eso se la jugó.
+//   · Cada móvil ocupa una silla y la silla se guarda en la partida, no
+//     en el aparato: así el que entra desde otro teléfono sigue siendo
+//     quien era, y el que todavía no ha dicho quién es no ve NINGUNA
+//     carta, no vaya a verse la suya.
 //
 // Que el aparato enseñe las cartas de los demás es justo lo que lo hace
 // jugable sin papelitos ni cintas en la frente: la información que cada
@@ -27,13 +38,17 @@ export interface Jugador {
   puesto: number
   /** Preguntas hechas. Es el mérito: acertar con menos. */
   preguntas: number
+  /** Qué cuenta se ha sentado en esta silla. `null`, nadie todavía. */
+  perfil: string | null
 }
 
 export type Fase = 'pasa' | 'mirando' | 'alguien-acerto' | 'fin'
 
 export interface Juego {
   /** Marca del formato: si cambia, el juego guardado se tira. */
-  version: 2
+  version: 3
+  /** Hora del envío. La mesa compartida la necesita para el desfase. */
+  emitido: number
   jugadores: Jugador[]
   categoria: Categoria | 'mezclado'
   /** A quién le toca, por posición en la lista. */
@@ -74,15 +89,17 @@ export function cuantosCaben(categoria: Categoria | 'mezclado'): number {
   return cartasDe(categoria).length
 }
 
-export function nuevoJuego(o: Opciones, azar: () => number = Math.random): Juego {
+export function nuevoJuego(o: Opciones, azar: () => number = Math.random, ahora = Date.now()): Juego {
   const mazo = baraja(cartasDe(o.categoria), azar)
   return {
-    version: 2,
+    version: 3,
+    emitido: ahora,
     jugadores: o.nombres.map((nombre, i) => ({
       nombre,
       carta: mazo[i % mazo.length],
       puesto: 0,
       preguntas: 0,
+      perfil: null,
     })),
     categoria: o.categoria,
     turno: 0,
@@ -102,6 +119,74 @@ export function loQueVe(j: Juego): Jugador[] {
 }
 
 export const quedanPorAcertar = (j: Juego): Jugador[] => j.jugadores.filter((p) => p.puesto === 0)
+
+/** En qué silla se ha sentado esta cuenta. `-1` si en ninguna. */
+export function miSitio(j: Juego, perfil: string | null): number {
+  if (!perfil) return -1
+  return j.jugadores.findIndex((p) => p.perfil === perfil)
+}
+
+/**
+ * Este móvil dice quién es. Una cuenta ocupa una silla y solo una: si
+ * ya estaba sentada en otra, se levanta de aquella.
+ */
+export function tomaSitio(j: Juego, indice: number, perfil: string): Juego {
+  if (indice < 0 || indice >= j.jugadores.length) return j
+  return {
+    ...j,
+    jugadores: j.jugadores.map((p, i) => ({
+      ...p,
+      perfil: i === indice ? perfil : p.perfil === perfil ? null : p.perfil,
+    })),
+    historia: [`${j.jugadores[indice].nombre} ya tiene su móvil.`, ...j.historia],
+  }
+}
+
+/** Quita acentos, signos y mayúsculas: se compara lo que suena. */
+function pelado(texto: string): string {
+  return texto
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9ñ ]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/**
+ * ¿Lo que ha escrito es su famoso?
+ *
+ * Vale el nombre entero y vale una parte con la que no se confunda con
+ * nadie: «nadal», «penelope cruz». Nada de aceptar dos letras, y nada
+ * de exigir la tilde de Peñíscola: en un juego a voces, pedir el nombre
+ * clavado con acentos es perder el tiempo discutiendo con el teclado.
+ */
+export function esLaCarta(texto: string, nombre: string): boolean {
+  const dicho = pelado(texto)
+  const real = pelado(nombre)
+  if (dicho.length < 3) return false
+  if (dicho === real) return true
+  // Una palabra suya que no sea de relleno: «de», «la», «el»…
+  const trozos = real.split(' ').filter((p) => p.length >= 4)
+  if (trozos.includes(dicho)) return true
+  // O un trozo largo del nombre, para los que escriben a medias.
+  return dicho.length >= 5 && real.includes(dicho)
+}
+
+/**
+ * Se la juega y lo escribe. Si acierta, a la clasificación; si no, se le
+ * cuenta la pregunta y pasa el turno, que es el precio de arriesgar.
+ */
+export function intenta(j: Juego, texto: string): Juego {
+  if (j.fase !== 'mirando') return j
+  const quien = j.jugadores[j.turno]
+  if (esLaCarta(texto, quien.carta.nombre)) return acierta(j)
+  const jugadores = j.jugadores.map((p, i) => (i === j.turno ? { ...p, preguntas: p.preguntas + 1 } : p))
+  return pasaElMovil(
+    { ...j, jugadores },
+    `${quien.nombre} dijo «${texto.trim()}» y no era.`,
+  )
+}
 
 /** Coge el móvil y mira: empieza su turno y, si lo hay, su reloj. */
 export function mira(j: Juego, ahora = Date.now()): Juego {
@@ -148,7 +233,8 @@ export function seAcabaElTiempo(j: Juego): Juego {
 
 /**
  * ¡Lo ha adivinado! Si es el primero y queda gente, se para a preguntar
- * si se sigue hasta que acierten todos.
+ * si se sigue hasta que acierten todos. Se llega aquí desde `intenta`,
+ * que es quien comprueba lo que ha escrito.
  */
 export function acierta(j: Juego): Juego {
   if (j.fase !== 'mirando') return j
@@ -185,8 +271,9 @@ export function terminaAqui(j: Juego): Juego {
   return { ...j, fase: 'fin', fin: null }
 }
 
-export function otraVez(j: Juego, azar: () => number = Math.random): Juego {
-  return nuevoJuego(
+/** Otra partida: cartas nuevas, pero cada uno se queda en su silla. */
+export function otraVez(j: Juego, azar: () => number = Math.random, ahora = Date.now()): Juego {
+  const nuevo = nuevoJuego(
     {
       nombres: j.jugadores.map((p) => p.nombre),
       categoria: j.categoria,
@@ -194,7 +281,12 @@ export function otraVez(j: Juego, azar: () => number = Math.random): Juego {
       vueltas: j.vueltas,
     },
     azar,
+    ahora,
   )
+  return {
+    ...nuevo,
+    jugadores: nuevo.jugadores.map((p, i) => ({ ...p, perfil: j.jugadores[i]?.perfil ?? null })),
+  }
 }
 
 /** Primero los que acertaron, por orden; detrás los que no. */
@@ -235,7 +327,7 @@ export function leeJuego(): Juego | null {
     const crudo = localStorage.getItem(LLAVE)
     if (!crudo) return null
     const j = JSON.parse(crudo) as Juego
-    if (j?.version !== 2 || !Array.isArray(j.jugadores) || j.jugadores.length < 2) return null
+    if (j?.version !== 3 || !Array.isArray(j.jugadores) || j.jugadores.length < 2) return null
     return j
   } catch {
     return null

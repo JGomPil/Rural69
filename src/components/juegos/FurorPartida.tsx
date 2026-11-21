@@ -155,7 +155,7 @@ export function FurorPartida({
   partida: Partida
   gente: Member[]
   perfiles: Profile[]
-  mesa: Mesa
+  mesa: Mesa<Partida>
   /** Un administrador puede recoger el mando si el moderador desaparece. */
   puedeMandar: boolean
 }) {
@@ -362,7 +362,7 @@ function Mando({
   perfiles,
   puedeMandar,
 }: {
-  mesa: Mesa
+  mesa: Mesa<Partida>
   perfiles: Profile[]
   puedeMandar: boolean
 }) {

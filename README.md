@@ -702,10 +702,18 @@ pregunta** a la mesa y le contestan sí o no.
 
 - **La pantalla guarda el secreto, y esa es toda la gracia.** Lo que cada cual no puede saber
   es lo suyo, y de eso se encarga el aparato: nada de papelitos, cintas en la frente ni un
-  árbitro que lo sepa todo. Por eso el turno enseña la lista de los demás y una interrogación
-  donde va el tuyo.
-- **Un solo aparato, y a propósito.** Aquí no hay nada que sincronizar —el juego *es* el móvil
-  pasando—, así que, al revés que el Furor, no necesita tabla ni moderador.
+  árbitro que lo sepa todo.
+- **Cada uno con su móvil.** La partida es una fila en `game_sessions`, como el Furor, pero de
+  las abiertas: aquí no manda uno, cada cual mueve su turno desde su teléfono. Antes de ver
+  nada hay que decir quién eres, y la silla se guarda **en la partida**, no en el aparato, para
+  que quien entre desde otro teléfono siga siendo quien era. Un móvil que no ha dicho quién es
+  no ve ni una carta: la primera que vería sería la suya. Y se avisa en todas las pantallas de
+  que tu famoso sí sale en el móvil del de al lado.
+- **Para acertar hay que escribirlo.** Decirlo en voz alta y pulsar «ya lo sé» deja la puerta
+  abierta al «si yo ya lo sabía»; escrito, no hay discusión. Vale el nombre entero o un
+  apellido que identifique, sin pelearse con las tildes, y fallar cuesta la pregunta y el turno.
+- **Sin cobertura se juega igual**, con un solo móvil que va pasando de mano en mano: es la
+  misma partida, enseñada de otra manera.
 - **El final lo decidís en caliente.** El juego se acaba cuando alguien adivina quién es, y en
   ese mismo momento se pregunta si se sigue hasta que acierten todos. Antes de empezar nadie
   sabe si va a querer seguir, así que no tiene sentido preguntarlo entonces.

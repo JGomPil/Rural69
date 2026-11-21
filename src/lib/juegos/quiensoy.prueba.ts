@@ -2,6 +2,11 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import {
   acierta,
   baraja,
+  esLaCarta,
+  intenta,
+  miSitio,
+  otraVez,
+  tomaSitio,
   clasificacion,
   cuantosCaben,
   guardaJuego,
@@ -70,9 +75,10 @@ describe('el reparto', () => {
     expect(j.jugadores.every((p) => p.carta.categoria === 'musica')).toBe(true)
   })
 
-  it('empiezan todos sin saber quiénes son', () => {
+  it('empiezan todos sin saber quiénes son y sin móvil', () => {
     const j = empieza()
     expect(j.jugadores.every((p) => p.puesto === 0 && p.preguntas === 0)).toBe(true)
+    expect(j.jugadores.every((p) => p.perfil === null)).toBe(true)
     expect(j.fase).toBe('pasa')
     expect(quedanPorAcertar(j)).toHaveLength(3)
   })
@@ -162,6 +168,76 @@ describe('acertar', () => {
   })
 })
 
+describe('cada móvil dice quién es', () => {
+  it('sentarse en una silla la marca como tuya', () => {
+    const j = tomaSitio(empieza(), 1, 'perfil-vero')
+    expect(j.jugadores[1].perfil).toBe('perfil-vero')
+    expect(miSitio(j, 'perfil-vero')).toBe(1)
+    expect(j.historia[0]).toContain('Vero ya tiene su móvil')
+  })
+
+  it('una cuenta solo ocupa una silla: si cambia, deja la anterior', () => {
+    let j = tomaSitio(empieza(), 1, 'perfil-vero')
+    j = tomaSitio(j, 2, 'perfil-vero')
+    expect(j.jugadores[1].perfil).toBeNull()
+    expect(j.jugadores[2].perfil).toBe('perfil-vero')
+  })
+
+  it('quien no se ha sentado no tiene sitio', () => {
+    expect(miSitio(empieza(), 'nadie')).toBe(-1)
+    expect(miSitio(empieza(), null)).toBe(-1)
+  })
+
+  it('otra partida reparte cartas nuevas pero respeta las sillas', () => {
+    const j = tomaSitio(empieza(), 0, 'perfil-javi')
+    const otra = otraVez(j, azarFijo([0.8, 0.2, 0.6]))
+    expect(otra.jugadores[0].perfil).toBe('perfil-javi')
+    expect(otra.jugadores[0].puesto).toBe(0)
+  })
+})
+
+describe('hay que escribirlo', () => {
+  it('vale el nombre entero, con o sin tildes y mayúsculas', () => {
+    expect(esLaCarta('penelope cruz', 'Penélope Cruz')).toBe(true)
+    expect(esLaCarta('  PENÉLOPE   CRUZ ', 'Penélope Cruz')).toBe(true)
+  })
+
+  it('vale un apellido que lo identifique', () => {
+    expect(esLaCarta('nadal', 'Rafa Nadal')).toBe(true)
+    expect(esLaCarta('einstein', 'Albert Einstein')).toBe(true)
+  })
+
+  it('no vale cualquier cosa', () => {
+    expect(esLaCarta('nad', 'Rafa Nadal')).toBe(false)
+    expect(esLaCarta('messi', 'Rafa Nadal')).toBe(false)
+    expect(esLaCarta('', 'Rafa Nadal')).toBe(false)
+    // «de» y «la» son relleno: no pueden dar un acierto.
+    expect(esLaCarta('de', 'Camarón de la Isla')).toBe(false)
+  })
+
+  it('acertar escribiéndolo cuenta como acierto', () => {
+    const j = mira(empieza(), 1_000_000)
+    const suyo = j.jugadores[j.turno].carta.nombre
+    const despues = intenta(j, suyo)
+    expect(despues.jugadores[0].puesto).toBe(1)
+    expect(despues.fase).toBe('alguien-acerto')
+  })
+
+  it('fallar cuesta la pregunta y el turno', () => {
+    const j = mira(empieza(), 1_000_000)
+    const despues = intenta(j, 'Chuck Norris')
+    expect(despues.jugadores[0].puesto).toBe(0)
+    expect(despues.jugadores[0].preguntas).toBe(1)
+    expect(despues.turno).toBe(1)
+    expect(despues.historia[0]).toContain('Javi dijo «Chuck Norris» y no era')
+  })
+
+  it('fuera de turno no hace nada', () => {
+    const j = empieza()
+    expect(intenta(j, 'lo que sea')).toBe(j)
+  })
+})
+
 describe('las vueltas', () => {
   it('sin límite, se puede jugar indefinidamente', () => {
     let j = empieza({ vueltas: null })
@@ -203,7 +279,7 @@ describe('el juego guardado en el aparato', () => {
   })
 
   it('un juego de otra versión no se recupera', () => {
-    localStorage.setItem('rural69-quiensoy', JSON.stringify({ ...empieza(), version: 1 }))
+    localStorage.setItem('rural69-quiensoy', JSON.stringify({ ...empieza(), version: 2 }))
     expect(leeJuego()).toBeNull()
   })
 })

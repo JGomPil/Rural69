@@ -414,11 +414,11 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       'durante'` y esconder el enlace del menú el resto del año.
 - [ ] **El marcador de la casa.** Guardar quién ganó cada partida para picarse
       entre escapadas. Necesita tabla y SQL.
-- [x] **¿Quién soy?** Una carta por cabeza, ves las de los demás menos la tuya, una
-      pregunta por turno. Acaba cuando alguien acierta, y ahí se pregunta si se sigue hasta
-      que acierten todos. Vueltas sin límite, reloj opcional, 68 famosos en cuatro
-      categorías. Un solo aparato que va pasando: este no necesita servidor. 24 pruebas.
-      (`src/lib/juegos/quiensoy.ts`, `famosos.ts`)
+- [x] **¿Quién soy?** Una carta por cabeza, cada uno con su móvil: ves las de los demás y
+      la tuya tapada, una pregunta por turno, y para acertar hay que escribir el nombre.
+      Acaba cuando alguien acierta, y ahí se pregunta si se sigue hasta que acierten todos.
+      Vueltas sin límite, reloj opcional, 68 famosos. Sin cobertura, un solo móvil que va
+      pasando. 34 pruebas. (`src/lib/juegos/quiensoy.ts`, `supabase/23_juegos_de_todos.sql`)
 - [ ] **Más juegos.** El cajón está hecho para eso.
 - [ ] **Pendiente de probar con gente.** Si 30 segundos se hacen largos, si los
       botones se entienden a voces y si la lista de 179 palabras aguanta una
@@ -433,8 +433,10 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       tiempo real, y las tres columnas de silencio en `profiles`, con los perfiles
       del grupo en 23:00 → 8:00. Probada también la escritura: apagar y volver a
       encender el interruptor del perfil, confirmado tras recargar del todo.
-- [ ] Pasar `supabase/22_juegos.sql` en el SQL Editor. Sin él, el Furor funciona pero
-      solo en el móvil del que juega: nadie más ve la partida.
+- [x] Pasar `supabase/22_juegos.sql` en el SQL Editor (21/11/2026). Comprobado con dos
+      pantallas: la segunda ve la palabra, el marcador y la cuenta atrás del moderador.
+- [ ] Pasar `supabase/23_juegos_de_todos.sql` en el SQL Editor. Sin él, el «¿Quién soy?»
+      no se sincroniza entre móviles: cada aparato jugaría por su cuenta.
 - [ ] Volver a desplegar la *Edge Function* `avisar` (panel → Edge Functions →
       avisar → Code → pegar `supabase/functions/avisar/index.ts` → Deploy). Sin
       esto, ni el silencio de noche ni el número del icono con la app cerrada.

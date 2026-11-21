@@ -5,13 +5,17 @@ import { useGrupo } from '../hooks/useGrupo'
 import { FurorEquipos } from '../components/juegos/FurorEquipos'
 import { FurorPartida } from '../components/juegos/FurorPartida'
 import { Cargando } from '../components/ui/Varios'
-import { nuevaPartida } from '../lib/juegos/furor'
+import { guardaPartida, leePartida, nuevaPartida, type Partida } from '../lib/juegos/furor'
 import { useMesa } from '../lib/juegos/sincronia'
 
 export function Furor() {
   const { perfil, esAdmin } = useAuth()
   const { miembros, perfiles } = useGrupo()
-  const mesa = useMesa('furor', perfil?.id ?? null)
+  // El Furor es de los cerrados: manda el moderador y los demás miran.
+  const mesa = useMesa<Partida>('furor', perfil?.id ?? null, {
+    guarda: guardaPartida,
+    lee: leePartida,
+  })
 
   const gente = miembros.filter((m) => m.active)
 

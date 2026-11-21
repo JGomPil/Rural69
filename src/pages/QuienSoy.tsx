@@ -1,20 +1,22 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, Info, Smile } from 'lucide-react'
+import { ArrowLeft, CloudOff, Info, Smile } from 'lucide-react'
+import { useAuth } from '../hooks/useAuth'
 import { useGrupo } from '../hooks/useGrupo'
 import { QuienSoyJugadores } from '../components/juegos/QuienSoyJugadores'
 import { QuienSoyPartida } from '../components/juegos/QuienSoyPartida'
+import { Cargando } from '../components/ui/Varios'
 import { guardaJuego, leeJuego, nuevoJuego, type Juego } from '../lib/juegos/quiensoy'
+import { useMesa } from '../lib/juegos/sincronia'
 
 export function QuienSoy() {
+  const { perfil } = useAuth()
   const { miembros } = useGrupo()
-  // Se juega en un solo aparato, así que la partida vive aquí; si el móvil
-  // se bloquea a mitad, se recupera donde estaba.
-  const [juego, setJuego] = useState<Juego | null>(() => leeJuego())
-
-  useEffect(() => {
-    guardaJuego(juego)
-  }, [juego])
+  // Este es de los abiertos: cada uno mueve lo suyo desde su propio móvil.
+  const mesa = useMesa<Juego>('quiensoy', perfil?.id ?? null, {
+    guarda: guardaJuego,
+    lee: leeJuego,
+    todosJuegan: true,
+  })
 
   return (
     <div className="space-y-5">
@@ -31,18 +33,35 @@ export function QuienSoy() {
             <Smile size={22} className="text-tierra-600" /> ¿Quién soy?
           </h1>
           <p className="text-sm text-tenue">
-            {juego ? 'Partida en marcha.' : 'La carta en la frente, de toda la vida.'}
+            {mesa.partida ? 'Partida en marcha.' : 'Cada uno es un famoso y no sabe cuál.'}
           </p>
         </div>
       </header>
 
-      {juego ? (
-        <QuienSoyPartida juego={juego} onCambia={setJuego} onSalir={() => setJuego(null)} />
+      {mesa.cargando ? (
+        <Cargando texto="Mirando si hay partida…" />
+      ) : mesa.partida ? (
+        <>
+          <QuienSoyPartida
+            juego={mesa.partida}
+            miPerfil={perfil?.id ?? null}
+            aSolas={mesa.aSolas}
+            desfase={mesa.desfase}
+            onCambia={mesa.publica}
+            onSalir={() => void mesa.termina()}
+          />
+          {mesa.aSolas && (
+            <p className="flex items-center justify-center gap-2 text-center text-xs text-suave">
+              <CloudOff size={14} /> Sin línea con el servidor: se juega con este móvil, pasándolo de
+              mano en mano.
+            </p>
+          )}
+        </>
       ) : (
         <>
           <QuienSoyJugadores
             gente={miembros.filter((m) => m.active)}
-            onEmpezar={(o) => setJuego(nuevoJuego(o))}
+            onEmpezar={(o) => void mesa.empieza(nuevoJuego(o))}
           />
           <ComoSeJuega />
         </>
@@ -59,20 +78,26 @@ function ComoSeJuega() {
       </summary>
       <div className="space-y-2 border-t border-arena px-4 py-3 text-sm text-tenue">
         <p>
-          Al empezar, a cada uno le toca un famoso, y nadie sabe cuál es el suyo. El móvil va pasando
-          de mano en mano: el que lo tiene <strong>ve las cartas de todos los demás menos la suya</strong>.
+          Al empezar, a cada uno le toca un famoso y nadie sabe cuál es el suyo.{' '}
+          <strong>Cada cual abre el juego en su propio móvil y dice quién es</strong>: desde ese momento
+          ve las cartas de todos los demás, con la suya tapada.
         </p>
         <p>
-          En su turno hace <strong>una sola pregunta</strong> a la mesa —¿estoy vivo?, ¿soy español?,
-          ¿canto?— y le contestan sí o no. Luego pasa el móvil al siguiente, sepa algo más o no.
+          Por turnos, se hace <strong>una sola pregunta</strong> a la mesa —¿estoy vivo?, ¿soy español?,
+          ¿canto?— y los demás contestan sí o no. Todos los móviles van a la vez: se ve de quién es el
+          turno sin preguntarlo.
         </p>
         <p>
-          El juego se acaba en cuanto alguien adivina quién es. En ese momento se os pregunta si
-          queréis <strong>seguir hasta que acierten todos</strong>, que es como suele acabar.
+          Para acertar hay que <strong>escribir el nombre</strong>, no basta con decirlo. Si fallas, se
+          te cuenta la pregunta y pasa el turno.
         </p>
         <p>
-          El reloj es opcional —son segundos para preguntar, no para acertar— y las vueltas pueden ir
-          sin límite. Hay 68 famosos entre cine y tele, música, deportes e históricos.
+          El juego se acaba en cuanto alguien adivina quién es, y ahí mismo se os pregunta si queréis{' '}
+          <strong>seguir hasta que acierten todos</strong>.
+        </p>
+        <p className="text-suave">
+          Cuidado con mirar el móvil del de al lado: tu famoso sale en la pantalla de todos los demás.
+          Y si no hay cobertura, se juega con un solo móvil que va pasando.
         </p>
       </div>
     </details>

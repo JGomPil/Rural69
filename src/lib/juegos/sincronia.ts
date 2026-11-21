@@ -28,52 +28,77 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '../supabase'
-import { guardaPartida, leePartida, sella, type Partida } from './furor'
 
-interface Fila {
-  state: Partida
-  moderator_id: string
+/**
+ * Lo único que la mesa necesita saber de una partida: cuándo se envió.
+ * Con eso reconoce su propio eco y mide el desfase de relojes, y le da
+ * igual si dentro hay un Furor o un ¿Quién soy?
+ */
+export interface Estado {
+  emitido: number
 }
 
-export interface Mesa {
-  partida: Partida | null
+interface Fila<T> {
+  state: T
+  moderator_id: string
+  anyone_plays?: boolean
+}
+
+export interface Mesa<T> {
+  partida: T | null
   /** Perfil que lleva el mando. `null` cuando se juega a solas. */
   moderador: string | null
   soyModerador: boolean
-  /** Lo que va del reloj del moderador al de este móvil, en milisegundos. */
+  /** Puedo escribir: o llevo el mando, o es partida en la que juegan todos. */
+  puedoTocar: boolean
+  /** Lo que va del reloj del que escribió al de este móvil, en milisegundos. */
   desfase: number
   cargando: boolean
   /** Sin línea con Supabase: la partida solo existe en este aparato. */
   aSolas: boolean
   /** Empieza una partida y se pone al mando. */
-  empieza: (p: Partida) => Promise<void>
-  /** Cambia la partida. Solo hace algo si llevas el mando. */
-  publica: (p: Partida) => void
+  empieza: (p: T) => Promise<void>
+  /** Cambia la partida. Solo hace algo si puedes tocarla. */
+  publica: (p: T) => void
   pasaElMando: (perfilId: string) => Promise<void>
   tomaElMando: () => Promise<void>
   termina: () => Promise<void>
 }
 
-export function useMesa(juego: string, miPerfil: string | null): Mesa {
-  const [partida, setPartida] = useState<Partida | null>(null)
+export interface Trastos<T> {
+  /** La copia de este aparato, para sobrevivir a un bloqueo de pantalla. */
+  guarda: (p: T | null) => void
+  lee: () => T | null
+  /** Partida en la que cada jugador mueve lo suyo desde su móvil. */
+  todosJuegan?: boolean
+}
+
+export function useMesa<T extends Estado>(
+  juego: string,
+  miPerfil: string | null,
+  trastos: Trastos<T>,
+): Mesa<T> {
+  const { guarda, lee, todosJuegan = false } = trastos
+  const [partida, setPartida] = useState<T | null>(null)
   const [moderador, setModerador] = useState<string | null>(null)
   const [cargando, setCargando] = useState(true)
   const [aSolas, setASolas] = useState(false)
   const [desfase, setDesfase] = useState(0)
 
   const soyModerador = aSolas || (miPerfil !== null && moderador === miPerfil)
+  const puedoTocar = soyModerador || todosJuegan
   // En un `ref` porque lo leen cosas que no se vuelven a crear en cada
   // pintado —el envío y la relectura—, y se pone al día en un efecto: tocar
   // un `ref` mientras se pinta es justo lo que React pide no hacer.
-  const soyModeradorRef = useRef(soyModerador)
+  const puedoTocarRef = useRef(puedoTocar)
   useEffect(() => {
-    soyModeradorRef.current = soyModerador
-  }, [soyModerador])
+    puedoTocarRef.current = puedoTocar
+  }, [puedoTocar])
   /** La hora del último envío propio: así se reconoce el eco sin equivocarse. */
   const ultimoEnvio = useRef(0)
 
   const recoge = useCallback(
-    (fila: Fila | null) => {
+    (fila: Fila<T> | null) => {
       if (!fila) {
         setPartida(null)
         setModerador(null)
@@ -98,18 +123,20 @@ export function useMesa(juego: string, miPerfil: string | null): Mesa {
       if (error) throw error
       // Al moderador no se le pisa su propia partida con una lectura que
       // puede venir de hace medio segundo: la suya es la buena.
-      if (!soyModeradorRef.current) recoge((data as Fila | null) ?? null)
+      if (!puedoTocarRef.current) recoge((data as Fila<T> | null) ?? null)
       setASolas(false)
     } catch {
       // Ni tabla ni línea: a solas, con lo último que hubiera aquí.
       setASolas(true)
-      setPartida((antes) => antes ?? leePartida())
+      setPartida((antes) => antes ?? lee())
       setModerador(null)
       setDesfase(0)
     } finally {
       setCargando(false)
     }
-  }, [juego, recoge])
+    // `guarda` y `lee` son funciones del módulo del juego, las mismas en
+    // cada pintado: ponerlas aquí no dispara relecturas.
+  }, [juego, recoge, lee])
 
   useEffect(() => {
     // Sin `void` directo: así el primer `setCargando` cae en otro tic y no
@@ -147,7 +174,7 @@ export function useMesa(juego: string, miPerfil: string | null): Mesa {
             setModerador(null)
             return
           }
-          const fila = aviso.new as unknown as Fila
+          const fila = aviso.new as unknown as Fila<T>
           // El eco de lo que acabo de escribir yo: ni caso.
           if (fila.state?.emitido === ultimoEnvio.current) return
           recoge(fila)
@@ -165,30 +192,38 @@ export function useMesa(juego: string, miPerfil: string | null): Mesa {
     }
   }, [juego, recoge, mira])
 
-  // La copia de este aparato es la red de seguridad del que lleva el mando.
+  // La copia de este aparato es la red de seguridad del que escribe.
   useEffect(() => {
-    if (soyModerador) guardaPartida(partida)
-  }, [partida, soyModerador])
+    if (puedoTocar) guarda(partida)
+  }, [partida, puedoTocar, guarda])
 
   const escribe = useCallback(
-    async (p: Partida) => {
+    async (p: T, nuevoDuenyo = false) => {
       if (!miPerfil) return
-      const sellada = sella(p)
+      const sellada = { ...p, emitido: Date.now() }
       ultimoEnvio.current = sellada.emitido
-      const { error } = await supabase
-        .from('game_sessions')
-        .upsert({ game: juego, state: sellada, moderator_id: miPerfil, updated_at: new Date().toISOString() })
+      const fila: Record<string, unknown> = {
+        game: juego,
+        state: sellada,
+        updated_at: new Date().toISOString(),
+        anyone_plays: todosJuegan,
+      }
+      // El moderador solo se pone al crear o al recogerlo: si se mandara en
+      // cada toque, en el ¿Quién soy? el último que pulsa se quedaría con el
+      // mando sin pretenderlo.
+      if (nuevoDuenyo) fila.moderator_id = miPerfil
+      const { error } = await supabase.from('game_sessions').upsert(fila)
       if (error) throw error
     },
-    [juego, miPerfil],
+    [juego, miPerfil, todosJuegan],
   )
 
   const empieza = useCallback(
-    async (p: Partida) => {
+    async (p: T) => {
       setPartida(p)
       setModerador(miPerfil)
       try {
-        await escribe(p)
+        await escribe(p, true)
         setASolas(false)
       } catch {
         setASolas(true)
@@ -201,8 +236,8 @@ export function useMesa(juego: string, miPerfil: string | null): Mesa {
   // moderador cambia al instante y el envío va detrás. Si falla, se juega
   // a solas y se avisa, pero el juego no se para por una mala cobertura.
   const publica = useCallback(
-    (p: Partida) => {
-      if (!soyModeradorRef.current) return
+    (p: T) => {
+      if (!puedoTocarRef.current) return
       setPartida(p)
       if (aSolas) return
       void escribe(p).catch(() => setASolas(true))
@@ -231,19 +266,20 @@ export function useMesa(juego: string, miPerfil: string | null): Mesa {
   const termina = useCallback(async () => {
     setPartida(null)
     setModerador(null)
-    guardaPartida(null)
+    guarda(null)
     if (aSolas) return
     try {
       await supabase.from('game_sessions').delete().eq('game', juego)
     } catch {
       // Si no se pudo borrar, al volver a entrar se verá la de antes.
     }
-  }, [aSolas, juego])
+  }, [aSolas, juego, guarda])
 
   return {
     partida,
     moderador,
     soyModerador,
+    puedoTocar,
     desfase,
     cargando,
     aSolas,
