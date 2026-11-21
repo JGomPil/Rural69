@@ -3,7 +3,7 @@
 // Rural69 · El repertorio de «¿Qué canción suena?»
 // ---------------------------------------------------------------------
 // Lo mismo que `bandas-sonoras.mjs` pero con canciones de pop y rock de
-// 1960 a 2010: la lista se escribe aquí a mano y el script la resuelve
+// 1960 a hoy: la lista se escribe aquí a mano y el script la resuelve
 // contra la tienda de Apple para quedarse con el identificador y la
 // previsualización de 30 segundos, que es lo que suena en la partida.
 //
@@ -193,7 +193,7 @@ const CANCIONES = [
   { titulo: 'With or Without You', artista: 'U2', anyo: 1987 },
   { titulo: 'Where the Streets Have No Name', artista: 'U2', anyo: 1987 },
   { titulo: 'Faith', artista: 'George Michael', anyo: 1987 },
-  { titulo: 'La Bamba', artista: 'Los Lobos', anyo: 1987 },
+  { titulo: 'La Bamba', artista: 'Los Lobos', anyo: 1987, esp: true },
   { titulo: 'I Wanna Dance With Somebody (Who Loves Me)', artista: 'Whitney Houston', anyo: 1987 },
   { titulo: 'Sign o’ the Times', artista: 'Prince', anyo: 1987 },
   { titulo: 'Personal Jesus', artista: 'Depeche Mode', anyo: 1989 },
@@ -390,7 +390,7 @@ const CANCIONES = [
   { titulo: 'Tenía tanto que darte', artista: 'Nena Daconte', anyo: 2008 },
   { titulo: 'Club de fans de John Boy', artista: 'Love of Lesbian', anyo: 2009 },
   { titulo: 'Moving', artista: 'Macaco', anyo: 2009 },
-  { titulo: 'La tortura', artista: 'Shakira', anyo: 2005 },
+  { titulo: 'La tortura', artista: 'Shakira', anyo: 2005, esp: true },
   { titulo: 'Labios compartidos', artista: 'Maná', anyo: 2006 },
   { titulo: 'Me enamora', artista: 'Juanes', anyo: 2007 },
   // --- Rock del de siempre -------------------------------------------
@@ -494,6 +494,87 @@ const CANCIONES = [
   { titulo: 'Rayando el sol', artista: 'Maná', anyo: 1990 },
   { titulo: 'Matador', artista: 'Los Fabulosos Cadillacs', anyo: 1993 },
   { titulo: 'Lamento boliviano', artista: 'Los Enanitos Verdes', anyo: 1994 },
+  // --- Del 2010 para acá ---------------------------------------------
+  // Las que suenan en el coche de los que no habían nacido cuando salió
+  // el «Paranoid». Aquí lo famoso se mide distinto: no hay treinta años
+  // de criba, así que va lo que ha sonado hasta el hartazgo en la radio,
+  // en las bodas y en los anuncios.
+  { titulo: 'Rolling In the Deep', artista: 'Adele', anyo: 2010 },
+  { titulo: 'Love the Way You Lie', artista: 'Eminem', anyo: 2010 },
+  { titulo: 'Waka Waka (This Time for Africa)', artista: 'Shakira', anyo: 2010, alias: ['Esto es África'] },
+  { titulo: 'Firework', artista: 'Katy Perry', anyo: 2010 },
+  { titulo: 'Party Rock Anthem', artista: 'LMFAO', anyo: 2011 },
+  { titulo: 'Someone Like You', artista: 'Adele', anyo: 2011 },
+  { titulo: 'Moves Like Jagger', artista: 'Maroon 5', anyo: 2011 },
+  { titulo: 'We Found Love', artista: 'Rihanna', anyo: 2011 },
+  { titulo: 'Titanium', artista: 'David Guetta', anyo: 2011 },
+  { titulo: 'Somebody That I Used to Know', artista: 'Gotye', anyo: 2011 },
+  { titulo: 'Pumped Up Kicks', artista: 'Foster the People', anyo: 2011 },
+  { titulo: 'Gangnam Style', artista: 'PSY', anyo: 2012 },
+  { titulo: 'Call Me Maybe', artista: 'Carly Rae Jepsen', anyo: 2012 },
+  { titulo: 'Radioactive', artista: 'Imagine Dragons', anyo: 2012 },
+  { titulo: 'Get Lucky', artista: 'Daft Punk', anyo: 2013 },
+  { titulo: 'Blurred Lines', artista: 'Robin Thicke', anyo: 2013 },
+  { titulo: 'Royals', artista: 'Lorde', anyo: 2013 },
+  { titulo: 'Wake Me Up', artista: 'Avicii', anyo: 2013 },
+  { titulo: 'Happy', artista: 'Pharrell Williams', anyo: 2013 },
+  { titulo: 'Wrecking Ball', artista: 'Miley Cyrus', anyo: 2013, extra: 'Bangerz' },
+  { titulo: 'Counting Stars', artista: 'OneRepublic', anyo: 2013 },
+  { titulo: 'Take Me to Church', artista: 'Hozier', anyo: 2013 },
+  { titulo: 'Do I Wanna Know?', artista: 'Arctic Monkeys', anyo: 2013 },
+  { titulo: 'Pompeii', artista: 'Bastille', anyo: 2013 },
+  { titulo: 'All of Me', artista: 'John Legend', anyo: 2013 },
+  { titulo: 'Uptown Funk', artista: 'Mark Ronson', anyo: 2014 },
+  { titulo: 'Shake It Off', artista: 'Taylor Swift', anyo: 2014 },
+  { titulo: 'Chandelier', artista: 'Sia', anyo: 2014 },
+  { titulo: 'Thinking Out Loud', artista: 'Ed Sheeran', anyo: 2014 },
+  { titulo: 'Hello', artista: 'Adele', anyo: 2015 },
+  { titulo: 'Sorry', artista: 'Justin Bieber', anyo: 2015 },
+  { titulo: 'See You Again', artista: 'Wiz Khalifa', anyo: 2015 },
+  { titulo: 'Closer', artista: 'The Chainsmokers', anyo: 2016 },
+  { titulo: 'Shape of You', artista: 'Ed Sheeran', anyo: 2017 },
+  { titulo: 'Believer', artista: 'Imagine Dragons', anyo: 2017 },
+  { titulo: 'Havana', artista: 'Camila Cabello', anyo: 2017 },
+  { titulo: "Beggin'", artista: 'Måneskin', anyo: 2017 },
+  { titulo: 'Shallow', artista: 'Lady Gaga & Bradley Cooper', anyo: 2018 },
+  { titulo: 'Bad Guy', artista: 'Billie Eilish', anyo: 2019 },
+  { titulo: 'Old Town Road', artista: 'Lil Nas X', anyo: 2019 },
+  { titulo: 'Señorita', artista: 'Shawn Mendes & Camila Cabello', anyo: 2019 },
+  { titulo: 'Dance Monkey', artista: 'Tones and I', anyo: 2019 },
+  { titulo: 'Blinding Lights', artista: 'The Weeknd', anyo: 2019 },
+  { titulo: 'Levitating', artista: 'Dua Lipa', anyo: 2020 },
+  { titulo: 'Stay', artista: 'The Kid LAROI & Justin Bieber', anyo: 2021 },
+  { titulo: 'As It Was', artista: 'Harry Styles', anyo: 2022 },
+  { titulo: 'Anti-Hero', artista: 'Taylor Swift', anyo: 2022 },
+  { titulo: 'Flowers', artista: 'Miley Cyrus', anyo: 2023 },
+  { titulo: 'Espresso', artista: 'Sabrina Carpenter', anyo: 2024 },
+  { titulo: 'Die With a Smile', artista: 'Lady Gaga & Bruno Mars', anyo: 2024 },
+  // --- Del 2010 para acá, en español ---------------------------------
+  { titulo: 'Loca', artista: 'Shakira', anyo: 2010, esp: true },
+  { titulo: 'Danza Kuduro', artista: 'Don Omar', anyo: 2010 },
+  { titulo: 'Solamente tú', artista: 'Pablo Alborán', anyo: 2011 },
+  { titulo: 'Vivir mi vida', artista: 'Marc Anthony', anyo: 2013 },
+  { titulo: 'Propuesta indecente', artista: 'Romeo Santos', anyo: 2013 },
+  { titulo: 'Bailando', artista: 'Enrique Iglesias', anyo: 2014 },
+  { titulo: 'La bicicleta', artista: 'Carlos Vives & Shakira', anyo: 2016 },
+  { titulo: 'Cómo te atreves', artista: 'Morat', anyo: 2016 },
+  { titulo: 'Despacito', artista: 'Luis Fonsi', anyo: 2017 },
+  { titulo: 'Mi gente', artista: 'J Balvin', anyo: 2017 },
+  { titulo: 'Felices los 4', artista: 'Maluma', anyo: 2017 },
+  { titulo: 'La puerta violeta', artista: 'Rozalén', anyo: 2017 },
+  { titulo: 'Malamente', artista: 'Rosalía', anyo: 2018 },
+  { titulo: 'Lo malo', artista: 'Aitana & Ana Guerra', anyo: 2018 },
+  { titulo: 'Con altura', artista: 'Rosalía', anyo: 2019 },
+  { titulo: 'Si antes te hubiera conocido', artista: 'Karol G', anyo: 2024 },
+  { titulo: 'Con calma', artista: 'Daddy Yankee', anyo: 2019 },
+  { titulo: 'Hawái', artista: 'Maluma', anyo: 2020 },
+  { titulo: 'La noche de anoche', artista: 'Bad Bunny', anyo: 2020 },
+  { titulo: 'Tú me dejaste de querer', artista: 'C. Tangana', anyo: 2020 },
+  { titulo: 'Provenza', artista: 'Karol G', anyo: 2022 },
+  { titulo: 'Neverita', artista: 'Bad Bunny', anyo: 2022 },
+  { titulo: 'Beso', artista: 'Rosalía', anyo: 2023 },
+  { titulo: 'Quédate', artista: 'Quevedo', anyo: 2022, alias: ['Bzrp Music Sessions 52'], id: 1632746802 },
+  { titulo: 'Shakira: Bzrp Music Sessions, Vol. 53', artista: 'Bizarrap', anyo: 2023, alias: ['La sesión de Shakira'] },
 ]
 
 /** Quita acentos, signos y mayúsculas: se compara lo que suena. */
@@ -509,11 +590,14 @@ const limpia = (t) =>
 // Lo que no es la canción que la gente conoce, aunque se llame igual.
 // «Remastered» no está: un remaster es la misma cinta, y en muchos casos
 // es la única que vende la tienda.
-const OTRAS = /\blive\b|\ben vivo\b|\ben directo\b|\bdirecto\b|remix|re-?mix|refix|club mix|club edit|video edit|without rap|extended|radio edit|\bdemo\b|rehearsal|outtake|acoustic|ac[uú]stic|unplugged|karaoke|tribute|tributo|\bcover\b|\bversión\b|cover version|made famous|made popular|\bas sung by\b|instrumental|8-?bit|lullaby|ringtone|workout|\bmix\)|re-?recorded|\bnew recording\b|\brevisited\b|\bsped up\b|slowed|parod|\(vivo\)|\bdirecto\)|en concierto|\bel concierto\b/i
+const OTRAS = /\blive\b|\ben vivo\b|\ben directo\b|\bdirecto\b|remix|\bmix\b|re-?mix|refix|club mix|club edit|video edit|without rap|extended|radio edit|\bdemo\b|rehearsal|outtake|acoustic|ac[uú]stic|unplugged|karaoke|tribute|tributo|\bcover\b|\bversión\b|cover version|made famous|made popular|\bas sung by\b|instrumental|8-?bit|lullaby|ringtone|workout|\bmix\)|re-?recorded|\bnew recording\b|\brevisited\b|\bsped up\b|slowed|parod|\(vivo\)|\bdirecto\)|en concierto|\bel concierto\b/i
 
 // Discos grabados en un concierto, que no siempre se anuncian en el título
 // de la canción.
-const DIRECTOS = /\bvivo\b|\bdirecto\b|\blive\b|\bconcierto\b|unplugged|\bgira\b|\btour\b/i
+// Ojo con «tour»: estaba aquí y tiraba el «EL ÚLTIMO TOUR DEL MUNDO» de
+// Bad Bunny, que es un disco de estudio con un nombre de gira. Los
+// directos de verdad se anuncian: vivo, directo, live, concierto.
+const DIRECTOS = /\bvivo\b|\bdirecto\b|\blive\b|\bconcierto\b|unplugged|\bgira\b/i
 
 // Recopilatorios de gasolinera. No se descartan —de algunas canciones es lo
 // único que hay— pero pierden contra el disco de verdad: ahí es donde está la
@@ -522,6 +606,53 @@ const COMPILADOS = /grandes [eé]xitos|lo mejor de|\d+ grandes|\d+ a[nñ]os|esen
 
 // Y quien no es el grupo: discos de homenajes, bandas de bodas y recopilatorios.
 const IMPOSTORES = /tribute|karaoke|hit crew|studio band|various artists|orquesta|orchestra tribute|the sunshine|cast|party|covers?\b/i
+
+// El estilo sale del género que trae la tienda, traducido a las cuatro
+// cosas que se piden en un salón: rock, heavy, pop y urbano. La tienda
+// acierta casi siempre y cuando no, la ficha lleva `estilo` a mano.
+const ESTILOS = {
+  'Hard rock': 'heavy',
+  Metal: 'heavy',
+  'Heavy metal': 'heavy',
+  Rock: 'rock',
+  'Pop/Rock': 'rock',
+  Alternativa: 'rock',
+  'Alternativa y rock en español': 'rock',
+  'Alternativa para adultos': 'rock',
+  'Rock: Independiente': 'rock',
+  'Folk rock': 'rock',
+  Punk: 'rock',
+  'Pop punk': 'rock',
+  'Hip-hop/Rap': 'urbano',
+  'Urbano latino': 'urbano',
+  Reggaeton: 'urbano',
+}
+// La tienda va por canción y un grupo acaba repartido: el «Ñu» en pop,
+// Extremoduro en pop y en rock, Scorpions en tres sitios. Para elegir
+// «pon rock» en el salón eso no sirve, así que el estilo lo manda el
+// grupo. Estas cuatro listas pesan más que el género de la tienda.
+const DE_HEAVY = new Set(['AC/DC', 'Aerosmith', 'Alice Cooper', 'Alice In Chains', 'Audioslave', 'Barón Rojo', 'Black Sabbath', 'Blue Öyster Cult', 'Bon Jovi', 'Deep Purple', 'Def Leppard', 'Dio', 'Europe', 'Evanescence', 'Extreme', 'Guns N\' Roses', 'Heart', 'Iron Maiden', 'Judas Priest', 'Korn', 'Led Zeppelin', 'Linkin Park', 'Los Suaves', 'Medina Azahara', 'Metallica', 'Motörhead', 'Mägo de Oz', 'Mötley Crüe', 'Obús', 'Ozzy Osbourne', 'Papa Roach', 'Rammstein', 'Rata Blanca', 'Scorpions', 'Skid Row', 'System of a Down', 'The Darkness', 'Thin Lizzy', 'Twisted Sister', 'Van Halen', 'Whitesnake', 'Ñu'])
+const DE_ROCK = new Set(['Arctic Monkeys', 'Blondie', 'Bob Dylan', 'David Bowie', 'Dire Straits', 'Elvis Presley', 'Gorillaz', 'Simon & Garfunkel', 'The Beach Boys', 'The Who', 'Asfalto', 'Barricada', 'Beck', 'Blur', 'Burning', 'Celtas Cortos', 'Danza Invisible', 'Dover', 'Duncan Dhu', 'El Último de la Fila', 'Extremoduro', 'Fito y Fitipaldis', 'Foo Fighters', 'Franz Ferdinand', 'Gabinete Caligari', 'Green Day', 'Héroes del Silencio', 'Ilegales', 'Jeff Buckley', 'Leño', 'Los Fabulosos Cadillacs', 'Los Enanitos Verdes', 'Los Planetas', 'Los Rodríguez', 'Los Ronaldos', 'Los Secretos', 'Los Toreros Muertos', 'Loquillo y Trogloditas', 'Loquillo y Los Trogloditas', 'Love of Lesbian', 'Marea', 'Muse', 'Måneskin', 'Nacha Pop', 'Nirvana', 'Oasis', 'Pearl Jam', 'Pereza', 'Platero y Tú', 'Queens of the Stone Age', 'Radio Futura', 'Red Hot Chili Peppers', 'Rosendo', 'Seguridad Social', 'Siniestro Total', 'Ska-P', 'Soda Stereo', 'Soundgarden', 'Stereophonics', 'Stone Temple Pilots', 'Tequila', 'The Cranberries', 'The Offspring', 'The Smashing Pumpkins', 'The Verve', 'Triana', 'Vetusta Morla'])
+const DE_POP = new Set(['Billie Eilish', 'Hombres G', 'Jarabe de Palo', 'Joaquín Sabina', 'Billy Joel', 'Bob Marley & The Wailers', 'Chambao', 'El Canto del Loco', 'Estopa', 'Imagine Dragons', 'La Oreja de Van Gogh', 'Las Grecas', 'Lorde', 'Macaco', 'Maná', 'Robbie Williams', 'Rosana', 'Tones and I'])
+const DE_URBANO = new Set(['2Pac', '50 Cent', 'Bad Bunny', 'Beastie Boys', 'Bizarrap', 'C. Tangana', 'Coolio', 'Daddy Yankee', 'Don Omar', 'Eminem', 'Flo Rida', 'House of Pain', 'J Balvin', 'JAY-Z', 'Karol G', 'Lil Nas X', 'Maluma', 'OutKast', 'Quevedo', 'Rosalía', 'The Sugarhill Gang', 'Wiz Khalifa'])
+
+/** Lo que no está en ninguna lista es pop: pop, dance, soul, baladas, latino. */
+function estiloDe(ficha, genero) {
+  if (ficha.estilo) return ficha.estilo
+  if (DE_HEAVY.has(ficha.artista)) return 'heavy'
+  if (DE_ROCK.has(ficha.artista)) return 'rock'
+  if (DE_POP.has(ficha.artista)) return 'pop'
+  if (DE_URBANO.has(ficha.artista)) return 'urbano'
+  return ESTILOS[genero] ?? 'pop'
+}
+
+// Quién canta en español. Es por grupo porque casi siempre lo es, y la
+// ficha lleva `esp` cuando no: Shakira canta en los dos idiomas.
+const EN_ESPANOL = new Set(['Alaska y Dinarama', 'Alejandro Sanz', 'Aitana & Ana Guerra', 'Amaral', 'Andrés Calamaro', 'Antonio Flores', 'Antonio Vega', 'Asfalto', 'Bad Bunny', 'Barón Rojo', 'Barricada', 'Bebe', 'Bizarrap', 'Burning', 'C. Tangana', 'Camilo Sesto', 'Carlos Vives & Shakira', 'Cecilia', 'Celtas Cortos', 'Chambao', 'Daddy Yankee', 'Danza Invisible', 'Don Omar', 'Duncan Dhu', 'Dúo Dinámico', 'El Canto del Loco', 'El Último de la Fila', 'Ella Baila Sola', 'Enrique Iglesias', 'Estopa', 'Extremoduro', 'Fito y Fitipaldis', 'Gabinete Caligari', 'Golpes Bajos', 'Héroes del Silencio', 'Hombres G', 'Ilegales', 'J Balvin', 'Jarabe de Palo', 'Jarcha', 'Jeanette', 'Joan Manuel Serrat', 'Joaquín Sabina', 'Juanes', 'Julio Iglesias', 'Karina', 'Karol G', 'La Oreja de Van Gogh', 'La Unión', 'Las Grecas', 'Las Ketchup', 'Leño', 'Los Brincos', 'Los Chichos', 'Los Diablos', 'Los Enanitos Verdes', 'Los Fabulosos Cadillacs', 'Los Planetas', 'Los Rodríguez', 'Los Ronaldos', 'Los Secretos', 'Los Suaves', 'Los Toreros Muertos', 'Los del Río', 'Loquillo y Trogloditas', 'Loquillo y Los Trogloditas', 'Love of Lesbian', 'Luis Eduardo Aute', 'Luis Fonsi', 'Luz Casal', 'Macaco', 'Maluma', 'Manolo Escobar', 'Marc Anthony', 'Marea', 'Massiel', 'Maná', 'Mecano', 'Medina Azahara', 'Melendi', 'Miguel Ríos', 'Mocedades', 'Morat', 'Mägo de Oz', 'Nacha Pop', 'Nena Daconte', 'Nino Bravo', 'Obús', 'Olé Olé', 'Pablo Alborán', 'Paco de Lucía', 'Pereza', 'Platero y Tú', 'Quevedo', 'Radio Futura', 'Raphael', 'Rata Blanca', 'Rocío Jurado', 'Romeo Santos', 'Rosalía', 'Rosana', 'Rosendo', 'Rozalén', 'Seguridad Social', 'Siniestro Total', 'Ska-P', 'Soda Stereo', 'Tequila', 'Triana', 'Vetusta Morla', 'Víctor Manuel', 'Ñu'])
+
+function enEspanyol(ficha) {
+  return ficha.esp ?? EN_ESPANOL.has(ficha.artista)
+}
 
 function puntua(ficha, r) {
   const artista = limpia(ficha.artista)
@@ -644,6 +775,8 @@ for (const ficha of prueba ? CANCIONES.slice(0, 12) : CANCIONES) {
     artista: ficha.artista,
     anyo: ficha.anyo,
     album: r.elegido.collectionName,
+    estilo: estiloDe(ficha, r.elegido.primaryGenreName),
+    esp: enEspanyol(ficha),
     preview: r.elegido.previewUrl,
     puntos: r.puntos,
   })

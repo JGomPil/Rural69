@@ -30,6 +30,7 @@ export function MusicaPartida({
   miPerfil,
   miNombre,
   cosa,
+  etiqueta,
   aSolas,
   desfase,
   onCambia,
@@ -43,6 +44,8 @@ export function MusicaPartida({
   miNombre: string
   /** Qué se adivina: «película» o «canción». Es lo único que cambia. */
   cosa: string
+  /** El montón del que se tira, si no es «de todo». */
+  etiqueta?: string | null
   /** Sin línea: un solo móvil hace de todo, también de altavoz. */
   aSolas: boolean
   desfase: number
@@ -225,6 +228,7 @@ export function MusicaPartida({
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-tenue">
           {Cosa} {partida.numero} de {partida.rondas}
+          {etiqueta && <span className="font-normal text-suave"> · {etiqueta}</span>}
         </p>
         {partida.fin !== null && partida.fase === 'sonando' && (
           <p

@@ -22,6 +22,7 @@ import {
   sacaPistaDe,
   siguiente,
   trastosDe,
+  type Categoria,
   type Opciones,
   type Partida,
   type Pista,
@@ -39,6 +40,7 @@ export function JuegoDeMusica({
   segundosPorDefecto,
   rondasPorDefecto,
   carga,
+  categorias,
 }: {
   /** La fila de `game_sessions`: «quepeli», «quecancion». */
   juego: string
@@ -56,6 +58,8 @@ export function JuegoDeMusica({
   segundosPorDefecto: number
   rondasPorDefecto: number
   carga: () => Promise<Pista[]>
+  /** Los montones que puede elegir la mesa. Sin esto, se juega con todo. */
+  categorias?: Categoria[]
 }) {
   const { perfil } = useAuth()
   const { miembros } = useGrupo()
@@ -72,7 +76,7 @@ export function JuegoDeMusica({
   // reglas —la ficha vivía en otro sitio—, así que se da por terminada y la
   // mesa vuelve a la pantalla de empezar.
   const yaLimpiada = useRef(false)
-  const vieja = mesa.partida !== null && mesa.partida.version !== 3
+  const vieja = mesa.partida !== null && mesa.partida.version !== 4
   useEffect(() => {
     if (!vieja || yaLimpiada.current) return
     yaLimpiada.current = true
@@ -85,20 +89,47 @@ export function JuegoDeMusica({
     void carga().then(setPistas)
   }, [carga])
 
+  /** El montón de una categoría. Sin categoría —o sin lista—, todo. */
+  const montonDe = useCallback(
+    (id: string | null) => {
+      const cual = categorias?.find((c) => c.id === id)
+      return cual && pistas ? pistas.filter(cual.tiene) : (pistas ?? [])
+    },
+    [categorias, pistas],
+  )
+
+  // El de la partida en marcha: la ronda siguiente la saca quien lleva
+  // el mando, que puede ser otro móvil, y tiene que tirar del mismo.
+  const elegida = mesa.partida?.categoria ?? null
   const saca = useCallback(
-    (usadas: number[], azar: () => number) => (pistas ? sacaPistaDe(pistas, usadas, azar) : null),
-    [pistas],
+    (usadas: number[], azar: () => number) => {
+      const monton = montonDe(elegida)
+      return monton.length > 0 ? sacaPistaDe(monton, usadas, azar) : null
+    },
+    [montonDe, elegida],
   )
 
   const empieza = useCallback(
     (o: Omit<Opciones, 'moderador'>) => {
       // Quien monta la partida se queda con la música, que para eso la monta.
       const mando = perfil ? { perfil: perfil.id, nombre: perfil.display_name } : null
-      const partida = nuevaPartida({ ...o, moderador: mando }, saca)
+      // Aquí todavía no hay partida de la que leer la categoría: manda
+      // la que se acaba de elegir en la pantalla de montar.
+      const monton = montonDe(o.categoria)
+      const partida = nuevaPartida({ ...o, moderador: mando }, (usadas, azar) =>
+        sacaPistaDe(monton, usadas, azar),
+      )
       if (partida) void mesa.empieza(partida)
     },
-    [mesa, saca, perfil],
+    [mesa, montonDe, perfil],
   )
+
+  /** Cuántas hay de cada montón, para la pantalla de montar. */
+  const conCuentas = useMemo(
+    () => categorias?.map((c) => ({ id: c.id, nombre: c.nombre, cuantas: (pistas ?? []).filter(c.tiene).length })),
+    [categorias, pistas],
+  )
+  const etiqueta = elegida && elegida !== 'todo' ? (categorias?.find((c) => c.id === elegida)?.nombre ?? null) : null
 
   return (
     <div className="space-y-5">
@@ -129,6 +160,7 @@ export function JuegoDeMusica({
             miPerfil={perfil?.id ?? null}
             miNombre={perfil?.display_name ?? 'Alguien'}
             cosa={cosa}
+            etiqueta={etiqueta}
             aSolas={mesa.aSolas}
             desfase={mesa.desfase}
             onCambia={mesa.publica}
@@ -152,6 +184,7 @@ export function JuegoDeMusica({
           <MusicaJugadores
             gente={miembros.filter((m) => m.active)}
             cuantas={pistas.length}
+            categorias={conCuentas}
             cosas={cosas}
             comoVa={comoVa}
             segundosPorDefecto={segundosPorDefecto}

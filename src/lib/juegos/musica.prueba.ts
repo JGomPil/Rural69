@@ -31,7 +31,7 @@ const JAVI = { perfil: 'cuenta-javi', nombre: 'Javi' }
 
 const empieza = (extra: Partial<Parameters<typeof nuevaPartida>[0]> = {}) =>
   nuevaPartida(
-    { nombres: ['Javi', 'Vero', 'Leo'], rondas: 3, segundos: 60, moderador: JAVI, ...extra },
+    { nombres: ['Javi', 'Vero', 'Leo'], rondas: 3, segundos: 60, moderador: JAVI, categoria: null, ...extra },
     saca,
     azarFijo([0, 0.5, 0.9]),
     1_000_000,
@@ -48,7 +48,9 @@ describe('el repertorio', () => {
 
   it('sin repertorio no hay nada que sacar', () => {
     expect(sacaPistaDe([], [], () => 0)).toBeNull()
-    expect(nuevaPartida({ nombres: ['Javi'], rondas: 3, segundos: 60, moderador: null }, () => null)).toBeNull()
+    expect(
+      nuevaPartida({ nombres: ['Javi'], rondas: 3, segundos: 60, moderador: null, categoria: null }, () => null),
+    ).toBeNull()
   })
 })
 
@@ -107,6 +109,12 @@ describe('una partida', () => {
   it('apuntar a alguien que no está en la lista no hace nada', () => {
     const p = empieza()
     expect(acierta(p, 9, 2_000_000)).toBe(p)
+  })
+
+  it('se acuerda del montón elegido, y la ronda siguiente tira del mismo', () => {
+    const p = empieza({ categoria: 'heavy' })
+    expect(p.categoria).toBe('heavy')
+    expect(siguiente(nadieLaSaco(p, 1_100_000), saca, azarFijo([0.5]), 1_200_000).categoria).toBe('heavy')
   })
 
   it('cuando el moderador dice que no la sacó nadie, se destapa sin puntos', () => {

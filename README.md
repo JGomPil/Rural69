@@ -848,7 +848,7 @@ _Barbie_.
 
 ### ¿Qué canción suena?
 
-El mismo juego con otro repertorio: pop y rock de 1960 a 2010, 431 canciones, un tercio
+El mismo juego con otro repertorio: pop y rock de 1960 a hoy, 506 canciones, un tercio
 en español. Vale el título y vale el grupo, que en el salón se grita lo que salga antes.
 
 - **Es el mismo juego, y por eso es el mismo código.** Las reglas, la pantalla de montar
@@ -867,7 +867,7 @@ en español. Vale el título y vale el grupo, que en el salón se grita lo que s
 - **Treinta segundos y quince rondas, y el reloj tira a corto.** Una canción conocida se saca
   en cuatro segundos, así que los tiempos que se eligen son 45, 30, 15 o 5 segundos —con cinco
   es a muerte súbita— o sin reloj; los noventa segundos del principio no los usaba nadie ni
-  cuando no la sacaba nadie. Las rondas llegan a cincuenta, que con 431 canciones siguen sin
+  cuando no la sacaba nadie. Las rondas llegan a cincuenta, que con 506 canciones siguen sin
   repetirse. Cada juego trae sus valores por defecto y se cambian antes de empezar.
 - **Las que vienen de un recopilatorio pierden contra el disco.** Esto salió jugando: el «Malo»
   de Bebe sonaba raro porque lo único que vende la tienda española es un «Sabor Latino» del
@@ -894,6 +894,22 @@ en español. Vale el título y vale el grupo, que en el salón se grita lo que s
   tiene la canción pero el buscador no la saca ni poniéndole el disco —«No sé qué hacer
   contigo» es la séptima de un disco que se llama igual— la ficha lleva el identificador a
   mano y el script va derecho a por ella.
+- **Y setenta y cinco del 2010 para acá**, que es la otra mitad del salón. Aquí lo famoso se
+  mide distinto: no hay treinta años de criba, así que entró lo que ha sonado hasta el
+  hartazgo —_Rolling in the Deep_, _Get Lucky_, _Happy_, _Uptown Funk_, _Despacito_,
+  _Blinding Lights_, _Flowers_— y lo de aquí, que en estos años es urbano: _Malamente_,
+  _Lo malo_, _Tú me dejaste de querer_, la sesión de Quevedo. Cuatro no las vende la tienda
+  española por mucho que tenga el disco —_Tusa_, _Dákiti_, _Me porto bonito_, _Despechá_—, y
+  en su sitio entraron otras de los mismos.
+- **Se elige qué puede sonar.** Con medio millar de canciones, «de todo» es una tómbola donde
+  al del heavy le toca Camilo Sesto. Así que en la pantalla de montar partida hay un montón
+  que elegir: de todo (506), rock (203), heavy y hard rock (71), pop y baile (203), rap y
+  reguetón (29), solo en español (156), del 60 al 89 (233) o del 2010 para acá (75). Dos
+  detalles que importan: **el estilo lo manda el grupo, no la canción** —la tienda ficha a
+  Extremoduro en pop y en rock a la vez, y por canción «rock» te saca una balada—, y las
+  rondas se recortan a lo que tenga el montón, que ofrecer cincuenta rondas de veintinueve
+  canciones es prometer repetidas. El montón elegido viaja en el estado de la partida, no en
+  el móvil que la montó: la ronda siguiente la saca quien lleve el mando, que puede ser otro.
 - **Un tercio en español, a propósito.** En ese sofá se grita antes _Hijo de la Luna_ que un
   éxito americano del 62. Los sesenta en español son flojitos y están compensados con los
   ochenta y los noventa.

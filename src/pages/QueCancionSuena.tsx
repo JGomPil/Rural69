@@ -1,5 +1,5 @@
 import { JuegoDeMusica } from '../components/juegos/JuegoDeMusica'
-import { cargaLasCanciones } from '../lib/juegos/canciones'
+import { CATEGORIAS, cargaLasCanciones } from '../lib/juegos/canciones'
 
 export function QueCancionSuena() {
   return (
@@ -7,7 +7,7 @@ export function QueCancionSuena() {
       juego="quecancion"
       llave="rural69-quecancion"
       titulo="¿Qué canción suena?"
-      lema="Pop y rock del 60 al 2010, treinta segundos cada una."
+      lema="Pop y rock del 60 a hoy, treinta segundos cada una."
       cosa="canción"
       cosas="canciones"
       // Media canción se saca en cuatro segundos: con sesenta sobraba medio
@@ -16,6 +16,7 @@ export function QueCancionSuena() {
       segundosPorDefecto={30}
       rondasPorDefecto={15}
       carga={cargaLasCanciones}
+      categorias={CATEGORIAS}
       comoVa={
         <>
           Suenan treinta segundos de una canción y se grita cuál es. La música sale por{' '}
@@ -26,7 +27,7 @@ export function QueCancionSuena() {
       comoSeJuega={
         <>
           <p>
-            Suenan treinta segundos de una canción de pop o rock de 1960 a 2010 y{' '}
+            Suenan treinta segundos de una canción de pop o rock de 1960 a hoy y{' '}
             <strong>se grita</strong>. Nadie escribe nada: el que pone la música hace de moderador,
             toca el nombre del que la ha sacado y a la siguiente.
           </p>
@@ -45,6 +46,13 @@ export function QueCancionSuena() {
             <strong>Suena en un solo móvil</strong>, el que esté más cerca del altavoz. Diez
             teléfonos medio segundo desincronizados no es música, es ruido. Y si el que la lleva se
             va con el móvil en el bolsillo, cualquiera recoge el mando con «que suene aquí».
+          </p>
+          <p>
+            <strong>Se elige qué puede sonar.</strong> Con medio millar de canciones, «de todo» es
+            una tómbola donde al del heavy le toca Camilo Sesto, así que en la pantalla de montar
+            partida se puede acotar el montón: rock, heavy y hard rock, pop y baile, rap y reguetón,
+            solo en español, del 60 al 89 o del 2010 para acá. El estilo lo manda el grupo y no la
+            canción, para que «rock» no saque la balada que la tienda tiene fichada como pop.
           </p>
           <p>
             El trozo lo elige la tienda, no nosotros: en una canción casi siempre cae el estribillo,

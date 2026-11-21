@@ -15,6 +15,7 @@ const RONDAS = [5, 10, 15, 20, 30, 50]
 export function MusicaJugadores({
   gente,
   cuantas,
+  categorias,
   cosas,
   comoVa,
   segundosPorDefecto,
@@ -24,6 +25,8 @@ export function MusicaJugadores({
   gente: Member[]
   /** Cuántas hay en el repertorio, para decirlo en pantalla. */
   cuantas: number
+  /** Los montones que se pueden elegir, con lo que tiene cada uno. */
+  categorias?: { id: string; nombre: string; cuantas: number }[]
   /** «películas» o «canciones». */
   cosas: string
   /** El párrafo de «cómo va esto», que cambia de un juego a otro. */
@@ -36,6 +39,15 @@ export function MusicaJugadores({
   const [suelto, setSuelto] = useState('')
   const [segundos, setSegundos] = useState(segundosPorDefecto)
   const [rondas, setRondas] = useState(rondasPorDefecto)
+  const [categoria, setCategoria] = useState(categorias?.[0]?.id ?? null)
+
+  /** Las que hay en el montón elegido: manda sobre el repertorio entero. */
+  const enElMonton = categorias?.find((c) => c.id === categoria)?.cuantas ?? cuantas
+  // De nada sirve ofrecer 50 rondas si el montón tiene 29 canciones: se
+  // repetirían. Siempre queda la primera opción, aunque el montón sea corto.
+  const rondasQueCaben = RONDAS.filter((r) => r <= enElMonton)
+  const posibles = rondasQueCaben.length > 0 ? rondasQueCaben : [RONDAS[0]]
+  const rondasBuenas = Math.min(rondas, posibles[posibles.length - 1])
 
   const anyade = (nombre: string) => {
     const limpio = nombre.trim()
@@ -128,6 +140,17 @@ export function MusicaJugadores({
       </Tarjeta>
 
       <Tarjeta className="space-y-4 p-4">
+        {categorias && categorias.length > 1 && (
+          <Campo etiqueta={`Qué ${cosas} pueden sonar`}>
+            <Lista value={categoria ?? 'todo'} onChange={(e) => setCategoria(e.target.value)}>
+              {categorias.map((c) => (
+                <option key={c.id} value={c.id} disabled={c.cuantas < 2}>
+                  {c.nombre} ({c.cuantas})
+                </option>
+              ))}
+            </Lista>
+          </Campo>
+        )}
         <div className="grid grid-cols-2 gap-3">
           <Campo etiqueta="Tiempo por ronda">
             <Lista value={segundos} onChange={(e) => setSegundos(Number(e.target.value))}>
@@ -139,8 +162,8 @@ export function MusicaJugadores({
             </Lista>
           </Campo>
           <Campo etiqueta="Rondas">
-            <Lista value={rondas} onChange={(e) => setRondas(Number(e.target.value))}>
-              {RONDAS.map((r) => (
+            <Lista value={rondasBuenas} onChange={(e) => setRondas(Number(e.target.value))}>
+              {posibles.map((r) => (
                 <option key={r} value={r}>
                   {r} {cosas}
                 </option>
@@ -149,7 +172,7 @@ export function MusicaJugadores({
           </Campo>
         </div>
         <p className="text-sm text-suave">
-          {cuantas} {cosas} en el repertorio, y en una partida no se repite ninguna.
+          {enElMonton} {cosas} para elegir, y en una partida no se repite ninguna.
           {segundos === 0
             ? ' Sin reloj: la música da vueltas hasta que alguien la saque.'
             : segundos <= 15
@@ -165,7 +188,7 @@ export function MusicaJugadores({
         disabled={nombres.length < 2}
         onClick={() => {
           despiertaElSonido()
-          onEmpezar({ nombres, rondas, segundos })
+          onEmpezar({ nombres, rondas: rondasBuenas, segundos, categoria })
         }}
       >
         <Play size={18} /> ¡Empezar!

@@ -44,6 +44,21 @@ export interface Pista {
   pie: string
   /** Treinta segundos de música, en la CDN de la tienda. */
   preview: string
+  /** De qué palo es: rock, heavy, pop, urbano. Las pelis no traen. */
+  estilo?: string
+  /** Si se canta en español. Para el «solo españolas». */
+  esp?: boolean
+}
+
+/**
+ * Un montón del que tirar: «de todo», «rock», «en español». Las arma
+ * cada repertorio —el de canciones tiene; el de pelis, no— y la mesa
+ * elige una al montar la partida.
+ */
+export interface Categoria {
+  id: string
+  nombre: string
+  tiene: (p: Pista) => boolean
 }
 
 export interface Jugador {
@@ -74,9 +89,10 @@ export interface Partida {
    * Sube cuando cambia la forma del estado, y entonces las partidas a
    * medias de la versión anterior se cierran solas en vez de pintarse
    * mal. La 2 era la del «¿Qué peli suena?» con la ficha dentro de
-   * `ronda.banda`; ahora la ficha es una `Pista` y vale para los dos.
+   * `ronda.banda`; la 3, la ficha convertida en `Pista` para los dos
+   * juegos; la 4 añade el montón elegido.
    */
-  version: 3
+  version: 4
   /** Hora del envío. La mesa compartida la necesita para el desfase. */
   emitido: number
   jugadores: Jugador[]
@@ -93,6 +109,12 @@ export interface Partida {
   fase: Fase
   /** Quién lleva la partida: pone la música y apunta los aciertos. */
   moderador: Mando | null
+  /**
+   * De qué montón se tira, para que lo sepan todos los móviles y no
+   * solo el que montó la partida: la ronda siguiente la saca quien
+   * lleva el mando, que puede no ser el mismo.
+   */
+  categoria: string | null
   historia: string[]
 }
 
@@ -101,6 +123,8 @@ export interface Opciones {
   rondas: number
   segundos: number
   moderador: Mando | null
+  /** El montón elegido, o `null` para todo el repertorio. */
+  categoria: string | null
 }
 
 /** De dónde salen las pistas. Inyectado para poder probar sin JSON. */
@@ -115,7 +139,7 @@ export function nuevaPartida(
   const pista = saca([], azar)
   if (!pista) return null
   return {
-    version: 3,
+    version: 4,
     emitido: ahora,
     jugadores: o.nombres.map((nombre) => ({ nombre, puntos: 0 })),
     usadas: [pista.id],
@@ -128,6 +152,7 @@ export function nuevaPartida(
     fin: null,
     fase: 'sonando',
     moderador: o.moderador,
+    categoria: o.categoria,
     historia: [],
   }
 }
@@ -304,7 +329,7 @@ export function trastosDe(llave: string) {
         const crudo = localStorage.getItem(llave)
         if (!crudo) return null
         const p = JSON.parse(crudo) as Partida
-        return p.version === 3 ? p : null
+        return p.version === 4 ? p : null
       } catch {
         return null
       }
