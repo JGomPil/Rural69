@@ -2,7 +2,20 @@ import { useEffect, useRef, useState } from 'react'
 import { Check, Dices, Hourglass, RefreshCw, Smartphone, Trophy, Users, X } from 'lucide-react'
 import { Boton } from '../ui/Boton'
 import { Tarjeta } from '../ui/Varios'
-import { despiertaElSonido, fanfarria, mantenLaPantalla, tic, timbre } from '../../lib/juegos/sonido'
+import {
+  acierto,
+  dados,
+  despiertaElSonido,
+  fallo,
+  fanfarria,
+  mantenLaPantalla,
+  quesito,
+  redoble,
+  teToca,
+  tic,
+  timbre,
+  toque,
+} from '../../lib/juegos/sonido'
 import { TableroTrivial } from './TableroTrivial'
 import { FICHAS } from './colores'
 import {
@@ -50,6 +63,7 @@ export function TrivialPartida({
   const [tableroAbiertoEn, setTableroAbiertoEn] = useState<string | null>(null)
   const ultimoTic = useRef(0)
   const yaSono = useRef(false)
+  const comoEstaba = useRef<Foto | null>(null)
 
   const sitio = aSolas ? partida.turno : miSitioT(partida, miPerfil)
   const meToca = sitio === partida.turno
@@ -93,6 +107,29 @@ export function TrivialPartida({
     }
     if (partida.fase !== 'fin') yaSono.current = false
   }, [partida.fase])
+
+  // Los sonidos salen de lo que CAMBIA en la partida, no de los botones.
+  // Así suenan en todos los móviles a la vez —el dado, el veredicto— y no
+  // solo en el del que ha pulsado, que es la mitad de la gracia de jugar
+  // todos alrededor de la misma mesa.
+  useEffect(() => {
+    const ahora = retrata(partida)
+    const antes = comoEstaba.current
+    comoEstaba.current = ahora
+    if (!antes) return
+
+    if (antes.fase === 'tirando' && ahora.fase === 'eligiendo') dados()
+    if (!antes.reto && ahora.reto) redoble()
+    if (antes.fase === 'pregunta' && ahora.fase === 'resultado') {
+      if (ahora.quesitos > antes.quesitos) quesito()
+      else if (ahora.acertada) acierto()
+      else fallo()
+    }
+    // Dentro del desafío del centro no se cambia de fase: cada acierto
+    // suena un escalón más arriba que el anterior.
+    if (ahora.reto !== null && antes.reto !== null && ahora.reto > antes.reto) acierto(ahora.reto)
+    if (antes.turno !== ahora.turno && meToca) teToca()
+  }, [partida, meToca])
 
   if (partida.fase === 'fin') {
     const tabla = clasificacionT(partida)
@@ -278,7 +315,10 @@ export function TrivialPartida({
                   <button
                     type="button"
                     disabled={!meToca || revelado}
-                    onClick={() => onCambia(responde(partida, i, saca))}
+                    onClick={() => {
+                      toque()
+                      onCambia(responde(partida, i, saca))
+                    }}
                     className={`w-full rounded-2xl border px-4 py-3 text-left text-base transition active:scale-[0.99] disabled:active:scale-100 ${
                       revelado && buena
                         ? 'border-bosque-500 bg-bosque-100 font-semibold text-bosque-800'
@@ -400,4 +440,28 @@ function Casillero({ indice }: { indice: number }) {
       {casilla.tipo === 'quesito' && ' · ¡quesito!'}
     </>
   )
+}
+
+/**
+ * Lo poquito de la partida que hace falta para saber qué ha pasado
+ * entre un pintado y el siguiente. Se mira esto y no la partida entera
+ * porque el que escribe y el que recibe no tienen el mismo sello de
+ * hora, y comparar objetos enteros haría sonar cosas de más.
+ */
+interface Foto {
+  fase: string
+  turno: number
+  reto: number | null
+  quesitos: number
+  acertada: boolean
+}
+
+function retrata(p: PartidaT): Foto {
+  return {
+    fase: p.fase,
+    turno: p.turno,
+    reto: p.reto ? p.reto.hechas.length : null,
+    quesitos: p.jugadores[p.turno]?.quesitos.length ?? 0,
+    acertada: p.pregunta !== null && p.elegida === p.pregunta.buena,
+  }
 }

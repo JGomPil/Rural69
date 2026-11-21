@@ -14,7 +14,15 @@ import {
 import { Boton } from '../ui/Boton'
 import { Entrada } from '../ui/Campos'
 import { Tarjeta } from '../ui/Varios'
-import { despiertaElSonido, mantenLaPantalla, tic, timbre } from '../../lib/juegos/sonido'
+import {
+  acierto,
+  despiertaElSonido,
+  fallo,
+  mantenLaPantalla,
+  quesito,
+  tic,
+  timbre,
+} from '../../lib/juegos/sonido'
 import { EMOJI_CATEGORIA } from '../../lib/juegos/famosos'
 import {
   clasificacion,
@@ -52,6 +60,7 @@ export function QuienSoyPartida({
   const [, repinta] = useState(0)
   const [dicho, setDicho] = useState('')
   const ultimoTic = useRef(0)
+  const comoEstaba = useRef<{ faltan: number; fallo: string } | null>(null)
   const restante = restanteDe(juego, desfase)
 
   // Con un solo aparato, la silla es la de quien tenga el turno; con cada
@@ -83,6 +92,24 @@ export function QuienSoyPartida({
     }, 100)
     return () => clearInterval(reloj)
   }, [juego, desfase, meToca, onCambia])
+
+  // El veredicto suena en todos los móviles, no solo en el de quien lo
+  // intentó: así la mesa se entera sin tener que mirar la pantalla.
+  useEffect(() => {
+    const ahora = {
+      faltan: quedanPorAcertar(juego).length,
+      fallo: juego.ultimoFallo ? `${juego.ultimoFallo.nombre}:${juego.ultimoFallo.dicho}` : '',
+    }
+    const antes = comoEstaba.current
+    comoEstaba.current = ahora
+    if (!antes) return
+    if (ahora.faltan < antes.faltan) quesito()
+    else if (ahora.fallo && ahora.fallo !== antes.fallo) fallo()
+  }, [juego])
+
+  useEffect(() => {
+    if (juego.fase === 'fin') acierto(2)
+  }, [juego.fase])
 
   const mirando = juego.fase === 'mirando'
   useEffect(() => {

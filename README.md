@@ -767,6 +767,13 @@ quesitos y 1.523 preguntas, de las que **199 van de nosotros**.
   Trivial de toda la vida sí, y con diez personas eso es una mesa esperando a que uno
   encadene. Del centro no te puedes quedar a vivir: si el dado te lleva más allá, sales por
   otro corredor. Y fallar el desafío final cuesta un quesito, que por eso se avisa antes.
+- **Suena lo que pasa, no lo que se pulsa.** El dado rodando y parándose, el «tac» de marcar
+  una respuesta, el veredicto —acierto, fallo o quesito, que suena mejor—, un redoble al
+  entrar al centro y un aviso corto, con vibración, cuando te toca a ti. Los sonidos salen de
+  lo que CAMBIA en la partida, así que se oyen en todos los móviles a la vez y no solo en el
+  del que ha tocado la pantalla: la mesa se entera sin mirar. Van cortos y bajitos a
+  propósito, porque suenan en diez aparatos alrededor de la misma mesa; el único que grita es
+  el timbre del tiempo.
 - **La pregunta viaja entera en el estado, con la respuesta buena dentro.** Quien abra las
   herramientas del navegador puede verla. En una casa con amigos eso no es un agujero de
   seguridad: es alguien haciendo trampas, y para eso no hay programa que valga.
