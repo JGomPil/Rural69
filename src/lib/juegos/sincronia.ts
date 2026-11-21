@@ -202,19 +202,33 @@ export function useMesa<T extends Estado>(
       if (!miPerfil) return
       const sellada = { ...p, emitido: Date.now() }
       ultimoEnvio.current = sellada.emitido
+
+      // Durante la partida se CAMBIA la fila, no se da de alta otra vez. No
+      // es un detalle: un alta exige firmarla como moderador, y en el
+      // ¿Quién soy? el que toca no suele serlo. Mandándola igualmente, el
+      // último que pulsara se llevaría el mando sin pretenderlo.
+      if (!nuevoDuenyo) {
+        const { data, error } = await supabase
+          .from('game_sessions')
+          .update({ state: sellada, updated_at: new Date().toISOString() })
+          .eq('game', juego)
+          .select('game')
+        if (error) throw error
+        // Si no había fila que cambiar —alguien terminó la partida por otro
+        // lado—, no se pierde el envío en silencio: se vuelve a poner.
+        if (data && data.length > 0) return
+      }
+
       const fila: Record<string, unknown> = {
         game: juego,
         state: sellada,
+        moderator_id: miPerfil,
         updated_at: new Date().toISOString(),
       }
       // La columna llegó en `23_juegos_de_todos.sql` y solo la necesitan los
       // juegos abiertos. Mandarla siempre haría que, hasta pasar ese SQL, el
       // Furor —que ya funcionaba— se cayera a jugar a solas.
       if (todosJuegan) fila.anyone_plays = true
-      // El moderador solo se pone al crear o al recogerlo: si se mandara en
-      // cada toque, en el ¿Quién soy? el último que pulsa se quedaría con el
-      // mando sin pretenderlo.
-      if (nuevoDuenyo) fila.moderator_id = miPerfil
       const { error } = await supabase.from('game_sessions').upsert(fila)
       if (error) throw error
     },

@@ -435,8 +435,10 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       encender el interruptor del perfil, confirmado tras recargar del todo.
 - [x] Pasar `supabase/22_juegos.sql` en el SQL Editor (21/11/2026). Comprobado con dos
       pantallas: la segunda ve la palabra, el marcador y la cuenta atrás del moderador.
-- [ ] Pasar `supabase/23_juegos_de_todos.sql` en el SQL Editor. Sin él, el «¿Quién soy?»
-      no se sincroniza entre móviles: cada aparato jugaría por su cuenta.
+- [x] Pasar `supabase/23_juegos_de_todos.sql` en el SQL Editor (21/11/2026).
+- [ ] Pasar `supabase/24_terminar_entre_todos.sql` en el SQL Editor. Sin él, en el
+      «¿Quién soy?» solo el que empezó puede terminar la partida, y a los demás el botón
+      les miente: se les vacía la pantalla y la partida sigue viva para el resto.
 - [ ] Volver a desplegar la *Edge Function* `avisar` (panel → Edge Functions →
       avisar → Code → pegar `supabase/functions/avisar/index.ts` → Deploy). Sin
       esto, ni el silencio de noche ni el número del icono con la app cerrada.
