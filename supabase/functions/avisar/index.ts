@@ -42,6 +42,33 @@ interface Aviso {
   url: string | null
 }
 
+// ---------------------------------------------------------------------
+// No molestar de noche
+// ---------------------------------------------------------------------
+// Esto está escrito dos veces a propósito: aquí, que es donde se decide
+// porque es donde se firman los envíos, y en `src/lib/silencio.ts`, que
+// es lo que deja al perfil decir «ahora mismo estarías en silencio». Una
+// función de Deno no puede importar del navegador. Si cambia la regla,
+// hay que cambiarla en los dos sitios.
+// ---------------------------------------------------------------------
+
+/** La hora que es en España (0–23), no la del servidor. */
+function horaEnEspanya(cuando = new Date()): number {
+  const texto = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Madrid',
+    hour: '2-digit',
+    hourCycle: 'h23',
+  }).format(cuando)
+  const h = Number.parseInt(texto, 10)
+  return Number.isNaN(h) ? cuando.getUTCHours() : h
+}
+
+/** La ventana normal cruza la medianoche (de 23 a 8), de ahí las dos formas. */
+function enSilencio(hora: number, desde: number, hasta: number): boolean {
+  if (desde === hasta) return false
+  return desde < hasta ? hora >= desde && hora < hasta : hora >= desde || hora < hasta
+}
+
 const CLAVE_SERVICIO = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
 
 /**
@@ -106,6 +133,22 @@ Deno.serve(async (peticion) => {
   const aviso: Aviso | null = cuerpo?.record ?? null
   if (!aviso?.profile_id || !aviso.title) {
     return new Response('Nada que enviar', { status: 200 })
+  }
+
+  // ¿Toca callarse? Se silencia el empujón, no el aviso: la fila de
+  // `notifications` ya está escrita y por la mañana estará en la campana.
+  const { data: quien, error: errPerfil } = await supabase
+    .from('profiles')
+    .select('quiet_hours, quiet_from, quiet_to')
+    .eq('id', aviso.profile_id)
+    .maybeSingle()
+
+  if (errPerfil) {
+    // Lo normal es que falte pasar `21_no_molestar.sql`. Ante la duda se
+    // avisa: mejor sonar de noche una vez que callarse de día siempre.
+    console.error('No he podido leer las horas de silencio:', errPerfil.message)
+  } else if (quien?.quiet_hours && enSilencio(horaEnEspanya(), quien.quiet_from ?? 23, quien.quiet_to ?? 8)) {
+    return new Response('En silencio: el aviso espera en la campana', { status: 200 })
   }
 
   const { data: suscripciones, error } = await supabase

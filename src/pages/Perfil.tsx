@@ -13,14 +13,15 @@ import {
 } from 'lucide-react'
 import { Avatar, AvatarEditable } from '../components/ui/Avatar'
 import { Boton } from '../components/ui/Boton'
-import { Campo, Entrada, Interruptor } from '../components/ui/Campos'
+import { Campo, Entrada, Interruptor, Lista } from '../components/ui/Campos'
 import { Etiqueta, Seccion, Tarjeta } from '../components/ui/Varios'
 import { useAuth } from '../hooks/useAuth'
 import { useGrupo } from '../hooks/useGrupo'
 import { useAvisos } from '../hooks/useAvisos'
 import { useNotificaciones } from '../hooks/useNotificaciones'
 import { useTema, type Preferencia } from '../hooks/useTema'
-import { mensajeError, supabase } from '../lib/supabase'
+import { faltaPasarSql, mensajeError, supabase } from '../lib/supabase'
+import { enSilencio, horaBonita, horaEnEspanya } from '../lib/silencio'
 
 export function Perfil() {
   const { perfil, session, esAdmin, salir, refrescarPerfil, cambiarEmail, cambiarPassword, compruebaPassword } =
@@ -357,6 +358,101 @@ function Aspecto() {
   )
 }
 
+/**
+ * No molestar de noche.
+ *
+ * Los avisos nacen cuando alguien hace algo, y alguien hace cosas a las dos
+ * de la mañana. Un móvil vibrando en la mesilla porque un amigo ha propuesto
+ * una casa es la forma más rápida de que medio grupo apague los avisos para
+ * siempre, y entonces los recordatorios —que sí importan— tampoco llegan.
+ *
+ * Se silencia el empujón, no el aviso: por la mañana está en la campana con
+ * todo lo que pasó de noche. Y es de cada persona, no del grupo: quien
+ * trabaje de noche se lo apaga.
+ */
+function NoMolestar() {
+  const { perfil, refrescarPerfil } = useAuth()
+  const avisos = useAvisos()
+  const [guardando, setGuardando] = useState(false)
+
+  // Las columnas llegaron en `21_no_molestar.sql`. Sin pasarlo no vienen, y
+  // lo que se enseña es lo que valdrá en cuanto se pase.
+  const activo = perfil?.quiet_hours ?? true
+  const desde = perfil?.quiet_from ?? 23
+  const hasta = perfil?.quiet_to ?? 8
+
+  const guarda = async (cambios: { quiet_hours?: boolean; quiet_from?: number; quiet_to?: number }) => {
+    if (!perfil) return
+    setGuardando(true)
+    try {
+      const { error: err } = await supabase.from('profiles').update(cambios).eq('id', perfil.id)
+      if (err) throw err
+      await refrescarPerfil()
+    } catch (e) {
+      avisos.error(faltaPasarSql(e) ?? mensajeError(e))
+    } finally {
+      setGuardando(false)
+    }
+  }
+
+  const ahora = horaEnEspanya()
+  const callado = activo && enSilencio(ahora, desde, hasta)
+  const horas = Array.from({ length: 24 }, (_, h) => h)
+
+  return (
+    <div className="space-y-3 rounded-2xl border border-arena bg-beige/40 p-4">
+      <Interruptor
+        checked={activo}
+        onChange={(v) => void guarda({ quiet_hours: v })}
+        etiqueta="No molestar de noche"
+        disabled={guardando}
+      />
+      {activo && (
+        <div className="flex flex-wrap items-center gap-2 text-sm text-tenue">
+          <span>De</span>
+          <Lista
+            aria-label="Hora a la que empieza el silencio"
+            value={String(desde)}
+            disabled={guardando}
+            onChange={(e) => void guarda({ quiet_from: Number(e.target.value) })}
+            className="w-24"
+          >
+            {horas.map((h) => (
+              <option key={h} value={h}>
+                {horaBonita(h)}
+              </option>
+            ))}
+          </Lista>
+          <span>a</span>
+          <Lista
+            aria-label="Hora a la que se acaba el silencio"
+            value={String(hasta)}
+            disabled={guardando}
+            onChange={(e) => void guarda({ quiet_to: Number(e.target.value) })}
+            className="w-24"
+          >
+            {horas.map((h) => (
+              <option key={h} value={h}>
+                {horaBonita(h)}
+              </option>
+            ))}
+          </Lista>
+          <span>hora de España</span>
+        </div>
+      )}
+      <p className="text-sm text-suave">
+        {activo
+          ? `A esas horas el móvil no suena: el aviso se crea igual y por la mañana está en la campana. ${
+              callado
+                ? `Ahora mismo son las ${horaBonita(ahora)} en España, así que estarías en silencio.`
+                : `Ahora mismo son las ${horaBonita(ahora)} en España, así que sí sonaría.`
+            }`
+          : 'Los avisos sonarán a cualquier hora, también de madrugada.'}
+      </p>
+    </div>
+  )
+}
+
 function AvisosDelGrupo() {
   const { permiso, activados, activar, desactivar } = useNotificaciones()
   const avisos = useAvisos()
@@ -400,6 +496,7 @@ function AvisosDelGrupo() {
               apuntados en este aparato: si lo cambias o borras los datos del navegador, hay que volver a
               activarlos aquí.
             </p>
+            <NoMolestar />
           </>
         ) : (
           <>

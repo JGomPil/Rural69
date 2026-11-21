@@ -13,6 +13,22 @@ clave privada en el navegador no es privada.
 | `public/sw.js` | Recibe el empujón y pinta el aviso, con la app cerrada |
 | `supabase/functions/avisar/index.ts` | Firma, cifra y envía. Vive en Supabase |
 | Un *Database Webhook* | Llama a la función cada vez que nace una fila en `notifications` |
+| `supabase/21_no_molestar.sql` | Las horas de silencio de cada cual, que la función mira antes de enviar |
+
+## No molestar de noche
+
+Antes de enviar, la función mira `profiles.quiet_hours`, `quiet_from` y
+`quiet_to` de quien va a recibir el aviso, y si es de noche **no empuja**. El
+aviso no se pierde: la fila de `notifications` ya está escrita y por la mañana
+está en la campana. La hora se calcula en `Europe/Madrid`, no en la del
+servidor.
+
+La misma regla está escrita en `src/lib/silencio.ts` para que el perfil pueda
+decir «ahora mismo estarías en silencio». Si cambia, hay que cambiarla en los
+dos sitios.
+
+**Después de pasar `21_no_molestar.sql` hay que volver a desplegar la
+función**, o seguirá avisando de madrugada.
 
 ## Si hay que volver a desplegar la función
 

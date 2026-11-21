@@ -13,6 +13,14 @@ export interface Profile {
   member_id: string | null
   /** Foto que cada cual se pone desde su perfil. */
   avatar_url: string | null
+  /**
+   * No molestar de noche. Llegó en `21_no_molestar.sql`, así que hasta
+   * pasarlo no vienen en la respuesta: quien lea esto, con `?? true`.
+   */
+  quiet_hours: boolean
+  /** Hora de España a la que empieza el silencio, y a la que acaba. */
+  quiet_from: number
+  quiet_to: number
   created_at: string
 }
 
