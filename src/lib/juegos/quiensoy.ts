@@ -60,6 +60,12 @@ export interface Juego {
   segundos: number
   /** Instante en que se acaba la cuenta atrás. `null` es reloj parado. */
   fin: number | null
+  /**
+   * El último que se la jugó y falló, para contarlo en TODAS las
+   * pantallas. Si solo lo viera quien falló, los demás verían pasar el
+   * turno sin saber por qué, y la gracia es justo esa.
+   */
+  ultimoFallo: { nombre: string; dicho: string } | null
   fase: Fase
   /** Si ya se decidió seguir después del primer acierto. */
   seguir: boolean
@@ -101,6 +107,7 @@ export function nuevoJuego(o: Opciones, azar: () => number = Math.random, ahora 
       preguntas: 0,
       perfil: null,
     })),
+    ultimoFallo: null,
     categoria: o.categoria,
     turno: 0,
     vuelta: 1,
@@ -139,6 +146,15 @@ export function tomaSitio(j: Juego, indice: number, perfil: string): Juego {
       perfil: i === indice ? perfil : p.perfil === perfil ? null : p.perfil,
     })),
     historia: [`${j.jugadores[indice].nombre} ya tiene su móvil.`, ...j.historia],
+  }
+}
+
+/** Me he sentado donde no era: suelto la silla y vuelvo a elegir. */
+export function dejaElSitio(j: Juego, perfil: string): Juego {
+  if (!j.jugadores.some((p) => p.perfil === perfil)) return j
+  return {
+    ...j,
+    jugadores: j.jugadores.map((p) => (p.perfil === perfil ? { ...p, perfil: null } : p)),
   }
 }
 
@@ -183,7 +199,7 @@ export function intenta(j: Juego, texto: string): Juego {
   if (esLaCarta(texto, quien.carta.nombre)) return acierta(j)
   const jugadores = j.jugadores.map((p, i) => (i === j.turno ? { ...p, preguntas: p.preguntas + 1 } : p))
   return pasaElMovil(
-    { ...j, jugadores },
+    { ...j, jugadores, ultimoFallo: { nombre: quien.nombre, dicho: texto.trim() } },
     `${quien.nombre} dijo «${texto.trim()}» y no era.`,
   )
 }
@@ -191,7 +207,13 @@ export function intenta(j: Juego, texto: string): Juego {
 /** Coge el móvil y mira: empieza su turno y, si lo hay, su reloj. */
 export function mira(j: Juego, ahora = Date.now()): Juego {
   if (j.fase !== 'pasa') return j
-  return { ...j, fase: 'mirando', fin: j.segundos > 0 ? ahora + j.segundos * 1000 : null }
+  // Al empezar un turno nuevo se borra el fallo del anterior: ya se contó.
+  return {
+    ...j,
+    fase: 'mirando',
+    ultimoFallo: null,
+    fin: j.segundos > 0 ? ahora + j.segundos * 1000 : null,
+  }
 }
 
 /** El siguiente que todavía no sepa quién es. */

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import {
   acierta,
   baraja,
+  dejaElSitio,
   esLaCarta,
   intenta,
   miSitio,
@@ -183,6 +184,12 @@ describe('cada móvil dice quién es', () => {
     expect(j.jugadores[2].perfil).toBe('perfil-vero')
   })
 
+  it('me he sentado donde no era: suelto la silla', () => {
+    const j = dejaElSitio(tomaSitio(empieza(), 1, 'perfil-vero'), 'perfil-vero')
+    expect(j.jugadores[1].perfil).toBeNull()
+    expect(miSitio(j, 'perfil-vero')).toBe(-1)
+  })
+
   it('quien no se ha sentado no tiene sitio', () => {
     expect(miSitio(empieza(), 'nadie')).toBe(-1)
     expect(miSitio(empieza(), null)).toBe(-1)
@@ -230,6 +237,12 @@ describe('hay que escribirlo', () => {
     expect(despues.jugadores[0].preguntas).toBe(1)
     expect(despues.turno).toBe(1)
     expect(despues.historia[0]).toContain('Javi dijo «Chuck Norris» y no era')
+  })
+
+  it('el fallo queda apuntado para todas las pantallas, y se borra al turno siguiente', () => {
+    const fallado = intenta(mira(empieza(), 1_000_000), 'Chuck Norris')
+    expect(fallado.ultimoFallo).toEqual({ nombre: 'Javi', dicho: 'Chuck Norris' })
+    expect(mira(fallado, 1_000_000).ultimoFallo).toBeNull()
   })
 
   it('fuera de turno no hace nada', () => {

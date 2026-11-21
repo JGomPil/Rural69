@@ -18,6 +18,7 @@ import { despiertaElSonido, mantenLaPantalla, tic, timbre } from '../../lib/jueg
 import { EMOJI_CATEGORIA } from '../../lib/juegos/famosos'
 import {
   clasificacion,
+  dejaElSitio,
   intenta,
   mira,
   miSitio,
@@ -50,7 +51,6 @@ export function QuienSoyPartida({
 }) {
   const [, repinta] = useState(0)
   const [dicho, setDicho] = useState('')
-  const [fallo, setFallo] = useState<string | null>(null)
   const ultimoTic = useRef(0)
   const restante = restanteDe(juego, desfase)
 
@@ -193,7 +193,13 @@ export function QuienSoyPartida({
           )}
         </Tarjeta>
         {!aSolas && yo && <Cartas juego={juego} sitio={sitio} />}
-        <Pie juego={juego} yo={yo?.nombre} aSolas={aSolas} onTerminar={() => onCambia(terminaAqui(juego))} />
+        <Pie
+        juego={juego}
+        yo={yo?.nombre}
+        aSolas={aSolas}
+        onTerminar={() => onCambia(terminaAqui(juego))}
+        onNoSoy={!aSolas && miPerfil ? () => onCambia(dejaElSitio(juego, miPerfil)) : undefined}
+      />
       </div>
     )
   }
@@ -239,11 +245,8 @@ export function QuienSoyPartida({
               className="flex gap-2"
               onSubmit={(e) => {
                 e.preventDefault()
-                const antes = juego.jugadores[juego.turno].puesto
-                const despues = intenta(juego, dicho)
-                if (despues.jugadores[juego.turno].puesto === antes) setFallo(dicho.trim())
                 setDicho('')
-                onCambia(despues)
+                onCambia(intenta(juego, dicho))
               }}
             >
               <Entrada
@@ -271,11 +274,13 @@ export function QuienSoyPartida({
         </p>
       )}
 
-      {fallo && (
-        <p className="text-center text-sm text-tierra-700">No, «{fallo}» no eras tú. Otra vez será.</p>
-      )}
-
-      <Pie juego={juego} yo={yo?.nombre} aSolas={aSolas} onTerminar={() => onCambia(terminaAqui(juego))} />
+      <Pie
+        juego={juego}
+        yo={yo?.nombre}
+        aSolas={aSolas}
+        onTerminar={() => onCambia(terminaAqui(juego))}
+        onNoSoy={!aSolas && miPerfil ? () => onCambia(dejaElSitio(juego, miPerfil)) : undefined}
+      />
     </div>
   )
 }
@@ -314,11 +319,18 @@ function Cartas({ juego, sitio }: { juego: Juego; sitio: number }) {
 
 function Vueltas({ juego }: { juego: Juego }) {
   return (
-    <p className="text-center text-sm text-suave">
-      Vuelta {juego.vuelta}
-      {juego.vueltas !== null && ` de ${juego.vueltas}`} · faltan por saberlo{' '}
-      {quedanPorAcertar(juego).length} de {juego.jugadores.length}
-    </p>
+    <div className="space-y-2">
+      <p className="text-center text-sm text-suave">
+        Vuelta {juego.vuelta}
+        {juego.vueltas !== null && ` de ${juego.vueltas}`} · faltan por saberlo{' '}
+        {quedanPorAcertar(juego).length} de {juego.jugadores.length}
+      </p>
+      {juego.ultimoFallo && (
+        <p className="rounded-xl bg-tierra-50 px-4 py-2 text-center text-sm text-tierra-800">
+          {juego.ultimoFallo.nombre} dijo «{juego.ultimoFallo.dicho}» y no era.
+        </p>
+      )}
+    </div>
   )
 }
 
@@ -327,11 +339,13 @@ function Pie({
   yo,
   aSolas,
   onTerminar,
+  onNoSoy,
 }: {
   juego: Juego
   yo?: string
   aSolas: boolean
   onTerminar: () => void
+  onNoSoy?: () => void
 }) {
   const sinMovil = juego.jugadores.filter((p) => !p.perfil).map((p) => p.nombre)
   return (
@@ -349,7 +363,12 @@ function Pie({
           )}
         </>
       )}
-      <div className="flex justify-center">
+      <div className="flex flex-wrap justify-center gap-1">
+        {onNoSoy && (
+          <Boton variante="fantasma" tamanyo="sm" onClick={onNoSoy}>
+            <Smartphone size={15} /> No soy {yo}
+          </Boton>
+        )}
         <Boton variante="fantasma" tamanyo="sm" onClick={onTerminar}>
           <X size={15} /> Terminar la partida
         </Boton>

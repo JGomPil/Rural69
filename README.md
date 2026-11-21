@@ -709,6 +709,9 @@ pregunta** a la mesa y le contestan sí o no.
   que quien entre desde otro teléfono siga siendo quien era. Un móvil que no ha dicho quién es
   no ve ni una carta: la primera que vería sería la suya. Y se avisa en todas las pantallas de
   que tu famoso sí sale en el móvil del de al lado.
+- **El que falla lo paga en público.** Si te la juegas y no era, sale en todas las pantallas
+  —«Javi dijo «Chuck Norris» y no era»— hasta que empieza el turno siguiente. Si solo lo
+  viera quien falló, los demás verían pasar el turno sin saber por qué, y la gracia es esa.
 - **Para acertar hay que escribirlo.** Decirlo en voz alta y pulsar «ya lo sé» deja la puerta
   abierta al «si yo ya lo sabía»; escrito, no hay discusión. Vale el nombre entero o un
   apellido que identifique, sin pelearse con las tildes, y fallar cuesta la pregunta y el turno.
