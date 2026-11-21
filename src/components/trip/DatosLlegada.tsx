@@ -16,7 +16,18 @@ import type { House } from '../../lib/types'
  * Aparece sola: mientras nadie haya apuntado nada, en su lugar se ve un
  * recordatorio de apuntarlo.
  */
-export function DatosLlegada({ casa, escapadaId }: { casa: House; escapadaId: string }) {
+export function DatosLlegada({
+  casa,
+  escapadaId,
+  /** En el panel, durante la escapada, callarse si no hay nada apuntado:
+   *  ya estás dentro de la casa, recordarte que apuntes la dirección no
+   *  sirve para nada. */
+  silencioso = false,
+}: {
+  casa: House
+  escapadaId: string
+  silencioso?: boolean
+}) {
   const direccion = [casa.address, casa.town, casa.province].map((x) => x?.trim()).filter(Boolean).join(', ')
   const mapa =
     casa.map_url?.trim() ||
@@ -36,6 +47,7 @@ export function DatosLlegada({ casa, escapadaId }: { casa: House; escapadaId: st
   )
 
   if (!hayAlgo) {
+    if (silencioso) return null
     return (
       <Link
         to={`/escapadas/${escapadaId}/casas`}

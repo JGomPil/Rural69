@@ -21,11 +21,14 @@ import { cuentaAtras, euros, numero, rangoFechas } from '../lib/formato'
 import { personasEquivalentes } from '../lib/cantidades'
 import { estiloCategoria } from '../lib/constantes'
 import { queFalta } from '../lib/pendientes'
+import { momentoDe } from '../lib/estancia'
 import { Boton } from '../components/ui/Boton'
 import { AvisoError, Cargando, Etiqueta, EtiquetaEstado, Progreso, Seccion, Tarjeta, Vacio } from '../components/ui/Varios'
 import { InstalarApp } from '../components/layout/InstalarApp'
 import { FormularioEscapada } from '../components/trip/FormularioEscapada'
 import { QueFalta } from '../components/trip/QueFalta'
+import { EstamosAlli } from '../components/trip/EstamosAlli'
+import { DatosLlegada } from '../components/trip/DatosLlegada'
 import type { House, PantryItem, Trip } from '../lib/types'
 
 export function Panel() {
@@ -96,6 +99,11 @@ export function Panel() {
   const elegida = datos?.casas.find((c) => c.id === escapadaActiva?.chosen_house_id)
   const saludo = perfil?.display_name?.split(' ')[0] || 'amig@'
 
+  // Los tres días que importan. Durante ellos el panel cambia de cara:
+  // lo de «te falta votar las fechas» ya no pinta nada, y lo que hace
+  // falta es qué se come hoy, qué falta por comprar y la clave del portón.
+  const alli = escapadaActiva ? momentoDe(escapadaActiva) === 'durante' : false
+
   // Quién ha contestado ya si viene, y si falto yo o alguien de mi casa.
   const activos = miembros.filter((m) => m.active)
   const yo = miembros.find((m) => m.id === perfil?.member_id)
@@ -137,7 +145,7 @@ export function Panel() {
       <header className="animate-sube">
         <p className="text-sm font-semibold text-oliva-700">¡Hola, {saludo}!</p>
         <h1 className="font-display text-2xl text-bosque-800 sm:text-3xl">
-          {escapadaActiva ? 'Nuestra próxima escapada' : 'Rural69'}
+          {!escapadaActiva ? 'Rural69' : alli ? '¡Estamos de escapada!' : 'Nuestra próxima escapada'}
         </h1>
       </header>
 
@@ -161,8 +169,20 @@ export function Panel() {
       ) : (
         <>
           {/* Lo primero, antes incluso de la tarjeta de la escapada: para eso
-              se abre la aplicación. */}
-          {pendientes && <QueFalta pendientes={pendientes} />}
+              se abre la aplicación. Estando allí ya no hay nada que organizar,
+              así que en su lugar va lo del día. */}
+          {alli ? (
+            <>
+              <EstamosAlli
+                escapada={escapadaActiva}
+                miembros={miembros}
+                porComprar={(datos?.totalCompra ?? 0) - (datos?.compradosCompra ?? 0)}
+              />
+              {elegida && <DatosLlegada casa={elegida} escapadaId={escapadaActiva.id} silencioso />}
+            </>
+          ) : (
+            pendientes && <QueFalta pendientes={pendientes} />
+          )}
 
           {/* ---------- Tarjeta principal ---------- */}
           <Tarjeta className="animate-sube overflow-hidden">
