@@ -57,6 +57,12 @@ const ARCHIVOS_SQL: Record<string, string> = {
 /** Y lo mismo con las columnas que llegaron después que su tabla. */
 const COLUMNAS_SQL: Record<string, string> = {
   attending: 'supabase/17_quien_viene.sql',
+  gate_code: 'supabase/19_datos_llegada.sql',
+  wifi_password: 'supabase/19_datos_llegada.sql',
+  arrival_notes: 'supabase/19_datos_llegada.sql',
+  check_in: 'supabase/19_datos_llegada.sql',
+  owner_phone: 'supabase/19_datos_llegada.sql',
+  map_url: 'supabase/19_datos_llegada.sql',
 }
 
 export function faltaPasarSql(e: unknown): string | null {

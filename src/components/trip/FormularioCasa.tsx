@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { ImagePlus, Link2, Loader2, Trash2 } from 'lucide-react'
+import { ChevronDown, ImagePlus, KeyRound, Link2, Loader2, Trash2 } from 'lucide-react'
 import { Boton } from '../ui/Boton'
 import { AreaTexto, Campo, Entrada, Interruptor } from '../ui/Campos'
 import { Modal } from '../ui/Modal'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
-import { mensajeError, supabase } from '../../lib/supabase'
+import { faltaPasarSql, mensajeError, supabase } from '../../lib/supabase'
 import { subeFoto } from '../../lib/subidas'
 import type { House, HousePhoto } from '../../lib/types'
 
@@ -30,6 +30,17 @@ const VACIA = {
   features: '',
   notes: '',
   cover_image_url: '',
+  // Lo de llegar, que solo se rellena cuando ya está reservada.
+  address: '',
+  map_url: '',
+  check_in: '',
+  check_out: '',
+  owner_name: '',
+  owner_phone: '',
+  gate_code: '',
+  wifi_name: '',
+  wifi_password: '',
+  arrival_notes: '',
 }
 
 export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: Props) {
@@ -61,6 +72,16 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
         features: casa.features ?? '',
         notes: casa.notes ?? '',
         cover_image_url: casa.cover_image_url ?? '',
+        address: casa.address ?? '',
+        map_url: casa.map_url ?? '',
+        check_in: casa.check_in ?? '',
+        check_out: casa.check_out ?? '',
+        owner_name: casa.owner_name ?? '',
+        owner_phone: casa.owner_phone ?? '',
+        gate_code: casa.gate_code ?? '',
+        wifi_name: casa.wifi_name ?? '',
+        wifi_password: casa.wifi_password ?? '',
+        arrival_notes: casa.arrival_notes ?? '',
       })
       setExtras({
         has_pool: casa.has_pool,
@@ -110,6 +131,23 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
 
   const numeroODato = (v: string) => (v.trim() === '' ? null : Number(v))
 
+  /** ¿Se abre ya la sección de llegada? Si hay algo apuntado, o si la casa
+   *  está marcada como reservada, es que ya toca. */
+  const hayLlegada =
+    Boolean(casa?.reserved) ||
+    [
+      campos.address,
+      campos.map_url,
+      campos.check_in,
+      campos.check_out,
+      campos.owner_name,
+      campos.owner_phone,
+      campos.gate_code,
+      campos.wifi_name,
+      campos.wifi_password,
+      campos.arrival_notes,
+    ].some((v) => v.trim() !== '')
+
   const guardar = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
@@ -137,6 +175,16 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
         features: campos.features.trim() || null,
         notes: campos.notes.trim() || null,
         cover_image_url: campos.cover_image_url.trim() || fotos[0] || null,
+        address: campos.address.trim() || null,
+        map_url: campos.map_url.trim() || null,
+        check_in: campos.check_in.trim() || null,
+        check_out: campos.check_out.trim() || null,
+        owner_name: campos.owner_name.trim() || null,
+        owner_phone: campos.owner_phone.trim() || null,
+        gate_code: campos.gate_code.trim() || null,
+        wifi_name: campos.wifi_name.trim() || null,
+        wifi_password: campos.wifi_password.trim() || null,
+        arrival_notes: campos.arrival_notes.trim() || null,
         ...extras,
       }
 
@@ -168,7 +216,7 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
       onGuardada()
       onCerrar()
     } catch (err) {
-      setError(mensajeError(err))
+      setError(faltaPasarSql(err) ?? mensajeError(err))
     } finally {
       setGuardando(false)
     }
@@ -327,6 +375,72 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
             </label>
           </div>
         </div>
+
+        {/* -------- Lo que hace falta al llegar --------
+            Plegado a propósito: cuando se añade una candidata todavía no se
+            sabe nada de esto, y un formulario con veinte campos espanta.
+            Se abre cuando ya está reservada. */}
+        <details className="group rounded-2xl border border-arena bg-superficie" open={hayLlegada}>
+          <summary className="flex cursor-pointer list-none items-center gap-2 p-4 text-sm font-semibold text-tenue">
+            <KeyRound size={16} className="text-bosque-600" />
+            Datos de llegada
+            <span className="font-normal text-suave">· cuando ya esté reservada</span>
+            <ChevronDown size={16} className="ml-auto transition group-open:rotate-180" />
+          </summary>
+          <div className="space-y-4 border-t border-arena p-4">
+            <p className="text-xs text-suave">
+              Esto es lo que aparece en el Resumen el día de la escapada, y lo único que seguirá estando ahí sin
+              cobertura. Rellénalo con lo que te diga el dueño.
+            </p>
+
+            <Campo etiqueta="Dirección exacta" ayuda="La de meter en el navegador del coche.">
+              <Entrada value={campos.address} onChange={cambia('address')} placeholder="Camino de la Vega 4, 40170" />
+            </Campo>
+
+            <Campo etiqueta="Enlace al mapa" ayuda="Opcional. Si lo dejas vacío se busca la dirección en el mapa.">
+              <Entrada type="url" value={campos.map_url} onChange={cambia('map_url')} placeholder="https://maps.app.goo.gl/…" inputMode="url" />
+            </Campo>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Campo etiqueta="Hora de entrada">
+                <Entrada value={campos.check_in} onChange={cambia('check_in')} placeholder="A partir de las 17:00" />
+              </Campo>
+              <Campo etiqueta="Hora de salida">
+                <Entrada value={campos.check_out} onChange={cambia('check_out')} placeholder="Antes de las 12:00" />
+              </Campo>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Campo etiqueta="Quién abre la puerta">
+                <Entrada value={campos.owner_name} onChange={cambia('owner_name')} placeholder="Marisa, la dueña" />
+              </Campo>
+              <Campo etiqueta="Su teléfono">
+                <Entrada type="tel" inputMode="tel" value={campos.owner_phone} onChange={cambia('owner_phone')} placeholder="600 00 00 00" />
+              </Campo>
+            </div>
+
+            <Campo etiqueta="Clave del portón o de la caja de llaves">
+              <Entrada value={campos.gate_code} onChange={cambia('gate_code')} placeholder="1969" />
+            </Campo>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Campo etiqueta="Nombre del wifi">
+                <Entrada value={campos.wifi_name} onChange={cambia('wifi_name')} placeholder="MOVISTAR_1A2B" />
+              </Campo>
+              <Campo etiqueta="Contraseña del wifi">
+                <Entrada value={campos.wifi_password} onChange={cambia('wifi_password')} />
+              </Campo>
+            </div>
+
+            <Campo etiqueta="Cómo llegar" ayuda="El desvío sin señalizar, los dos kilómetros de pista, dónde aparcar…">
+              <AreaTexto
+                value={campos.arrival_notes}
+                onChange={cambia('arrival_notes')}
+                placeholder="Pasado el cementerio, el segundo camino a la derecha. Los últimos 300 m son de tierra."
+              />
+            </Campo>
+          </div>
+        </details>
 
         <Campo etiqueta="Comentarios y observaciones">
           <AreaTexto

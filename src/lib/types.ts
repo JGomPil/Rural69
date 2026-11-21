@@ -82,6 +82,18 @@ export interface House {
   notes: string | null
   cover_image_url: string | null
   reserved: boolean
+  // Lo que hace falta al llegar, no para decidir. Llegó en
+  // `19_datos_llegada.sql`, y hasta pasarlo no vienen en la respuesta.
+  address: string | null
+  map_url: string | null
+  check_in: string | null
+  check_out: string | null
+  owner_name: string | null
+  owner_phone: string | null
+  gate_code: string | null
+  wifi_name: string | null
+  wifi_password: string | null
+  arrival_notes: string | null
   proposed_by: string | null
   created_at: string
 }

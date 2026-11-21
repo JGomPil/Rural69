@@ -7,6 +7,7 @@ import { AvisoError, Cargando, Dato, Etiqueta, Progreso, Tarjeta } from '../ui/V
 import { cuentaAdultosNinos } from '../../lib/cantidades'
 import { resumenParaCompartir } from '../../lib/resumen'
 import { CompartirResumen } from './CompartirResumen'
+import { DatosLlegada } from './DatosLlegada'
 import { QuienViene } from './QuienViene'
 import { euros } from '../../lib/formato'
 import type { House } from '../../lib/types'
@@ -136,6 +137,8 @@ export function ResumenEscapada() {
           <ChevronRight size={18} className="text-carbon/30" />
         </Link>
       )}
+
+      {elegida && <DatosLlegada casa={elegida} escapadaId={escapada.id} />}
 
       {datos.total > 0 && (
         <Tarjeta className="p-4">
