@@ -505,3 +505,7 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       ven en la tarjeta (llamar y escribir de un toque) y en la comparativa.
       *Espacios comunes* pasa a llamarse **Espacios comunes destacables**
       (`supabase/26_contacto_casa.sql`)
+- [x] **El desplegable de «quién lo lleva» se comía el nombre** en *Común*: los
+      campos traen `w-full` de serie y, en la misma capa de Tailwind, el `w-36` de
+      la fila no lo ganaba. Con `!w-36` vuelve a sus 144 px. Repasados los demás
+      campos con ancho propio: no había otro caso

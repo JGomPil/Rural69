@@ -266,7 +266,10 @@ function Fila({
         value={cosa.member_id ?? ''}
         onChange={(e) => onCambia({ member_id: e.target.value || null })}
         aria-label={`Quién lleva ${cosa.name}`}
-        className="w-36 shrink-0 text-xs"
+        // El `!`: los campos traen `w-full` de serie y, en la misma capa de
+        // Tailwind, un `w-36` normal no lo gana; el desplegable se comía el
+        // nombre de la cosa.
+        className="!w-36 shrink-0 text-xs"
       >
         <option value="">Nadie aún</option>
         {participantes.map((m) => (
