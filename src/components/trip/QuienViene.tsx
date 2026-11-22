@@ -27,11 +27,17 @@ import type { Member } from '../../lib/types'
  *
  * Cada cual contesta por su casa —su pareja y sus niños—, que es como se
  * decide de verdad: nadie va por su cuenta.
+ *
+ * Un administrador puede además contestar por los demás. No es para volver
+ * a perseguir a nadie: es que hay escapadas que se apuntan después de
+ * hechas —las de antes de tener la aplicación— y ahí ya no va a contestar
+ * nadie, y de este número salen las cantidades de la compra y el precio
+ * por adulto que se ven en el historial.
  */
 export function QuienViene() {
   const { escapada, personas, recargar } = useEscapada()
   const { miembros } = useGrupo()
-  const { perfil } = useAuth()
+  const { perfil, esAdmin } = useAuth()
   const avisos = useAvisos()
   const [guardando, setGuardando] = useState<string | null>(null)
 
@@ -63,6 +69,9 @@ export function QuienViene() {
     if (!yo) return [] as Member[]
     return activos.filter((m) => m.id === yo.id || (yo.household_id && m.household_id === yo.household_id))
   }, [activos, miembros, perfil?.member_id])
+
+  /** Los que no son de mi casa, que solo puede contestar un administrador. */
+  const otros = useMemo(() => activos.filter((m) => !miCasa.some((c) => c.id === m.id)), [activos, miCasa])
 
   const vienen = activos.filter((m) => respuestas.get(m.id) === true)
   const noPueden = activos.filter((m) => respuestas.get(m.id) === false)
@@ -109,6 +118,27 @@ export function QuienViene() {
           Tu cuenta no está enlazada con ningún integrante, así que no puedes contestar desde aquí. Un
           administrador lo arregla en <strong>Ajustes → Usuarios</strong>.
         </p>
+      )}
+
+      {esAdmin && otros.length > 0 && (
+        <div className="mt-3 border-t border-arena pt-3">
+          <p className="text-xs font-bold tracking-wide text-suave uppercase">Por los demás</p>
+          <p className="mt-0.5 mb-2 text-xs text-suave">
+            Lo suyo lo contesta cada uno, pero como administrador puedes ponerlo tú: para apuntar una
+            escapada que ya se hizo, o cuando alguien lo dice por el grupo y no entra aquí.
+          </p>
+          <ul className="space-y-1.5">
+            {otros.map((m) => (
+              <FilaContesta
+                key={m.id}
+                miembro={m}
+                respuesta={respuestas.get(m.id)}
+                cargando={guardando === m.id}
+                onContesta={(viene) => void contesta(m, viene)}
+              />
+            ))}
+          </ul>
+        </div>
       )}
 
       <div className="mt-3 space-y-1.5 border-t border-arena pt-3 text-xs">

@@ -509,3 +509,10 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       campos traen `w-full` de serie y, en la misma capa de Tailwind, el `w-36` de
       la fila no lo ganaba. Con `!w-36` vuelve a sus 144 px. Repasados los demás
       campos con ancho propio: no había otro caso
+- [x] **Un administrador contesta «¿Quién viene?» por los demás**, en la misma
+      tarjeta del resumen. Cada cual sigue contestando por su casa, pero una
+      escapada que se apunta después de hecha no la va a contestar nadie, y de
+      ese número salen las cantidades de la compra y el precio por adulto del
+      historial. Lo de las casas de una escapada pasada ya se podía: el lápiz,
+      «Añadir casa» y marcar elegida siguen ahí; lo único cerrado es «Me vale»,
+      y se reabre desde *Votación*
