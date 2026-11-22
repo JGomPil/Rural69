@@ -21,6 +21,7 @@
 // =====================================================================
 
 import { diasHasta } from './formato'
+import { yaPaso } from './estancia'
 import type { Trip } from './types'
 
 /** De quién es la tarea: mía, del grupo o de quien administra. */
@@ -65,8 +66,9 @@ export function queFalta(e: EstadoOrganizacion): Pendiente[] {
   const mias: Pendiente[] = []
   const grupo: Pendiente[] = []
 
-  // Una escapada ya pasada o archivada no tiene nada pendiente.
-  if (t.status === 'realizada' || t.status === 'archivada') return []
+  // Una escapada ya pasada no tiene nada pendiente: ni la marcada como
+  // realizada ni la que simplemente tiene las fechas atrás.
+  if (yaPaso(t)) return []
 
   const hayFechas = Boolean(t.start_date)
   const dias = diasHasta(t.start_date)

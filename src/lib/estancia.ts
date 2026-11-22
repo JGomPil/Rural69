@@ -16,7 +16,7 @@
 // =====================================================================
 
 import { hoyISO } from './formato'
-import type { Trip, TripMeal } from './types'
+import type { EstadoEscapada, Trip, TripMeal } from './types'
 
 export type Momento = 'antes' | 'durante' | 'despues'
 
@@ -51,6 +51,33 @@ export function momentoDe(
   if (hoy < inicio) return 'antes'
   if (hoy > fin) return 'despues'
   return 'durante'
+}
+
+/**
+ * El estado que hay que enseñar, que no siempre es el apuntado.
+ *
+ * Lo guardado manda mientras no contradiga al calendario: una escapada cuyas
+ * fechas ya pasaron está hecha, aunque nadie se acordara de marcarla. Eso es
+ * lo que hace falta para apuntar las de antes de la aplicación —se ponen sus
+ * fechas y aparece donde toca, en el historial y no «en planificación»— y de
+ * paso arregla las que se quedan colgadas porque el finde pasó y nadie tocó
+ * el desplegable.
+ */
+export function estadoDe(
+  escapada: Pick<Trip, 'start_date' | 'end_date' | 'status'>,
+  hoy: string = hoyISO(),
+): EstadoEscapada {
+  if (escapada.status === 'realizada' || escapada.status === 'archivada') return escapada.status
+  return momentoDe(escapada, hoy) === 'despues' ? 'realizada' : escapada.status
+}
+
+/** ¿Es de las que ya pasaron? Es el reparto entre «próximas» y «pasadas». */
+export function yaPaso(
+  escapada: Pick<Trip, 'start_date' | 'end_date' | 'status'>,
+  hoy: string = hoyISO(),
+): boolean {
+  const estado = estadoDe(escapada, hoy)
+  return estado === 'realizada' || estado === 'archivada'
 }
 
 /** «Día 2 de 3». `null` si hoy cae fuera de la escapada. */

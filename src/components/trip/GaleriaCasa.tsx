@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, ExternalLink, X } from 'lucide-react'
+import { ordenaConPortada } from '../../lib/portada'
 import type { House } from '../../lib/types'
 
 /** Visor de fotos a pantalla completa, cómodo de pasar con el dedo. */
@@ -14,7 +15,8 @@ export function GaleriaCasa({
   onCerrar: () => void
 }) {
   const [indice, setIndice] = useState(0)
-  const todas = casa?.cover_image_url && !fotos.includes(casa.cover_image_url) ? [casa.cover_image_url, ...fotos] : fotos
+  // La portada abre la galería; si se borró, no se cuela entre las fotos.
+  const todas = ordenaConPortada(casa?.cover_image_url, fotos)
 
   useEffect(() => {
     setIndice(0)

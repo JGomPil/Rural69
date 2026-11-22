@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { ChevronDown, ImagePlus, KeyRound, Link2, Loader2, Trash2 } from 'lucide-react'
+import { ChevronDown, ImagePlus, KeyRound, Link2, Loader2, Star, Trash2 } from 'lucide-react'
 import { Boton } from '../ui/Boton'
 import { AreaTexto, Campo, Entrada, Interruptor } from '../ui/Campos'
 import { Modal } from '../ui/Modal'
 import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
 import { faltaPasarSql, mensajeError, supabase } from '../../lib/supabase'
+import { ordenaConPortada } from '../../lib/portada'
 import { subeFoto } from '../../lib/subidas'
 import type { House, HousePhoto } from '../../lib/types'
 
@@ -29,7 +30,6 @@ const VACIA = {
   common_spaces: '',
   features: '',
   notes: '',
-  cover_image_url: '',
   // Lo de llegar, que solo se rellena cuando ya está reservada.
   address: '',
   map_url: '',
@@ -71,7 +71,6 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
         common_spaces: casa.common_spaces ?? '',
         features: casa.features ?? '',
         notes: casa.notes ?? '',
-        cover_image_url: casa.cover_image_url ?? '',
         address: casa.address ?? '',
         map_url: casa.map_url ?? '',
         check_in: casa.check_in ?? '',
@@ -89,12 +88,17 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
         has_garden: casa.has_garden,
         pets_allowed: casa.pets_allowed,
       })
+      // La portada guardada va delante: es la primera foto la que hace de
+      // portada. Y si la que estaba apuntada se borró en su día, la lista la
+      // deja fuera y toma el relevo la siguiente.
       void supabase
         .from('house_photos')
         .select('*')
         .eq('house_id', casa.id)
         .order('sort_order')
-        .then(({ data }) => setFotos(((data ?? []) as HousePhoto[]).map((f) => f.url)))
+        .then(({ data }) =>
+          setFotos(ordenaConPortada(casa.cover_image_url, ((data ?? []) as HousePhoto[]).map((f) => f.url))),
+        )
     } else {
       setCampos(VACIA)
       setExtras({ has_pool: false, has_bbq: false, has_garden: false, pets_allowed: false })
@@ -111,6 +115,13 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
     setFotos((prev) => [...prev, limpia])
     setUrlFoto('')
   }
+
+  /** Toca una foto y se pone al principio: la primera es la portada. */
+  const hazPortada = (i: number) =>
+    setFotos((prev) => (i === 0 ? prev : [prev[i], ...prev.filter((_, j) => j !== i)]))
+
+  /** Al quitar la portada, la portada pasa a ser la siguiente que quede. */
+  const quitaFoto = (i: number) => setFotos((prev) => prev.filter((_, j) => j !== i))
 
   const sube = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const archivos = Array.from(e.target.files ?? [])
@@ -174,7 +185,7 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
         common_spaces: campos.common_spaces.trim() || null,
         features: campos.features.trim() || null,
         notes: campos.notes.trim() || null,
-        cover_image_url: campos.cover_image_url.trim() || fotos[0] || null,
+        cover_image_url: fotos[0] ?? null,
         address: campos.address.trim() || null,
         map_url: campos.map_url.trim() || null,
         check_in: campos.check_in.trim() || null,
@@ -324,22 +335,43 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
         <div className="rounded-2xl border border-arena bg-superficie p-4">
           <p className="mb-1 text-sm font-semibold text-tenue">Fotografías</p>
           <p className="mb-3 text-xs text-suave">
-            Pega la URL de una foto de la web de la casa o sube imágenes desde el móvil. La primera se usa como portada.
+            Pega la URL de una foto de la web de la casa o sube imágenes desde el móvil. Toca una foto para que
+            sea la portada: es la que se ve en la tarjeta, en la votación y en el resumen.
           </p>
 
           {fotos.length > 0 && (
             <div className="mb-3 grid grid-cols-3 gap-2 sm:grid-cols-4">
               {fotos.map((url, i) => (
-                <div key={`${url}-${i}`} className="group relative aspect-4/3 overflow-hidden rounded-xl bg-beige">
-                  <img src={url} alt="" className="size-full object-cover" loading="lazy" />
-                  {i === 0 && (
-                    <span className="absolute top-1 left-1 rounded-full bg-bosque-600 px-1.5 py-0.5 text-[10px] font-bold text-tinta-fuerte">
-                      Portada
+                <div
+                  key={`${url}-${i}`}
+                  className={`group relative aspect-4/3 overflow-hidden rounded-xl bg-beige ${
+                    i === 0 ? 'ring-2 ring-bosque-500' : ''
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => hazPortada(i)}
+                    aria-pressed={i === 0}
+                    aria-label={i === 0 ? `Foto ${i + 1}, ya es la portada` : `Hacer portada la foto ${i + 1}`}
+                    className="block size-full cursor-pointer"
+                  >
+                    <img src={url} alt="" className="size-full object-cover" loading="lazy" />
+                  </button>
+                  {i === 0 ? (
+                    <span className="pointer-events-none absolute top-1 left-1 inline-flex items-center gap-0.5 rounded-full bg-bosque-600 px-1.5 py-0.5 text-[10px] font-bold text-tinta-fuerte">
+                      <Star size={9} className="fill-current" /> Portada
+                    </span>
+                  ) : (
+                    <span
+                      title="Tócala para hacerla portada"
+                      className="pointer-events-none absolute bottom-1 left-1 inline-flex size-5 items-center justify-center rounded-full bg-velo/70 text-white"
+                    >
+                      <Star size={11} />
                     </span>
                   )}
                   <button
                     type="button"
-                    onClick={() => setFotos((prev) => prev.filter((_, j) => j !== i))}
+                    onClick={() => quitaFoto(i)}
                     aria-label="Quitar foto"
                     className="absolute top-1 right-1 rounded-full bg-velo/70 p-1 text-white opacity-90"
                   >

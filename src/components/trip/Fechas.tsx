@@ -460,7 +460,7 @@ function FormularioFechas({
   onCerrar: () => void
   onGuardado: () => Promise<void>
 }) {
-  const { perfil } = useAuth()
+  const { perfil, esAdmin } = useAuth()
   const avisos = useAvisos()
   const [inicio, setInicio] = useState('')
   const [fin, setFin] = useState('')
@@ -537,11 +537,29 @@ function FormularioFechas({
     >
       <form id="form-fechas" onSubmit={guardar} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="Ida" requerido>
-            <Entrada type="date" value={inicio} min={hoyISO()} onChange={(e) => setInicio(e.target.value)} required />
+          {/* Al resto del grupo no se le dejan proponer findes que ya pasaron,
+              que sería un despiste; a un administrador sí, que es la única
+              forma de apuntar las escapadas de antes de tener la aplicación. */}
+          <Campo
+            etiqueta="Ida"
+            requerido
+            ayuda={esAdmin ? 'Pueden ser de atrás: así se apunta una escapada que ya se hizo.' : undefined}
+          >
+            <Entrada
+              type="date"
+              value={inicio}
+              min={esAdmin ? undefined : hoyISO()}
+              onChange={(e) => setInicio(e.target.value)}
+              required
+            />
           </Campo>
           <Campo etiqueta="Vuelta" ayuda="Si lo dejas vacío, se toma el mismo día.">
-            <Entrada type="date" value={fin} min={inicio || hoyISO()} onChange={(e) => setFin(e.target.value)} />
+            <Entrada
+              type="date"
+              value={fin}
+              min={inicio || (esAdmin ? undefined : hoyISO())}
+              onChange={(e) => setFin(e.target.value)}
+            />
           </Campo>
         </div>
         <Campo etiqueta="Nombre" ayuda="Opcional: «puente de mayo», «finde de la feria»…">

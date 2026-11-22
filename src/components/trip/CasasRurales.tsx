@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Bath,
@@ -20,6 +20,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useAvisos } from '../../hooks/useAvisos'
 import { esVotoDuplicado, mensajeError, supabase } from '../../lib/supabase'
 import { euros, numero } from '../../lib/formato'
+import { portadaDe } from '../../lib/portada'
 import { Boton, BotonIcono } from '../ui/Boton'
 import { Confirmar } from '../ui/Modal'
 import { Persona } from '../ui/Persona'
@@ -76,6 +77,35 @@ export function CasasRurales() {
     }
     return mapa
   }, [datos?.fotos])
+
+  /**
+   * Portadas que se quedaron apuntando a una foto borrada. Pasaba con las
+   * casas de antes: la portada se guardaba aparte de la lista de fotos, así
+   * que al quitar la foto que era portada la columna seguía señalándola y la
+   * casa enseñaba esa foto en el Panel, en la Votación y en el Resumen, que
+   * no tienen la lista a mano para darse cuenta. Se corrige al cargar, una
+   * vez por casa, y de paso se rellena la portada de las que no tenían
+   * ninguna apuntada aun teniendo fotos.
+   */
+  const arregladas = useRef(new Set<string>())
+  useEffect(() => {
+    const porArreglar: { id: string; portada: string | null }[] = []
+    for (const casa of datos?.casas ?? []) {
+      const apuntada = casa.cover_image_url || null
+      const buena = portadaDe(apuntada, fotosDe[casa.id] ?? [])
+      if (buena === apuntada || arregladas.current.has(casa.id)) continue
+      arregladas.current.add(casa.id)
+      porArreglar.push({ id: casa.id, portada: buena })
+    }
+    if (!porArreglar.length) return
+    void (async () => {
+      for (const { id, portada } of porArreglar) {
+        const { error: err } = await supabase.from('houses').update({ cover_image_url: portada }).eq('id', id)
+        // Si no se puede escribir no pasa nada: la tarjeta ya enseña la buena.
+        if (err) console.error('Rural69: no se ha podido arreglar la portada', err)
+      }
+    })()
+  }, [datos?.casas, fotosDe])
 
   /**
    * Las que he votado yo: de la casa al identificador de mi voto, para poder
@@ -338,7 +368,7 @@ function TarjetaCasa({
   onElegir,
   onReservar,
 }: PropsTarjeta) {
-  const portada = casa.cover_image_url || fotos[0]
+  const portada = portadaDe(casa.cover_image_url, fotos)
   const extras = [
     casa.has_pool && '🏊 Piscina',
     casa.has_bbq && '🔥 Barbacoa',

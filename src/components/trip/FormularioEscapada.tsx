@@ -12,6 +12,7 @@ import { faltaPasarSql, mensajeError, supabase } from '../../lib/supabase'
 import { ESTADOS } from '../../lib/constantes'
 import { personasEquivalentes } from '../../lib/cantidades'
 import { numero } from '../../lib/formato'
+import { estadoDe } from '../../lib/estancia'
 import { hereda, resumeHeredado, type QueHeredar } from '../../lib/heredar'
 import type { EstadoEscapada, Trip } from '../../lib/types'
 
@@ -36,6 +37,8 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
   const [provincia, setProvincia] = useState('')
   const [observaciones, setObservaciones] = useState('')
   const [estado, setEstado] = useState<EstadoEscapada>('planificacion')
+  // ¿Ha elegido él el estado a mano? Mientras no lo toque, lo ponen las fechas.
+  const [estadoTocado, setEstadoTocado] = useState(false)
   const [participantes, setParticipantes] = useState<Set<string>>(new Set())
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -69,6 +72,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
       setProvincia(escapada.province ?? '')
       setObservaciones(escapada.notes ?? '')
       setEstado(escapada.status)
+      setEstadoTocado(false)
       void supabase
         .from('trip_participants')
         .select('*')
@@ -91,6 +95,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
       setProvincia('')
       setObservaciones('')
       setEstado('planificacion')
+      setEstadoTocado(false)
       setParticipantes(new Set(miembros.filter((m) => m.active).map((m) => m.id)))
       // La anterior viene elegida: es lo que se quiere el 90 % de las veces,
       // y está a la vista antes de pulsar «Crear», no escondida en un ajuste.
@@ -98,6 +103,17 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
       setQueTraer({ menu: true, equipaje: true, compra: false })
     }
   }, [abierto, escapada, miembros])
+
+  /**
+   * El estado que se va a guardar. Con unas fechas que ya pasaron, la escapada
+   * está hecha y lo dice sola: es lo que hace falta para apuntar las de antes
+   * de tener la aplicación, que si no se quedaban «en planificación» para
+   * siempre. En cuanto él elige uno a mano, manda el suyo.
+   */
+  const estadoFinal = estadoTocado
+    ? estado
+    : estadoDe({ start_date: inicio || null, end_date: fin || null, status: estado })
+  const loPonenLasFechas = !estadoTocado && estadoFinal !== estado
 
   const seleccionados = useMemo(() => miembros.filter((m) => participantes.has(m.id)), [miembros, participantes])
   const equivalentes = personasEquivalentes(seleccionados)
@@ -133,7 +149,7 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
         town: localidad.trim() || null,
         province: provincia.trim() || null,
         notes: observaciones.trim() || null,
-        status: estado,
+        status: estadoFinal,
       }
 
       let id = escapada?.id
@@ -270,7 +286,10 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
         )}
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="Fecha de ida" ayuda="Si todavía están por decidir, déjalas en blanco: saldrá «Fechas por decidir».">
+          <Campo
+            etiqueta="Fecha de ida"
+            ayuda="Si todavía están por decidir, déjalas en blanco: saldrá «Fechas por decidir». Y pueden ser de atrás, para apuntar una escapada que ya se hizo."
+          >
             <Entrada type="date" value={inicio} onChange={(e) => setInicio(e.target.value)} />
           </Campo>
           <Campo etiqueta="Fecha de vuelta">
@@ -287,8 +306,21 @@ export function FormularioEscapada({ abierto, onCerrar, escapada, onGuardada }: 
           </Campo>
         </div>
 
-        <Campo etiqueta="Estado">
-          <Lista value={estado} onChange={(e) => setEstado(e.target.value as EstadoEscapada)}>
+        <Campo
+          etiqueta="Estado"
+          ayuda={
+            loPonenLasFechas
+              ? 'Las fechas ya pasaron, así que entra como realizada y va al historial. Cámbialo si no es eso.'
+              : undefined
+          }
+        >
+          <Lista
+            value={estadoFinal}
+            onChange={(e) => {
+              setEstadoTocado(true)
+              setEstado(e.target.value as EstadoEscapada)
+            }}
+          >
             {Object.entries(ESTADOS).map(([valor, e]) => (
               <option key={valor} value={valor}>
                 {e.emoji} {e.etiqueta}

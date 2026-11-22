@@ -7,6 +7,7 @@ import { useGrupo } from '../hooks/useGrupo'
 import { supabase } from '../lib/supabase'
 import { euros, numero, rangoFechas } from '../lib/formato'
 import { clave } from '../lib/cantidades'
+import { estadoDe, yaPaso } from '../lib/estancia'
 import { descarga, generaCSV, nombreArchivo } from '../lib/exportar'
 import { Boton } from '../components/ui/Boton'
 import { AvisoError, Cargando, Dato, Etiqueta, EtiquetaEstado, Seccion, Tarjeta, Vacio } from '../components/ui/Varios'
@@ -45,7 +46,9 @@ export function Historial() {
 
   const resumen = useMemo(() => {
     if (!datos) return null
-    const realizadas = escapadas.filter((t) => t.status === 'realizada' || t.status === 'archivada')
+    // Cuentan las que ya pasaron, aunque nadie las marcara: también las de
+    // antes de la aplicación, apuntadas después con sus fechas.
+    const realizadas = escapadas.filter((t) => yaPaso(t))
     const porEscapada = escapadas.map((t) => {
       const casa = datos.casas.find((c) => c.id === t.chosen_house_id)
       const items = datos.compra.filter((i) => i.trip_id === t.id)
@@ -284,7 +287,7 @@ export function Historial() {
                       <td className="px-4 py-2.5 text-tenue">{f.casa?.name ?? '—'}</td>
                       <td className="px-4 py-2.5 text-tenue">{euros(f.porAdultoCasa)}</td>
                       <td className="px-4 py-2.5">
-                        <EtiquetaEstado estado={f.escapada.status} />
+                        <EtiquetaEstado estado={estadoDe(f.escapada)} />
                       </td>
                     </tr>
                   ))}

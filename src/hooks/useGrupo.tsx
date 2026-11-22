@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { esFalloDeRed, mensajeError, supabase } from '../lib/supabase'
 import { guarda, lee } from '../lib/almacen'
+import { yaPaso } from '../lib/estancia'
 import type { Household, Member, Profile, Trip } from '../lib/types'
 import { useAuth } from './useAuth'
 
@@ -56,7 +57,7 @@ function ordenaEscapadas(escapadas: Trip[]): Trip[] {
 
 function eligeActiva(escapadas: Trip[]): Trip | null {
   const hoy = new Date().toISOString().slice(0, 10)
-  const vivas = escapadas.filter((t) => t.status === 'planificacion' || t.status === 'confirmada')
+  const vivas = escapadas.filter((t) => !yaPaso(t, hoy))
   const futuras = vivas
     .filter((t) => !t.end_date || t.end_date >= hoy)
     .sort((a, b) => (a.start_date ?? '9999').localeCompare(b.start_date ?? '9999'))

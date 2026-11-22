@@ -13,6 +13,7 @@ import { useSinLeer } from '../hooks/useSinLeer'
 import { mensajeError, supabase } from '../lib/supabase'
 import { personasEquivalentes } from '../lib/cantidades'
 import { cuentaAtras, numero, rangoFechas } from '../lib/formato'
+import { estadoDe, yaPaso } from '../lib/estancia'
 import type { Member, Trip } from '../lib/types'
 
 export interface ContextoEscapada {
@@ -169,7 +170,7 @@ export function Escapada() {
 
   const participantes = miembros.filter((m) => datos.idsParticipantes.includes(m.id))
   const personas = personasEquivalentes(participantes)
-  const cuenta = escapada.status === 'planificacion' || escapada.status === 'confirmada' ? cuentaAtras(escapada.start_date) : null
+  const cuenta = yaPaso(escapada) ? null : cuentaAtras(escapada.start_date)
   const otras = escapadas.filter((t) => t.id !== escapada.id)
 
   const contexto: ContextoEscapada = { escapada, participantes, personas, recargar }
@@ -212,7 +213,7 @@ export function Escapada() {
 
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <h1 className="font-display text-2xl text-bosque-800 sm:text-3xl">{escapada.title}</h1>
-          <EtiquetaEstado estado={escapada.status} />
+          <EtiquetaEstado estado={estadoDe(escapada)} />
           {cuenta && (
             <span className="rounded-full bg-tierra-600 px-2.5 py-0.5 text-xs font-bold text-tinta-fuerte">{cuenta}</span>
           )}

@@ -473,3 +473,25 @@ rodado, saldrá solo durante la escapada, igual que el panel.
 - [ ] Volver a desplegar la *Edge Function* `avisar` (panel → Edge Functions →
       avisar → Code → pegar `supabase/functions/avisar/index.ts` → Deploy). Sin
       esto, ni el silencio de noche ni el número del icono con la app cerrada.
+
+## Fase 23 · La portada se elige, y las de antes se pueden apuntar ✅
+
+- [x] **La portada de la casa se elige tocándola.** No había forma: era siempre la
+      primera foto que se hubiera subido, sin decirlo y sin poder cambiarlo. Ahora
+      se toca una foto, se pone la primera y lleva la etiqueta *Portada*; las
+      demás enseñan una estrellita
+- [x] **La portada ya no se queda clavada en una foto borrada.** `cover_image_url`
+      iba por su cuenta y ganaba siempre (`cover || fotos[0]`): al borrar esa foto
+      el fichero seguía en el bucket y la casa la seguía enseñando en la tarjeta,
+      en la votación, en el panel y en el resumen. La portada es ahora siempre una
+      de las fotos (`src/lib/portada.ts`, 7 pruebas)
+- [x] Lo que ya estaba descuadrado en la base de datos **se corrige solo** al abrir
+      la pestaña *Casas*, para las cuatro pantallas que solo tienen la casa a mano
+- [x] **Un administrador puede proponer fechas pasadas**, que es la única forma de
+      apuntar las escapadas de antes de tener la aplicación. Al resto se le sigue
+      impidiendo, que ahí sí es un despiste
+- [x] **El estado sale del calendario.** Una escapada con las fechas atrás está
+      realizada aunque nadie tocara el desplegable: va a *Pasadas* y al historial,
+      no cuenta en «qué falta por hacer» y no le quita el panel a la que viene
+      (`estadoDe` y `yaPaso` en `src/lib/estancia.ts`, 5 pruebas). Y el formulario
+      de la escapada lo enseña ya elegido al escribir unas fechas de atrás

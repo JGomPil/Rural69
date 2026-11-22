@@ -9,6 +9,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useConsulta } from '../hooks/useConsulta'
 import { supabase } from '../lib/supabase'
 import { cuentaAtras, rangoFechas } from '../lib/formato'
+import { estadoDe, yaPaso } from '../lib/estancia'
 import type { Trip } from '../lib/types'
 
 type Filtro = 'activas' | 'pasadas' | 'todas'
@@ -40,9 +41,10 @@ export function Escapadas() {
 
   const visibles = useMemo(() => {
     if (filtro === 'todas') return escapadas
-    if (filtro === 'activas')
-      return escapadas.filter((t) => t.status === 'planificacion' || t.status === 'confirmada')
-    return escapadas.filter((t) => t.status === 'realizada' || t.status === 'archivada')
+    // El reparto lo decide el calendario además del estado apuntado: una con
+    // las fechas pasadas va a «Pasadas» aunque nadie la haya marcado.
+    if (filtro === 'activas') return escapadas.filter((t) => !yaPaso(t))
+    return escapadas.filter((t) => yaPaso(t))
   }, [escapadas, filtro])
 
   if (cargando) return <Cargando texto="Cargando escapadas…" />
@@ -134,7 +136,7 @@ function TarjetaEscapada({
   participantes: number
   onAbrir: () => void
 }) {
-  const cuenta = escapada.status !== 'realizada' && escapada.status !== 'archivada' ? cuentaAtras(escapada.start_date) : null
+  const cuenta = yaPaso(escapada) ? null : cuentaAtras(escapada.start_date)
   return (
     <Tarjeta onClick={onAbrir} className="p-4">
       <div className="flex items-start justify-between gap-2">
@@ -155,7 +157,7 @@ function TarjetaEscapada({
         </span>
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <EtiquetaEstado estado={escapada.status} />
+        <EtiquetaEstado estado={estadoDe(escapada)} />
         {cuenta && (
           <span className="rounded-full bg-tierra-600 px-2.5 py-0.5 text-xs font-bold text-tinta-fuerte">{cuenta}</span>
         )}

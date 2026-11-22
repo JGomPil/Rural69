@@ -22,7 +22,7 @@ import { cuentaAtras, euros, numero, rangoFechas } from '../lib/formato'
 import { personasEquivalentes } from '../lib/cantidades'
 import { estiloCategoria } from '../lib/constantes'
 import { queFalta } from '../lib/pendientes'
-import { momentoDe } from '../lib/estancia'
+import { estadoDe, momentoDe } from '../lib/estancia'
 import { DIAS_PARA_AVISAR, diasDesdeLaCopia } from '../lib/copia'
 import { Boton } from '../components/ui/Boton'
 import { AvisoError, Cargando, Etiqueta, EtiquetaEstado, Progreso, Seccion, Tarjeta, Vacio } from '../components/ui/Varios'
@@ -207,7 +207,7 @@ export function Panel() {
               )}
               <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
                 <div className="flex flex-wrap items-center gap-2">
-                  <EtiquetaEstado estado={escapadaActiva.status} />
+                  <EtiquetaEstado estado={estadoDe(escapadaActiva)} />
                   {cuentaAtras(escapadaActiva.start_date) && (
                     <span className="rounded-full bg-tierra-600 px-2.5 py-0.5 text-xs font-bold text-tinta-fuerte">
                       {cuentaAtras(escapadaActiva.start_date)}

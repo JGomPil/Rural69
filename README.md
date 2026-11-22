@@ -194,6 +194,14 @@ Las fotos se pueden añadir de dos formas: pegando la URL de una imagen de la we
 (no ocupa nada) o subiéndolas al bucket `fotos`, que `02_rls.sql` crea con lectura pública
 y subida solo para integrantes. El plan gratuito de Supabase incluye 1 GB.
 
+**La portada se elige tocándola**: en el formulario de la casa, tocar una foto la pone la
+primera, y la primera es la portada —la que sale en la tarjeta, en la votación, en el panel y
+en el resumen—. Se guarda además en `houses.cover_image_url`, porque esas pantallas tienen la
+casa a mano pero no su lista de fotos. Antes esa columna vivía por su cuenta: al borrar la
+foto que era portada, el fichero seguía en el bucket y la casa enseñaba una foto que ya no
+estaba en su ficha. Ahora la portada es siempre una de las fotos (`src/lib/portada.ts`), y lo
+que quedó descuadrado se corrige solo al abrir la pestaña *Casas*.
+
 Lo que se sube se encoge antes de salir del teléfono (`src/lib/subidas.ts`): lado largo a
 2000 px —512 para los avatares— y JPEG, respetando la orientación del EXIF. Una foto de
 4 MB se queda en 400 KB, así que ese giro da para muchas escapadas, y subir diez fotos por
@@ -401,6 +409,19 @@ buscar casa sin saber el finde suele ser trabajo doble.
 Crear la escapada no obliga a nada de esto: **solo el nombre es obligatorio**. Sin fechas, la
 aplicación muestra «Fechas por decidir» y los tiempos de la compra avisan de que todavía no se
 pueden generar a partir de los días.
+
+### Las de antes de la aplicación
+
+Las escapadas que el grupo ya hizo se pueden apuntar con sus fechas de verdad. Al resto del
+grupo se le sigue impidiendo proponer un finde que ya pasó —sería un despiste—, pero **un
+administrador sí puede**, que es la única forma de meter el histórico.
+
+Y el estado sale del calendario, no de un desplegable que haya que acordarse de tocar: si las
+fechas ya pasaron, la escapada **está realizada**, aparece en *Pasadas* y en el historial, no
+cuenta en «qué falta por hacer» y no roba el panel a la que viene. Lo apuntado solo manda
+cuando dice algo más fuerte —realizada o archivada—. Está en `estadoDe` y `yaPaso`
+(`src/lib/estancia.ts`), y el formulario de la escapada lo enseña ya elegido al escribir unas
+fechas de atrás, dejando cambiarlo.
 
 ---
 

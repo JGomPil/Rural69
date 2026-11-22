@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { diaDeLaEstancia, momentoDe, reparteTiempos, sumaDias } from './estancia'
+import { diaDeLaEstancia, estadoDe, momentoDe, reparteTiempos, sumaDias, yaPaso } from './estancia'
 import type { Trip, TripMeal } from './types'
 
 const escapada = (campos: Partial<Trip>): Pick<Trip, 'start_date' | 'end_date' | 'status'> => ({
@@ -37,6 +37,35 @@ describe('momentoDe', () => {
     // Marcada como realizada aunque hoy caiga dentro: ya pasó.
     expect(momentoDe(escapada({ status: 'realizada' }), '2027-04-17')).toBe('despues')
     expect(momentoDe(escapada({ status: 'archivada' }), '2027-04-17')).toBe('despues')
+  })
+})
+
+describe('estadoDe y yaPaso', () => {
+  it('con las fechas atrás está hecha, aunque siga apuntada en planificación', () => {
+    const vieja = escapada({ start_date: '2024-10-11', end_date: '2024-10-13', status: 'planificacion' })
+    expect(estadoDe(vieja, '2026-11-22')).toBe('realizada')
+    expect(yaPaso(vieja, '2026-11-22')).toBe(true)
+  })
+
+  it('la que todavía no ha llegado se queda con su estado', () => {
+    expect(estadoDe(escapada({}), '2027-04-15')).toBe('confirmada')
+    expect(yaPaso(escapada({}), '2027-04-15')).toBe(false)
+  })
+
+  it('durante el finde tampoco ha pasado', () => {
+    expect(estadoDe(escapada({}), '2027-04-17')).toBe('confirmada')
+    expect(yaPaso(escapada({}), '2027-04-17')).toBe(false)
+  })
+
+  it('sin fechas no se adivina nada: sigue en planificación', () => {
+    const sinFechas = escapada({ start_date: null, end_date: null, status: 'planificacion' })
+    expect(estadoDe(sinFechas, '2026-11-22')).toBe('planificacion')
+    expect(yaPaso(sinFechas, '2026-11-22')).toBe(false)
+  })
+
+  it('archivada se respeta tal cual, caiga donde caiga', () => {
+    expect(estadoDe(escapada({ status: 'archivada' }), '2027-04-15')).toBe('archivada')
+    expect(yaPaso(escapada({ status: 'archivada' }), '2027-04-15')).toBe(true)
   })
 })
 
