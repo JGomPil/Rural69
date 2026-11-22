@@ -45,6 +45,9 @@ supabase/
   13_equipaje.sql              Lo que lleva cada uno de su casa
   14_avisos_push.sql           A qué aparatos empujar los avisos
   15_recordatorios.sql         Recordatorio automático antes de la escapada (pg_cron)
+  16…25                        Avisos del chat, quién viene, fotos del finde, datos de
+                               llegada, reacciones, no molestar y los juegos de la casa
+  26_contacto_casa.sql         Segundo enlace y contacto de la casa candidata
   functions/avisar/            Edge Function que firma y manda el empujón (Web Push)
 src/
   lib/            supabase.ts, tipos, formato, cálculo de cantidades, export, subidas
@@ -64,7 +67,8 @@ households        Parejas / unidades familiares
 members           Integrantes del grupo (adulto o niño, con factor de consumo)
 trips             Escapadas (fechas, destino, estado, votación abierta, casa elegida)
 trip_participants Quién viene a cada escapada (sin fila = no ha contestado)
-houses            Casas rurales candidatas de una escapada
+houses            Casas rurales candidatas de una escapada (dos enlaces y el contacto
+                  de antes de reservar; los datos de llegada, al final de la ficha)
 house_photos      Fotos adicionales de cada casa
 votes             Qué casas le valen a cada cual (voto por aprobación)
 dishes            Recetario del grupo: un plato y para cuánta gente
@@ -143,6 +147,11 @@ Scripts disponibles:
    18. `supabase/19_datos_llegada.sql`
    19. `supabase/20_reacciones.sql`
    20. `supabase/21_no_molestar.sql`
+   21. `supabase/22_juegos.sql`
+   22. `supabase/23_juegos_de_todos.sql`
+   23. `supabase/24_terminar_entre_todos.sql`
+   24. `supabase/25_preguntas_trivial.sql`
+   25. `supabase/26_contacto_casa.sql`
 
    Todos se pueden volver a ejecutar sin miedo, y en cualquier orden: no borran ni
    duplican nada. Los que amplían la lista de tipos de aviso (el 15 y el 16) la leen

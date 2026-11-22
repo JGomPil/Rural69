@@ -75,6 +75,13 @@ export interface House {
   trip_id: string
   name: string
   url: string | null
+  /** El segundo enlace: el portal donde se encontró y la web del dueño.
+   *  Llegó en `26_contacto_casa.sql`, igual que los dos de contacto. */
+  url2: string | null
+  /** A quién se llama o se escribe para preguntar, que no es lo mismo que
+   *  `owner_name`/`owner_phone`: aquellos son los del día de la llegada. */
+  contact_phone: string | null
+  contact_email: string | null
   town: string | null
   province: string | null
   total_price: number | null

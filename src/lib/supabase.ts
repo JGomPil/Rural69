@@ -66,6 +66,9 @@ const COLUMNAS_SQL: Record<string, string> = {
   check_in: 'supabase/19_datos_llegada.sql',
   owner_phone: 'supabase/19_datos_llegada.sql',
   map_url: 'supabase/19_datos_llegada.sql',
+  url2: 'supabase/26_contacto_casa.sql',
+  contact_phone: 'supabase/26_contacto_casa.sql',
+  contact_email: 'supabase/26_contacto_casa.sql',
   quiet_hours: 'supabase/21_no_molestar.sql',
   quiet_from: 'supabase/21_no_molestar.sql',
 }

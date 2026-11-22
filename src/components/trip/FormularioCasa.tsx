@@ -21,6 +21,11 @@ interface Props {
 const VACIA = {
   name: '',
   url: '',
+  url2: '',
+  // A quién se pregunta ANTES de reservar. Lo de quien abre la puerta el
+  // día de llegada va más abajo, en «Datos de llegada».
+  contact_phone: '',
+  contact_email: '',
   town: '',
   province: '',
   total_price: '',
@@ -62,6 +67,9 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
       setCampos({
         name: casa.name,
         url: casa.url ?? '',
+        url2: casa.url2 ?? '',
+        contact_phone: casa.contact_phone ?? '',
+        contact_email: casa.contact_email ?? '',
         town: casa.town ?? '',
         province: casa.province ?? '',
         total_price: casa.total_price != null ? String(casa.total_price) : '',
@@ -166,8 +174,17 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
       setError('La casa necesita un nombre.')
       return
     }
-    if (campos.url && !/^https?:\/\//i.test(campos.url.trim())) {
-      setError('La URL debe empezar por http:// o https://')
+    for (const [etiqueta, valor] of [
+      ['La URL', campos.url],
+      ['La segunda URL', campos.url2],
+    ] as const) {
+      if (valor && !/^https?:\/\//i.test(valor.trim())) {
+        setError(`${etiqueta} debe empezar por http:// o https://`)
+        return
+      }
+    }
+    if (campos.contact_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(campos.contact_email.trim())) {
+      setError('Ese correo no tiene buena pinta: revísalo.')
       return
     }
     setGuardando(true)
@@ -176,6 +193,9 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
         trip_id: tripId,
         name: campos.name.trim(),
         url: campos.url.trim() || null,
+        url2: campos.url2.trim() || null,
+        contact_phone: campos.contact_phone.trim() || null,
+        contact_email: campos.contact_email.trim() || null,
         town: campos.town.trim() || null,
         province: campos.province.trim() || null,
         total_price: numeroODato(campos.total_price),
@@ -266,6 +286,40 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
           />
         </Campo>
 
+        <Campo
+          etiqueta="Otra web"
+          ayuda="Casi ninguna casa tiene un solo enlace: la ficha del portal y la web del dueño no dicen lo mismo."
+        >
+          <Entrada
+            type="url"
+            value={campos.url2}
+            onChange={cambia('url2')}
+            placeholder="https://…"
+            inputMode="url"
+          />
+        </Campo>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Campo etiqueta="Teléfono de contacto" ayuda="Al que se llama para preguntar si está libre.">
+            <Entrada
+              type="tel"
+              inputMode="tel"
+              value={campos.contact_phone}
+              onChange={cambia('contact_phone')}
+              placeholder="921 00 00 00"
+            />
+          </Campo>
+          <Campo etiqueta="Correo de contacto">
+            <Entrada
+              type="email"
+              inputMode="email"
+              value={campos.contact_email}
+              onChange={cambia('contact_email')}
+              placeholder="reservas@lacasa.es"
+            />
+          </Campo>
+        </div>
+
         <div className="grid gap-4 sm:grid-cols-2">
           <Campo etiqueta="Localidad">
             <Entrada value={campos.town} onChange={cambia('town')} />
@@ -323,7 +377,7 @@ export function FormularioCasa({ abierto, onCerrar, tripId, casa, onGuardada }: 
           </div>
         </div>
 
-        <Campo etiqueta="Espacios comunes" ayuda="Salón con chimenea, porche, comedor grande…">
+        <Campo etiqueta="Espacios comunes destacables" ayuda="Salón con chimenea, porche, comedor grande…">
           <Entrada value={campos.common_spaces} onChange={cambia('common_spaces')} />
         </Campo>
 

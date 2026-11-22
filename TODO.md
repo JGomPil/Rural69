@@ -468,6 +468,9 @@ rodado, saldrá solo durante la escapada, igual que el panel.
 - [ ] Pasar `supabase/24_terminar_entre_todos.sql` en el SQL Editor. Sin él, en el
       «¿Quién soy?» solo el que empezó puede terminar la partida, y a los demás el botón
       les miente: se les vacía la pantalla y la partida sigue viva para el resto.
+- [ ] Pasar `supabase/26_contacto_casa.sql` en el SQL Editor. Sin él, al guardar una
+      casa sale «falta pasar 26_contacto_casa.sql»: son las tres columnas nuevas
+      (segundo enlace, teléfono y correo de contacto).
 - [ ] Pasar `supabase/25_preguntas_trivial.sql` en el SQL Editor. Sin él el Trivial se
       juega igual con las 1.523 de serie, pero no se pueden añadir preguntas nuevas.
 - [ ] Volver a desplegar la *Edge Function* `avisar` (panel → Edge Functions →
@@ -495,3 +498,10 @@ rodado, saldrá solo durante la escapada, igual que el panel.
       no cuenta en «qué falta por hacer» y no le quita el panel a la que viene
       (`estadoDe` y `yaPaso` en `src/lib/estancia.ts`, 5 pruebas). Y el formulario
       de la escapada lo enseña ya elegido al escribir unas fechas de atrás
+- [x] **Faltaban campos en la casa.** Una casa suele tener dos sitios donde
+      mirarla —la ficha del portal y la web del dueño, que no dicen lo mismo— y
+      un teléfono y un correo a los que preguntar si está libre ese finde, que
+      acababan perdidos en el WhatsApp del grupo. Ahora están en la ficha, y se
+      ven en la tarjeta (llamar y escribir de un toque) y en la comparativa.
+      *Espacios comunes* pasa a llamarse **Espacios comunes destacables**
+      (`supabase/26_contacto_casa.sql`)

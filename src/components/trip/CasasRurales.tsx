@@ -8,7 +8,9 @@ import {
   Columns3,
   ExternalLink,
   LayoutGrid,
+  Mail,
   Pencil,
+  Phone,
   Plus,
   Trash2,
   Trophy,
@@ -349,6 +351,10 @@ interface PropsTarjeta {
   onReservar?: () => void
 }
 
+/** El botoncito de enlace del pie de la tarjeta, que se repite cuatro veces. */
+const CHIP =
+  'inline-flex items-center gap-1.5 rounded-xl bg-bosque-50 px-3 py-1.5 text-sm font-semibold text-bosque-700 transition hover:bg-bosque-100'
+
 function TarjetaCasa({
   casa,
   fotos,
@@ -483,7 +489,7 @@ function TarjetaCasa({
         {casa.features && <p className="text-sm text-tenue">{casa.features}</p>}
         {casa.common_spaces && (
           <p className="text-sm text-suave">
-            <span className="font-semibold">Espacios comunes:</span> {casa.common_spaces}
+            <span className="font-semibold">Espacios comunes destacables:</span> {casa.common_spaces}
           </p>
         )}
         {casa.notes && (
@@ -512,9 +518,27 @@ function TarjetaCasa({
               href={casa.url}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-bosque-50 px-3 py-1.5 text-sm font-semibold text-bosque-700 transition hover:bg-bosque-100"
+              className={CHIP}
             >
               <ExternalLink size={15} /> Ver la web
+            </a>
+          )}
+          {/* Una casa suele tener dos sitios donde mirarla, y un teléfono al
+              que llamar para preguntar por el finde: de poco sirven si hay
+              que abrir el formulario de edición para verlos. */}
+          {casa.url2 && (
+            <a href={casa.url2} target="_blank" rel="noreferrer noopener" className={CHIP}>
+              <ExternalLink size={15} /> La otra web
+            </a>
+          )}
+          {casa.contact_phone && (
+            <a href={`tel:${casa.contact_phone.replace(/\s+/g, '')}`} className={CHIP}>
+              <Phone size={15} /> {casa.contact_phone}
+            </a>
+          )}
+          {casa.contact_email && (
+            <a href={`mailto:${casa.contact_email}`} className={CHIP} aria-label={`Escribir a ${casa.name}`}>
+              <Mail size={15} /> Escribir
             </a>
           )}
           {onElegir && (
@@ -546,6 +570,9 @@ function TarjetaCasa({
   )
 }
 
+/** El enlace de dentro de la tabla comparativa. */
+const ENLACE = 'font-semibold text-bosque-600 underline underline-offset-2'
+
 function Comparador({
   casas,
   votos,
@@ -576,24 +603,46 @@ function Comparador({
     { etiqueta: 'Barbacoa', valor: (c) => (c.has_bbq ? '✅' : '—') },
     { etiqueta: 'Jardín', valor: (c) => (c.has_garden ? '✅' : '—') },
     { etiqueta: 'Mascotas', valor: (c) => (c.pets_allowed ? '✅' : '—') },
-    { etiqueta: 'Espacios comunes', valor: (c) => c.common_spaces || '—' },
+    { etiqueta: 'Espacios comunes destacables', valor: (c) => c.common_spaces || '—' },
     { etiqueta: 'Características', valor: (c) => c.features || '—' },
     { etiqueta: 'Votos', valor: (c) => votos[c.id] ?? 0, destacar: true },
     {
-      etiqueta: 'Web',
+      etiqueta: 'Teléfono',
       valor: (c) =>
-        c.url ? (
-          <a
-            href={c.url}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="font-semibold text-bosque-600 underline underline-offset-2"
-          >
-            Abrir
+        c.contact_phone ? (
+          <a href={`tel:${c.contact_phone.replace(/\s+/g, '')}`} className={ENLACE}>
+            {c.contact_phone}
           </a>
         ) : (
           '—'
         ),
+    },
+    {
+      etiqueta: 'Correo',
+      valor: (c) =>
+        c.contact_email ? (
+          <a href={`mailto:${c.contact_email}`} className={ENLACE}>
+            {c.contact_email}
+          </a>
+        ) : (
+          '—'
+        ),
+    },
+    {
+      etiqueta: 'Web',
+      valor: (c) => {
+        const webs = [c.url, c.url2].filter(Boolean) as string[]
+        if (!webs.length) return '—'
+        return (
+          <span className="flex flex-wrap gap-2">
+            {webs.map((web, i) => (
+              <a key={web} href={web} target="_blank" rel="noreferrer noopener" className={ENLACE}>
+                {i === 0 ? 'Abrir' : 'La otra'}
+              </a>
+            ))}
+          </span>
+        )
+      },
     },
   ]
 
